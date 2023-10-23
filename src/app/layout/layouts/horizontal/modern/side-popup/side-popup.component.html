@@ -1,0 +1,57 @@
+<div class="flex flex-col flex-auto p-0 gap-5">
+    <div class="flex flex-row flex-auto items-center">
+        <div class="flex flex-auto justify-start">
+            <button mat-icon-button (click)="onNoClick()">
+                <mat-icon [svgIcon]="'heroicons_outline:x'" class="text-gray-900 icon-size-5 "></mat-icon>
+            </button>
+        </div>
+        <div class="flex flex-auto justify-end hover:underline underline-offset-1" style="color:#004B8B!important">
+            <span class="font-semibold">Dashboard</span><span><mat-icon [svgIcon]="'heroicons_outline:arrow-right'"
+                    class="text-gray-900 icon-size-4 mt-1 ml-1 "></mat-icon></span>
+        </div>
+    </div>
+    <div class="flex flex-row flex-auto items-center">
+        <div class="flex flex-auto justify-start">
+            <span class="font-medium text-2xl">Apps</span>
+        </div>
+    </div>
+    <div lass="flex flex-col flex-auto">
+        <div class="flex flex-row flex-auto items-center gap-3">
+            <!-- First Row -->
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-6 mr-2" src="assets/images/logo/logo.svg">
+                <span class="font-semibold">CRM</span>
+            </div>
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-6 mr-2" src="assets/images/logo/logo.svg">
+                <span class="font-semibold">HR</span>
+            </div>
+        </div>
+        <div class="flex flex-row flex-auto items-center gap-3">
+            <!-- Second Row -->
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-6 mr-2" src="assets/test-imgs/powerpoint.svg">
+                <span class="font-semibold">Power</span>
+            </div>
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-6 mr-2" src="assets/test-imgs/visio.svg">
+                <span class="font-semibold">Visio</span>
+            </div>
+        </div>
+        <div class="flex flex-row flex-auto items-center gap-3">
+            <!-- Second Row -->
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-10 mr-2" src="assets/test-imgs/excel.svg">
+                <span class="font-semibold">MS Excel</span>
+            </div>
+            <div class="flex flex-row flex-auto p-3 items-center hover:bg-slate-200">
+                <img class="w-8 mr-2" src="assets/test-imgs/teams.svg">
+                <span class="font-semibold">MS Teams</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-auto  hover:underline underline-offset-1" style="color:#004B8B!important">
+        <span class="font-semibold">Explore All Your Apps</span><span><mat-icon [svgIcon]="'heroicons_outline:arrow-right'"
+                class="text-gray-900 icon-size-4 mt-1 ml-1 "></mat-icon></span>
+    </div>
+</div>
