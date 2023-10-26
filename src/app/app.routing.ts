@@ -10,7 +10,7 @@ import { InitialDataResolver } from 'app/app.resolvers';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'example'},
+    {path: '', pathMatch : 'full', redirectTo: 'home'},
 
     // Redirect signed in user to the '/example'
     //
@@ -74,12 +74,13 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children   : [
-            {path: 'example', loadChildren: () => import('app/modules/admin/example/example.module').then(m => m.ExampleModule)},
-            {path: 'example2', loadChildren: () => import('app/modules/admin/example2/example2.module').then(m => m.Example2Module)},
-            {path: 'example3', loadChildren: () => import('app/modules/admin/example3/example3.module').then(m => m.Example3Module)},
-            {path: 'contacts', children: [
-                {path: 'leads', loadChildren: () => import('app/modules/admin/leads/leads.module').then(m => m.LeadsModule)},                
-            ]},
+            {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
+           //CRM Routes
+           {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)}
+
+
+              
+           //Configurator
         ]
     }
 ];
