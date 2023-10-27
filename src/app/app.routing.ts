@@ -76,10 +76,11 @@ export const appRoutes: Route[] = [
         children   : [
             {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
            //CRM Routes
-           {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)}
-
-
-              
+           {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)},
+            //App Routes
+            {path: 'app', children: [
+                {path: 'calendar', loadChildren: () => import('app/modules/admin/app/calendar/calendar.module').then(m => m.CalendarModule)},
+                ]},
            //Configurator
         ]
     }
