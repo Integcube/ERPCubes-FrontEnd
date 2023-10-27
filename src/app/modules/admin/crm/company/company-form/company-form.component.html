@@ -37,20 +37,20 @@
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Company Owner</mat-label>
-                            <input matInput [formControlName]="'salesOwner'" [spellcheck]="false" #salesOwner>
+                            <input matInput [formControlName]="'companyOwner'" [spellcheck]="false" #salesOwner>
                         </mat-form-field>
                     </div>
                     <div class="mt-8">
-                        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+                        <mat-form-field class="fuse-mat-dense flex-auto w-full">
                             <mat-label>Industry</mat-label>
-                            <input matInput [formControlName]="'companyIndustryId'" [spellcheck]="false" #companyIndustryId>
+                            <mat-select [formControlName]="'industryId'" [spellcheck]="false" #companyIndustryId>
+                                <mat-option value="-1"></mat-option>
+                                <ng-container *ngIf="industries$|async as industries">
+                                    <mat-option *ngFor="let industry of industries" [value]="industry.industryId">{{industry.industryTitle}}</mat-option>
+                                </ng-container>
+                            </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div class="mt-8">
-                        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                            <mat-label>Type</mat-label>
-                            <input matInput [formControlName]="'companySourceId'" [spellcheck]="false" #companySourceId>
-                        </mat-form-field>
+                      
                     </div>
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
@@ -73,7 +73,7 @@
                     <div class="mt-8">
                         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                             <mat-label>ZIP</mat-label>
-                            <input matInput [formControlName]="'billingZIP'" [spellcheck]="false" #billingZIP>
+                            <input matInput [formControlName]="'billingZip'" [spellcheck]="false" #billingZIP>
                         </mat-form-field>
                     </div>
                     <div class="mt-8">

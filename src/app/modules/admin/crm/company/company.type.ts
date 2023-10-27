@@ -1,29 +1,30 @@
 export class Company{
-
     companyId: number;
-    tenantId: number;
-    name: string = '';
-    website: string = '';
-    salesOwner: number;
-    assignedTo: number;
-    mobile: string = '';
-    work: string = '';
-    billingAddress: string = '';
-    billingStreet: string = '';
-    billingCity: string = '';
-    billingZIP: string = '';
-    billingState: string = '';
-    billingCountry: string = '';
-    deliveryAddress: string = '';
-    deliveryStreet: string = '';
-    deliveryCity: string = '';
-    deliveryZIP: string = '';
-    deliveryState: string = '';
-    deliveryCountry: string = '';
-    companySourceId: number;
-    companyIndustryId: number;
+    name: string;
+    website: string;
+    companyOwner: string;
+    mobile?: string;
+    work?: string;
+    billingAddress?: string;
+    billingStreet?: string;
+    billingCity?: string;
+    billingZip?: string;
+    billingState?: string;
+    billingCountry?: string;
+    deliveryAddress?: string;
+    deliveryStreet?: string;
+    deliveryCity?: string;
+    deliveryZip?: string;
+    deliveryState?: string;
+    deliveryCountry?: string;
+    industryId: number;
+    industryTitle: string;
     createdDate: Date;
     constructor(reg){
         this.companyId = reg.companyId?reg.companyId:-1;
     }
+}
+export interface Industry{
+    industryId:number,
+    industryTitle:string
 }

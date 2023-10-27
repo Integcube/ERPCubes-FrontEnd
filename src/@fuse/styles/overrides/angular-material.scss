@@ -520,7 +520,7 @@
             position: relative;
             display: flex;
             align-items: stretch;
-            min-height: 20px;
+            min-height: 48px;
             border-radius: 4px;
             padding: 0 16px;
             border-width: 1px;
@@ -894,7 +894,7 @@
         .mat-form-field-wrapper {
 
             .mat-form-field-flex {
-                min-height: 40px;
+                // min-height: 40px;
 
                 .mat-form-field-prefix,
                 .mat-form-field-suffix {

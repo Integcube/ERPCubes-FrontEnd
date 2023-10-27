@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Company } from './company.type';
+import { Company, Industry } from './company.type';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
@@ -14,8 +14,10 @@ export class CompanyService {
   private readonly getcompanyListURL = `${environment.url}/Company/all`
   private readonly saveCompanyURL = `${environment.url}/Company/save`
   private readonly deleteCompanyURL = `${environment.url}/Company/save`
+  private readonly getIndustriesURL = `${environment.url}/Industry/all`
 
   user: User;
+  private _Industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _company: BehaviorSubject<Company | null> = new BehaviorSubject(null);
   private _companies: BehaviorSubject<Company[] | null> = new BehaviorSubject(null);
 
@@ -26,6 +28,9 @@ export class CompanyService {
     this._userService.user$.subscribe(user => {
       this.user = user;
     })
+  }
+  get Industries$():Observable<Industry[]>{
+    return this._Industries.asObservable();
   }
   get company$(): Observable<Company> {
     return this._company.asObservable();
@@ -41,6 +46,18 @@ export class CompanyService {
     return this._httpClient.post<Company[]>(this.getcompanyListURL, data).pipe(
       tap((companies) => {
         this._companies.next(companies);
+      
+      })
+    );
+  }
+  getIndustries(): Observable<Industry[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Industry[]>(this.getIndustriesURL, data).pipe(
+      tap((industries) => {
+        this._Industries.next(industries);
       })
     );
   }

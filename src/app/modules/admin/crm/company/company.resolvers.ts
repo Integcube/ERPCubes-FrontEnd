@@ -16,6 +16,17 @@ export class CompaniesResolver implements Resolve<any>{
 }
 
 @Injectable({
+    providedIn:'root'
+})
+export class IndustryResolver implements Resolve<any>{
+    constructor(private _companyService:CompanyService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getIndustries();
+    }
+}
+
+@Injectable({
     providedIn: 'root'
 })
 export class SelectedCompanyResolver implements Resolve<any>
