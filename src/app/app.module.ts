@@ -12,6 +12,7 @@ import { mockApiServices } from 'app/mock-api';
 import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy       : PreloadAllModules,
@@ -26,7 +27,8 @@ const routerConfig: ExtraOptions = {
         BrowserModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
-
+//Calendar
+FullCalendarModule,
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
         FuseConfigModule.forRoot(appConfig),
