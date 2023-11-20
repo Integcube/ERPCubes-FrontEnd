@@ -19,12 +19,13 @@ const customPalettes = {
 const themes = {
     // Default theme is required for theming system to work correctly
     'default': {
-        themeGrey:{
-            DEFAULT: '#12344D'
-        },
         primary  : {
             ...colors.indigo,
             DEFAULT: '#12344D'
+        },
+        accent2  : {
+            ...colors.indigo,
+            DEFAULT: '#00bda5'
         },
         accent   : {
             ...colors.slate,

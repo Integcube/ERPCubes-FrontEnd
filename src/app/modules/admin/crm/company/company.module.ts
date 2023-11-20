@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterModule } from '@angular/router';
 import { CompanyComponent } from './company.component';
 import { companyRoutes } from './company.routing';
@@ -25,6 +25,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CompanyDetailComponent } from './company-detail/company-detail.component';
+import { CompanyActivityComponent } from './company-detail/company-activity/company-activity.component';
+import { CompanyInfoComponent } from './company-detail/company-info/company-info.component';
+import { CompanyDataComponent } from './company-detail/company-data/company-data.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 
@@ -32,7 +37,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
   declarations: [
     CompanyComponent,
     CompanyListComponent,
-    CompanyFormComponent
+    CompanyFormComponent,
+    CompanyDetailComponent,
+    CompanyActivityComponent,
+    CompanyInfoComponent,
+    CompanyDataComponent
   ],
   imports: [
     RouterModule.forChild(companyRoutes),
@@ -54,24 +63,25 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule
-
+    SharedModule,
+    MatExpansionModule,
+    MatTabsModule
   ],
-  providers   : [
+  providers: [
     {
-        provide : MAT_DATE_FORMATS,
-        useValue: {
-            parse  : {
-                dateInput: moment.ISO_8601
-            },
-            display: {
-                dateInput         : 'LL',
-                monthYearLabel    : 'MMM YYYY',
-                dateA11yLabel     : 'LL',
-                monthYearA11yLabel: 'MMMM YYYY'
-            }
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: moment.ISO_8601
+        },
+        display: {
+          dateInput: 'LL',
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY'
         }
+      }
     }
-]
+  ]
 })
 export class CompanyModule { }

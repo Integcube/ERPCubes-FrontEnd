@@ -1,0 +1,271 @@
+<div class="flex flex-col flex-auto justify-start bg-white h-screen overflow-auto ">
+    <div class="flex justify-between w-full px-6 pt-6">
+        <div class="flex items-center">
+            <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-left"></mat-icon>
+            <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
+                [routerLink]="['/crm/contacts/leads']">
+                Leads
+            </span>
+        </div>
+        <div class="flex items-center">
+            <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
+                [matMenuTriggerFor]="actionMenu">
+                Actions
+            </span>
+            <mat-menu #actionMenu="matMenu">
+                <button mat-menu-item>Yesterday</button>
+                <button mat-menu-item>2 days ago</button>
+                <button mat-menu-item>3 days ago</button>
+            </mat-menu>
+            <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-down"></mat-icon>
+        </div>
+    </div>
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30">
+        <!-- Avatar and name -->
+        <div class="flex flex-auto items-center min-w-0">
+            <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden">
+                <ng-container *ngIf="selectedLead.avatar">
+                    <img class="object-cover w-full h-full" [src]="selectedLead.avatar" alt="Contact avatar" />
+                </ng-container>
+                <ng-container *ngIf="!selectedLead.avatar">
+                    <div
+                        class="flex items-center justify-center w-full h-full rounded-full text-xl uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                        {{selectedLead.firstName.charAt(0)}}
+                    </div>
+                </ng-container>
+            </div>
+            <div class="min-w-0 ml-4">
+                <div class="text-xl leading-5 truncate">{{selectedLead.firstName + " " + selectedLead.lastName }}</div>
+                <div class="leading-5 truncate text-secondary">{{selectedLead.email}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between w-full border-b px-6 pb-6">
+        <div class="flex flex-col justify-center" (click)="addNote()">
+            <button mat-icon-button >
+                <mat-icon class="icon-size-5">edit_note</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                Notes
+            </span>
+        </div>
+        <div class="flex flex-col justify-center">
+            <button mat-icon-button>
+                <mat-icon class="icon-size-5">email</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                Email
+            </span>
+        </div>
+        <div class="flex flex-col justify-center">
+            <button mat-icon-button>
+                <mat-icon class="icon-size-5">call</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                Call
+            </span>
+        </div>
+        <div class="flex flex-col justify-center" (click)="addTask()">
+            <button mat-icon-button>
+                <mat-icon class="icon-size-5">add_task</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                Task
+            </span>
+        </div>
+        <div class="flex flex-col justify-center"  [routerLink]="['/app/calendar']">
+            <button mat-icon-button>
+                <mat-icon class="icon-size-5">calendar_today</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                Calender
+            </span>
+        </div>
+        <div class="flex flex-col justify-center">
+            <button mat-icon-button>
+                <mat-icon class="icon-size-5">more_horiz</mat-icon>
+            </button>
+            <span class="text-sm text-center">
+                More
+            </span>
+        </div>
+    </div>
+    <div class="flex flex-row justify-between w-full">
+        <mat-accordion>
+            <mat-expansion-panel [togglePosition]="'before'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="items-center justify-between">
+                        <span class="text-base font-semibold">About This Company</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="flex flex-col">
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="leadForm">
+                            <div>
+                                <label for="name" class="text-sm font-semibold ml-3">First Name:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'firstName'" #name>
+                                </div>
+                                <mat-error *ngIf="leadForm.get('firstName').hasError('required')" class="text-sm">
+                                    First Name is required
+                                </mat-error>
+                            </div>
+                            <div>
+                                <label for="lastName" class="text-sm font-semibold ml-3">Last Name:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'lastName'" #lastName>
+                                </div>
+                                <mat-error *ngIf="leadForm.get('lastName').hasError('required')" class="text-sm">
+                                    Last Name is required
+                                </mat-error>
+                            </div>
+                            <div>
+                                <label for="email" class="text-sm font-semibold ml-3">Last Name:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'email'" #email>
+                                </div>
+                                <mat-error *ngIf="leadForm.get('email').hasError('required')" class="text-sm">
+                                    Email is required
+                                </mat-error>
+                            </div>
+                           <div>
+                                <label for="leadOwner" class="text-sm font-semibold ml-3">Lead Owner:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <select class="w-full font-medium leading-5 bg-transparent h-full"
+                                    [formControlName]="'leadOwner'" #leadOwner>
+                                    <ng-container *ngIf="users$|async as users">
+                                        <option *ngFor="let user of users"  [value]="user.id">{{user.name}}</option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                                <mat-error *ngIf="leadForm.get('email').hasError('required')" class="text-sm">
+                                    Email is required
+                                </mat-error>
+                             </div>
+                           <div>
+                                <label for="industryId" class="text-sm font-semibold ml-3">Industry:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <select class="w-full font-medium leading-5 bg-transparent h-full"
+                                    [formControlName]="'industryId'" #industryId>
+                                    <ng-container *ngIf="industries$|async as industries">
+                                        <option [value]="-1"></option>
+                                        <option *ngFor="let industry of industries"  [value]="industry.industryId">{{industry.industryTitle}}</option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="sourceId" class="text-sm font-semibold ml-3">Source:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <select class="w-full font-medium leading-5 bg-transparent h-full"
+                                    [formControlName]="'sourceId'" #sourceId>
+                                    <ng-container *ngIf="leadSource$|async as sources">
+                                        <option [value]="-1"></option>
+                                        <option *ngFor="let source of sources"  [value]="source.sourceId">{{source.sourceTitle}}</option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="productId" class="text-sm font-semibold ml-3">Product:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <select class="w-full font-medium leading-5 bg-transparent h-full"
+                                    [formControlName]="'industryId'" #industryId>
+                                    <ng-container *ngIf="product$|async as products">
+                                        <option [value]="-1"></option>
+                                        <option *ngFor="let product of products"  [value]="product.productId">{{product.productName}}</option>
+                                        </ng-container>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="mobile" class="text-sm font-semibold ml-3">Mobile:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'mobile'" #mobile>
+                                </div>
+                             </div>
+                            <div>
+                                <label for="work" class="text-sm font-semibold ml-3">Work:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'work'" #work>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="city" class="text-sm font-semibold ml-3">City:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'city'" #city>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="state" class="text-sm font-semibold ml-3">State:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'state'" #state>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="zip" class="text-sm font-semibold ml-3">ZIP:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'zip'" #zip>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="country" class="text-sm font-semibold ml-3">Country:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'country'" #country>
+                                </div>
+                            </div> 
+                            <!-- Actions -->
+                            <div class="flex flex-row justify-end " *ngIf="!leadForm.invalid && leadForm.dirty">
+                                <!-- Save -->
+                                <button class="ml-2" mat-stroked-button class="text-xs" [matTooltip]="'Save'"
+                                    (click)="save()">
+                                    Save
+                                </button>
+
+                            </div>
+                        </form>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel [togglePosition]="'before'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="items-center justify-between">
+                        <span class="text-base font-semibold">Website Activity</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p class="text-primary">Track the customer requests associated with this record.</p>
+            </mat-expansion-panel>
+            <mat-expansion-panel [togglePosition]="'before'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="items-center justify-between">
+                        <span class="text-base font-semibold">Company Subscription</span>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p class="text-primary">Track the customer requests associated with this record.</p>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+</div>

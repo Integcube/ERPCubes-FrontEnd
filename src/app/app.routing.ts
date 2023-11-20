@@ -80,7 +80,12 @@ export const appRoutes: Route[] = [
             //App Routes
             {path: 'app', children: [
                 {path: 'calendar', loadChildren: () => import('app/modules/admin/app/calendar/calendar.module').then(m => m.CalendarModule)},
-                ]},
+                {path: 'tasks', loadChildren: () => import('app/modules/admin/app/tasks/tasks.module').then(m => m.TasksModule)},
+                {path: 'notes', loadChildren: () => import('app/modules/admin/app/notes/notes.module').then(m => m.NotesModule)},
+                {path: 'activities', loadChildren: () => import('app/modules/admin/app/activity/activity.module').then(m => m.ActivitiesModule)},
+                {path: 'file-manager', loadChildren: () => import('app/modules/admin/app/file-manager/file-manager.module').then(m => m.FileManagerModule)},
+                {path: 'scrumboard', loadChildren: () => import('app/modules/admin/app/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
+            ]},
            //Configurator
         ]
     }

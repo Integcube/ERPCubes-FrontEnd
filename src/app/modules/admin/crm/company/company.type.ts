@@ -20,6 +20,8 @@ export class Company{
     industryId: number;
     industryTitle: string;
     createdDate: Date;
+    isHovered:boolean;
+    avatar:string;
     constructor(reg){
         this.companyId = reg.companyId?reg.companyId:-1;
     }

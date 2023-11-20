@@ -13,9 +13,12 @@ import { LayoutModule } from 'app/layout/layout.module';
 import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { ErrorInterceptor } from './core/error/error.interceptor';
 
 const routerConfig: ExtraOptions = {
-    preloadingStrategy       : PreloadAllModules,
+    preloadingStrategy: PreloadAllModules,
     scrollPositionRestoration: 'enabled'
 };
 
@@ -23,12 +26,13 @@ const routerConfig: ExtraOptions = {
     declarations: [
         AppComponent,
     ],
-    imports     : [
+    imports: [
         BrowserModule,
+        MatSnackBarModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
-//Calendar
-FullCalendarModule,
+        //Calendar
+        FullCalendarModule,
         // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
         FuseConfigModule.forRoot(appConfig),
@@ -43,10 +47,16 @@ FullCalendarModule,
         // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({})
     ],
-    bootstrap   : [
+    // providers: [
+    //     {
+    //       provide: HTTP_INTERCEPTORS,
+    //       useClass: ErrorInterceptor,
+    //       multi: true
+    //     }
+    //   ],
+    bootstrap: [
         AppComponent
     ]
 })
-export class AppModule
-{
+export class AppModule {
 }

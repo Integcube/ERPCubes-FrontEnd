@@ -13,13 +13,16 @@ export class CompanyService {
 
   private readonly getcompanyListURL = `${environment.url}/Company/all`
   private readonly saveCompanyURL = `${environment.url}/Company/save`
-  private readonly deleteCompanyURL = `${environment.url}/Company/save`
+  private readonly deleteCompanyURL = `${environment.url}/Company/delete`
   private readonly getIndustriesURL = `${environment.url}/Industry/all`
+  private readonly getUsersUrl = `${environment.url}/Users/all`
 
   user: User;
+
   private _Industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _company: BehaviorSubject<Company | null> = new BehaviorSubject(null);
   private _companies: BehaviorSubject<Company[] | null> = new BehaviorSubject(null);
+  private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
 
   constructor(
     private _userService: UserService,
@@ -29,8 +32,11 @@ export class CompanyService {
       this.user = user;
     })
   }
-  get Industries$():Observable<Industry[]>{
+  get industries$():Observable<Industry[]>{
     return this._Industries.asObservable();
+  }
+  get users$():Observable<User[]>{
+    return this._users.asObservable();
   }
   get company$(): Observable<Company> {
     return this._company.asObservable();
@@ -61,15 +67,26 @@ export class CompanyService {
       })
     );
   }
+  getUsers(): Observable<User[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
+      tap((users) => {
+        this._users.next(users);
+      })
+    );
+  }
   saveCompany(company:Company){
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      ...company
+      company
     }
     return this._httpClient.post<Company[]>(this.saveCompanyURL, data).pipe(
       tap((companies) => {
-        this.getCompanies();
+        this.getCompanies().subscribe();
       })
     );
   }
@@ -77,11 +94,12 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      ...company
+      companyId:company.companyId,
+      name:company.name,
     }
-    return this._httpClient.post<Company[]>(this.saveCompanyURL, data).pipe(
-      tap((companies) => {
-        this.getCompanies();
+    return this._httpClient.post<Company[]>(this.deleteCompanyURL, data).pipe(
+      tap((company) => {
+        this.getCompanies().subscribe();
       })
     );
   }

@@ -1,0 +1,49 @@
+<div class="flex flex-col w-full">
+    <div class="flex justify-end mb-4">
+        <button mat-flat-button [color]="'primary'" class="text-xs h-8" [matTooltip]="'Create New Tasks'"
+            (click)="addTask()">
+            Create Task
+        </button>
+    </div>
+    <div class="relative">
+        <ng-container *ngIf="filteredData$|async as tasks; else noTask">
+            <ng-container *ngIf="tasks.length; else noTask">
+                <ng-container *ngFor="let task of tasks">
+                    <fuse-card class="relative flex flex-col w-full filter-testimonial my-2 rounded-sm cursor-pointer"
+                        (click)="updateTask(task)">
+                        <div class="flex flex-row justify-between w-full pt-4 px-4">
+                            <span class="flex text-md truncate"><b>Task</b>&nbsp;{{"assigned to "+
+                                task.taskOwnerTitle}}</span>
+                            <span class="flex text-md truncate">{{task.createdDate | date:'long'}}</span>
+                        </div>
+                        <div class="flex flex-col mt-2 px-4">
+                            <span class="flex flex-wrap text-md font-semibold line-clamp-1">{{task.taskTitle}}</span>
+                            <span class="flex flex-wrap text-md line-clamp-3">{{task.description}}</span>
+                        </div>
+                        <div class="flex flex-row mt-4 justify-between p-4 bg-gray-50 dark:bg-transparent">
+                            <span
+                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': task.status === 3,
+                                'bg-purple-200 text-purple-800 dark:bg-purple-600 dark:text-purple-50': task.status === 2,
+                                            'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': task.status === 1}">
+                                <span class="leading-relaxed whitespace-nowrap">{{task.statusTitle}}</span>
+                            </span>
+                            <span class="flex flex-wrap text-md line-clamp-3"><b>Due:</b>&nbsp;{{task.dueDate |
+                                date}}</span>
+                        </div>
+                    </fuse-card>
+                </ng-container>
+            </ng-container>  
+        </ng-container>
+
+        <!-- No Task -->
+        <ng-template #noTask>
+            <div class="flex flex-auto flex-col items-center mt-4 justify-center bg-gray-100 dark:bg-transparent">
+                <mat-icon
+                    class="icon-size-24"
+                    [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+                <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No task found!</div>
+            </div>
+        </ng-template>
+    </div>
+</div>

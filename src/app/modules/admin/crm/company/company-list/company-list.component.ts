@@ -45,7 +45,17 @@ export class CompanyListComponent implements OnInit {
     private _companyService: CompanyService,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
   ) { }
+  onMouseEnter(row: Company) {
+    row.isHovered = true;
+  }
 
+  onMouseLeave(row: Company) {
+    row.isHovered = false;
+  }
+
+  previewCompany(row: Company) {
+    this._router.navigate(['detail-view', row.companyId], { relativeTo: this._activatedRoute });
+  }
   ngOnInit(): void {
     //Get company List
     this.companies$ = this._companyService.companies$;
@@ -59,6 +69,8 @@ export class CompanyListComponent implements OnInit {
         this.companies = [...comapnies];
         this.companyCount = comapnies.length;
         this.dataSource = new MatTableDataSource(this.companies);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this._changeDetectorRef.markForCheck();
       });
     // Get selected company
@@ -115,13 +127,13 @@ export class CompanyListComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
   createCompany() {
-    let newCompany:Company = new Company({});
-    this._companyService.selectedCompany(newCompany);
-    this._router.navigate(['./', newCompany.companyId], { relativeTo: this._activatedRoute });
+    // let newCompany:Company = cloneDeep(new Company({}));
+    // this._companyService.selectedCompany(newCompany);
+    this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
   updateCompany(selectedCompany:Company){
-    this._companyService.selectedCompany(selectedCompany);
+    // this._companyService.selectedCompany(selectedCompany);
     this._router.navigate(['./', selectedCompany.companyId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
