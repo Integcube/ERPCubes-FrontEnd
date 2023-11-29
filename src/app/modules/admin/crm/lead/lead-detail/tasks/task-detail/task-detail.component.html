@@ -9,7 +9,7 @@
         </div>
 
         <!-- Task form -->
-        <form class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
+        <form class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 overflow-y-auto"
             [formGroup]="taskForm">
             <!-- Title -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
@@ -25,6 +25,19 @@
                     [cdkAutosizeMinRows]="1">
                     </textarea>
             </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>lead Owner</mat-label>
+                    <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #leadOwner>
+                        <mat-option value="-1"></mat-option>
+                        <ng-container *ngIf="users$|async as users">
+                            <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error *ngIf="taskForm.get('taskOwner').hasError('required')">
+                        Task Owner is required
+                    </mat-error>
+                </mat-form-field>
+
             <!-- Due date -->
             <div>
                 <div class="font-medium">Due date</div>

@@ -1,67 +1,85 @@
-import { Component, OnInit,ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
-import { combineLatest, map, catchError, EMPTY, filter } from 'rxjs';
+import { combineLatest, map, catchError, EMPTY, takeUntil, Subject } from 'rxjs';
 import { LeadService } from '../../../lead.service';
-import { Tasks, TaskModel } from '../../../lead.type';
+import { TaskModel, Lead } from '../../../lead.type';
 
 @Component({
   selector: 'app-task-tab',
   templateUrl: './task-tab.component.html',
-  styleUrls: ['./task-tab.component.scss'],
-  changeDetection:ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskTabComponent implements OnInit {
-
+export class TaskTabComponent implements OnInit, OnDestroy {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   tasks$ = this._leadService.tasks$;
   users$ = this._leadService.users$;
+  lead: Lead;
   taskWithUser$ = combineLatest([
     this.tasks$,
     this.users$
   ]).pipe(
     map(([tasks, users]) =>
-    tasks.map(task => ({
+      tasks.map(task => ({
         ...task,
-        taskOwnerTitle : users?.find(a=>a.id === task.taskOwner)?.name,
-        createdByTitle:  users?.find(a=>a.id === task.createdBy)?.name,
+        taskOwnerTitle: users?.find(a => a.id === task.taskOwner)?.name,
+        createdByTitle: users?.find(a => a.id === task.createdBy)?.name,
       } as TaskModel))
     ),
-    catchError(error=>{alert(error);return EMPTY})
+    catchError(error => { alert(error); return EMPTY })
   );
   filteredData$ = combineLatest([
     this._leadService.searchQuery$,
     this.taskWithUser$
   ]).pipe(
     map(([search, tasks]) => !search || !search.trim() ? tasks :
-    tasks.filter(task => 
-      task.taskTitle.toLowerCase().includes(search.trim().toLowerCase())
+      tasks.filter(task =>
+        task.taskTitle.toLowerCase().includes(search.trim().toLowerCase())
       )
     ),
   );
   constructor(
-    private _leadService:LeadService,
+    private _leadService: LeadService,
     private _matDialog: MatDialog,
-  ) { }
+    private _changeDetectorRef: ChangeDetectorRef,
 
+  ) { }
   ngOnInit(): void {
+    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
+      this.lead = { ...data }; this._changeDetectorRef.markForCheck();
+    })
   }
-  addTask(){
+  toggleStatus(taskId: number, statusId: number, taskTitle:string) {
+    let status:number=-1;
+    if (statusId === 1) {
+      status =3;
+    }
+    else {
+      status =1;
+    }
+    this._leadService.updateTaskStatus(taskId,taskTitle,status,this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data=>{this._changeDetectorRef.markForCheck()})
+  }
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+  addTask() {
     let tasks = new TaskModel({})
     this._matDialog.open(TaskDetailComponent, {
       autoFocus: false,
-      data     : {
-          task: cloneDeep(tasks)
+      data: {
+        task: cloneDeep(tasks)
       }
-  });
+    });
   }
-  updateTask(task:TaskModel):void{
+  updateTask(task: TaskModel): void {
     this._matDialog.open(TaskDetailComponent, {
       autoFocus: false,
-      data     : {
+      data: {
         task: cloneDeep(task)
       }
-  });
+    });
   }
 
 }

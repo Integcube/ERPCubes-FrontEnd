@@ -3,8 +3,29 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 
 import { Observable, catchError, throwError } from 'rxjs';
 import { LeadService } from './lead.service';
-import { Lead, TaskModel } from './lead.type';
-
+import { Lead, LeadFilter, TaskModel } from './lead.type';
+@Injectable({
+  providedIn:'root'
+})
+export class EmailResolver implements Resolve<any>{
+  constructor(
+    private _leadService:LeadService)
+    { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadService.getEmails(+route.paramMap.get('id'));
+  }
+}
+@Injectable({
+  providedIn:'root'
+})
+export class CallResolver implements Resolve<any>{
+  constructor(
+    private _leadService:LeadService)
+    { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadService.getCalls(+route.paramMap.get('id'));
+  }
+}
 @Injectable({
     providedIn: 'root'
 })
@@ -12,6 +33,7 @@ export class LeadsResolver implements Resolve<any>{
     constructor(private _leadService:LeadService){
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      this._leadService.setFilter(new LeadFilter())
        return this._leadService.getLeads();
     }
 }
@@ -37,7 +59,16 @@ export class UserResolver implements Resolve<any>{
       return this._leadService.getUsers();
     }
 }
-
+@Injectable({
+  providedIn:'root'
+})
+export class CustomListResolver implements Resolve<any>{
+  constructor(private _leadService:LeadService){
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadService.getCustomList();
+  }
+}
 @Injectable({
   providedIn:'root'
 })

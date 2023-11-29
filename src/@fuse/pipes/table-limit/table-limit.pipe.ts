@@ -5,12 +5,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TableLimitPipe implements PipeTransform {
   transform(value: string, isHover:boolean): string {
-    let limit = 28;
+    let limit = 27;
     if (!value){
         return '';
     } 
     if (isHover){
-        limit = 17
+        limit = 15
         return value.length > limit ? value.substring(0, limit) + '...' : value;
 
     }

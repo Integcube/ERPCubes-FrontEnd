@@ -39,6 +39,13 @@ import { TaskDetailComponent } from './lead-detail/tasks/task-detail/task-detail
 import { TaskTabComponent } from './lead-detail/tasks/task-tab/task-tab.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ViewDetailComponent } from './lead-detail/view/view-detail/view-detail.component';
+import { EmailTabComponent } from './lead-detail/email/email-tab/email-tab.component';
+import { EmailDetailComponent } from './lead-detail/email/email-detail/email-detail.component';
+import { QuillModule } from 'ngx-quill';
+import { ActivityDetailComponent } from './lead-detail/activity/activity-detail/activity-detail.component';
+import { CallDetailComponent } from './lead-detail/call/call-detail/call-detail.component';
+import { CallTabComponent } from './lead-detail/call/call-tab/call-tab.component';
 
 
 
@@ -56,7 +63,13 @@ import { MatDialogModule } from '@angular/material/dialog';
     NoteDetailComponent,
     NoteTabComponent,
     TaskDetailComponent,
-    TaskTabComponent
+    TaskTabComponent,
+    ViewDetailComponent,
+    EmailTabComponent,
+    EmailDetailComponent,
+    ActivityDetailComponent,
+    CallDetailComponent,
+    CallTabComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),
@@ -73,6 +86,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatProgressBarModule,
     MatRadioModule,
     MatRippleModule,
+    QuillModule,
     MatSelectModule,
     MatSidenavModule,
     MatTableModule,

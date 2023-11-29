@@ -1,23 +1,15 @@
-
-    <!-- Main -->
-    <div class="flex-auto border-t -mt-px pt-4 px-6 sm:pt-6">
-        <div class="flex items-center  mb-2 sm:mt-0 ">
-            <!-- Search -->
-            <div class="flex-auto">
-                <mat-form-field
-                    class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
-                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                    <input matInput
-                    [formControl]="searchInputControl"
-                    [autocomplete]="'off'"
-                    [placeholder]="'Search'">
-                </mat-form-field>
-            </div>
+<!-- Main -->
+<div class="flex-auto border-t -mt-px pt-4 px-6 sm:pt-6">
+    <div class="flex items-center  mb-2 sm:mt-0 ">
+        <!-- Search -->
+        <div class="flex-auto">
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'">
+            </mat-form-field>
         </div>
-        <mat-tab-group
-        class="sm:px-2"
-        mat-stretch-tabs="false"
-        [animationDuration]="'0'">
+    </div>
+    <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
 
         <!-- Activity -->
         <mat-tab>
@@ -27,9 +19,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
-                    
-                </div>
+                <app-activity-detail></app-activity-detail>
             </ng-template>
         </mat-tab>
 
@@ -41,7 +31,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                    <app-note-tab></app-note-tab>
+                <app-note-tab></app-note-tab>
             </ng-template>
         </mat-tab>
 
@@ -53,12 +43,11 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
-                   
-                </div>
+                <app-email-tab></app-email-tab>
             </ng-template>
         </mat-tab>
         <!-- Call -->
+        
         <mat-tab>
             <ng-template mat-tab-label>
                 <span class="inline-flex items-center space-x-2">
@@ -66,9 +55,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
-                   
-                </div>
+                <app-call-tab></app-call-tab>
             </ng-template>
         </mat-tab>
         <!-- Task -->
@@ -79,7 +66,7 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                   <app-task-tab></app-task-tab>
+                <app-task-tab></app-task-tab>
             </ng-template>
         </mat-tab>
         <!-- Meeting -->
@@ -90,9 +77,9 @@
                 </span>
             </ng-template>
             <ng-template matTabContent>
-                   
+
             </ng-template>
         </mat-tab>
 
     </mat-tab-group>
-    </div>
+</div>

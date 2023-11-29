@@ -151,27 +151,20 @@
                             <input matInput [formControlName]="'country'" [spellcheck]="false" #billingCountry>
                         </mat-form-field>
                     </div>
-                    <!-- Actions -->
-                    <div
-                        class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <!-- Delete -->
+                    <div class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <ng-container *ngIf="selectedlead.leadId !== -1">
                             <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
                                 Delete
                             </button>
                         </ng-container>
-
-                        <!-- Cancel -->
                         <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
                             [routerLink]="['../']">
                             Cancel
                         </button>
-                        <!-- Save -->
                         <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="leadForm.invalid"
                             [matTooltip]="'Save'" (click)="save()">
                             Save
                         </button>
-
                     </div>
                 </form>
             </div>

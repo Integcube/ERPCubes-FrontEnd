@@ -1,0 +1,115 @@
+<ng-container>
+    <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+            <div class="text-lg font-medium">Event</div>
+            <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
+                <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+        <!-- Task form -->
+        <form class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 overflow-y-auto" [formGroup]="eventForm">
+            <!-- Title -->
+            <mat-form-field class="fuse-mat-dense w-full">
+                <mat-label>Title</mat-label>
+                <input matInput [formControlName]="'title'" [spellcheck]="false" #title>
+                <mat-error *ngIf="eventForm.get('title').hasError('required')">
+                    Title is required
+                </mat-error>
+            </mat-form-field>
+            <!-- Description -->
+            <mat-form-field class="fuse-mat-dense w-full">
+                <mat-label>Type</mat-label>
+                <mat-select [formControlName]="'type'" [spellcheck]="false" #type>
+                    <mat-option value="-1"></mat-option>
+                    <ng-container *ngIf="eventTypes$|async as events">
+                        <mat-option *ngFor="let event of events" [value]="event.typeId">{{event.typeTitle}}</mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error *ngIf="eventForm.get('type').hasError('required')">
+                    Type is required
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Due date -->
+            <div class="flex flex-row justify-between gap-5">
+                <div class="flex flex-col justify-center">
+                    <div class="font-medium">Start date</div>
+                    <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+                    [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !eventForm.value.start,
+                                        'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': eventForm.value.start}"    
+                    (click)="startDatePicker.open()">
+                        <mat-icon class="icon-size-5 text-current">calendar_today</mat-icon>
+                        <span class="ml-2 text-md font-medium">
+                            <ng-container *ngIf="eventForm.value.start">{{eventForm.value.start |
+                                date:'longDate'}}</ng-container>
+                            <ng-container *ngIf="!eventForm.value.start">Not set</ng-container>
+                        </span>
+                        <mat-form-field
+                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                            <input matInput [formControlName]="'start'" [matDatepicker]="startDatePicker">
+                            <mat-datepicker #startDatePicker>
+                                <mat-datepicker-actions>
+                                    <button mat-button (click)="resetStartDate()" matDatepickerCancel>
+                                        Clear
+                                    </button>
+                                    <button mat-flat-button [color]="'primary'" matDatepickerApply>
+                                        Select
+                                    </button>
+                                </mat-datepicker-actions>
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <div class="font-medium">End date</div>
+                    <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+                    [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !eventForm.value.end,
+                                        'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': eventForm.value.end}"    
+                    (click)="dueDatePicker.open()">
+                        <mat-icon class="icon-size-5 text-current">calendar_today</mat-icon>
+                        <span class="ml-2 text-md font-medium">
+                            <ng-container *ngIf="eventForm.value.end">{{eventForm.value.end |
+                                date:'longDate'}}</ng-container>
+                            <ng-container *ngIf="!eventForm.value.end">Not set</ng-container>
+                        </span>
+                        <mat-form-field
+                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                            <input matInput [formControlName]="'end'" [matDatepicker]="dueDatePicker">
+                            <mat-datepicker #dueDatePicker>
+                                <mat-datepicker-actions>
+                                    <button mat-button (click)="resetEndDate()" matDatepickerCancel>
+                                        Clear
+                                    </button>
+                                    <button mat-flat-button [color]="'primary'" matDatepickerApply>
+                                        Select
+                                    </button>
+                                </mat-datepicker-actions>
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div> 
+           
+        </form>
+        <!-- Actions -->
+        <div
+            class="flex sticky bottom-0 items-center  py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+            <!-- Delete -->
+            <ng-container class="ml-4" *ngIf="eventForm.value.id !== -1">
+                <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                    Delete
+                </button>
+            </ng-container>
+            <!-- Cancel -->
+            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                Cancel
+            </button>
+            <!-- Save -->
+            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="eventForm.invalid"
+                [matTooltip]="'Save'" (click)="save()">
+                Save
+            </button>
+        </div>
+    </div>
+</ng-container>

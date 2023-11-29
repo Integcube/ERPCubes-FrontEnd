@@ -1,3 +1,4 @@
+
 export class Lead {
     leadId: number;
     firstName: string="";
@@ -21,6 +22,7 @@ export class Lead {
     productId: number;
     productTitle: string="";
     createdDate: Date;
+    modifiedDate:Date;
     isHovered:boolean;
     avatar:any;
     constructor(reg){
@@ -54,6 +56,32 @@ export class Tag{
     constructor(reg){
         this.tagId = reg.tagId?reg.tagId: -1
     }
+}
+export class Email{
+    emailId: number;
+    subject: string;
+    description: string;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg){
+        this.emailId = reg.emailId?reg.emailId:-1
+    }
+}
+export class LeadCustomList {
+    listId: number = -1;
+    listTitle: string ="";
+    filter: string = "";
+    filterParsed: LeadFilter = new LeadFilter();
+    constructor(reg) {
+        this.listId = reg.list ? reg.list : -1;
+        this.filterParsed = reg.filterParsed?reg.filterParsed:new LeadFilter();
+    }
+}
+export class LeadFilter{
+    leadOwner:string[]=[];
+    createdDate:Date=null;
+    modifiedDate:Date=null;
+    leadStatus:number[]=[];
 }
 export class Note{
     noteId:number;
@@ -94,5 +122,17 @@ export class TaskModel {
     tags:Tag[];
     constructor(reg){
         this.taskId = reg.taskId?reg.taskId:-1
+    }
+}
+export class Call{
+    callId: number;
+    subject: string;
+    response: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg){
+        this.callId = reg.callId?reg.callId:-1
     }
 }
