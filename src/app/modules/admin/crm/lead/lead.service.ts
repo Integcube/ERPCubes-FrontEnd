@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks } from './lead.type';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,7 @@ export class LeadService {
   private readonly saveEmailsUrl = `${environment.url}/Email/save`
   private readonly getCallsUrl = `${environment.url}/Call/all`
   private readonly saveCallsUrl = `${environment.url}/Call/save`
+  private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
 
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
@@ -55,6 +56,7 @@ export class LeadService {
   private _email:BehaviorSubject<Email | null> = new BehaviorSubject(null);
   private _calls:BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _call:BehaviorSubject<Call | null> = new BehaviorSubject(null);
+  private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -88,6 +90,10 @@ export class LeadService {
   )
   updateSearchQuery(value: any) {
     this._serachQuery.next(value);
+  }
+  get activities$(): Observable<any>
+  {
+      return this._activities.asObservable();
   }
   selectedNoteTask$ = this.note$.pipe(
     switchMap((note) => {
@@ -524,7 +530,6 @@ export class LeadService {
       subject: email.subject,
       description: email.description
     }
-    debugger;
     return this._httpClient.post<Email[]>(this.saveEmailsUrl, data).pipe(
       tap((email) => {
         this.getEmails(leadId).subscribe();
@@ -550,14 +555,12 @@ export class LeadService {
     );
   }
   getCalls(leadId: number): Observable<Call[]> {
-    debugger;
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
       leadId
     }
-    debugger;
     return this._httpClient.post<Call[]>(this.getCallsUrl, data).pipe(
       tap((calls) => {
         this._calls.next(calls);
@@ -565,5 +568,21 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
 
     );
+  }
+
+  getActivities(count:number, leadId:number): Observable<any>
+  {
+      let data = {
+          tenantId: this.user.tenantId,
+          id: this.user.id,
+          count,
+          leadId,
+          companyId:-1,
+      }
+      return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
+          tap((response: Activity[]) => {
+              this._activities.next(response);
+          })
+      );
   }
 }

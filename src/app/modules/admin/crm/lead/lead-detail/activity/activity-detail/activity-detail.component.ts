@@ -1,87 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivitiesService } from 'app/modules/admin/app/activity/activities.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Activity } from 'app/modules/admin/app/activity/activities.types';
 import moment from 'moment';
-import { Observable } from 'rxjs';
-
+import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { LeadService } from '../../../lead.service';
+import { Lead } from '../../../lead.type';
 @Component({
-  selector: 'app-activity-detail',
-  templateUrl: './activity-detail.component.html',
-  styleUrls: ['./activity-detail.component.scss']
+    selector: 'app-activity-detail',
+    templateUrl: './activity-detail.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ActivityDetailComponent implements OnInit {
-
-  activities$: Observable<Activity[]>;
-
-    /**
-     * Constructor
-     */
-    constructor(public _activityService: ActivitiesService)
-    {
+export class ActivityDetailComponent implements OnInit, OnDestroy {
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+    counter = 1;
+    lead: Lead;
+    activitiesz$: Observable<Activity[]> = combineLatest(this._leadService.activities$, this._leadService.users$)
+        .pipe(map(([activities, users]) => {
+            if (activities) {
+                return activities.map(activity => ({
+                    ...activity,
+                    userName: users.find(u => u.id == activity.createdBy)?.name // Access the username property from the user
+                } as Activity))
+            }
+        }
+        ));
+    constructor(public _leadService: LeadService,
+        private _changeDetectorRef: ChangeDetectorRef,
+    ) { }
+    ngOnInit(): void {
+        this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
+            this.lead = { ...data }; this.getActivity();
+        })
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        // Get the activities
-        this.activities$ = this._activityService.activities;
+    // loadMoreEntries(event: Event): void {
+    //     const scrollPosition = window.pageYOffset;
+    //     const windowSize = window.innerHeight;
+    //     const documentSize = document.body.offsetHeight;
+    //     if (scrollPosition + windowSize >= documentSize - 20) {
+    //         this.getActivity();
+    //     }
+    // }
+    getActivity() {
+        this._leadService.getActivities(this.counter, this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe((newEntries) => {
+            this.counter++;
+            this._changeDetectorRef.markForCheck();
+        });
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Returns whether the given dates are different days
-     *
-     * @param current
-     * @param compare
-     */
-    isSameDay(current: string, compare: string): boolean
-    {
+    isSameDay(current: string, compare: string): boolean {
         return moment(current, moment.ISO_8601).isSame(moment(compare, moment.ISO_8601), 'day');
     }
-
-    /**
-     * Get the relative format of the given date
-     *
-     * @param date
-     */
-    getRelativeFormat(date: string): string
-    {
+    getRelativeFormat(createdDate: string): string {
         const today = moment().startOf('day');
         const yesterday = moment().subtract(1, 'day').startOf('day');
-
-        // Is today?
-        if ( moment(date, moment.ISO_8601).isSame(today, 'day') )
-        {
+        if (moment(createdDate, moment.ISO_8601).isSame(today, 'day')) {
             return 'Today';
         }
-
-        // Is yesterday?
-        if ( moment(date, moment.ISO_8601).isSame(yesterday, 'day') )
-        {
+        if (moment(createdDate, moment.ISO_8601).isSame(yesterday, 'day')) {
             return 'Yesterday';
         }
-
-        return moment(date, moment.ISO_8601).fromNow();
+        return moment(createdDate, moment.ISO_8601).fromNow();
     }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
-    trackByFn(index: number, item: any): any
-    {
+    trackByFn(index: number, item: any): any {
         return item.id || index;
     }
-
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+    }
 }

@@ -37,7 +37,6 @@ export class LeadsResolver implements Resolve<any>{
        return this._leadService.getLeads();
     }
 }
-
 @Injectable({
     providedIn:'root'
 })
@@ -48,7 +47,6 @@ export class IndustryResolver implements Resolve<any>{
       return this._leadService.getIndustries();
     }
 }
-
 @Injectable({
     providedIn:'root'
 })
@@ -79,7 +77,6 @@ export class ProductResolver implements Resolve<any>{
     return this._leadService.getProduct();
   }
 }
-
 @Injectable({
   providedIn:'root'
 })
@@ -121,6 +118,7 @@ export class NoteResolver implements Resolve<any>{
     return this._leadService.getNotes(+route.paramMap.get('id'));
   }
 }
+
 @Injectable({
     providedIn: 'root'
 })
