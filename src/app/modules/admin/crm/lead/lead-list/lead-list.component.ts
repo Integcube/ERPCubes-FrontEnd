@@ -155,8 +155,8 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         this.leads = [...comapnies];
         this.leadCount = comapnies.length;
         this.dataSource = new MatTableDataSource(this.leads);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
       });

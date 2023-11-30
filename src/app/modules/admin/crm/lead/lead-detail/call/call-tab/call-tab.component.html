@@ -9,29 +9,32 @@
             <ng-container *ngFor="let call of calls">
                 <fuse-card
                     class="relative flex flex-col w-full p-4 filter-testimonial my-2 rounded-sm cursor-pointer"
-                    (click)="updateCall(call)"
-                >
+                    (click)="updateCall(call)">
                     <div class="flex flex-row justify-between w-full">
                         <span class="flex text-md truncate"><b>Call</b>&nbsp;{{"Made by " + call.createdByTitle}}</span>
                         <span class="flex text-md truncate">{{call.createdDate | date:'long'}}</span>
                     </div>
                     <div class="flex flex-col mt-2">
                         <div>
-                            <span class="text-md font-semibold"><u>Subject:</u></span>
-                            <span class="flex flex-wrap text-md line-clamp-1">{{call.subject}}</span>
+                            <span class="text-md font-semibold">Subject</span>
+                            <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
+                               <span class="flex flex-wrap text-xs sm:text-sm">{{call.subject}}</span>
+                            </div>
                         </div>
-                        <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-800">
-                            <!-- <span class="text-md font-semibold"><u>Body:</u></span> -->
-                            <span class="flex flex-wrap text-md line-clamp-3" [innerHTML]="sanitizeHtml(call.response)"></span>
+                        <div>
+                            <span class="text-md font-semibold">Response</span>
+                            <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
+                               <span class="flex flex-wrap text-md line-clamp-3" [innerHTML]="sanitizeHtml(call.response)"></span>
+                            </div>
                         </div>
-                        <div class="flex flex-row mt-4 justify-between py-4 px-0 bg-white dark:bg-transparent">
+                        <div class="flex flex-row justify-between py-3 px-0 bg-white dark:bg-transparent">
                             <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
                                 [ngClass]="{'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': call.startTime}">
                                 <span class="leading-relaxed whitespace-nowrap">Start Time: {{call.startTime | date:'shortTime':'GMT'}}</span>
                             </span>
                             <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
                                 [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': call.endTime}">
                                 <span class="leading-relaxed whitespace-nowrap">End Time: {{call.endTime | date:'shortTime':'GMT'}}</span>
                             </span>

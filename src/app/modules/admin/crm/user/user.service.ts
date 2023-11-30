@@ -14,8 +14,8 @@ import { FormGroup } from '@angular/forms';
 export class UserFormService {
 
     private readonly adduserListURL = `${environment.url}/Account/register`
-    private readonly getuserListURL = `${environment.url}/AspNetUsers/all`
-    private readonly updateUserURL = `${environment.url}/AspNetUsers/update`
+    private readonly getuserListURL = `${environment.url}/Users/all`
+    private readonly updateUserURL = `${environment.url}/Users/update`
     // private readonly deleteCompanyURL = `${environment.url}/Company/save`
 
     user: User;
@@ -104,13 +104,8 @@ export class UserFormService {
           userName: user.value.userName,
           email: user.value.email,
           phoneNumber: user.value.phoneNumber,
-          passwordHash: user.value.passwordHash,
-
-
         }
-
-          debugger;
-        return this._httpClient.post<UserForm[]>(this.adduserListURL, data).pipe(
+        return this._httpClient.post<UserForm[]>(this.updateUserURL, data).pipe(
           tap((users) => {
             debugger;
             this.getUsers();
@@ -118,8 +113,6 @@ export class UserFormService {
         );
 
       }
-    
-    
       deleteCompany(user:UserForm){
         let data = {
           id: this.user.id,

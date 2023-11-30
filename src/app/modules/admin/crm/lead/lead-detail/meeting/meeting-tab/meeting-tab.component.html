@@ -15,23 +15,22 @@
                     </div>
                     <div class="flex flex-col mt-2">
                         <div>
-                            <span class="text-md font-semibold"><u>Subject:</u></span>
-                            <span class="flex flex-wrap text-md line-clamp-1">{{meeting.subject}}</span>
+                            <span class="text-md font-semibold">Subject</span>
+                            <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
+                               <span class="flex flex-wrap text-xs sm:text-sm">{{meeting.subject}}</span>
+                            </div>
                         </div>
-                        <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
-                            <span class="text-md font-semibold"><u>Response:</u></span>
-                            <span class="flex flex-wrap text-md line-clamp-3">{{meeting.note}}</span>
+                        <div>
+                            <span class="text-md font-semibold">Response</span>
+                            <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
+                               <span class="flex flex-wrap text-md line-clamp-3">{{meeting.note}}</span>
+                            </div>
                         </div>
-                        <div class="flex flex-row mt-4 justify-between py-4 px-0 bg-white dark:bg-transparent">
+                        <div class="flex flex-row justify py-2 px-0 bg-white dark:bg-transparent">
                             <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
-                                [ngClass]="{'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': meeting.startTime}">
-                                <span class="leading-relaxed whitespace-nowrap">Start Time: {{meeting.startTime | date:'shortTime':'GMT'}}</span>
-                            </span>
-                            <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
-                                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': meeting.endTime}">
-                                <span class="leading-relaxed whitespace-nowrap">End Time: {{meeting.endTime | date:'shortTime':'GMT'}}</span>
+                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide mt-1"
+                                [ngClass]="{'bg-yellow-300 text-blue-800 dark:bg-blue-600 dark:text-blue-50': meeting.startTime}">
+                                <span class="leading-relaxed whitespace-nowrap">From {{meeting.startTime | date:'shortTime':'GMT'}} To {{meeting.endTime | date:'shortTime':'GMT'}}</span>
                             </span>
                         </div>
                     </div>                   

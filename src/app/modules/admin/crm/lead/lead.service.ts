@@ -254,7 +254,6 @@ export class LeadService {
   getLeads(): Observable<Lead[]> {
     return this.filter$.pipe(
       switchMap((filter: LeadFilter) => {
-        debugger;
         const data = {
           id: this.user.id,
           tenantId: this.user.tenantId,
@@ -263,7 +262,6 @@ export class LeadService {
           modifiedDate: filter?.modifiedDate || null,
           leadStatus: filter?.leadStatus.join(', ') || "",
         };
-
         return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
           tap((leads) => {
             this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
@@ -342,14 +340,12 @@ export class LeadService {
     );
   }
   getMeetings(leadId: number): Observable<Meeting[]> {
-    debugger;
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
       leadId
     }
-    debugger;
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
       tap((meetings) => {
         this._meetings.next(meetings);
@@ -630,6 +626,7 @@ export class LeadService {
       companyId: -1,
       leadId
     }
+    debugger;
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
       tap((emails) => {
         this._emails.next(emails);
@@ -638,7 +635,6 @@ export class LeadService {
     );
   }
   getCalls(leadId: number): Observable<Call[]> {
-    debugger;
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
