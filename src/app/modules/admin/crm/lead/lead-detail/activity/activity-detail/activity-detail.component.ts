@@ -10,6 +10,7 @@ import { Lead } from '../../../lead.type';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityDetailComponent implements OnInit, OnDestroy {
+    loadingMore = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     counter = 1;
     lead: Lead;
@@ -23,6 +24,16 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             }
         }
         ));
+    @HostListener('window:scroll', ['$event'])
+    onScroll(): void {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = document.body.scrollHeight;
+        if (scrollPosition >= documentHeight - 1 && !this.loadingMore) {
+            setTimeout(() => {
+                this.getActivity();
+            }, 500);
+        }
+    }
     constructor(public _leadService: LeadService,
         private _changeDetectorRef: ChangeDetectorRef,
     ) { }
@@ -31,17 +42,11 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             this.lead = { ...data }; this.getActivity();
         })
     }
-    // loadMoreEntries(event: Event): void {
-    //     const scrollPosition = window.pageYOffset;
-    //     const windowSize = window.innerHeight;
-    //     const documentSize = document.body.offsetHeight;
-    //     if (scrollPosition + windowSize >= documentSize - 20) {
-    //         this.getActivity();
-    //     }
-    // }
     getActivity() {
+        this.loadingMore = true;
         this._leadService.getActivities(this.counter, this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe((newEntries) => {
             this.counter++;
+            this.loadingMore = false;
             this._changeDetectorRef.markForCheck();
         });
     }

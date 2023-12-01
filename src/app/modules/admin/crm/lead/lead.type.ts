@@ -84,6 +84,8 @@ export class LeadCustomList {
     listId: number = -1;
     listTitle: string = "";
     filter: string = "";
+    isPublic: number;
+    type: string;
     filterParsed: LeadFilter = new LeadFilter();
     constructor(reg) {
         this.listId = reg.list ? reg.list : -1;

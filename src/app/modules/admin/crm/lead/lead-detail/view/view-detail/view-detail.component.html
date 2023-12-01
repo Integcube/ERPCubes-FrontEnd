@@ -9,22 +9,25 @@
         </div>
 
         <!-- Task form -->
-        <form class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 overflow-y-auto">
+        <form [formGroup]="viewForm" class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 overflow-y-auto">
             <!-- Title -->
             <mat-form-field class="fuse-mat-dense w-full">
                 <mat-label>Title</mat-label>
-                <input matInput>
+                <input matInput [formControlName]="'listTitle'">
+                <mat-error *ngIf="viewForm.get('listTitle').hasError('required')">
+                    Title is required
+                </mat-error>
             </mat-form-field>
             <!-- Description -->
             <div class="flex flex-col gt-xs:flex-row">
                 <span class="font-semibold mb-2 gt-xs:text-right gt-xs:min-w-32 gt-xs:mr-4 gt-xs:mb-0">
                     Shared with
                 </span>
-                <mat-radio-group class="flex flex-col" [color]="'primary'" [value]="'just-good'">
-                    <mat-radio-button class="mb-2" [value]="'everything'">
+                <mat-radio-group class="flex flex-col" [formControlName]="'isPublic'" [color]="'primary'" [value]="'just-good'">
+                    <mat-radio-button class="mb-2" [value]=0>
                         Private
                     </mat-radio-button>
-                    <mat-radio-button class="mb-2" [value]="'just-good'">
+                    <mat-radio-button class="mb-2" [value]=1>
                         Everyone
                     </mat-radio-button>
                 </mat-radio-group>
@@ -34,8 +37,8 @@
         <div
             class="flex sticky bottom-0 items-center py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
             <!-- Delete -->
-            <ng-container class="ml-4">
-                <button mat-button [color]="'warn'" [matTooltip]="'Delete'">
+            <ng-container class="ml-4" *ngIf="viewForm.value.listId != -1">
+                <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
                     Delete
                 </button>
             </ng-container>
@@ -45,7 +48,7 @@
                 Cancel
             </button>
             <!-- Save -->
-            <button class="ml-2" mat-flat-button [color]="'primary'" [matTooltip]="'Save'">
+            <button class="ml-2" mat-flat-button [color]="'primary'" [matTooltip]="'Save'" [disabled]="!viewForm.valid" (click)="save()">
                 Save
             </button>
         </div>

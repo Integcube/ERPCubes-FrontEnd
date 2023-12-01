@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component,ChangeDetectionStrategy, ElementRef, Inject, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { Lead, LeadCustomList, LeadFilter, LeadStatus } from '../lead.type';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DOCUMENT } from '@angular/common';
@@ -14,47 +14,57 @@ import { LeadService } from '../lead.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { User } from 'app/core/user/user.types';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail.component';
 
 @Component({
   selector: 'app-lead-list',
   templateUrl: './lead-list.component.html',
-  styleUrls: ['./lead-list.component.scss']
+  styleUrls: ['./lead-list.component.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class LeadListComponent implements OnInit, AfterViewInit {
+export class LeadListComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('usersPanel') private _usersPanel: TemplateRef<any>;
   @ViewChild('usersPanelOrigin') private _usersPanelOrigin: ElementRef;
+  @ViewChild('createdDatePanel') private _createdDatePanel: TemplateRef<any>;
+  @ViewChild('createdDatePanelOrigin') private _createdDatePanelOrigin: ElementRef;
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'leadStatus', 'createdDate'];
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
-  filter:LeadFilter={
+  dateRangesFilter:any[];
+  dateRanges: { label: string, value: string }[] = [
+    { label: 'Today', value: 'today' },
+    { label: 'Last Week', value: 'lastWeek' },
+    { label: 'Last 15 Days', value: 'last15Days' },
+    { label: 'Last Month', value: 'lastMonth' },
+    { label: 'Last 4 Months', value: 'last4Months' },
+    { label: 'Last 8 Months', value: 'last8Months' },
+    { label: 'Last Year', value: 'lastYear' },
+    { label: 'More Than a Year', value: 'moreThanYear' }
+  ];
+  filter: LeadFilter = {
     leadOwner: [],
     createdDate: null,
     modifiedDate: null,
     leadStatus: []
   }
-  //Users
   filteredUsers: User[]
   users: User[]
-  filteredUserArr:number[]=[]
-  //Status
+  filteredUserArr: number[] = []
   filteredStatus: LeadStatus[]
   status: LeadStatus[]
-  filteredStatusArr:number[]=[]
+  filteredStatusArr: number[] = []
   leads$: Observable<Lead[]>;
   leads: Lead[];
   leadCount: number = 0;
   selectedLead: Lead;
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  //Observables
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
   customLists$ = this._leadService.customLists$;
@@ -71,13 +81,47 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
   ) { }
-  getLeads(list:LeadCustomList, name:string): void {
+  onDateRangeChange(selectedValue: string) {
+    let startDate: Date = new Date();
+    let endDate: Date = new Date();
+    switch (selectedValue) {
+      case 'today':
+        endDate.setDate(endDate.getDate() + 1);
+        break;
+      case 'lastWeek':
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case 'last15Days':
+        startDate.setDate(startDate.getDate() - 15);
+        break;
+      case 'lastMonth':
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      case 'last4Months':
+        startDate.setMonth(startDate.getMonth() - 4);
+        break;
+      case 'last8Months':
+        startDate.setMonth(startDate.getMonth() - 8);
+        break;
+      case 'lastYear':
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        break;
+      case 'moreThanYear':
+        startDate.setFullYear(startDate.getFullYear() - 100);
+        break;
+      default:
+        break;
+    }
+    this.filter.createdDate=startDate;
+    this._leadService.setFilter(this.filter);
+  }
+  getLeads(list: LeadCustomList, name: string): void {
     if (list === null) {
       list = new LeadCustomList({});
       list.listTitle = name;
     }
-      this.filter = list.filterParsed;
-      this._leadService.setCustomList(list);
+    this.filter = list.filterParsed;
+    this._leadService.setCustomList(list);
     this._leadService.setFilter(list.filterParsed);
   }
   openUsersPanel(): void {
@@ -117,19 +161,72 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  addView(){
-    this._matDialog.open(ViewDetailComponent, {
-      autoFocus: false,
-      data     : {
-      }
-  });
+  filterCreatedDate(event): void {
+    const value = event.target.value.toLowerCase();
+    fromEvent(event.target, 'input')
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.dateRangesFilter = this.dateRanges.filter(user =>
+          user.label.toLowerCase().includes(value)
+        );
+      });
   }
-  updateView():void{
+  openCreatedDatePanel(): void{
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._createdDatePanelOrigin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._createdDatePanelOrigin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._createdDatePanel, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._createdDatePanelOrigin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.dateRangesFilter = this.dateRanges;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    });
+  }
+  addView() {
+    let view = new LeadCustomList({});
     this._matDialog.open(ViewDetailComponent, {
       autoFocus: false,
-      data     : {
+      data: {
+        view: view
       }
-  });
+    });
+  }
+  updateView(view: LeadCustomList): void {
+    this._matDialog.open(ViewDetailComponent, {
+      autoFocus: false,
+      data: {
+        view: view
+      }
+    });
   }
   onMouseEnter(row: Lead) {
     row.isHovered = true;
@@ -141,26 +238,38 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     this._router.navigate(['detail-view', row.leadId], { relativeTo: this._activatedRoute });
   }
   ngOnInit(): void {
+    this.dateRangesFilter=[...this.dateRanges];
     let selectedList = new LeadCustomList({});
     selectedList.listTitle = "All leads"
     this._leadService.setCustomList(selectedList);
     this.leads$ = this._leadService.filteredLeads$;
     this._leadService.filteredLeads$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        }))
-      .subscribe((comapnies: Lead[]) => {
-        this.leads = [...comapnies];
-        this.leadCount = comapnies.length;
-        this.dataSource = new MatTableDataSource(this.leads);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-        this.ngAfterViewInit();
-        this._changeDetectorRef.markForCheck();
-      });
+  .pipe(
+    takeUntil(this._unsubscribeAll),
+    catchError(err => {
+      this.errorMessageSubject.next(err);
+      return EMPTY;
+    })
+  )
+  .subscribe((companies: Lead[]) => {
+    this.leads = [...companies];
+    this.leadCount = companies.length;
 
+    if (this.leads.length > 0) {
+      this.dataSource = new MatTableDataSource(this.leads);
+      
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+      if (this.sort) {
+        this.dataSource.sort = this.sort;
+      }
+    } else {
+      this.dataSource.data = [];
+    }
+
+    this._changeDetectorRef.markForCheck();
+  });
     this._leadService.lead$
       .pipe(takeUntil(this._unsubscribeAll),
         catchError(err => {
@@ -171,28 +280,24 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         this.selectedLead = Lead;
         this._changeDetectorRef.markForCheck();
       });
-
     this.matDrawer.openedChange.subscribe((opened) => {
       if (!opened) {
         this.selectedLead = null;
         this._changeDetectorRef.markForCheck();
       }
     });
-
     this._leadService.users$.pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((users: User[]) => {
-      this.users = users;
-      this.filteredUsers = this.users;
-      this._changeDetectorRef.markForCheck();
-    })
-
+      .subscribe((users: User[]) => {
+        this.users = users;
+        this.filteredUsers = this.users;
+        this._changeDetectorRef.markForCheck();
+      })
     this._leadService.leadStatus$.pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((status: LeadStatus[]) => {
-      this.status = status;
-      this.filteredStatus = this.status;
-      this._changeDetectorRef.markForCheck();
-    })
-
+      .subscribe((status: LeadStatus[]) => {
+        this.status = status;
+        this.filteredStatus = this.status;
+        this._changeDetectorRef.markForCheck();
+      })
     this._fuseMediaWatcherService.onMediaChange$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(({ matchingAliases }) => {
@@ -204,7 +309,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         }
         this._changeDetectorRef.markForCheck();
       });
-
     fromEvent(this._document, 'keydown')
       .pipe(
         takeUntil(this._unsubscribeAll),
@@ -217,10 +321,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         this.createLead();
       });
   }
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
@@ -237,18 +338,18 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-  cancelFilters(filterId:number): void{
-    if(filterId == 1){
-      this.filter.leadOwner = [];     
+  cancelFilters(filterId: number): void {
+    if (filterId == 1) {
+      this.filter.leadOwner = [];
     }
-    else if(filterId == 2){
-      this.filter.createdDate = null;     
+    else if (filterId == 2) {
+      this.filter.createdDate = null;
     }
-    else if(filterId == 3){
-      this.filter.modifiedDate = null;     
+    else if (filterId == 3) {
+      this.filter.modifiedDate = null;
     }
-    else if(filterId == 4){
-      this.filter.leadStatus = [];     
+    else if (filterId == 4) {
+      this.filter.leadStatus = [];
     }
     this._leadService.setFilter(this.filter);
   }
@@ -277,12 +378,11 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  filterUsers(event): void
-  {
+  filterUsers(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
       .pipe(
-        debounceTime(300), 
+        debounceTime(300),
         distinctUntilChanged()
       )
       .subscribe(() => {

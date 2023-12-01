@@ -10,7 +10,7 @@ import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, Lead
   providedIn: 'root'
 })
 export class LeadService {
-
+  user: User;
   private readonly getLeadListURL = `${environment.url}/Lead/all`
   private readonly saveLeadURL = `${environment.url}/Lead/save`
   private readonly deleteLeadURL = `${environment.url}/Lead/delete`
@@ -26,6 +26,9 @@ export class LeadService {
   private readonly getLeadTaskUrl = `${environment.url}/Task/all`
   private readonly getTaskTagsUrl = `${environment.url}/Task/tags`
   private readonly getCustomListUrl = `${environment.url}/CustomList/all`
+  private readonly saveCustomListUrl = `${environment.url}/CustomList/save`
+  private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
+  private readonly saveCustomListFilterUrl = `${environment.url}/CustomList/saveFilter`
   private readonly deleteTaskUrl = `${environment.url}/Task/delete`
   private readonly saveTaskUrl = `${environment.url}/Task/save`
   private readonly updateTaskStatusUrl = `${environment.url}/Task/updateStatus`
@@ -34,8 +37,6 @@ export class LeadService {
   private readonly getCallsUrl = `${environment.url}/Call/all`
   private readonly saveCallsUrl = `${environment.url}/Call/save`
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
-
-  user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
   private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
@@ -52,10 +53,9 @@ export class LeadService {
   private _customLists: BehaviorSubject<LeadCustomList[] | null> = new BehaviorSubject(null);
   private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
   private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
-  private _emails:BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
-  private _email:BehaviorSubject<Email | null> = new BehaviorSubject(null);
-  private _calls:BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
-  private _call:BehaviorSubject<Call | null> = new BehaviorSubject(null);
+  private _emails: BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
+  private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
+  private _call: BehaviorSubject<Call | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
@@ -69,31 +69,30 @@ export class LeadService {
     this.leads$,
     this.filter$
   ).pipe(
-    map(([leads, filter])=>{
-      return leads.filter(lead=>{
+    map(([leads, filter]) => {
+      return leads.filter(lead => {
         let passFilter = true;
-      if (filter.leadOwner.length > 0) {
-        passFilter = passFilter && filter.leadOwner.includes(lead.leadOwner);
-      }
-      if (filter.leadStatus.length > 0) {
-        passFilter = passFilter && filter.leadStatus.includes(lead.status);
-      }
-      if (filter.createdDate) {
-        passFilter = passFilter && lead.createdDate >= filter.createdDate;
-      }
-      if (filter.modifiedDate) {
-        passFilter = passFilter && lead.modifiedDate >= filter.modifiedDate;
-      }
-      return passFilter;
+        if (filter.leadOwner.length > 0) {
+          passFilter = passFilter && filter.leadOwner.includes(lead.leadOwner);
+        }
+        if (filter.leadStatus.length > 0) {
+          passFilter = passFilter && filter.leadStatus.includes(lead.status);
+        }
+        if (filter.createdDate) {
+          passFilter = passFilter && lead.createdDate <= filter.createdDate;
+        }
+        if (filter.modifiedDate) {
+          passFilter = passFilter && lead.modifiedDate <= filter.modifiedDate;
+        }
+        return passFilter;
       })
     })
   )
   updateSearchQuery(value: any) {
     this._serachQuery.next(value);
   }
-  get activities$(): Observable<any>
-  {
-      return this._activities.asObservable();
+  get activities$(): Observable<any> {
+    return this._activities.asObservable();
   }
   selectedNoteTask$ = this.note$.pipe(
     switchMap((note) => {
@@ -200,6 +199,9 @@ export class LeadService {
   get calls$(): Observable<Call[]> {
     return this._calls.asObservable();
   }
+  get emails$(): Observable<Email[]> {
+    return this._emails.asObservable();
+  }
   getTags(): Observable<Tag[]> {
     let data = {
       id: this.user.id,
@@ -248,7 +250,6 @@ export class LeadService {
   getLeads(): Observable<Lead[]> {
     return this.filter$.pipe(
       switchMap((filter: LeadFilter) => {
-        debugger;
         const data = {
           id: this.user.id,
           tenantId: this.user.tenantId,
@@ -445,13 +446,16 @@ export class LeadService {
     return this._httpClient.post<LeadCustomList[]>(this.getCustomListUrl, data).pipe(
       map(data => {
         return data.map(d => {
-          const jsonObject = JSON.parse(d.filter);
-          let filter: LeadFilter = {
-            leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner.split(', ') : [],
-            createdDate: jsonObject?.createdDate,
-            modifiedDate: jsonObject?.modifiedDate, 
-            leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus.split(', ').map(Number) : [],
-          };
+          let filter = new LeadFilter();
+          if (d.filter) {
+            const jsonObject = JSON.parse(d.filter);
+            filter = {
+              leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner.split(', ') : [],
+              createdDate: jsonObject?.createdDate,
+              modifiedDate: jsonObject?.modifiedDate,
+              leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus.split(', ').map(Number) : [],
+            };
+          }
           return {
             ...d,
             filterParsed: filter
@@ -462,6 +466,56 @@ export class LeadService {
         this._customLists.next(customList);
       }),
       catchError(error => { alert(error); return EMPTY; })
+    );
+  }
+  saveCustomList(leadList: LeadCustomList): Observable<LeadCustomList> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      listId: leadList.listId,
+      listTitle: leadList.listTitle,
+      isPublic: leadList.isPublic,
+      type: "Lead"
+    }
+    return this._httpClient.post<LeadCustomList>(this.saveCustomListUrl, data).pipe(
+      map(customList => {
+        let filter = new LeadFilter();
+        if (customList.filter) {
+          const jsonObject = JSON.parse(customList.filter);
+          filter = {
+            leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner.split(', ') : [],
+            createdDate: jsonObject?.createdDate,
+            modifiedDate: jsonObject?.modifiedDate,
+            leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus.split(', ').map(Number) : [],
+          };
+        }
+        return {
+          ...customList,
+          filterParsed: new LeadFilter()
+        }
+      }),
+      tap((customList) => {
+        this.setCustomList(customList)
+        this.getCustomList().subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteCustomList(leadList: LeadCustomList): Observable<LeadCustomList> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      listId: leadList.listId,
+      listTitle: leadList.listTitle,
+    }
+    return this._httpClient.post<LeadCustomList>(this.deleteCustomListUrl, data).pipe(
+      tap((customList) => {
+        let list = new LeadCustomList({});
+        list.listTitle = "All Leads";
+        this.setCustomList(list);
+        this.getCustomList().subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
     );
   }
   setCustomList(list: LeadCustomList) {
@@ -537,9 +591,6 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
-  get emails$(): Observable<Email[]> {
-    return this._emails.asObservable();
-  }
   getEmails(leadId: number): Observable<Email[]> {
     let data = {
       id: "-1",
@@ -569,20 +620,18 @@ export class LeadService {
 
     );
   }
-
-  getActivities(count:number, leadId:number): Observable<any>
-  {
-      let data = {
-          tenantId: this.user.tenantId,
-          id: this.user.id,
-          count,
-          leadId,
-          companyId:-1,
-      }
-      return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
-          tap((response: Activity[]) => {
-              this._activities.next(response);
-          })
-      );
+  getActivities(count: number, leadId: number): Observable<any> {
+    let data = {
+      tenantId: this.user.tenantId,
+      id: this.user.id,
+      count,
+      leadId,
+      companyId: -1,
+    }
+    return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
+      tap((response: Activity[]) => {
+        this._activities.next(response);
+      })
+    );
   }
 }
