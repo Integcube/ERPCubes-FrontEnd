@@ -244,32 +244,21 @@ export class LeadListComponent implements OnInit {
     this._leadService.setCustomList(selectedList);
     this.leads$ = this._leadService.filteredLeads$;
     this._leadService.filteredLeads$
-  .pipe(
-    takeUntil(this._unsubscribeAll),
-    catchError(err => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    })
-  )
-  .subscribe((companies: Lead[]) => {
-    this.leads = [...companies];
-    this.leadCount = companies.length;
-
-    if (this.leads.length > 0) {
-      this.dataSource = new MatTableDataSource(this.leads);
-      
-      if (this.paginator) {
+      .pipe(takeUntil(this._unsubscribeAll),
+        catchError(err => {
+          this.errorMessageSubject.next(err);
+          return EMPTY;
+        }))
+      .subscribe((comapnies: Lead[]) => {
+        this.leads = [...comapnies];
+        this.leadCount = comapnies.length;
+        this.dataSource = new MatTableDataSource(this.leads);
         this.dataSource.paginator = this.paginator;
-      }
-      if (this.sort) {
         this.dataSource.sort = this.sort;
-      }
-    } else {
-      this.dataSource.data = [];
-    }
+        // this.ngAfterViewInit();
+        this._changeDetectorRef.markForCheck();
+      });
 
-    this._changeDetectorRef.markForCheck();
-  });
     this._leadService.lead$
       .pipe(takeUntil(this._unsubscribeAll),
         catchError(err => {

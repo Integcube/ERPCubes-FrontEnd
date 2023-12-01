@@ -11,10 +11,21 @@ export const crmRoutes: Routes = [{
 
 {
     path: 'configurations', children: [
-        { path: 'users', loadChildren: () => import('app/modules/admin/crm/user/user.module').then(m => m.UserModule) },
+        // { path: 'users', loadChildren: () => import('app/modules/admin/crm/user/user.module').then(m => m.UserModule) },
         { path: 'teams', loadChildren: () => import('app/modules/admin/crm/team/team.module').then(m => m.TeamModule) },
 
     ]
 },
 
+{
+    path: 'configurations', children: [
+        { path: 'users', loadChildren: () => import('app/modules/admin/crm/user/user.module').then(m => m.UserModule) },
+    ]
+},
+
+{
+    path: 'configurations', children:[
+        { path: 'products',loadChildren:()=> import('app/modules/admin/crm/product/product.module').then(m=>m.ProductModule)},
+    ]
+},
 ]

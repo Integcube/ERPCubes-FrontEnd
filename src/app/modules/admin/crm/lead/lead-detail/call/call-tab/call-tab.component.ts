@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -7,6 +6,7 @@ import { combineLatest, map, catchError, EMPTY } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { CallDetailComponent } from '../call-detail/call-detail.component';
 import { Call } from '../../../lead.type';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-call-tab',
@@ -23,17 +23,29 @@ export class CallTabComponent implements OnInit {
     map(([calls, users]) =>
     calls.map(call => ({
         ...call,
-        callOwnerTitle : users?.find(a=>a.id === call.subject)?.name,
         createdByTitle:  users?.find(a=>a.id === call.createdBy)?.name,
       } as Call))
     ),
     catchError(error=>{alert(error);return EMPTY})
   );
+  filteredData$ = combineLatest([
+    this._leadService.searchQuery$,
+    this.callWithUser$
+  ]).pipe(
+    map(([search, calls]) => !search || !search.trim() ? calls :
+    calls.filter(e =>
+        e.subject.toLowerCase().includes(search.trim().toLowerCase())
+      )
+    ),
+  );
   constructor(
     private _leadService:LeadService,
     private _matDialog: MatDialog,
+    private sanitizer: DomSanitizer
   ) { }
-
+  sanitizeHtml(htmlString: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(htmlString);
+  }
   ngOnInit(): void {
   }
   addCall(){

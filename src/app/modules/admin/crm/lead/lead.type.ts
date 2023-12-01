@@ -151,3 +151,15 @@ export class Call {
         this.callId = reg.callId ? reg.callId : -1
     }
 }
+export class Meeting{
+    meetingId: number;
+    subject: string;
+    note: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg){
+        this.meetingId = reg.meetingId?reg.meetingId:-1
+    }
+}

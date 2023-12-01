@@ -4,13 +4,12 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks } from './lead.type';
+import { Activity,Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks,Meeting } from './lead.type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeadService {
-  user: User;
   private readonly getLeadListURL = `${environment.url}/Lead/all`
   private readonly saveLeadURL = `${environment.url}/Lead/save`
   private readonly deleteLeadURL = `${environment.url}/Lead/delete`
@@ -36,7 +35,11 @@ export class LeadService {
   private readonly saveEmailsUrl = `${environment.url}/Email/save`
   private readonly getCallsUrl = `${environment.url}/Call/all`
   private readonly saveCallsUrl = `${environment.url}/Call/save`
+  private readonly getMeetingsUrl = `${environment.url}/Meeting/all`
+  private readonly saveMeetingsUrl = `${environment.url}/Meeting/save`
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
+
+  user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
   private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
@@ -53,10 +56,14 @@ export class LeadService {
   private _customLists: BehaviorSubject<LeadCustomList[] | null> = new BehaviorSubject(null);
   private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
   private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
-  private _emails: BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
-  private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
-  private _call: BehaviorSubject<Call | null> = new BehaviorSubject(null);
+  private _emails:BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
+  private _email:BehaviorSubject<Email | null> = new BehaviorSubject(null);
+  private _calls:BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
+  private _call:BehaviorSubject<Call | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
+
+  private _meetings:BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+  private _meeting:BehaviorSubject<Meeting | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -199,9 +206,13 @@ export class LeadService {
   get calls$(): Observable<Call[]> {
     return this._calls.asObservable();
   }
-  get emails$(): Observable<Email[]> {
-    return this._emails.asObservable();
+  get meeting$(): Observable<Meeting> {
+    return this._meeting.asObservable();
   }
+  get meetings$(): Observable<Meeting[]> {
+    return this._meetings.asObservable();
+  }
+
   getTags(): Observable<Tag[]> {
     let data = {
       id: this.user.id,
@@ -258,7 +269,6 @@ export class LeadService {
           modifiedDate: filter?.modifiedDate || null,
           leadStatus: filter?.leadStatus.join(', ') || "",
         };
-
         return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
           tap((leads) => {
             this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
@@ -331,6 +341,21 @@ export class LeadService {
     return this._httpClient.post<Product[]>(this.getProductUrl, data).pipe(
       tap((product) => {
         this._product.next(product);
+      }),
+      catchError(error => { alert(error); return EMPTY })
+
+    );
+  }
+  getMeetings(leadId: number): Observable<Meeting[]> {
+    let data = {
+      id: "-1",
+      tenantId: this.user.tenantId,
+      companyId: -1,
+      leadId
+    }
+    return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
+      tap((meetings) => {
+        this._meetings.next(meetings);
       }),
       catchError(error => { alert(error); return EMPTY })
 
@@ -434,6 +459,30 @@ export class LeadService {
           return throwError('Could not found the task with id of ' + id + '!');
         }
         return of(task);
+      })
+    );
+  }
+  getMeetingById(id: number): Observable<Meeting> {
+    debugger;
+    return this._meetings.pipe(
+      take(1),
+      map((meetings) => {
+        if (id == -1) {
+          const meeting = new Meeting({});
+          this._meeting.next(meeting);
+          return meeting
+        }
+        else {
+          const meeting = meetings.find(value => value.meetingId === id) || null;
+          this._meeting.next(meeting);
+          return meeting;
+        }
+      }),
+      switchMap((meeting) => {
+        if (!meeting) {
+          return throwError('Could not found the meeting with id of ' + id + '!');
+        }
+        return of(meeting);
       })
     );
   }
@@ -591,6 +640,24 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
+  get emails$(): Observable<Email[]> {
+    return this._emails.asObservable();
+  }
+  saveMeeting(meeting: any, leadId: number):Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      ...meeting.value
+    }
+    debugger;
+    return this._httpClient.post<Meeting[]>(this.saveMeetingsUrl, data).pipe(
+      tap((meeting) => {
+        this.getMeetings(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+
   getEmails(leadId: number): Observable<Email[]> {
     let data = {
       id: "-1",
@@ -598,9 +665,30 @@ export class LeadService {
       companyId: -1,
       leadId
     }
+    debugger;
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
       tap((emails) => {
         this._emails.next(emails);
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  saveCall(call: any, leadId: number): Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      companyId: -1,
+      leadId: leadId,
+      callId: call.callId,
+      subject: call.subject,
+      response: call.response,
+      startTime: call.startTime,
+      endTime: call.endTime
+    }
+    debugger;
+    return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
+      tap((call) => {
+        this.getCalls(leadId).subscribe();
       }),
       catchError(error => { alert(error); return EMPTY })
     );

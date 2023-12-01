@@ -46,6 +46,8 @@ import { QuillModule } from 'ngx-quill';
 import { ActivityDetailComponent } from './lead-detail/activity/activity-detail/activity-detail.component';
 import { CallDetailComponent } from './lead-detail/call/call-detail/call-detail.component';
 import { CallTabComponent } from './lead-detail/call/call-tab/call-tab.component';
+import { MeetingDetailComponent } from './lead-detail/meeting/meeting-detail/meeting-detail.component';
+import { MeetingTabComponent } from './lead-detail/meeting/meeting-tab/meeting-tab.component';
 
 
 
@@ -69,7 +71,9 @@ import { CallTabComponent } from './lead-detail/call/call-tab/call-tab.component
     EmailDetailComponent,
     ActivityDetailComponent,
     CallDetailComponent,
-    CallTabComponent
+    CallTabComponent,
+    MeetingDetailComponent,
+    MeetingTabComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),
