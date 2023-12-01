@@ -33,6 +33,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   @ViewChild('createdDatePanelOrigin') private _createdDatePanelOrigin: ElementRef;
   @ViewChild('modifiedDatePanel') private _modifiedDatePanel: TemplateRef<any>;
   @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
+  @ViewChild('leadStatusPanel') private _leadStatusPanel: TemplateRef<any>;
+  @ViewChild('leadStatusPanelOrigin') private _leadStatusPanelOrigin: ElementRef;
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'leadStatus', 'createdDate'];
@@ -66,6 +68,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   leadCount: number = 0;
   selectedLead: Lead;
   drawerMode: 'side' | 'over';
+  leadStatus:LeadStatus[];
+  filteredLeadStatus:LeadStatus[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
@@ -116,11 +120,9 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     }
     if(type=="created"){
       this.filter.createdDate=startDate;
-
     }
     else{
       this.filter.modifiedDate=startDate;
-
     }
     this._leadService.setFilter(this.filter);
     this._usersPanelOverlayRef.detach();
