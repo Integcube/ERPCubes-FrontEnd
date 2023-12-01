@@ -86,10 +86,12 @@ export class LeadService {
           passFilter = passFilter && filter.leadStatus.includes(lead.status);
         }
         if (filter.createdDate) {
-          passFilter = passFilter && lead.createdDate <= filter.createdDate;
+          let c = new Date(filter.createdDate);
+          passFilter = passFilter && c >= filter.createdDate;
         }
         if (filter.modifiedDate) {
-          passFilter = passFilter && lead.modifiedDate <= filter.modifiedDate;
+          let d = new Date(filter.modifiedDate);
+          passFilter = passFilter && d >= filter.modifiedDate;
         }
         return passFilter;
       })
@@ -463,7 +465,6 @@ export class LeadService {
     );
   }
   getMeetingById(id: number): Observable<Meeting> {
-    debugger;
     return this._meetings.pipe(
       take(1),
       map((meetings) => {

@@ -23,7 +23,7 @@ import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail
   styleUrls: ['./lead-list.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class LeadListComponent implements OnInit {
+export class LeadListComponent implements OnInit,AfterViewInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -31,6 +31,8 @@ export class LeadListComponent implements OnInit {
   @ViewChild('usersPanelOrigin') private _usersPanelOrigin: ElementRef;
   @ViewChild('createdDatePanel') private _createdDatePanel: TemplateRef<any>;
   @ViewChild('createdDatePanelOrigin') private _createdDatePanelOrigin: ElementRef;
+  @ViewChild('modifiedDatePanel') private _modifiedDatePanel: TemplateRef<any>;
+  @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'leadStatus', 'createdDate'];
@@ -81,7 +83,7 @@ export class LeadListComponent implements OnInit {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef
   ) { }
-  onDateRangeChange(selectedValue: string) {
+  onDateRangeChange(selectedValue: string,type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
     switch (selectedValue) {
@@ -112,8 +114,16 @@ export class LeadListComponent implements OnInit {
       default:
         break;
     }
-    this.filter.createdDate=startDate;
+    if(type=="created"){
+      this.filter.createdDate=startDate;
+
+    }
+    else{
+      this.filter.modifiedDate=startDate;
+
+    }
     this._leadService.setFilter(this.filter);
+    this._usersPanelOverlayRef.detach();
   }
   getLeads(list: LeadCustomList, name: string): void {
     if (list === null) {
@@ -123,6 +133,43 @@ export class LeadListComponent implements OnInit {
     this.filter = list.filterParsed;
     this._leadService.setCustomList(list);
     this._leadService.setFilter(list.filterParsed);
+  }
+  openModifiedDatePanel():void{
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._modifiedDatePanelOrigin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._modifiedDatePanelOrigin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._modifiedDatePanel, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._modifiedDatePanelOrigin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.dateRangesFilter = this.dateRanges;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    }); 
   }
   openUsersPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
@@ -253,9 +300,9 @@ export class LeadListComponent implements OnInit {
         this.leads = [...comapnies];
         this.leadCount = comapnies.length;
         this.dataSource = new MatTableDataSource(this.leads);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        // this.ngAfterViewInit();
+
+        setTimeout
+        this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
       });
 
@@ -310,7 +357,10 @@ export class LeadListComponent implements OnInit {
         this.createLead();
       });
   }
-
+  ngAfterViewInit(){
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
