@@ -1,4 +1,3 @@
-<ng-container *ngIf="meeting$|async as meeting">
     <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 overflow-y-auto">
         <!-- Header -->
         <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
@@ -7,32 +6,27 @@
                 <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
         </div>
-
         <!-- Task form -->
         <form class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 space-y-6 overflow-y-auto"
             [formGroup]="meetingForm">
-            <!-- Title -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                 <mat-label>Subject</mat-label>
                 <textarea matInput [formControlName]="'subject'" [rows]="1" cdkTextareaAutosize
                     [cdkAutosizeMinRows]="1">
                     </textarea>
             </mat-form-field>
-            <!-- Description -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                 <mat-label>Note</mat-label>
                 <textarea matInput [formControlName]="'note'" [rows]="1" cdkTextareaAutosize
                     [cdkAutosizeMinRows]="1">
                     </textarea>
             </mat-form-field>
-            <!-- Description -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                 <mat-label>Start Time</mat-label>
                 <textarea matInput [formControlName]="'startTime'" [rows]="1" cdkTextareaAutosize
                     [cdkAutosizeMinRows]="1">
                     </textarea>
             </mat-form-field>
-            <!-- Description -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                 <mat-label>End Time</mat-label>
                 <textarea matInput [formControlName]="'endTime'" [rows]="1" cdkTextareaAutosize
@@ -42,12 +36,10 @@
             
             
         </form>
-    </div>
-    <!-- Actions -->
-    <div
-        class="flex sticky bottom-0 items-center  -mx-6  sm:-mx-12  py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+        <div
+        class="flex sticky bottom-0 items-center    py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
         <!-- Delete -->
-        <ng-container class="ml-4" *ngIf="meeting.meetingId !== -1">
+        <ng-container class="ml-4" *ngIf="meetingForm.value.meetingId !== -1">
             <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteMeeting()">
                 Delete
             </button>
@@ -64,4 +56,5 @@
         </button>
 
     </div>
-</ng-container>
+    </div>
+

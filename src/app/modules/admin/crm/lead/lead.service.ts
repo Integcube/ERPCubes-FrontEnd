@@ -57,13 +57,9 @@ export class LeadService {
   private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
   private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
   private _emails:BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
-  private _email:BehaviorSubject<Email | null> = new BehaviorSubject(null);
   private _calls:BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
-  private _call:BehaviorSubject<Call | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
-
   private _meetings:BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
-  private _meeting:BehaviorSubject<Meeting | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -202,14 +198,8 @@ export class LeadService {
   get product$(): Observable<Product[]> {
     return this._product.asObservable();
   }
-  get call$(): Observable<Call> {
-    return this._call.asObservable();
-  }
   get calls$(): Observable<Call[]> {
     return this._calls.asObservable();
-  }
-  get meeting$(): Observable<Meeting> {
-    return this._meeting.asObservable();
   }
   get meetings$(): Observable<Meeting[]> {
     return this._meetings.asObservable();
@@ -464,29 +454,20 @@ export class LeadService {
       })
     );
   }
-  getMeetingById(id: number): Observable<Meeting> {
-    return this._meetings.pipe(
-      take(1),
-      map((meetings) => {
-        if (id == -1) {
-          const meeting = new Meeting({});
-          this._meeting.next(meeting);
-          return meeting
-        }
-        else {
-          const meeting = meetings.find(value => value.meetingId === id) || null;
-          this._meeting.next(meeting);
-          return meeting;
-        }
-      }),
-      switchMap((meeting) => {
-        if (!meeting) {
-          return throwError('Could not found the meeting with id of ' + id + '!');
-        }
-        return of(meeting);
-      })
+  saveCustomFilter(listId: number, listTitle: string, filter: string): Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      listId,
+      listTitle,
+      filter
+    }
+    debugger;
+    return this._httpClient.post<Lead[]>(this.saveCustomListFilterUrl, data).pipe(
+      catchError(error => { alert(error); return EMPTY })
     );
   }
+
   getCustomList(): Observable<LeadCustomList[]> {
     let data = {
       id: this.user.id,
@@ -500,10 +481,10 @@ export class LeadService {
           if (d.filter) {
             const jsonObject = JSON.parse(d.filter);
             filter = {
-              leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner.split(', ') : [],
+              leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner : [],
               createdDate: jsonObject?.createdDate,
               modifiedDate: jsonObject?.modifiedDate,
-              leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus.split(', ').map(Number) : [],
+              leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus : [],
             };
           }
           return {
@@ -608,6 +589,7 @@ export class LeadService {
       leadId: leadId,
       task: {
         ...taskForm.value,
+        type:'task',
         priorityId: -1,
         statusId: -1,
         tags: taskForm.value.tags.join(',')
@@ -658,7 +640,6 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
-
   getEmails(leadId: number): Observable<Email[]> {
     let data = {
       id: "-1",
@@ -666,7 +647,6 @@ export class LeadService {
       companyId: -1,
       leadId
     }
-    debugger;
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
       tap((emails) => {
         this._emails.next(emails);
@@ -686,7 +666,6 @@ export class LeadService {
       startTime: call.startTime,
       endTime: call.endTime
     }
-    debugger;
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
         this.getCalls(leadId).subscribe();

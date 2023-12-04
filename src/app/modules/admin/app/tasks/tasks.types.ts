@@ -2,17 +2,21 @@ export interface Tag
 {
     tagId?: string;
     tagTitle?: string;
+    isSelected: boolean;
 }
 
 export class Task
 {
-    id: string;
-    type: 'task' | 'section';
-    title: string;
-    notes: string;
-    completed: boolean;
-    dueDate: string | null;
-    priority: 0 | 1 | 2;
-    tags: string[];
+    taskId: number;
+    taskTitle: string;
+    taskType: 'task' | 'section';
+    dueDate: Date | null;
+    priority:number;
     order: number;
+    status:number;
+    statusTitle:string;
+    description:string;
+    taskOwner:string;
+    createdBy:string;
+    createdDate:Date;
 }

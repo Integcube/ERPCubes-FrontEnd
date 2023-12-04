@@ -192,7 +192,7 @@
                                     {{"("+filter.leadStatus.length+")"}}
                                 </span>
                                 <span class="text-base  font-bold hover:underline cursor-pointer" #leadStatusPanelOrigin
-                                    (click)="openUsersPanel()" [ngClass]="filter.leadStatus.length ? 'text-white' : 'text-primary'">
+                                    (click)="openLeadStatusPanel()" [ngClass]="filter.leadStatus.length ? 'text-white' : 'text-primary'">
                                     Lead Status
                                 </span>
                                 <ng-template #leadStatusPanel>
@@ -202,20 +202,20 @@
                                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
                                                 <div class="ml-2">
                                                     <input class="w-full min-w-0 py-1 border-0" type="text" placeholder="Enter user name"
-                                                        (input)="filterUsers($event)" (keypress)="filterUsers($event)" [maxLength]="30"
+                                                        (input)="filterLeadStatus($event)" (keypress)="filterLeadStatus($event)" [maxLength]="30"
                                                         #newTagInput>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
-                                            <ng-container *ngFor="let user of filteredUsers; trackBy: trackByFn">
+                                            <ng-container *ngFor="let s of filteredStatus; trackBy: trackByFn">
                                                 <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
-                                                    (click)="toggleProductTag(user.id)" matRipple>
+                                                    (click)="toggleLeadStatus(s.statusId)" matRipple>
                                                     <mat-checkbox class="flex items-center h-10 min-h-10 pointer-events-none"
-                                                        [checked]="this.filter.leadStatus.includes(user.id)" [color]="'primary'"
+                                                        [checked]="this.filter.leadStatus.includes(s.statusId)" [color]="'primary'"
                                                         [disableRipple]="true">
                                                     </mat-checkbox>
-                                                    <div class="ml-1">{{user.name}}</div>
+                                                    <div class="ml-1">{{s.statusTitle}}</div>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -230,7 +230,7 @@
                         <div class="flex flex-row gap-2 align items-center">
                             <ng-container *ngIf="customList$|async as customList">
                                 <button mat-stroked-button class="w-5 min-w-5 max-w-5 h-8" [disabled]="customList.listId == -1"
-                                    [matTooltip]="'save filter'"><mat-icon>save</mat-icon></button>
+                                    [matTooltip]="'save filter'" (click)="saveFilter(customList)"><mat-icon>save</mat-icon></button>
                                 <button mat-stroked-button class="w-5! min-w-5 max-w-5 h-8" [disabled]="customList.listId == -1"
                                     [matTooltip]="'edit view'" (click)="updateView(customList)"><mat-icon>edit</mat-icon></button>
                             </ng-container>

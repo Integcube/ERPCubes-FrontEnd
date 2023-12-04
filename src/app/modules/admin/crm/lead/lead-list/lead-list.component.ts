@@ -59,17 +59,14 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   }
   filteredUsers: User[]
   users: User[]
-  filteredUserArr: number[] = []
   filteredStatus: LeadStatus[]
   status: LeadStatus[]
-  filteredStatusArr: number[] = []
   leads$: Observable<Lead[]>;
   leads: Lead[];
   leadCount: number = 0;
   selectedLead: Lead;
   drawerMode: 'side' | 'over';
   leadStatus:LeadStatus[];
-  filteredLeadStatus:LeadStatus[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
@@ -210,6 +207,43 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     });
   }
+  openLeadStatusPanel():void{
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._leadStatusPanelOrigin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._leadStatusPanelOrigin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._leadStatusPanel, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._leadStatusPanelOrigin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.filteredStatus = this.status;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    });
+  }
   filterCreatedDate(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -302,8 +336,6 @@ export class LeadListComponent implements OnInit,AfterViewInit {
         this.leads = [...comapnies];
         this.leadCount = comapnies.length;
         this.dataSource = new MatTableDataSource(this.leads);
-
-        setTimeout
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
       });
@@ -432,6 +464,19 @@ export class LeadListComponent implements OnInit,AfterViewInit {
         );
       });
   }
+  filterLeadStatus(event):void{
+    const value = event.target.value.toLowerCase();
+    fromEvent(event.target, 'input')
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.filteredStatus = this.status.filter(s =>
+          s.statusTitle.toLowerCase().includes(value)
+        );
+      });
+  }
   toggleProductTag(id: string): void {
     const leadOwnerIndex = this.filter.leadOwner.findIndex(userId => userId === id);
     if (leadOwnerIndex === -1) {
@@ -441,7 +486,19 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     }
     this._leadService.setFilter(this.filter);
   }
+  toggleLeadStatus(leadId:number):void{
+    const leadOwnerIndex = this.filter.leadStatus.findIndex(a => a === leadId);
+    if (leadOwnerIndex === -1) {
+      this.filter.leadStatus.push(leadId);
+    } else {
+      this.filter.leadStatus.splice(leadOwnerIndex, 1);
+    }
+    this._leadService.setFilter(this.filter);
+  }
   trackByFn(index: number, item: any): any {
     return item.id || index;
+  }
+  saveFilter(list:LeadCustomList):any{
+this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe(); 
   }
 }

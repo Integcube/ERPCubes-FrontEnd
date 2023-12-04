@@ -15,7 +15,6 @@ import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { ErrorInterceptor } from './core/error/error.interceptor';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -31,29 +30,14 @@ const routerConfig: ExtraOptions = {
         MatSnackBarModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(appRoutes, routerConfig),
-        //Calendar
         FullCalendarModule,
-        // Fuse, FuseConfig & FuseMockAPI
         FuseModule,
         FuseConfigModule.forRoot(appConfig),
         FuseMockApiModule.forRoot(mockApiServices),
-
-        // Core module of your application
         CoreModule,
-
-        // Layout module of your application
         LayoutModule,
-
-        // 3rd party modules that require global configuration via forRoot
         MarkdownModule.forRoot({})
     ],
-    // providers: [
-    //     {
-    //       provide: HTTP_INTERCEPTORS,
-    //       useClass: ErrorInterceptor,
-    //       multi: true
-    //     }
-    //   ],
     bootstrap: [
         AppComponent
     ]

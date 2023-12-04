@@ -36,9 +36,7 @@ export class MeetingTabComponent implements OnInit {
   ngOnInit(): void {
   }
   addMeeting(){
-    debugger;
     let meeting = new Meeting({})
-    // this._changeDetectorRef.markForCheck();
     this._matDialog.open(MeetingDetailComponent, {
       autoFocus: false,
       data     : {
@@ -47,9 +45,7 @@ export class MeetingTabComponent implements OnInit {
   });
   }
   updateMeeting(meeting:Meeting):void{
-    debugger;
-    // this._changeDetectorRef.markForCheck();
-    this._matDialog.open(MeetingDetailComponent, {
+   this._matDialog.open(MeetingDetailComponent, {
       autoFocus: false,
       data     : {
           meeting: cloneDeep(meeting)

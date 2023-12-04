@@ -1,346 +1,197 @@
-import { ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Tag, Task } from './tasks.types';
 import { UserService } from 'app/core/user/user.service';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TasksService
 {
-    private readonly getTagListURL = `${environment.url}/Tags/all`
-    private readonly saveTagURL = `${environment.url}/Company/save`
-    private readonly deleteTagURL = `${environment.url}/Company/delete`
-    private readonly getTaskListURL = `${environment.url}/Industry/all`
-    private readonly saveTaskListURL = `${environment.url}/Users/all`
-    private readonly deleteTaskListURL = `${environment.url}/Users/all`
-
+    private readonly getTagsURL =  `${environment.url}/Tags/all`
+    private readonly saveTagsURL = `${environment.url}/Tags/save`
+    private readonly deleteTagsURL = `${environment.url}/Tags/delete`
+    private readonly getTasksURL = `${environment.url}/Task/all`
+    private readonly saveTasksURL = `${environment.url}/Task/save`
+    private readonly updateTaskStatusURL = `${environment.url}/Task/updateStatus`
+    private readonly deleteTasksURL = `${environment.url}/Task/delete`
+    private readonly getUsersURL = `${environment.url}/Users/all`
     user: User;
-    
-    // Private
+    currentDate: Date = new Date();
     private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
     private _task: BehaviorSubject<Task | null> = new BehaviorSubject(null);
     private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
-
-    /**
-     * Constructor
-     */
-    constructor(private _httpClient: HttpClient,
+    private _taskTags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
+    private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
+    constructor(
+        private _httpClient: HttpClient,
         private _userService: UserService,
-    ) {
+    ) 
+    {
         this._userService.user$.subscribe(user => {
             this.user = user;
         })
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Getter for tags
-     */
-    get tags$(): Observable<Tag[]>
-    {
+    get tags$(): Observable<Tag[]> {
         return this._tags.asObservable();
     }
-
-    /**
-     * Getter for task
-     */
-    get task$(): Observable<Task>
-    {
+    get task$(): Observable<Task> {
         return this._task.asObservable();
     }
-
-    /**
-     * Getter for tasks
-     */
-    get tasks$(): Observable<Task[]>
-    {
+    get tasks$(): Observable<Task[]> {
         return this._tasks.asObservable();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get tags
-     */
-    getTags(): Observable<Tag[]>
-    {
+    get users$(): Observable<User[]> {
+        return this._users.asObservable();
+    }
+    
+    getTags(): Observable<Tag[]> {
         let data = {
-            id: this.user.id,
             tenantId: this.user.tenantId,
-          }
-          return this._httpClient.post<Tag[]>(this.getTagListURL, data).pipe(
+            id: this.user.id
+        }
+        return this._httpClient.post<Tag[]>(this.getTagsURL, data).pipe(
             tap((tags) => {
-              this._tags.next(tags);
-            })
-          );
-    }
-
-    /**
-     * Crate tag
-     *
-     * @param tag
-     */
-    createTag(tag: Tag): Observable<Tag>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.post<Tag>('api/apps/tasks/tag', {tag}).pipe(
-                map((newTag) => {
-
-                    // Update the tags with the new tag
-                    this._tags.next([...tags, newTag]);
-
-                    // Return new tag from observable
-                    return newTag;
-                })
-            ))
-        );
-    }
-
-    /**
-     * Update the tag
-     *
-     * @param id
-     * @param tag
-     */
-    updateTag(id: string, tag: Tag): Observable<Tag>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.patch<Tag>('api/apps/tasks/tag', {
-                id,
-                tag
-            }).pipe(
-                map((updatedTag) => {
-
-                    // Find the index of the updated tag
-                    const index = tags.findIndex(item => item.tagId === id);
-
-                    // Update the tag
-                    tags[index] = updatedTag;
-
-                    // Update the tags
-                    this._tags.next(tags);
-
-                    // Return the updated tag
-                    return updatedTag;
-                })
-            ))
-        );
-    }
-
-    /**
-     * Delete the tag
-     *
-     * @param id
-     */
-    deleteTag(id: string): Observable<boolean>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.delete('api/apps/tasks/tag', {params: {id}}).pipe(
-                map((isDeleted: boolean) => {
-
-                    // Find the index of the deleted tag
-                    const index = tags.findIndex(item => item.tagId === id);
-
-                    // Delete the tag
-                    tags.splice(index, 1);
-
-                    // Update the tags
-                    this._tags.next(tags);
-
-                    // Return the deleted status
-                    return isDeleted;
-                }),
-                filter(isDeleted => isDeleted),
-                switchMap(isDeleted => this.tasks$.pipe(
-                    take(1),
-                    map((tasks) => {
-
-                        // Iterate through the tasks
-                        tasks.forEach((task) => {
-
-                            const tagIndex = task.tags.findIndex(tag => tag === id);
-
-                            // If the task has a tag, remove it
-                            if ( tagIndex > -1 )
-                            {
-                                task.tags.splice(tagIndex, 1);
-                            }
-                        });
-
-                        // Return the deleted status
-                        return isDeleted;
-                    })
-                ))
-            ))
-        );
-    }
-
-    /**
-     * Get tasks
-     */
-    getTasks(): Observable<Task[]>
-    {
-        return this._httpClient.get<Task[]>('api/apps/tasks/all').pipe(
-            tap((response) => {
-                this._tasks.next(response);
+                this._tags.next(tags)
             })
         );
     }
-
-    /**
-     * Update tasks orders
-     *
-     * @param tasks
-     */
-    updateTasksOrders(tasks: Task[]): Observable<Task[]>
-    {
+    saveTags(tag: string): Observable<Tag> {
+        const data = {
+            tenantId: this.user.tenantId,
+            createdBy: this.user.id,
+            tagId: -1,
+            tagTitle: tag
+        };
+        return this._httpClient.post<Tag>(this.saveTagsURL, data).pipe(
+            map((response: Tag) => response), // Adjust 'tag' based on your API response structure
+            tap(() => {
+                this.getTags().subscribe();
+            })
+        );
+    }
+    deleteTags(id: number): Observable<Tag[]> {
+        let data = {
+            tenantId: this.user.tenantId,
+            tagId: id,
+            lastModifiedBy: this.user.id,
+        }
+        return this._httpClient.post<Tag[]>(this.deleteTagsURL, data).pipe(
+            tap(() => {
+                this.getTags().subscribe();
+            })
+        );
+    }
+    getTasks(): Observable<Task[]> {
+        let data = {
+            tenantId : this.user.tenantId,
+            id: this.user.id,
+            leadId: -1,
+            companyId: -1
+        }
+        return this._httpClient.post<Task[]>(this.getTasksURL, data).pipe(
+            tap((tasks) => {
+                this._tasks.next(tasks)
+            })
+        );
+    }
+    saveTasks(task: FormGroup<any>): Observable<Task[]> {
+        let data: any = { 
+            id: 1,
+            companyId: -1,
+            leadId: 1,
+            task : {...task.value,
+                createdBy: this.user.id,
+                taskOwner: this.user.id,
+                taskType: "task",}
+        }
+        return this._httpClient.post<Task[]>(this.saveTasksURL, data).pipe(
+            tap((tasks) => {
+                this.getTasks().subscribe();
+            })
+        );
+    }
+    updateTaskStatus(task: Task): Observable<Task[]> {
+        let data = {
+            tenantId: this.user.tenantId,
+            Id: this.user.id,
+            taskId:task.taskId,
+            taskTitle:task.taskTitle,
+            status:task.status,
+        }
+        return this._httpClient.post<Task[]>(this.updateTaskStatusURL, data).pipe(
+            tap((tasks) => {
+                this.getTasks().subscribe();
+            })
+        );
+    }
+    deleteTasks(id: number): Observable<Task[]> {
+        let data = {
+            tenantId: this.user.tenantId,
+            taskId: id
+        }
+        return this._httpClient.post<Task[]>(this.deleteTasksURL, data).pipe(
+            tap((tasks) => {
+                this.getTasks().subscribe();
+            })
+        );
+    }
+    selectedTask(selectedTask: Task){
+        this._task.next(selectedTask);
+    }
+    //Needs to be implmented
+    updateTaskOrders(tasks: Task[]): Observable<Task[]> {
         return this._httpClient.patch<Task[]>('api/apps/tasks/order', {tasks});
     }
-
-    /**
-     * Search tasks with given query
-     *
-     * @param query
-     */
-    searchTasks(query: string): Observable<Task[] | null>
-    {
-        return this._httpClient.get<Task[] | null>('api/apps/tasks/search', {params: {query}});
-    }
-
-    /**
-     * Get task by id
-     */
-    getTaskById(id: string): Observable<Task>
-    {
+    getTaskById(id: number): Observable<Task> {
         return this._tasks.pipe(
             take(1),
             map((tasks) => {
-
-                // Find the task
-                const task = tasks.find(item => item.id === id) || null;
-
-                // Update the task
-                this._task.next(task);
-
-                // Return the task
-                return task;
+                if(id===-1)
+                {
+                    const task = new Task();
+                    task.taskId =-1;
+                    task.taskType = 'task';
+                    this._task.next(task);
+                    return task;
+                }
+                if(id===-2)
+                {
+                    const task = new Task();
+                    task.taskId =-2;
+                    task.taskType = 'section';
+                    this._task.next(task);
+                    return task;
+                }
+                else{
+                    const task = tasks.find(item => item.taskId === id) || null;
+                    this._task.next(task);
+                    return task;
+                }
             }),
             switchMap((task) => {
-
                 if ( !task )
                 {
-                    return throwError('Could not found task with id of ' + id + '!');
+                    return throwError('Could not find task with id of ' + id + '!');
                 }
-
                 return of(task);
             })
         );
     }
-
-    /**
-     * Create task
-     *
-     * @param type
-     */
-    createTask(type: string): Observable<Task>
-    {
-        return this.tasks$.pipe(
-            take(1),
-            switchMap(tasks => this._httpClient.post<Task>('api/apps/tasks/task', {type}).pipe(
-                map((newTask) => {
-
-                    // Update the tasks with the new task
-                    this._tasks.next([newTask, ...tasks]);
-
-                    // Return the new task
-                    return newTask;
-                })
-            ))
-        );
-    }
-
-    /**
-     * Update task
-     *
-     * @param id
-     * @param task
-     */
-    updateTask(id: string, task: Task): Observable<Task>
-    {
-        return this.tasks$
-                   .pipe(
-                       take(1),
-                       switchMap(tasks => this._httpClient.patch<Task>('api/apps/tasks/task', {
-                           id,
-                           task
-                       }).pipe(
-                           map((updatedTask) => {
-
-                               // Find the index of the updated task
-                               const index = tasks.findIndex(item => item.id === id);
-
-                               // Update the task
-                               tasks[index] = updatedTask;
-
-                               // Update the tasks
-                               this._tasks.next(tasks);
-
-                               // Return the updated task
-                               return updatedTask;
-                           }),
-                           switchMap(updatedTask => this.task$.pipe(
-                               take(1),
-                               filter(item => item && item.id === id),
-                               tap(() => {
-
-                                   // Update the task if it's selected
-                                   this._task.next(updatedTask);
-
-                                   // Return the updated task
-                                   return updatedTask;
-                               })
-                           ))
-                       ))
-                   );
-    }
-
-    /**
-     * Delete the task
-     *
-     * @param id
-     */
-    deleteTask(id: string): Observable<boolean>
-    {
-        return this.tasks$.pipe(
-            take(1),
-            switchMap(tasks => this._httpClient.delete('api/apps/tasks/task', {params: {id}}).pipe(
-                map((isDeleted: boolean) => {
-
-                    // Find the index of the deleted task
-                    const index = tasks.findIndex(item => item.id === id);
-
-                    // Delete the task
-                    tasks.splice(index, 1);
-
-                    // Update the tasks
-                    this._tasks.next(tasks);
-
-                    // Return the deleted status
-                    return isDeleted;
-                })
-            ))
+    getUsers(): Observable<User[]> {
+        let data = {
+            tenantId: this.user.tenantId,
+            id: this.user.id
+        }
+        return this._httpClient.post<User[]>(this.getUsersURL, data).pipe(
+            tap((users) => {
+                this._users.next(users);
+            })
         );
     }
 }

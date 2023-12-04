@@ -20,7 +20,7 @@ export class TasksListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
-    drawerMode: 'side' | 'over';
+    drawerMode: 'over' | 'over';
     selectedTask: Task;
     tags: Tag[];
     tasks: Task[];
@@ -31,9 +31,7 @@ export class TasksListComponent implements OnInit, OnDestroy
     };
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    /**
-     * Constructor
-     */
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -46,83 +44,42 @@ export class TasksListComponent implements OnInit, OnDestroy
     {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
-        // Get the tags
+
         this._tasksService.tags$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((tags: Tag[]) => {
                 this.tags = tags;
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
 
-        // Get the tasks
         this._tasksService.tasks$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((tasks: Task[]) => {
                 this.tasks = tasks;
-
-                // Update the counts
-                this.tasksCount.total = this.tasks.filter(task => task.type === 'task').length;
-                this.tasksCount.completed = this.tasks.filter(task => task.type === 'task' && task.completed).length;
+                this.tasksCount.total = this.tasks.filter(task => task.taskType === 'task').length;
+                this.tasksCount.completed = this.tasks.filter(task => task.taskType === 'task' && task.status === 1).length;
                 this.tasksCount.incomplete = this.tasksCount.total - this.tasksCount.completed;
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
-
-                // Update the count on the navigation
                 setTimeout(() => {
-
-                    // Get the component -> navigation data -> item
                     const mainNavigationComponent = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>('mainNavigation');
-
-                    // If the main navigation component exists...
                     if ( mainNavigationComponent )
                     {
                         const mainNavigation = mainNavigationComponent.navigation;
-                        const menuItem = this._fuseNavigationService.getItem('apps.tasks', mainNavigation);
-
-                        // Update the subtitle of the item
+                        const menuItem = this._fuseNavigationService.getItem('application.tasks', mainNavigation);
                         menuItem.subtitle = this.tasksCount.incomplete + ' remaining tasks';
-
-                        // Refresh the navigation
                         mainNavigationComponent.refresh();
                     }
                 });
             });
 
-        // Get the task
-        this._tasksService.task$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((task: Task) => {
-                this.selectedTask = task;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Subscribe to media query change
         this._fuseMediaWatcherService.onMediaQueryChange$('(min-width: 1440px)')
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((state) => {
-
-                // Calculate the drawer mode
-                this.drawerMode = state.matches ? 'side' : 'over';
-
-                // Mark for check
+                this.drawerMode = state.matches ? 'over' : 'over';
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Listen for shortcuts
         fromEvent(this._document, 'keydown')
             .pipe(
                 takeUntil(this._unsubscribeAll),
@@ -132,63 +89,43 @@ export class TasksListComponent implements OnInit, OnDestroy
                 )
             )
             .subscribe((event: KeyboardEvent) => {
-
-                // If the '/' pressed
                 if ( event.key === '/' )
                 {
                     this.createTask('task');
                 }
-
-                // If the '.' pressed
                 if ( event.key === '.' )
                 {
                     this.createTask('section');
                 }
             });
     }
-
-    /**
-     * On destroy
-     */
     ngOnDestroy(): void
     {
-        // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * On backdrop clicked
-     */
     onBackdropClicked(): void
     {
-        // Go back to the list
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
-
-        // Mark for check
         this._changeDetectorRef.markForCheck();
     }
 
-    /**
-     * Create task
-     *
-     * @param type
-     */
+
+
     createTask(type: 'task' | 'section'): void
     {
-        // Create the task
-        this._tasksService.createTask(type).subscribe((newTask) => {
-
-            // Go to the new task
-            this._router.navigate(['./', newTask.id], {relativeTo: this._activatedRoute});
-
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        });
+        let newTask: Task = new Task();
+        newTask.taskType = type;     
+        if(type=="task"){
+            newTask.taskId = -1;
+        }
+        else{
+            newTask.taskId = -2;
+        }
+        this._router.navigate(['./', newTask.taskId], { relativeTo: this._activatedRoute});
+        this._changeDetectorRef.markForCheck();
     }
 
     /**
@@ -197,15 +134,32 @@ export class TasksListComponent implements OnInit, OnDestroy
      *
      * @param task
      */
-    toggleCompleted(task: Task): void
-    {
-        // Toggle the completed status
-        task.completed = !task.completed;
-
-        // Update the task on the server
-        this._tasksService.updateTask(task.id, task).subscribe();
-
-        // Mark for check
+    toggleStatus(task: Task): void {
+        let date = new Date;
+        let dueDate = new Date(task.dueDate);
+        switch (task.status) {
+            case 1: {
+                if (date > dueDate) {
+                    task.status = 4;
+                }
+                else {
+                    task.status = 3
+                }
+                break;
+            }
+            case 2: {
+                task.status = 1
+                break;
+            }
+            case 3: {
+                task.status = 2
+                break;
+            }
+            default: {
+                task.status = 1
+                break;
+            }
+        }         this._tasksService.updateTaskStatus(task).pipe(takeUntil(this._unsubscribeAll)).subscribe()
         this._changeDetectorRef.markForCheck();
     }
 
@@ -220,7 +174,7 @@ export class TasksListComponent implements OnInit, OnDestroy
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
 
         // Save the new order
-        this._tasksService.updateTasksOrders(event.container.data).subscribe();
+        this._tasksService.updateTaskOrders(event.container.data).subscribe();
 
         // Mark for check
         this._changeDetectorRef.markForCheck();

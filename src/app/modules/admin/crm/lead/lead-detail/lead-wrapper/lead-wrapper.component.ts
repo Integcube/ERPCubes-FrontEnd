@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
   changeDetection:ChangeDetectionStrategy.OnPush,
 })
 export class LeadWrapperComponent {
-  private _tab : BehaviorSubject<"overview"|"activity"> = new BehaviorSubject("overview");
+  private _tab : BehaviorSubject<"overview"|"activity"> = new BehaviorSubject("activity");
   tab$ = this._tab.asObservable();
   constructor() { }
   updateTab(tab:"overview"|"activity"){

@@ -22,37 +22,22 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
   meetingForm: UntypedFormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   meeting: Meeting;
-  meeting$ = this._leadService.meeting$;
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) private _data: { meeting: Meeting },
+    @Inject(MAT_DIALOG_DATA) public _data: { meeting: Meeting },
     private _leadService: LeadService,
     private _formBuilder: UntypedFormBuilder,
     private _matDialogRef: MatDialogRef<MeetingDetailComponent>
   ) { }
   ngOnInit(): void {
     this.meetingForm = this._formBuilder.group({
-      meetingId: ['', Validators.required],
-      subject: ['', Validators.required],
-      note: [''],
-      startTime: [null],
-      endTime: [null],
-      createdBy:[''], 
-      createdDate: [null],
+      meetingId: [this._data.meeting.meetingId, Validators.required],
+      subject: [this._data.meeting.subject, Validators.required],
+      note: [this._data.meeting.note],
+      startTime: [this._data.meeting.startTime],
+      endTime: [this._data.meeting.endTime],
     });
-    if (this._data.meeting.meetingId) {
-      this._leadService.getMeetingById(this._data.meeting.meetingId).pipe(
-        takeUntil(this._unsubscribeAll),
-      ).subscribe(
-        (data) => {
-          this.meetingForm.patchValue(data, { emitEvent: false });
-          this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
-        }
-      );
-    }
+
   }
   isOverdue(date: string): boolean {
     return moment(date, moment.ISO_8601).isBefore(moment(), 'days');

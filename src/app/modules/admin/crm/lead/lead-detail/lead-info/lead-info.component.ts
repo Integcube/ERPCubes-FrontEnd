@@ -2,11 +2,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil, catchError, EMPTY } from 'rxjs';
 import { LeadService } from '../../lead.service';
-import { Lead, Note, TaskModel } from '../../lead.type';
+import { Call, Email, Lead, Meeting, Note, TaskModel } from '../../lead.type';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { NoteDetailComponent } from '../notes/note-detail/note-detail.component';
 import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component';
+import { EmailDetailComponent } from '../email/email-detail/email-detail.component';
+import { CallDetailComponent } from '../call/call-detail/call-detail.component';
+import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
 
 @Component({
   selector: 'app-lead-info',
@@ -100,6 +103,33 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       autoFocus: false,
       data     : {
           task: cloneDeep(tasks)
+      }
+  });
+  }
+  addMeeting(){
+    let meeting = new Meeting({})
+    this._matDialog.open(MeetingDetailComponent, {
+      autoFocus: false,
+      data     : {
+          meeting: cloneDeep(meeting)
+      }
+  });
+  }
+  addCall(){
+    let call = new Call({})
+    this._matDialog.open(CallDetailComponent, {
+      autoFocus: false,
+      data     : {
+          call: cloneDeep(call)
+      }
+  });
+  }
+  addEmail(){
+    let email = new Email({})
+    this._matDialog.open(EmailDetailComponent, {
+      autoFocus: false,
+      data     : {
+          email: cloneDeep(email)
       }
   });
   }
