@@ -30,6 +30,7 @@ import { CompanyActivityComponent } from './company-detail/company-activity/comp
 import { CompanyInfoComponent } from './company-detail/company-info/company-info.component';
 import { CompanyDataComponent } from './company-detail/company-data/company-data.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ViewDetailComponent } from './company-detail/view/view-detail/view-detail.component';
 
 
 
@@ -41,7 +42,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     CompanyDetailComponent,
     CompanyActivityComponent,
     CompanyInfoComponent,
-    CompanyDataComponent
+    CompanyDataComponent,
+    ViewDetailComponent
   ],
   imports: [
     RouterModule.forChild(companyRoutes),

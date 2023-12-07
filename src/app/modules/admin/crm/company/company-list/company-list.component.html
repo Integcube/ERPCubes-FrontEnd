@@ -33,41 +33,238 @@
                                     [autocomplete]="'off'" [placeholder]="'Search contacts'">
                             </mat-form-field>
                         </div>
-                        <!-- Add contact button -->
+                        <!-- Add company button -->
                         <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createCompany()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add</span>
                         </button>
                     </div>
                 </div>
-                <!-- Project selector -->
+                <!-- View selector -->
                 <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6  sm:px-8">
                     <div class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
                         matRipple [matMenuTriggerFor]="projectsMenu">
                         <div class="flex items-center">
                             <div class="overflow-hidden">
-                                <div class="font-medium leading-6 truncate">My Companies</div>
+                                <ng-container *ngIf="customList$|async as customList">
+                                    <div class="font-medium leading-6 truncate">{{customList.listTitle}}</div>
+                                </ng-container>
                             </div>
                             <div class="flex items-center justify-center pl-2">
                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chevron-down'"></mat-icon>
                             </div>
                         </div>
-                        <mat-menu #projectsMenu="matMenu" [xPosition]="'before'">
-                            <button mat-menu-item>ACME Corp. Backend App
-                            </button>
-                            <button mat-menu-item>ACME Corp. Frontend App
-                            </button>
-                            <button mat-menu-item>Creapond
-                            </button>
-                            <button mat-menu-item>Withinpixels
-                            </button>
+                        <mat-menu #projectsMenu="matMenu" [xPosition]="'before'"
+                            class="max-h-70 overflow-auto overflow-x-hidden">
+                            <ng-container *ngIf="customLists$|async as lists">
+                                <button mat-menu-item (click)="getCompany(null, 'All Companies')">All Companies</button>
+                                <button mat-menu-item *ngFor="let list of lists"
+                                    (click)="getCompany(list, list.listTitle)">
+                                    {{list.listTitle}}
+                                </button>
+                                <button mat-menu-item class="text-accent2 font-bold border-t-2" (click)="addView()">
+                                    Create new View
+                                </button>
+                            </ng-container>
                         </mat-menu>
                     </div>
                 </div>
                 <!-- Company list -->
-                <div class="flex-auto py-5 bg-default">
+                <div class="flex-auto py-2 bg-default min-h-3/4 pb-10">
+                    <!-- Company View Filters -->
+                    <div class="flex flex-row justify-end w-full px-10 mb-2 gap-5">
+                        <div class="flex flex-row gap-2">
+                            <!-- Company Owner -->
+                            <div class="flex gap-1 items-center p-2 rounded"
+                                [ngStyle]="{'background-color': filter.companyOwner.length ? '#00bda5':'transparent'}">
+                                <span *ngIf="filter.companyOwner.length"
+                                    class="text-base  font-bold hover:underline cursor-pointer" #usersPanelOrigin
+                                    (click)="openUsersPanel()"
+                                    [ngClass]="filter.companyOwner.length ? 'text-white' : 'text-primary'">
+                                    {{"("+filter.companyOwner.length+")"}}
+                                </span>
+                                <span class="text-base  font-bold hover:underline cursor-pointer" #usersPanelOrigin
+                                    (click)="openUsersPanel()"
+                                    [ngClass]="filter.companyOwner.length ? 'text-white' : 'text-primary'">
+                                    Company Owner
+                                </span>
+                                <ng-template #usersPanel>
+                                    <div class="w-60 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2">
+                                            <div class="flex items-center">
+                                                <mat-icon class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                                <div class="ml-2">
+                                                    <input class="w-full min-w-0 py-1 border-0" type="text"
+                                                        placeholder="Enter user name" (input)="filterUsers($event)"
+                                                        (keypress)="filterUsers($event)" [maxLength]="30" #newTagInput>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                            <ng-container *ngFor="let user of filteredUsers; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                                    (click)="toggleCompanyOwner(user.id)" matRipple>
+                                                    <mat-checkbox
+                                                        class="flex items-center h-10 min-h-10 pointer-events-none"
+                                                        [checked]="this.filter.companyOwner.includes(user.id)"
+                                                        [color]="'primary'" [disableRipple]="true">
+                                                    </mat-checkbox>
+                                                    <div class="ml-1">{{user.name}}</div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <mat-icon [ngClass]="filter.companyOwner.length ? 'text-white' : 'text-primary'"
+                                    svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf="filter.companyOwner.length" matTooltip="remove"
+                                    class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
+                                    (click)="cancelFilters(1)"></mat-icon>
+                            </div>
+                            <!-- Create -->
+                            <div class="flex gap-1 items-center p-2 rounded"
+                                [ngStyle]="{'background-color': filter.createdDate ? '#00bda5':'transparent'}">
+
+                                <span class="text-base  font-bold hover:underline cursor-pointer"
+                                    #createdDatePanelOrigin (click)="openCreatedDatePanel()"
+                                    [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'">
+                                    Created Date
+                                </span>
+                                <ng-template #createdDatePanel>
+                                    <div class="w-60 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2">
+                                            <div class="flex items-center">
+                                                <mat-icon class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                                <div class="ml-2">
+                                                    <input class="w-full min-w-0 py-1 border-0" type="text"
+                                                        placeholder="Enter user name"
+                                                        (input)="filterCreatedDate($event)"
+                                                        (keypress)="filterCreatedDate($event)" [maxLength]="30"
+                                                        #newTagInput>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                            <ng-container *ngFor="let user of dateRangesFilter; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                                    matRipple (click)="onDateRangeChange(user.value,'created')">
+                                                    {{user.label}}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <mat-icon [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'"
+                                    svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf="filter.createdDate" matTooltip="remove"
+                                    class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
+                                    (click)="cancelFilters(2)"></mat-icon>
+                            </div>
+                            <!-- Modified -->
+                            <div class="flex gap-1 items-center p-2 rounded"
+                                [ngStyle]="{'background-color': filter.modifiedDate ? '#00bda5':'transparent'}">
+
+                                <span class="text-base  font-bold hover:underline cursor-pointer"
+                                    #modifiedDatePanelOrigin (click)="openModifiedDatePanel()"
+                                    [ngClass]="filter.modifiedDate ? 'text-white' : 'text-primary'">
+                                    Modified Date
+                                </span>
+                                <ng-template #modifiedDatePanel>
+                                    <div class="w-60 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2">
+                                            <div class="flex items-center">
+                                                <mat-icon class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                                <div class="ml-2">
+                                                    <input class="w-full min-w-0 py-1 border-0" type="text"
+                                                        placeholder="Enter user name"
+                                                        (input)="filterCreatedDate($event)"
+                                                        (keypress)="filterCreatedDate($event)" [maxLength]="30"
+                                                        #newTagInput>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                            <ng-container *ngFor="let user of dateRangesFilter; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                                    matRipple (click)="onDateRangeChange(user.value, 'modified')">
+                                                    {{user.label}}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <mat-icon [ngClass]="filter.modifiedDate ? 'text-white' : 'text-primary'"
+                                    svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf="filter.modifiedDate" matTooltip="remove"
+                                    class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
+                                    (click)="cancelFilters(3)"></mat-icon>
+                            </div>
+                            <!-- Industry -->
+                            <div class="flex gap-1 items-center p-2 rounded"
+                                [ngStyle]="{'background-color': filter.industryId.length ? '#00bda5':'transparent'}">
+                                <span *ngIf="filter.industryId.length"
+                                    class="text-base  font-bold hover:underline cursor-pointer" #industryPanelOrigin
+                                    (click)="openIndustryPanel()"
+                                    [ngClass]="filter.industryId.length ? 'text-white' : 'text-primary'">
+                                    {{"("+filter.industryId.length+")"}}
+                                </span>
+                                <span class="text-base  font-bold hover:underline cursor-pointer" #industryPanelOrigin
+                                    (click)="openIndustryPanel()"
+                                    [ngClass]="filter.industryId.length ? 'text-white' : 'text-primary'">
+                                    Industry
+                                </span>
+                                <ng-template #industryPanel>
+                                    <div class="w-60 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2">
+                                            <div class="flex items-center">
+                                                <mat-icon class="icon-size-5"
+                                                    [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                                <div class="ml-2">
+                                                    <input class="w-full min-w-0 py-1 border-0" type="text"
+                                                        placeholder="Enter Industry" (input)="filterIndustries($event)"
+                                                        (keypress)="filterIndustries($event)" [maxLength]="30" #newTagInput>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                            <ng-container *ngFor="let industry of filteredIndustries; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
+                                                    (click)="toggleIndustry(industry.industryId)" matRipple>
+                                                    <mat-checkbox
+                                                        class="flex items-center h-10 min-h-10 pointer-events-none"
+                                                        [checked]="this.filter.industryId.includes(industry.industryId)"
+                                                        [color]="'primary'" [disableRipple]="true">
+                                                    </mat-checkbox>
+                                                    <div class="ml-1">{{industry.industryTitle}}</div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <mat-icon [ngClass]="filter.industryId.length ? 'text-white' : 'text-primary'"
+                                    svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                <mat-icon *ngIf="filter.industryId.length" matTooltip="remove"
+                                    class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
+                                    (click)="cancelFilters(4)"></mat-icon>
+                            </div>
+                        </div>
+                        <div class="flex flex-row gap-2 align items-center">
+                            <ng-container *ngIf="customList$|async as customList">
+                                <button mat-stroked-button class="w-5 min-w-5 max-w-5 h-8"
+                                    [disabled]="customList.listId == -1" [matTooltip]="'save filter'"
+                                    (click) = "saveUpdateFilter(customList.listId, customList.listTitle)"><mat-icon>save</mat-icon></button>
+                                <button mat-stroked-button class="w-5! min-w-5 max-w-5 h-8"
+                                    [disabled]="customList.listId == -1" [matTooltip]="'edit view'"
+                                    (click)="updateView(customList)"><mat-icon>edit</mat-icon></button>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <!-- Company List View -->
                     <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
-                        <ng-container *ngIf="companies$ | async as companies">
+                        <ng-container *ngIf="companies$|async as companies">
                             <ng-container *ngIf="companies.length; else noCompany">
                                 <div class="flex-auto  py-1 bg-card overflow-x-auto">
                                     <table mat-table [dataSource]="dataSource" matSort>
@@ -90,21 +287,27 @@
                                         </ng-container>
                                         <!-- ID Column -->
                                         <ng-container matColumnDef="name">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;"> Name </th>
-                                            <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'" class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)" (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
-                                              <div class="flex items-center justify-between">
-                                                <span (click)="previewCompany(row)" class="hover:text-clip truncate"><u>{{row.name | tblimit: row.isHovered}}</u></span>
-                                                <span *ngIf="row.isHovered" class="relative right-0">
-                                                  <button mat-stroked-button (click)="updateCompany(row)" class="h-8"> 
-                                                    <span class="text-xs">Preview</span>
-                                                  </button>
-                                                </span>
-                                              </div>
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;">
+                                                Name </th>
+                                            <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"
+                                                class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)"
+                                                (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
+                                                <div class="flex items-center justify-between">
+                                                    <span (click)="previewCompany(row)"
+                                                        class="hover:text-clip truncate"><u>{{row.name | tblimit:
+                                                            row.isHovered}}</u></span>
+                                                    <span *ngIf="row.isHovered" class="relative right-0">
+                                                        <button mat-stroked-button (click)="updateCompany(row)"
+                                                            class="h-8">
+                                                            <span class="text-xs">Preview</span>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </td>
-                                          </ng-container>                                          
+                                        </ng-container>
                                         <ng-container matColumnDef="createdDate">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
-                                            <td mat-cell *matCellDef="let row"> {{row.createdDate | date}} </td>
+                                            <td mat-cell *matCellDef="let row"> {{row.createdDate}} </td>
                                         </ng-container>
                                         <ng-container matColumnDef="phone">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
