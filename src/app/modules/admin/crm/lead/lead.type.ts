@@ -40,6 +40,11 @@ export class Lead {
     avatar: any;
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;
+        this.status = reg.status ? reg.status : 0;
+        this.sourceId = reg.sourceId ? reg.sourceId : 0;
+        this.industryId = reg.industryId ? reg.industryId : 0;
+        this.productId = reg.productId ? reg.productId : 0;
+        this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
     }
 }
 export interface LeadStatus {

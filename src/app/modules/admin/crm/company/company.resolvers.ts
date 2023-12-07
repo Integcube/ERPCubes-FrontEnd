@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { CompanyService } from './company.service';
-import { Company } from './company.type';
+import { Company, CompanyFilter } from './company.type';
 import { Observable, catchError, throwError } from 'rxjs';
-
 @Injectable({
     providedIn: 'root'
 })
@@ -11,6 +10,7 @@ export class CompaniesResolver implements Resolve<any>{
     constructor(private _companyService:CompanyService){
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        this._companyService.setFilter(new CompanyFilter())
        return this._companyService.getCompanies();
     }
 }
@@ -38,6 +38,17 @@ export class UserResolver implements Resolve<any>{
 }
 
 @Injectable({
+    providedIn:'root'
+})
+export class CustomListResolver implements Resolve<any>{
+    constructor(private _companyService:CompanyService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getCustomList();
+    }
+}
+
+@Injectable({
     providedIn: 'root'
 })
 export class SelectedCompanyResolver implements Resolve<any>
@@ -60,3 +71,44 @@ export class SelectedCompanyResolver implements Resolve<any>
                    );
     }
 }
+
+// @Injectable({
+//     providedIn:'root'
+// })
+// export class NotesResolver implements Resolve<any>{
+//     constructor(private _companyService:CompanyService){
+//     }
+//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//       return this._companyService.getNotes();
+//     }
+// }
+// @Injectable({
+//     providedIn:'root'
+// })
+// export class TaskResolver implements Resolve<any>{
+//     constructor(private _companyService:CompanyService){
+//     }
+//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//       return this._companyService.getTasks();
+//     }
+// }
+// @Injectable({
+//     providedIn:'root'
+// })
+// export class CallResolver implements Resolve<any>{
+//     constructor(private _companyService:CompanyService){
+//     }
+//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//       return this._companyService.getCalls();
+//     }
+// }
+// @Injectable({
+//     providedIn:'root'
+// })
+// export class MeetingResolver implements Resolve<any>{
+//     constructor(private _companyService:CompanyService){
+//     }
+//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//       return this._companyService.getMeetings();
+//     }
+// }
