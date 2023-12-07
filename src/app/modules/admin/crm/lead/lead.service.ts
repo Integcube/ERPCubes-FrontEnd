@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity,Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks,Meeting } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting } from './lead.type';
 
 @Injectable({
   providedIn: 'root'
@@ -56,10 +56,10 @@ export class LeadService {
   private _customLists: BehaviorSubject<LeadCustomList[] | null> = new BehaviorSubject(null);
   private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
   private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
-  private _emails:BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
-  private _calls:BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
+  private _emails: BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
+  private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
-  private _meetings:BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+  private _meetings: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -462,12 +462,10 @@ export class LeadService {
       listTitle,
       filter
     }
-    debugger;
     return this._httpClient.post<Lead[]>(this.saveCustomListFilterUrl, data).pipe(
       catchError(error => { alert(error); return EMPTY })
     );
   }
-
   getCustomList(): Observable<LeadCustomList[]> {
     let data = {
       id: this.user.id,
@@ -589,7 +587,7 @@ export class LeadService {
       leadId: leadId,
       task: {
         ...taskForm.value,
-        type:'task',
+        type: 'task',
         priorityId: -1,
         statusId: -1,
         tags: taskForm.value.tags.join(',')
@@ -626,7 +624,7 @@ export class LeadService {
   get emails$(): Observable<Email[]> {
     return this._emails.asObservable();
   }
-  saveMeeting(meeting: any, leadId: number):Observable<any> {
+  saveMeeting(meeting: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,

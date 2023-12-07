@@ -84,8 +84,8 @@ export class TasksListComponent implements OnInit, OnDestroy
             .pipe(
                 takeUntil(this._unsubscribeAll),
                 filter<KeyboardEvent>(event =>
-                    (event.ctrlKey === true || event.metaKey) // Ctrl or Cmd
-                    && (event.key === '/' || event.key === '.') // '/' or '.' key
+                    (event.ctrlKey === true || event.metaKey) 
+                    && (event.key === '/' || event.key === '.') 
                 )
             )
             .subscribe((event: KeyboardEvent) => {
@@ -104,16 +104,11 @@ export class TasksListComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
-
     onBackdropClicked(): void
     {
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
         this._changeDetectorRef.markForCheck();
     }
-
-
-
     createTask(type: 'task' | 'section'): void
     {
         let newTask: Task = new Task();
@@ -127,13 +122,6 @@ export class TasksListComponent implements OnInit, OnDestroy
         this._router.navigate(['./', newTask.taskId], { relativeTo: this._activatedRoute});
         this._changeDetectorRef.markForCheck();
     }
-
-    /**
-     * Toggle the completed status
-     * of the given task
-     *
-     * @param task
-     */
     toggleStatus(task: Task): void {
         let date = new Date;
         let dueDate = new Date(task.dueDate);
@@ -162,30 +150,13 @@ export class TasksListComponent implements OnInit, OnDestroy
         }         this._tasksService.updateTaskStatus(task).pipe(takeUntil(this._unsubscribeAll)).subscribe()
         this._changeDetectorRef.markForCheck();
     }
-
-    /**
-     * Task dropped
-     *
-     * @param event
-     */
     dropped(event: CdkDragDrop<Task[]>): void
     {
-        // Move the item in the array
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-
-        // Save the new order
+        event.container.data.forEach((a, index)=>a.order = index)
         this._tasksService.updateTaskOrders(event.container.data).subscribe();
-
-        // Mark for check
         this._changeDetectorRef.markForCheck();
     }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
     trackByFn(index: number, item: any): any
     {
         return item.id || index;

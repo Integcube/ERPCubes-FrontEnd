@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Tag, Task } from './tasks.types';
@@ -18,14 +18,16 @@ export class TasksService
     private readonly getTasksURL = `${environment.url}/Task/all`
     private readonly saveTasksURL = `${environment.url}/Task/save`
     private readonly updateTaskStatusURL = `${environment.url}/Task/updateStatus`
+    private readonly getTasktags = `${environment.url}/Task/tags`
     private readonly deleteTasksURL = `${environment.url}/Task/delete`
     private readonly getUsersURL = `${environment.url}/Users/all`
+    private readonly updateTaskOrderURL = `${environment.url}/Task/updateTaskOrder`
+    
     user: User;
     currentDate: Date = new Date();
     private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
     private _task: BehaviorSubject<Task | null> = new BehaviorSubject(null);
     private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
-    private _taskTags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
     private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
     constructor(
         private _httpClient: HttpClient,
@@ -49,7 +51,6 @@ export class TasksService
     get users$(): Observable<User[]> {
         return this._users.asObservable();
     }
-    
     getTags(): Observable<Tag[]> {
         let data = {
             tenantId: this.user.tenantId,
@@ -61,19 +62,16 @@ export class TasksService
             })
         );
     }
-    saveTags(tag: string): Observable<Tag> {
+    saveTags(tag: string, tagId:number): Observable<Tag> {
         const data = {
             tenantId: this.user.tenantId,
             createdBy: this.user.id,
-            tagId: -1,
+            tagId: tagId,
             tagTitle: tag
         };
         return this._httpClient.post<Tag>(this.saveTagsURL, data).pipe(
-            map((response: Tag) => response), // Adjust 'tag' based on your API response structure
-            tap(() => {
-                this.getTags().subscribe();
-            })
-        );
+            catchError(err => { alert(err.message); return EMPTY })
+        )
     }
     deleteTags(id: number): Observable<Tag[]> {
         let data = {
@@ -102,14 +100,24 @@ export class TasksService
     }
     saveTasks(task: FormGroup<any>): Observable<Task[]> {
         let data: any = { 
-            id: 1,
+            id: this.user.id,
             companyId: -1,
-            leadId: 1,
-            task : {...task.value,
-                createdBy: this.user.id,
-                taskOwner: this.user.id,
-                taskType: "task",}
+            leadId: -1,
+            tenantId:this.user.tenantId,
+            type:task.value.taskType,
+            task : {
+                taskId:task.value.taskId,
+                taskTitle:task.value.taskTitle,
+                description:task.value.description,
+                priorityId:task.value.priority,
+                statusId:task.value.status,
+                taskOwner:task.value.taskOwner,
+                tags:task.value.tags.join(','),
+                dueDate:task.value.dueDate,
+               }
         }
+        debugger;
+
         return this._httpClient.post<Task[]>(this.saveTasksURL, data).pipe(
             tap((tasks) => {
                 this.getTasks().subscribe();
@@ -144,9 +152,16 @@ export class TasksService
     selectedTask(selectedTask: Task){
         this._task.next(selectedTask);
     }
-    //Needs to be implmented
     updateTaskOrders(tasks: Task[]): Observable<Task[]> {
-        return this._httpClient.patch<Task[]>('api/apps/tasks/order', {tasks});
+        debugger;
+        let data = {
+            tasks
+        }
+        return this._httpClient.post<Task[]>(this.updateTaskOrderURL, data).pipe(
+            tap(() => {
+                this.getTags().subscribe();
+            })
+        );
     }
     getTaskById(id: number): Observable<Task> {
         return this._tasks.pipe(
@@ -158,6 +173,7 @@ export class TasksService
                     task.taskId =-1;
                     task.taskType = 'task';
                     this._task.next(task);
+                    this.getTags().subscribe();
                     return task;
                 }
                 if(id===-2)
@@ -166,6 +182,7 @@ export class TasksService
                     task.taskId =-2;
                     task.taskType = 'section';
                     this._task.next(task);
+                    this.getTags().subscribe();
                     return task;
                 }
                 else{
@@ -179,14 +196,30 @@ export class TasksService
                 {
                     return throwError('Could not find task with id of ' + id + '!');
                 }
-                return of(task);
+                if(task.taskId !== -1 && task.taskId !== -2){
+                    let data = {
+                        tenantId: this.user.tenantId,
+                        id: this.user.id,
+                        taskId:id
+                    }
+                    return this._httpClient.post<Tag[]>(this.getTasktags, data).pipe(
+                        tap((tags) => {
+                            this._tags.next(tags)
+                        }),
+                        map(() => task)
+                    );
+                }
+                else{
+                    return of(task);
+                }
             })
         );
     }
     getUsers(): Observable<User[]> {
         let data = {
             tenantId: this.user.tenantId,
-            id: this.user.id
+            id: this
+            .user.id
         }
         return this._httpClient.post<User[]>(this.getUsersURL, data).pipe(
             tap((users) => {

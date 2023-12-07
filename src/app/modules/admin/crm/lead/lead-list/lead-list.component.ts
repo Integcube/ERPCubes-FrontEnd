@@ -498,7 +498,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
-  saveFilter(list:LeadCustomList):any{
-this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe(); 
+  saveFilter(list: LeadCustomList): any {
+    this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe();
   }
 }

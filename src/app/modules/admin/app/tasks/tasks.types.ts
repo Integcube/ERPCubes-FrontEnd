@@ -1,6 +1,6 @@
 export interface Tag
 {
-    tagId?: string;
+    tagId?: number;
     tagTitle?: string;
     isSelected: boolean;
 }

@@ -4,7 +4,7 @@
 
         <!-- Drawer -->
         <mat-drawer class="w-full sm:w-128 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
-            [disableClose]="true" #matDrawer>
+            [disableClose]="false" #matDrawer>
             <router-outlet></router-outlet>
         </mat-drawer>
 
@@ -75,7 +75,8 @@
                                         </button>
                                     </button>
                                     <!-- Task link -->
-                                    <a class="flex flex-auto items-center min-w-0 h-full pr-7" [routerLink]="[task.id]">
+                                    <a class="flex flex-auto items-center min-w-0 h-full pr-7"
+                                        [routerLink]="[task.taskId]">
                                         <!-- taskTitle & Placeholder -->
                                         <div class="flex-auto mr-2 truncate text-primary">
                                             <ng-container *ngIf="task.taskTitle">

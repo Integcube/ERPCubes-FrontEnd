@@ -1,30 +1,31 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { debounceTime, filter, Subject, takeUntil, tap } from 'rxjs';
-import { assign } from 'lodash-es';
+import { catchError, debounceTime, EMPTY, filter, Subject, takeUntil } from 'rxjs';
 import * as moment from 'moment';
-import { Tag,Task } from '../tasks.types';
+import { Tag, Task } from '../tasks.types';
 import { TasksListComponent } from '../list/list.component';
 import { TasksService } from '../tasks.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
 
 
 @Component({
-    selector       : 'tasks-details',
-    templateUrl    : './details.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    selector: 'tasks-details',
+    templateUrl: './details.component.html',
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
-{
+export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
     @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
     @ViewChild('titleField') private _titleField: ElementRef;
-
+    users$ = this._tasksService.users$;
+    user: User;
     tags: Tag[];
     tagsEditMode: boolean = false;
     filteredTags: Tag[];
@@ -34,10 +35,8 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    /**
-     * Constructor
-     */
     constructor(
+        private _userService: UserService,
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
         private _formBuilder: UntypedFormBuilder,
@@ -47,34 +46,49 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         private _tasksListComponent: TasksListComponent,
         private _tasksService: TasksService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
-    )
-    {
+        private _viewContainerRef: ViewContainerRef,
+        private _taskListComponent: TasksListComponent
+    ) {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
+    setPriority(id: number) {
+        this.taskForm.get('priority').patchValue(id);
+    }
+    save() {
+        let selectedIds: any[] = [];
+        this.tags.map(a => {
+            if (a.isSelected == true) {
+                selectedIds.push(a.tagId);
+            }
+        })
+        this.taskForm.get('tags').patchValue(selectedIds);
+        this._tasksService.saveTasks(this.taskForm).pipe(takeUntil(this._unsubscribeAll), catchError(err => { alert(err.message); return EMPTY })).subscribe(
+            data => {
+                this._taskListComponent.onBackdropClicked();
+                this.closeDrawer();
+                this._changeDetectorRef.markForCheck();
+            }
+        );
+    }
+    ngOnInit(): void {
         // Open the drawer
         this._tasksListComponent.matDrawer.open();
-
+        this._userService.user$.subscribe(user => {
+            this.user = user;
+            this._changeDetectorRef.markForCheck();
+        })
         // Create the task form
         this.taskForm = this._formBuilder.group({
-            id       : [''],
-            type     : [''],
-            title    : [''],
-            notes    : [''],
-            completed: [false],
-            dueDate  : [null],
-            priority : [0],
-            tags     : [[]],
-            order    : [0]
+            taskId: ['', Validators.required],
+            taskType: ['', Validators.required],
+            taskTitle: ['', Validators.required],
+            description: [''],
+            taskOwner: [this.user.id, Validators.required],
+            status: [],
+            dueDate: [null],
+            priority: [0],
+            tags: [[]],
+            order: [0]
         });
 
         // Get the tags
@@ -83,8 +97,6 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((tags: Tag[]) => {
                 this.tags = tags;
                 this.filteredTags = tags;
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
 
@@ -102,134 +114,95 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this._tasksService.task$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((task: Task) => {
-
-                // Open the drawer in case it is closed
                 this._tasksListComponent.matDrawer.open();
-
-                // Get the task
                 this.task = task;
-
-                // Patch values to the form from the task
-                this.taskForm.patchValue(task, {emitEvent: false});
-
-                // Mark for check
+                this.taskForm.patchValue(task, { emitEvent: false });
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Update task when there is a value change on the task form
-        // this.taskForm.valueChanges
-        //     .pipe(
-        //         tap((value) => {
-
-        //             // Update the task object
-        //             this.task = assign(this.task, value);
-        //         }),
-        //         debounceTime(300),
-        //         takeUntil(this._unsubscribeAll)
-        //     )
-        //     .subscribe((value) => {
-
-        //         // Update the task on the server
-        //         this._tasksService.saveTasks(value.id, value).subscribe();
-
-        //         // Mark for check
-        //         this._changeDetectorRef.markForCheck();
-        //     });
-
-        // Listen for NavigationEnd event to focus on the title field
         this._router.events
             .pipe(
                 takeUntil(this._unsubscribeAll),
                 filter(event => event instanceof NavigationEnd)
             )
             .subscribe(() => {
-
-                // Focus on the title field
                 this._titleField.nativeElement.focus();
             });
     }
 
-    /**
-     * After view init
-     */
-    ngAfterViewInit(): void
-    {
-        // Listen for matDrawer opened change
+    ngAfterViewInit(): void {
         this._tasksListComponent.matDrawer.openedChange
             .pipe(
                 takeUntil(this._unsubscribeAll),
                 filter(opened => opened)
             )
             .subscribe(() => {
-
-                // Focus on the title element
                 this._titleField.nativeElement.focus();
             });
     }
 
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
+    ngOnDestroy(): void {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-
-        // Dispose the overlay
-        if ( this._tagsPanelOverlayRef )
-        {
+        if (this._tagsPanelOverlayRef) {
             this._tagsPanelOverlayRef.dispose();
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Close the drawer
-     */
-    closeDrawer(): Promise<MatDrawerToggleResult>
-    {
+    closeDrawer(): Promise<MatDrawerToggleResult> {
         return this._tasksListComponent.matDrawer.close();
     }
 
-    /**
-     * Toggle the completed status
-     */
-    toggleCompleted(): void
-    {
-        // Get the form control for 'completed'
-        const completedFormControl = this.taskForm.get('completed');
+    toggleCompleted(): void {
+        let date = new Date;
+        let dueDate = new Date(this.taskForm.value.dueDate);
+        let status = this.taskForm.value.status;
 
-        // Toggle the completed status
-        completedFormControl.setValue(!completedFormControl.value);
+        switch (status) {
+            case 1: {
+                if (date > dueDate) {
+                    status = 4;
+                }
+                else {
+                    status = 3
+                }
+                break;
+            }
+            case 2: {
+                status = 1
+                break;
+            }
+            case 3: {
+                status = 2
+                break;
+            }
+            default: {
+                status = 1
+                break;
+            }
+        }
+        this.taskForm.get('status').patchValue(status)
+
     }
 
-    /**
-     * Open tags panel
-     */
-    openTagsPanel(): void
-    {
+    openTagsPanel(): void {
         // Create the overlay
         this._tagsPanelOverlayRef = this._overlay.create({
-            backdropClass   : '',
-            hasBackdrop     : true,
-            scrollStrategy  : this._overlay.scrollStrategies.block(),
+            backdropClass: '',
+            hasBackdrop: true,
+            scrollStrategy: this._overlay.scrollStrategies.block(),
             positionStrategy: this._overlay.position()
-                                  .flexibleConnectedTo(this._tagsPanelOrigin.nativeElement)
-                                  .withFlexibleDimensions(true)
-                                  .withViewportMargin(64)
-                                  .withLockedPosition(true)
-                                  .withPositions([
-                                      {
-                                          originX : 'start',
-                                          originY : 'bottom',
-                                          overlayX: 'start',
-                                          overlayY: 'top'
-                                      }
-                                  ])
+                .flexibleConnectedTo(this._tagsPanelOrigin.nativeElement)
+                .withFlexibleDimensions(true)
+                .withViewportMargin(64)
+                .withLockedPosition(true)
+                .withPositions([
+                    {
+                        originX: 'start',
+                        originY: 'bottom',
+                        overlayX: 'start',
+                        overlayY: 'top'
+                    }
+                ])
         });
 
         // Subscribe to the attachments observable
@@ -249,8 +222,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
         this._tagsPanelOverlayRef.backdropClick().subscribe(() => {
 
             // If overlay exists and attached...
-            if ( this._tagsPanelOverlayRef && this._tagsPanelOverlayRef.hasAttached() )
-            {
+            if (this._tagsPanelOverlayRef && this._tagsPanelOverlayRef.hasAttached()) {
                 // Detach it
                 this._tagsPanelOverlayRef.detach();
 
@@ -262,280 +234,125 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy
             }
 
             // If template portal exists and attached...
-            if ( templatePortal && templatePortal.isAttached )
-            {
+            if (templatePortal && templatePortal.isAttached) {
                 // Detach it
                 templatePortal.detach();
             }
         });
     }
-
-    /**
-     * Toggle the tags edit mode
-     */
-    toggleTagsEditMode(): void
-    {
+    toggleProductTag(label: Tag): void {
+        const foundLabelIndex = this.tags.findIndex(a => a.tagId === label.tagId);
+        this.tags[foundLabelIndex].isSelected = !this.tags[foundLabelIndex].isSelected;
+        this._changeDetectorRef.markForCheck();
+    }
+    toggleTagsEditMode(): void {
         this.tagsEditMode = !this.tagsEditMode;
     }
+    filterTags(event): void {
+        const value = event.target.value.toLowerCase();
+        this.filteredTags = this.tags.filter(tag => tag.tagTitle.toLowerCase().includes(value));
+    }
 
-    /**
-     * Filter tags
-     *
-     * @param event
-     */
-    // filterTags(event): void
-    // {
-    //     // Get the value
-    //     const value = event.target.value.toLowerCase();
+    filterTagsInputKeyDown(event): void {
+        // Return if the pressed key is not 'Enter'
+        if (event.key !== 'Enter') {
+            return;
+        }
 
-    //     // Filter the tags
-    //     this.filteredTags = this.tags.filter(tag => tag.title.toLowerCase().includes(value));
-    // }
+        // If there is no tag available...
+        if (this.filteredTags.length === 0) {
+            // Create the tag
+            this.createTag(event.target.value);
 
-    /**
-     * Filter tags input key down event
-     *
-     * @param event
-     */
-    // filterTagsInputKeyDown(event): void
-    // {
-    //     // Return if the pressed key is not 'Enter'
-    //     if ( event.key !== 'Enter' )
-    //     {
-    //         return;
-    //     }
+            // Clear the input
+            event.target.value = '';
 
-    //     // If there is no tag available...
-    //     if ( this.filteredTags.length === 0 )
-    //     {
-    //         // Create the tag
-    //         this.createTag(event.target.value);
+            // Return
+            return;
+        }
 
-    //         // Clear the input
-    //         event.target.value = '';
+        // If there is a tag...
+        const tag = this.filteredTags[0];
+        const isTagApplied = null;
+        // const isTagApplied = this.task.tags.find(id => id === tag.id);
 
-    //         // Return
-    //         return;
-    //     }
-
-    //     // If there is a tag...
-    //     const tag = this.filteredTags[0];
-    //     const isTagApplied = this.task.tags.find(id => id === tag.id);
-
-    //     // If the found tag is already applied to the task...
-    //     if ( isTagApplied )
-    //     {
-    //         // Remove the tag from the task
-    //         this.deleteTagFromTask(tag);
-    //     }
-    //     else
-    //     {
-    //         // Otherwise add the tag to the task
-    //         this.addTagToTask(tag);
-    //     }
-    // }
+        // If the found tag is already applied to the task...
+        if (isTagApplied) {
+            // Remove the tag from the task
+            this.deleteTagFromTask(tag);
+        }
+        else {
+            // Otherwise add the tag to the task
+            this.addTagToTask(tag);
+        }
+    }
 
     /**
      * Create a new tag
      *
      * @param title
      */
-    // createTag(title: string): void
-    // {
-    //     const tag = {
-    //         title
-    //     };
-
-    //     // Create tag on the server
-    //     this._tasksService.createTag(tag)
-    //         .subscribe((response) => {
-
-    //             // Add the tag to the task
-    //             this.addTagToTask(response);
-    //         });
-    // }
-
-    /**
-     * Update the tag title
-     *
-     * @param tag
-     * @param event
-     */
-    // updateTagTitle(tag: Tag, event): void
-    // {
-    //     // Update the title on the tag
-    //     tag.title = event.target.value;
-
-    //     // Update the tag on the server
-    //     this._tasksService.updateTag(tag.id, tag)
-    //         .pipe(debounceTime(300))
-    //         .subscribe();
-
-    //     // Mark for check
-    //     this._changeDetectorRef.markForCheck();
-    // }
-
-    /**
-     * Delete the tag
-     *
-     * @param tag
-     */
-    // deleteTag(tag: Tag): void
-    // {
-    //     // Delete the tag from the server
-    //     this._tasksService.deleteTag(tag.id).subscribe();
-
-    //     // Mark for check
-    //     this._changeDetectorRef.markForCheck();
-    // }
-
-    /**
-     * Add tag to the task
-     *
-     * @param tag
-     */
-    // addTagToTask(tag: Tag): void
-    // {
-    //     // Add the tag
-    //     this.task.tags.unshift(tag.id);
-
-    //     // Update the task form
-    //     this.taskForm.get('tags').patchValue(this.task.tags);
-
-    //     // Mark for check
-    //     this._changeDetectorRef.markForCheck();
-    // }
-
-    /**
-     * Delete tag from the task
-     *
-     * @param tag
-     */
-    // deleteTagFromTask(tag: Tag): void
-    // {
-    //     // Remove the tag
-    //     this.task.tags.splice(this.task.tags.findIndex(item => item === tag.id), 1);
-
-    //     // Update the task form
-    //     this.taskForm.get('tags').patchValue(this.task.tags);
-
-    //     // Mark for check
-    //     this._changeDetectorRef.markForCheck();
-    // }
-
-    /**
-     * Toggle task tag
-     *
-     * @param tag
-     */
-    // toggleTaskTag(tag: Tag): void
-    // {
-    //     if ( this.task.tags.includes(tag.id) )
-    //     {
-    //         this.deleteTagFromTask(tag);
-    //     }
-    //     else
-    //     {
-    //         this.addTagToTask(tag);
-    //     }
-    // }
-
-    /**
-     * Should the create tag button be visible
-     *
-     * @param inputValue
-     */
-    // shouldShowCreateTagButton(inputValue: string): boolean
-    // {
-    //     return !!!(inputValue === '' || this.tags.findIndex(tag => tag.title.toLowerCase() === inputValue.toLowerCase()) > -1);
-    // }
-
-    /**
-     * Set the task priority
-     *
-     * @param priority
-     */
-    // setTaskPriority(priority): void
-    // {
-    //     // Set the value
-    //     this.taskForm.get('priority').setValue(priority);
-    // }
-
-    /**
-     * Check if the task is overdue or not
-     */
-    isOverdue(): boolean
-    {
-        return moment(this.task.dueDate, moment.ISO_8601).isBefore(moment(), 'days');
+    createTag(title: string): void {
+        this._tasksService.saveTags(title,-1)
+            .subscribe((response) => {
+                this.addTagToTask(response);
+                this.toggleProductTag(response);
+            });
     }
 
-    /**
-     * Delete the task
-     */
-    // deleteTask(): void
-    // {
-    //     // Open the confirmation dialog
-    //     const confirmation = this._fuseConfirmationService.open({
-    //         title  : 'Delete task',
-    //         message: 'Are you sure you want to delete this task? This action cannot be undone!',
-    //         actions: {
-    //             confirm: {
-    //                 label: 'Delete'
-    //             }
-    //         }
-    //     });
+    updateTagTitle(tag: Tag, event): void {
+        tag.tagTitle = event.target.value;
+        this._tasksService.saveTags(tag.tagTitle, tag.tagId)
+            .pipe(debounceTime(300))
+            .subscribe();
+        this._changeDetectorRef.markForCheck();
+    }
 
-    //     // Subscribe to the confirmation dialog closed action
-    //     confirmation.afterClosed().subscribe((result) => {
-
-    //         // If the confirm button pressed...
-    //         if ( result === 'confirmed' )
-    //         {
-
-    //             // Get the current task's id
-    //             const id = this.task.id;
-
-    //             // Get the next/previous task's id
-    //             const currentTaskIndex = this.tasks.findIndex(item => item.id === id);
-    //             const nextTaskIndex = currentTaskIndex + ((currentTaskIndex === (this.tasks.length - 1)) ? -1 : 1);
-    //             const nextTaskId = (this.tasks.length === 1 && this.tasks[0].id === id) ? null : this.tasks[nextTaskIndex].id;
-
-    //             // Delete the task
-    //             this._tasksService.deleteTask(id)
-    //                 .subscribe((isDeleted) => {
-
-    //                     // Return if the task wasn't deleted...
-    //                     if ( !isDeleted )
-    //                     {
-    //                         return;
-    //                     }
-
-    //                     // Navigate to the next task if available
-    //                     if ( nextTaskId )
-    //                     {
-    //                         this._router.navigate(['../', nextTaskId], {relativeTo: this._activatedRoute});
-    //                     }
-    //                     // Otherwise, navigate to the parent
-    //                     else
-    //                     {
-    //                         this._router.navigate(['../'], {relativeTo: this._activatedRoute});
-    //                     }
-    //                 });
-
-    //             // Mark for check
-    //             this._changeDetectorRef.markForCheck();
-    //         }
-    //     });
-    // }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
-    trackByFn(index: number, item: any): any
-    {
-        return item.id || index;
+    deleteTag(tag: Tag): void {
+        this._tasksService.deleteTags(tag.tagId).subscribe(
+            data => {
+                this.deleteTagFromTask(tag);
+            }
+        );
+    }
+    addTagToTask(tag: Tag): void {
+        this.tags.unshift(tag);
+        this.filteredTags = this.tags;
+        this._changeDetectorRef.markForCheck();
+    }
+    deleteTagFromTask(tag: Tag): void {
+        this.tags.splice(this.tags.findIndex(t => t.tagId === tag.tagId), 1);
+        this._changeDetectorRef.markForCheck();
+    }
+    shouldShowCreateTagButton(inputValue: string): boolean {
+        return !!!(inputValue === '' || this.tags.findIndex(tag => tag.tagTitle.toLowerCase() === inputValue.toLowerCase()) > -1);
+    }
+    isOverdue(): boolean {
+        return moment(this.taskForm.value.dueDate, moment.ISO_8601).isBefore(moment(), 'days');
+    }
+    deleteTask(): void {
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'Delete task',
+            message: 'Are you sure you want to delete this task? This action cannot be undone!',
+            actions: {
+                confirm: {
+                    label: 'Delete'
+                }
+            }
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if (result === 'confirmed') {
+                this._tasksService.deleteTasks(this.task.taskId).pipe(takeUntil(this._unsubscribeAll), catchError(err => { alert(err.message); return EMPTY })).subscribe(
+                    data => {
+                        this._taskListComponent.onBackdropClicked();
+                        this.closeDrawer();
+                        this._changeDetectorRef.markForCheck();
+                    }
+                );
+            }
+        });
+    }
+    trackByFn(index: number, item: any): any {
+        return item.tagId || index;
     }
 }

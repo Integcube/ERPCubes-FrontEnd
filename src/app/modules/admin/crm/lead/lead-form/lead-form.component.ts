@@ -52,7 +52,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       leadOwner: [this.user.id, Validators.required],
-      status: [''],
+      status: [],
       email: [''],
       mobile: [''],
       work: [''],
@@ -62,9 +62,9 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       zip: [''],
       state: [''],
       country: [''],
-      sourceId: [''],
-      industryId: [''],
-      productId: [''],
+      sourceId: [],
+      industryId: [],
+      productId: [],
       createdDate: ['']
     });
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll),
@@ -93,7 +93,6 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       });
   }
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
@@ -113,7 +112,6 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
     );
   }
   delete() {
-    // Open the confirmation dialog
     const confirmation = this._fuseConfirmationService.open({
       title: 'Delete lead',
       message: 'Are you sure you want to delete this lead? This action cannot be undone!',
