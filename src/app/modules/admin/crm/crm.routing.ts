@@ -1,6 +1,7 @@
 
 import { Routes } from "@angular/router";
-export const crmRoutes: Routes = [{
+export const crmRoutes: Routes = [
+{
     path: 'contacts', children: [
         { path: 'company', loadChildren: () => import('app/modules/admin/crm/company/company.module').then(m => m.CompanyModule) },
         { path: 'leads', loadChildren: () => import('app/modules/admin/crm/lead/lead.module').then(m => m.LeadModule) },
@@ -8,8 +9,9 @@ export const crmRoutes: Routes = [{
     ]
 },
 {
-    path: 'report', children: [
+    path: 'reports', children: [
         { path: 'lead-report', loadChildren: () => import('app/modules/admin/crm/lead-report/lead-report.module').then(m => m.LeadReportModule) },
+        { path: 'activity-report', loadChildren: () => import('app/modules/admin/crm/activity-report/activity-report.module').then(m => m.ActivityReportModule) },
     ]
 },
 {
