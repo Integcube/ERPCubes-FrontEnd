@@ -1,0 +1,113 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-default h-screen">
+    <!-- Main -->
+    <div class="flex-auto">
+        <!-- Header -->
+        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-12 px-6 md:px-8">
+
+            <!-- Title -->
+            <div>
+                <div class="text-3xl font-bold tracking-tight leading-none">Activity Reports</div>
+                <div class="ml-0.5 font-medium text-secondary">
+                    <ng-container *ngIf="activityReportCount > 0">
+                        {{activityReportCount}}
+                    </ng-container>
+                    {{activityReportCount | i18nPlural: {
+                    '=0' : 'No Reports',
+                    '=1' : 'Report',
+                    'other': 'Reports'
+                    } }}
+                </div>
+            </div>
+            <!-- Main actions -->
+            <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                <!-- Search -->
+                <div class="flex-auto">
+                    <mat-form-field
+                        class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                        <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                            [autocomplete]="'off'" [placeholder]="'Search Activity Reports'">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <!-- Team list -->
+        <div class="flex-auto pt-12 bg-default min-h-3/4 pb-10">
+            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+                    <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            <!-- Select -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()" color="accent"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row" class="w-10">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null" color="accent"
+                                        [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- Username Column -->
+                            <ng-container matColumnDef="leadOwnerName">
+                                dkjbsdjkf
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> User Name </th>
+                                <td mat-cell *matCellDef="let row"> {{row.leadOwnerName}} </td>
+                            </ng-container>
+                            <!-- Leads Column -->
+                            <ng-container matColumnDef="lead">
+                                sdjbskjfds
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Leads </th>
+                                <td mat-cell *matCellDef="let row"> {{row.lead}} </td>
+                            </ng-container>
+                            <!-- Notes Column -->
+                            <ng-container matColumnDef="note">
+                                jsadjfsjad
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Notes </th>
+                                <td mat-cell *matCellDef="let row"> {{row.note}} </td>
+                            </ng-container>
+                            <!-- Notes Column -->
+                            <ng-container matColumnDef="call">
+                                ;kasdflksjad
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Calls </th>
+                                <td mat-cell *matCellDef="let row"> {{row.call}} </td>
+                            </ng-container>
+                            <!-- Notes Column -->
+                            <ng-container matColumnDef="email">
+                                skfdkjansfd
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Emails </th>
+                                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+                            </ng-container>
+                            <!-- Notes Column -->
+                            <ng-container matColumnDef="task">
+                                asjdfskdajfbd
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Tasks </th>
+                                <td mat-cell *matCellDef="let row"> {{row.task}} </td>
+                            </ng-container>
+                            <!-- Notes Column -->
+                            <ng-container matColumnDef="meeting">
+                                asjdfsfjddfs
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort> Meetings </th>
+                                <td mat-cell *matCellDef="let row"> {{row.meeting}} </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr class="mat-row" *matNoDataRow>
+                                <td class="mat-cell" colspan="4">No data matching the filter</td>
+                            </tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of reports"></mat-paginator>
+                    </div>
+                <!-- No Reports -->
+                <ng-template #noReports>
+                    <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
+                        Reports!</div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
