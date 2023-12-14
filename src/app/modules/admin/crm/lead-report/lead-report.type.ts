@@ -1,10 +1,15 @@
 export interface LeadReport {
-    leadOwner: string
+    leadOwnerId: string
     leadOwnerName:string
+    status: string
+    sId: number
+    prodName: string
+    prodId: number
+    count: number
+}
+export interface LeadReportView {
+    leadOwnerName:string  
     statusTitle: string
-    statusId: number
-    productName: string
-    productId: number
     count: number
 }
 export interface LeadStatus {

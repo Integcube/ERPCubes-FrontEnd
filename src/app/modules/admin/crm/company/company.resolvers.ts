@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { CompanyService } from './company.service';
-import { Company, CompanyFilter } from './company.type';
+import { Company, CompanyFilter, TaskModel } from './company.type';
 import { Observable, catchError, throwError } from 'rxjs';
 @Injectable({
     providedIn: 'root'
@@ -71,44 +71,62 @@ export class SelectedCompanyResolver implements Resolve<any>
                    );
     }
 }
+@Injectable({
+    providedIn:'root'
+  })
+  export class NoteResolver implements Resolve<any>{
+    constructor(private _companyService:CompanyService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getNotes(+route.paramMap.get('id'));
+    }
+}
+@Injectable({
+    providedIn:'root'
+  })
+  export class CallResolver implements Resolve<any>{
+    constructor(
+      private _companyService:CompanyService)
+      { }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getCalls(+route.paramMap.get('id'));
+    }
+  }
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class TaskResolver implements Resolve<any>
+  {
+    constructor(
+        private _router: Router,
+        private _companyService:CompanyService)
+    {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<TaskModel[]>
+    {
+        return this._companyService.getTasks(+route.paramMap.get('id'));
+    }
+  }
+@Injectable({
+    providedIn:'root'
+  })
+  export class EmailResolver implements Resolve<any>{
+    constructor(
+      private _companyService:CompanyService)
+      { }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getEmails(+route.paramMap.get('id'));
+    }
+  }
+  @Injectable({
+    providedIn:'root'
+  })
+  export class MeetingResolver implements Resolve<any>{
+    constructor(
+      private _companyService:CompanyService)
+      { }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getMeetings(+route.paramMap.get('id'));
+    }
+  }
 
-// @Injectable({
-//     providedIn:'root'
-// })
-// export class NotesResolver implements Resolve<any>{
-//     constructor(private _companyService:CompanyService){
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-//       return this._companyService.getNotes();
-//     }
-// }
-// @Injectable({
-//     providedIn:'root'
-// })
-// export class TaskResolver implements Resolve<any>{
-//     constructor(private _companyService:CompanyService){
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-//       return this._companyService.getTasks();
-//     }
-// }
-// @Injectable({
-//     providedIn:'root'
-// })
-// export class CallResolver implements Resolve<any>{
-//     constructor(private _companyService:CompanyService){
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-//       return this._companyService.getCalls();
-//     }
-// }
-// @Injectable({
-//     providedIn:'root'
-// })
-// export class MeetingResolver implements Resolve<any>{
-//     constructor(private _companyService:CompanyService){
-//     }
-//     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-//       return this._companyService.getMeetings();
-//     }
-// }

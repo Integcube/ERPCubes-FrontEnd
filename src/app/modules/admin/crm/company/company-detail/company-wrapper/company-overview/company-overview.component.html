@@ -1,0 +1,16 @@
+
+    <!-- Main -->
+    <div class="flex-auto border-t -mt-px pt-4 px-6 sm:pt-6">
+        <div class="flex items-center justify-center   mb-2 sm:mt-0 ">
+            <div class="w-full justify-center inset-0 flex flex-col min-w-0 overflow-hidden">
+                <div class="container">
+                    <div class="arrow-steps clearfix" >
+                      <div class="step" (click)="goToStep(i+1)" *ngFor = "let arrow of arrows; let i = index" #step>
+                        <span><a>{{arrow.name}}</a></span>
+                      </div>
+            
+                    </div>
+                  </div>		  
+            </div>
+        </div>
+    </div>

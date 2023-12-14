@@ -37,6 +37,7 @@ export class MeetingTabComponent implements OnInit {
   }
   addMeeting(){
     let meeting = new Meeting({})
+    // this._changeDetectorRef.markForCheck();
     this._matDialog.open(MeetingDetailComponent, {
       autoFocus: false,
       data     : {
@@ -45,7 +46,8 @@ export class MeetingTabComponent implements OnInit {
   });
   }
   updateMeeting(meeting:Meeting):void{
-   this._matDialog.open(MeetingDetailComponent, {
+    // this._changeDetectorRef.markForCheck();
+    this._matDialog.open(MeetingDetailComponent, {
       autoFocus: false,
       data     : {
           meeting: cloneDeep(meeting)

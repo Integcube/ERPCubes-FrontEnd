@@ -23,6 +23,7 @@ export class Company{
     companyOwner: string;
     mobile?: string;
     work?: string;
+    email: string;
     billingAddress?: string;
     billingStreet?: string;
     billingCity?: string;
@@ -59,4 +60,119 @@ export interface Activity {
 export interface Industry{
     industryId:number,
     industryTitle:string
+}
+
+
+export interface Activity {
+    activityId: string;
+    userId: string;
+    userName: string;
+    activityType: string;
+    activityTypeId: string;
+    activityStatus: number;
+    createdDate: string;
+    icon?: string;
+    createdBy: string;
+}
+export interface Industry{
+    industryId:number,
+    industryTitle:string
+}
+
+export class Note {
+    noteId: number;
+    noteTitle: string;
+    content: string;
+    createdDate: Date;
+    createdBy: string;
+    userName: string;
+    tags: Tag[];
+    tasks: Tasks[];
+    constructor(reg) {
+        this.noteId = reg.noteId ? reg.noteId : -1
+    }
+}
+export class Tasks {
+    taskId: number;
+    task: string;
+    isCompleted: boolean;
+    noteId: number
+    constructor(reg) {
+        this.taskId = reg.taskId ? reg.taskId : -1
+    }
+}
+export class Tag {
+    tagId: number;
+    tagTitle: string;
+    isSelected: boolean
+    constructor(reg) {
+        this.tagId = reg.tagId ? reg.tagId : -1
+    }
+}
+export class TaskModel {
+    taskId: number;
+    taskTitle: string;
+    dueDate: Date | null;
+    priority: number;
+    status: number;
+    description: string | null;
+    taskOwner: string;
+    taskOwnerTitle: string;
+    createdBy: string;
+    createdByTitle: string;
+    createdDate: Date;
+    taskType: string;
+    tags: Tag[];
+    constructor(reg) {
+        this.taskId = reg.taskId ? reg.taskId : -1
+    }
+}
+export class Email {
+    emailId: number;
+    subject: string;
+    description: string;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg) {
+        this.emailId = reg.emailId ? reg.emailId : -1
+    }
+}
+export class Call {
+    callId: number;
+    subject: string;
+    response: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg) {
+        this.callId = reg.callId ? reg.callId : -1
+    }
+}
+
+export class Meeting{
+    meetingId: number;
+    subject: string;
+    note: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg){
+        this.meetingId = reg.meetingId?reg.meetingId:-1
+    }
+}
+
+export interface Activity {
+    activityId: string;
+    userId: string;
+    userName: string;
+    activityType: string;
+    activityTypeId: string;
+    activityStatus: number;
+    image?: string;
+    detail?: string;
+    createdDate: string;
+    icon?: string;
+    createdBy: string;
 }

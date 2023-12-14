@@ -26,11 +26,27 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CompanyDetailComponent } from './company-detail/company-detail.component';
-import { CompanyActivityComponent } from './company-detail/company-activity/company-activity.component';
 import { CompanyInfoComponent } from './company-detail/company-info/company-info.component';
 import { CompanyDataComponent } from './company-detail/company-data/company-data.component';
 import {MatTabsModule} from '@angular/material/tabs';
 import { ViewDetailComponent } from './company-detail/view/view-detail/view-detail.component';
+import { ActivityDetailComponent } from './company-detail/activity/activity-detail/activity-detail.component';
+import { CompanyWrapperComponent } from './company-detail/company-wrapper/company-wrapper.component';
+import { QuillModule } from 'ngx-quill';
+import { CompanyActivityComponent } from './company-detail/company-wrapper/company-activity/company-activity.component';
+import { CallDetailComponent } from './company-detail/call/call-detail/call-detail.component';
+import { CallTabComponent } from './company-detail/call/call-tab/call-tab.component';
+import { EmailTabComponent } from './company-detail/email/email-tab/email-tab.component';
+import { EmailDetailComponent } from './company-detail/email/email-detail/email-detail.component';
+import { MeetingDetailComponent } from './company-detail/meeting/meeting-detail/meeting-detail.component';
+import { MeetingTabComponent } from './company-detail/meeting/meeting-tab/meeting-tab.component';
+import { NoteDetailComponent } from './company-detail/notes/note-detail/note-detail.component';
+import { NoteTabComponent } from './company-detail/notes/note-tab/note-tab.component';
+import { TaskDetailComponent } from './company-detail/tasks/task-detail/task-detail.component';
+import { TaskTabComponent } from './company-detail/tasks/task-tab/task-tab.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FuseCardModule } from '@fuse/components/card';
 
 
 
@@ -40,10 +56,22 @@ import { ViewDetailComponent } from './company-detail/view/view-detail/view-deta
     CompanyListComponent,
     CompanyFormComponent,
     CompanyDetailComponent,
-    CompanyActivityComponent,
     CompanyInfoComponent,
     CompanyDataComponent,
-    ViewDetailComponent
+    ViewDetailComponent,
+    ActivityDetailComponent,
+    CompanyWrapperComponent,
+    CompanyActivityComponent,
+    CallDetailComponent,
+    CallTabComponent,
+    EmailTabComponent,
+    EmailDetailComponent,
+    MeetingDetailComponent,
+    MeetingTabComponent,
+    NoteDetailComponent,
+    NoteTabComponent,
+    TaskDetailComponent,
+    TaskTabComponent,
   ],
   imports: [
     RouterModule.forChild(companyRoutes),
@@ -60,6 +88,7 @@ import { ViewDetailComponent } from './company-detail/view/view-detail/view-deta
     MatProgressBarModule,
     MatRadioModule,
     MatRippleModule,
+    QuillModule,
     MatSelectModule,
     MatSidenavModule,
     MatTableModule,
@@ -67,7 +96,11 @@ import { ViewDetailComponent } from './company-detail/view/view-detail/view-deta
     FuseFindByKeyPipeModule,
     SharedModule,
     MatExpansionModule,
-    MatTabsModule
+    MatTabsModule,
+    FuseCardModule,
+    DragDropModule,
+    MatDialogModule,
+    
   ],
   providers: [
     {

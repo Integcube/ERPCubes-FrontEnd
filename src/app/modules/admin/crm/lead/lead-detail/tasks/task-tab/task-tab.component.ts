@@ -60,6 +60,17 @@ export class TaskTabComponent implements OnInit, OnDestroy {
     }
     this._leadService.updateTaskStatus(taskId,taskTitle,status,this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data=>{this._changeDetectorRef.markForCheck()})
   }
+  togglePriority(taskId: number, priorityId: number, taskTitle: string, newPriority: number) {
+    // Check if the new priority is different from the current priority
+    if (priorityId !== newPriority) {
+      this._leadService.updateTaskPriority(taskId, taskTitle, newPriority, this.lead.leadId)
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(data => {
+          this._changeDetectorRef.markForCheck();
+        });
+    }
+  }
+  
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();

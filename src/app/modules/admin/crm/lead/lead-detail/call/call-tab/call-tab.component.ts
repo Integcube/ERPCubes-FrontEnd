@@ -49,7 +49,6 @@ export class CallTabComponent implements OnInit {
   ngOnInit(): void {
   }
   addCall(){
-    debugger;
     let call = new Call({})
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(CallDetailComponent, {
@@ -60,7 +59,6 @@ export class CallTabComponent implements OnInit {
   });
   }
   updateCall(call:Call):void{
-    debugger;
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(CallDetailComponent, {
       autoFocus: false,

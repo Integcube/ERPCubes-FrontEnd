@@ -82,15 +82,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
   
     switch (eventType) {
       case 1:
-        eventColor = '#F9483B'; // Red color for eventType 1
+        eventColor = '#800000'; // Maroon color for eventType 1
         break;
       case 2:
         eventColor = '#53B958'; // Green color for eventType 2
         break;
       case 3:
-        eventColor = '#007BFF'; // Blue color for eventType 3
+        eventColor = '#FF0000'; // Red color for eventType 3
         break;
-      case 4:
+      case 4: 
         eventColor = '#FFD700'; // Gold color for eventType 4
         break;
       case 5:

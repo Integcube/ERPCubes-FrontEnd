@@ -38,7 +38,9 @@ export class LeadService {
   private readonly getMeetingsUrl = `${environment.url}/Meeting/all`
   private readonly saveMeetingsUrl = `${environment.url}/Meeting/save`
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
-
+  private readonly saveNotesUrl = `${environment.url}/Notes/save`
+  private readonly deleteNotesURL = `${environment.url}/Notes/delete`
+  private readonly updateTaskPriorityUrl = `${environment.url}/Task/updatePriority`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -60,6 +62,7 @@ export class LeadService {
   private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
   private _meetings: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -251,27 +254,40 @@ export class LeadService {
     this._filter.next(filter);
   }
   getLeads(): Observable<Lead[]> {
-    return this.filter$.pipe(
-      switchMap((filter: LeadFilter) => {
-        const data = {
-          id: this.user.id,
-          tenantId: this.user.tenantId,
-          leadOwner: filter?.leadOwner.join(', ') || "",
-          createdDate: filter?.createdDate || null,
-          modifiedDate: filter?.modifiedDate || null,
-          leadStatus: filter?.leadStatus.join(', ') || "",
-        };
-        return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
-          tap((leads) => {
-            this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
-          }),
-          catchError(error => {
-            alert(error);
-            return EMPTY;
-          })
-        );
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
+      tap((leads) => {
+        this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
+      }),
+      catchError(error => {
+        alert(error);
+        return EMPTY;
       })
     );
+    // return this.filter$.pipe(
+    //   switchMap((filter: LeadFilter) => {
+    //     const data = {
+    //       id: this.user.id,
+    //       tenantId: this.user.tenantId,
+    //       leadOwner: filter?.leadOwner.join(', ') || "",
+    //       createdDate: filter?.createdDate || null,
+    //       modifiedDate: filter?.modifiedDate || null,
+    //       leadStatus: filter?.leadStatus.join(', ') || "",
+    //     };
+    //     return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
+    //       tap((leads) => {
+    //         this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
+    //       }),
+    //       catchError(error => {
+    //         alert(error);
+    //         return EMPTY;
+    //       })
+    //     );
+    //   })
+    // );
   }
   getIndustries(): Observable<Industry[]> {
     let data = {
@@ -283,7 +299,6 @@ export class LeadService {
         this._industries.next(industries);
       }),
       catchError(error => { alert(error); return EMPTY })
-
     );
   }
   getUsers(): Observable<User[]> {
@@ -600,9 +615,42 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
-  deleteNote() {
+  deleteNote(noteId: number, leadId: number): Observable<Note> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      noteId: noteId
+    }
+    return this._httpClient.post<Note>(this.deleteNotesURL, data).pipe(
+      tap((note) => {
+        this.getNotes(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
   }
-  saveNote() {
+  saveNote(note: Note, leadId: number): Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      companyId: -1,
+      leadId: leadId,
+      note: {
+        noteId: note.noteId,
+        noteTitle: note.noteTitle,
+        content: note.content,
+        tags: note.tags ? note.tags.map(tag => tag.tagId).join(',') : '',
+        tasks:note.tasks 
+      }
+    };
+    return this._httpClient.post<Note[]>(this.saveNotesUrl, data).pipe(
+      tap(() => {
+        this.getNotes(leadId).subscribe();
+      }),
+      catchError(error => {
+        alert(error);
+        return EMPTY;
+      })
+    );
   }
   saveEmail(email: any, leadId: number): Observable<any> {
     let data = {
@@ -628,9 +676,14 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      ...meeting.value
+      companyId: -1,
+      leadId: leadId,
+      meetingId: meeting.meetingId,
+      subject: meeting.subject,
+      note: meeting.note,
+      startTime: meeting.startTime,
+      endTime: meeting.endTime
     }
-    debugger;
     return this._httpClient.post<Meeting[]>(this.saveMeetingsUrl, data).pipe(
       tap((meeting) => {
         this.getMeetings(leadId).subscribe();
@@ -684,6 +737,21 @@ export class LeadService {
       }),
       catchError(error => { alert(error); return EMPTY })
 
+    );
+  }
+  updateTaskPriority(taskId: number, taskTitle, priority, leadId){
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      taskId,
+      taskTitle,
+      priority
+    }
+    return this._httpClient.post<any>(this.updateTaskPriorityUrl, data).pipe(
+      tap((customList) => {
+        this.getTasks(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
     );
   }
   getActivities(count: number, leadId: number): Observable<any> {

@@ -17,50 +17,6 @@
     <form
         class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto"
         [formGroup]="composeForm">
-
-        <!-- To -->
-        <!-- <mat-form-field> -->
-            <!-- <mat-label>To</mat-label>
-            <input
-                matInput
-                [formControlName]="'to'" readonly="true"> -->
-                <!-- <mat-error *ngIf="composeForm.get('to').hasError('required')">
-                    Sender email is required
-                </mat-error> -->
-            <!-- <div
-                class="copy-fields-toggles"
-                matSuffix>
-                <span
-                    class="text-sm font-medium cursor-pointer select-none hover:underline"
-                    *ngIf="!copyFields.cc"
-                    (click)="showCopyField('cc')">
-                    Cc
-                </span>
-                <span
-                    class="ml-2 text-sm font-medium cursor-pointer select-none hover:underline"
-                    *ngIf="!copyFields.bcc"
-                    (click)="showCopyField('bcc')">
-                    Bcc
-                </span>
-            </div> -->
-        <!-- </mat-form-field> -->
-        <!-- Cc -->
-        <!-- <mat-form-field
-            *ngIf="copyFields.cc">
-            <mat-label>Cc</mat-label>
-            <input
-                matInput
-                [formControlName]="'cc'">
-        </mat-form-field> -->
-
-        <!-- Bcc -->
-        <!-- <mat-form-field
-            *ngIf="copyFields.bcc">
-            <mat-label>Bcc</mat-label>
-            <input
-                matInput
-                [formControlName]="'bcc'">
-        </mat-form-field> -->
         <!-- Subject -->
         <mat-form-field>
             <mat-label>Subject</mat-label>
@@ -69,12 +25,17 @@
                 [formControlName]="'subject'">
         </mat-form-field>
         <!-- Body -->
+        <!-- <mat-label class="font-semibold text-base">Response</mat-label>
         <quill-editor
             class="mt-2"
             [formControlName]="'response'"
             [bounds]="'self'"
             [modules]="quillModules">
-        </quill-editor>
+        </quill-editor> -->
+        <mat-form-field class="w-full">
+            <mat-label>Response</mat-label>
+            <input matInput [formControlName]="'response'" class="w-full h-16">
+        </mat-form-field>
 
         <mat-form-field>
             <mat-label>Start Time</mat-label>
@@ -92,30 +53,6 @@
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
             <div class="-ml-2">
-                <!-- Attach file -->
-                <!-- <button mat-icon-button>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:paper-clip'"></mat-icon>
-                </button> -->
-                <!-- Insert link -->
-                <!-- <button mat-icon-button>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:link'"></mat-icon>
-                </button> -->
-                <!-- Insert emoji -->
-                <!-- <button mat-icon-button>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:emoji-happy'"></mat-icon>
-                </button> -->
-                <!-- Insert image -->
-                <!-- <button mat-icon-button>
-                    <mat-icon
-                        class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:photograph'"></mat-icon>
-                </button> -->
             </div>
 
             <div class="flex items-center gap-3 mt-4 sm:mt-0">
@@ -124,16 +61,8 @@
                     class="ml-auto sm:ml-0"
                     mat-stroked-button
                     (click)="discard()">
-                    Discard
+                    Cancel
                 </button>
-                <!-- Save as draft -->
-                <!-- <button
-                    class="sm:mx-3"
-                    mat-stroked-button
-                    (click)="saveAsDraft()">
-                    <span>Save as draft</span>
-                </button> -->
-                <!-- Send -->
                 <button
                     class="order-first sm:order-last"
                     mat-flat-button

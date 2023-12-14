@@ -22,7 +22,6 @@ export class TasksService
     private readonly deleteTasksURL = `${environment.url}/Task/delete`
     private readonly getUsersURL = `${environment.url}/Users/all`
     private readonly updateTaskOrderURL = `${environment.url}/Task/updateTaskOrder`
-    
     user: User;
     currentDate: Date = new Date();
     private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);

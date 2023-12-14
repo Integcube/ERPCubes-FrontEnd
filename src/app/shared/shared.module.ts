@@ -2,10 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableLimitPipe } from '@fuse/pipes/table-limit/table-limit.pipe';
+import { UniquePipe } from '@fuse/pipes/unique-pipe/unique.pipe';
 
 @NgModule({
     declarations:[
-        TableLimitPipe
+        TableLimitPipe,
+        UniquePipe,
+        
     ],
     imports: [
         CommonModule,
@@ -16,7 +19,8 @@ import { TableLimitPipe } from '@fuse/pipes/table-limit/table-limit.pipe';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        TableLimitPipe
+        TableLimitPipe,
+        UniquePipe,
     ]
 })
 export class SharedModule

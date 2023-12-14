@@ -10,36 +10,51 @@
             <ng-container *ngIf="tasks.length; else noTask">
                 <ng-container *ngFor="let task of tasks">
                     <fuse-card class="relative flex flex-col w-full filter-testimonial my-2 rounded-sm cursor-pointer"
-                        (click)="updateTask(task)">
-                        <div class="flex flex-row justify-between w-full pt-4 px-4">
-                            <span class="flex text-md truncate"><b>Task</b>&nbsp;{{"assigned to "+
-                                task.taskOwnerTitle}}</span>
-                            <span class="flex text-md truncate">{{task.createdDate | date:'long'}}</span>
-                        </div>
-                        <div class="flex flex-col mt-2 px-4">
-                            <div class="flex flex-row items-center">
-                                <button mat-icon-button (click)="$event.stopPropagation()" (click)="toggleStatus(task.taskId,task.status,task.taskTitle)">
-                                    <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{ 'text-red-300' : task.status === 4,
-                                    'text-yellow-300': task.status === 3,
-                                                ' text-green-300 ': task.status === 1,
-                                                ' text-blue-300'  : task.status === 2}" ></mat-icon>
-                                </button>
-                                <span class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1">{{task.taskTitle}}</span>
-                            </div>
-                            <span class="flex flex-wrap mt-3 text-md line-clamp-3">{{task.description}}</span>
-                        </div>
-                        <div class="flex flex-row mt-4 justify-between p-4 bg-gray-50 dark:bg-transparent">
-                            <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
-                                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': task.status === 4,
-                                'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': task.status === 3,
-                                            'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': task.status === 1,
-                                            'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-green-50': task.status === 2}">
-                                <span class="leading-relaxed whitespace-nowrap">{{task.statusTitle}}</span>
-                            </span>
-                            <span class="flex flex-wrap text-md line-clamp-3"><b>Due:</b>&nbsp;{{task.dueDate |
-                                date}}</span>
-                        </div>
+                        (click)="updateTask(task)">                  
+                            <div class="flex flex-row items-center justify-between p-2">
+                                <div  class="flex flex-row justify-center items-center">
+                                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="toggleStatus(task.taskId,task.status,task.taskTitle)">
+                                        <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{ 'text-red-300' : task.status === 4,
+                                        'text-yellow-300': task.status === 3,
+                                                    ' text-green-300 ': task.status === 1,
+                                                    ' text-blue-300'  : task.status === 2}" ></mat-icon>
+                                    </button>
+                                    <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1">
+                                        {{task.taskTitle}}
+                                    </div>
+                                </div>
+                                <div class="flex flex-row  justify-between dark:bg-transparent gap-2">
+                                    <span
+                                        class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                        [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': task.status === 4,
+                                        'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': task.status === 3,
+                                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': task.status === 1,
+                                                    'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-green-50': task.status === 2}">
+                                        <span class="leading-relaxed whitespace-nowrap">{{task.statusTitle}}</span>
+                                    </span>
+                                    <div>
+                                        <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                          <mat-icon svgIcon="heroicons_solid:flag" [ngClass]="{
+                                            'text-red-600': task.priority === 1,
+                                            'text-yellow-400': task.priority === 2,
+                                            'text-green-500': task.priority === 3
+                                          }"></mat-icon>
+                                        </span>
+                                        <mat-menu #actionMenu="matMenu">
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 1)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600"></mat-icon> High
+                                          </button>
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 2)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400"></mat-icon> Medium
+                                          </button>
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 3)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500"></mat-icon> Low
+                                          </button>
+                                        </mat-menu>
+                                      </div>
+                                      
+                                </div>
+                            </div>               
                     </fuse-card>
                 </ng-container>
             </ng-container>  

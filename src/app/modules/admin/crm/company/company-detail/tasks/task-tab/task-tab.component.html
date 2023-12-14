@@ -1,0 +1,71 @@
+<div class="flex flex-col w-full">
+    <div class="flex justify-end">
+        <button mat-flat-button [color]="'primary'" class="text-xs h-8" [matTooltip]="'Create New Tasks'"
+            (click)="addTask()">
+            Create Task
+        </button>
+    </div>
+    <div class="relative my-4">
+        <ng-container *ngIf="filteredData$|async as tasks; else noTask">
+            <ng-container *ngIf="tasks.length; else noTask">
+                <ng-container *ngFor="let task of tasks">
+                    <fuse-card class="relative flex flex-col w-full filter-testimonial my-2 rounded-sm cursor-pointer"
+                        (click)="updateTask(task)">                  
+                            <div class="flex flex-row items-center justify-between p-2">
+                                <div  class="flex flex-row justify-center items-center">
+                                    <button mat-icon-button (click)="$event.stopPropagation()" (click)="toggleStatus(task.taskId,task.status,task.taskTitle)">
+                                        <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{ 'text-red-300' : task.status === 4,
+                                        'text-yellow-300': task.status === 3,
+                                                    ' text-green-300 ': task.status === 1,
+                                                    ' text-blue-300'  : task.status === 2}" ></mat-icon>
+                                    </button>
+                                    <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1">
+                                        {{task.taskTitle}}
+                                    </div>
+                                </div>
+                                <div class="flex flex-row  justify-between dark:bg-transparent gap-2">
+                                    <span
+                                        class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide uppercase"
+                                        [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': task.status === 4,
+                                        'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': task.status === 3,
+                                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': task.status === 1,
+                                                    'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-green-50': task.status === 2}">
+                                        <span class="leading-relaxed whitespace-nowrap">{{task.statusTitle}}</span>
+                                    </span>
+                                        <div>
+                                            <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                               <mat-icon svgIcon="heroicons_solid:flag"  [ngClass]="{ 'text-red-600' : task.priority === 1,
+                                                      'text-yellow-400': task.priority === 2,
+                                                      ' text-green-500 ': task.status === 3}">
+                                               </mat-icon>
+                                            </span>                                                                     
+                                            <mat-menu #actionMenu="matMenu">
+                                                <button mat-menu-item>
+                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600"></mat-icon> High
+                                                </button>
+                                                <button mat-menu-item>
+                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400"></mat-icon>Medium
+                                                </button>
+                                                <button mat-menu-item>
+                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500"></mat-icon>Low
+                                                </button>
+                                            </mat-menu>
+                                        </div>
+                                </div>
+                            </div>               
+                    </fuse-card>
+                </ng-container>
+            </ng-container>  
+        </ng-container>
+
+        <!-- No Task -->
+        <ng-template #noTask>
+            <div class="flex flex-auto flex-col items-center mt-4 justify-center bg-gray-100 dark:bg-transparent">
+                <mat-icon
+                    class="icon-size-24"
+                    [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+                <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No task found!</div>
+            </div>
+        </ng-template>
+    </div>
+</div>

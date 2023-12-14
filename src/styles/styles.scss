@@ -2,6 +2,9 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
-html{
-    overflow: hidden;
-}
+// html{
+//     overflow: hidden;
+// }
+.h-main-section {
+    height: calc(100vh - 4rem); /* Subtracting h-16 (4rem) from h-screen */
+  }

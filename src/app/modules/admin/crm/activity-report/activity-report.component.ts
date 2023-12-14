@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { ActivityReportService } from './activity-report.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Subject, combineLatest, map } from 'rxjs';
 import { ActivityReport } from './activity-report.type';
-import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
 @Component({
   selector: 'app-activity-report',

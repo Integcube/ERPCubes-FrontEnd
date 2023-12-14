@@ -1,24 +1,27 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef, ViewChild, AfterViewInit } from '@angular/core';
 import { LeadReportService } from './lead-report.service';
-import { Subject, combineLatest, map, takeUntil } from 'rxjs';
-import { LeadReport } from './lead-report.type';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { LeadReport, LeadStatus, Product } from "./lead-report.type";
+import { ChangeDetectorRef, Component, Inject, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-
+import { Subject, combineLatest, map, tap } from 'rxjs';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { UntypedFormControl } from '@angular/forms';
 @Component({
   selector: 'app-lead-report',
   templateUrl: './lead-report.component.html',
   styleUrls: ['./lead-report.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LeadReportComponent  {
+export class LeadReportComponent implements OnInit, OnDestroy {
 
-  constructor(private _leadReportService: LeadReportService,
+  constructor(
+    private _leadReportService: LeadReportService,
     private _changeDetectorRef: ChangeDetectorRef,
   ) { }
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  leadReportCount: number = 0;
+  statusTitles: string[] = []
+  _unsubscribeAll: Subject<any> = new Subject<any>();
   users$ = this._leadReportService.users$
   leadStatus$ = this._leadReportService.leadStatus$
   product$ = this._leadReportService.prodcts$
@@ -28,7 +31,29 @@ export class LeadReportComponent  {
   ).pipe(
     map(([users, reports]) => reports.map(r => ({
       ...r,
-      leadOwnerName: users.find(a => a.id === r.leadOwner)?.name
+      leadOwnerName: users.find(a => a.id === r.leadOwnerId)?.name
     } as LeadReport)))
   )
+  products:Product[]=[];
+  status:LeadStatus[]=[];
+  userList:LeadReport[]=[];
+  ngOnInit(): void {
+    this.leadReportWithUser$.subscribe((report) => {
+      this.leadReportCount = report.length;
+      this.userList = [...report];
+      this._changeDetectorRef.markForCheck();
+    });
+    this.leadStatus$.subscribe(
+      data=>{this.status = [...data] }
+    );
+    // this.product$.subscribe(
+    //   data=>{this.products = [...data] }
+    // );
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+
 }
