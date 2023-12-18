@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { cloneDeep } from 'lodash';
-import { EMPTY, catchError, combineLatest, map } from 'rxjs';
+import { EMPTY, Subject, catchError, combineLatest, map, takeUntil } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { EmailDetailComponent } from '../email-detail/email-detail.component';
-import { Email } from '../../../lead.type';
+import { Email, Lead } from '../../../lead.type';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
@@ -14,8 +14,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailTabComponent implements OnInit {
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+  lead: Lead;
   emails$ = this._leadService.emails$;
   users$ = this._leadService.users$;
   emailWithUser$ = combineLatest([
@@ -42,12 +43,15 @@ export class EmailTabComponent implements OnInit {
   constructor(
     private _leadService:LeadService,
     private _matDialog: MatDialog,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog
   ) { }
   sanitizeHtml(htmlString: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(htmlString);
   }
   ngOnInit(): void {
+
   }
   addEmail(){
     let email = new Email({})

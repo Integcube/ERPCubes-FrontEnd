@@ -71,6 +71,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           console.error("Error fetching data: ", error);
         }
       )
+      this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data };})
     }
     
   }
@@ -140,10 +141,10 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return item.id || index;
   }
   save(){
-    this._leadService.saveNote(this.note, 1).subscribe(data=>this.closeDialog());
+    this._leadService.saveNote(this.note, this.lead.leadId).subscribe(data=>this.closeDialog());
    }
    delete(){
-    this._leadService.deleteNote(this.note.noteId,1).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+    this._leadService.deleteNote(this.note.noteId,this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
    }
 }
 

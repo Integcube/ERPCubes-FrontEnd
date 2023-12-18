@@ -3,7 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { takeUntil, catchError, EMPTY, Subject } from 'rxjs';
 import { CompanyService } from '../../company.service';
-import { Company } from '../../company.type';
+import { Call, Company, Email, Meeting, Note, TaskModel } from '../../company.type';
+import { NoteDetailComponent } from '../notes/note-detail/note-detail.component';
+import { cloneDeep } from 'lodash';
+import { MatDialog } from '@angular/material/dialog';
+import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component';
+import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
+import { CallDetailComponent } from '../call/call-detail/call-detail.component';
+import { EmailDetailComponent } from '../email/email-detail/email-detail.component';
 
 @Component({
   selector: 'app-company-info',
@@ -24,6 +31,8 @@ export class CompanyInfoComponent implements OnInit, OnDestroy {
   constructor(private _formBuilder: FormBuilder,
     private _companyService: CompanyService,
     private _changeDetectorRef: ChangeDetectorRef,
+    private _matDialog: MatDialog,
+
     ) {
   }
   save() {
@@ -80,5 +89,50 @@ export class CompanyInfoComponent implements OnInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
+  }
+  addNote(){
+    let note = new Note({})
+    this._matDialog.open(NoteDetailComponent, {
+      autoFocus: false,
+      data     : {
+          note: cloneDeep(note)
+      }
+  });
+  }
+  addTask(){
+    let tasks = new TaskModel({})
+    this._matDialog.open(TaskDetailComponent, {
+      autoFocus: false,
+      data     : {
+          task: cloneDeep(tasks)
+      }
+  });
+  }
+  addMeeting(){
+    let meeting = new Meeting({})
+    this._matDialog.open(MeetingDetailComponent, {
+      autoFocus: false,
+      data     : {
+          meeting: cloneDeep(meeting)
+      }
+  });
+  }
+  addCall(){
+    let call = new Call({})
+    this._matDialog.open(CallDetailComponent, {
+      autoFocus: false,
+      data     : {
+          call: cloneDeep(call)
+      }
+  });
+  }
+  addEmail(){
+    let email = new Email({})
+    this._matDialog.open(EmailDetailComponent, {
+      autoFocus: false,
+      data     : {
+          email: cloneDeep(email)
+      }
+  });
   }
 }

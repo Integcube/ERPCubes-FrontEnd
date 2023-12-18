@@ -52,7 +52,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       leadOwner: [this.user.id, Validators.required],
-      status: [],
+      status: ['', Validators.required],
       email: [''],
       mobile: [''],
       work: [''],

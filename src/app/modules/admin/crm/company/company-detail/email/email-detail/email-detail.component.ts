@@ -76,4 +76,11 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
     send(): void {
 
     }
+    delete(){
+        this._companyService.deleteEmail(this.composeForm.value.emailId, this.company.companyId)
+        .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
+    }
+    close(): void {
+        this.matDialogRef.close();
+    }
 }

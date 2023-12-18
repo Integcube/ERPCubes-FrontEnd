@@ -129,4 +129,14 @@ export class SelectedCompanyResolver implements Resolve<any>
       return this._companyService.getMeetings(+route.paramMap.get('id'));
     }
   }
+  @Injectable({
+    providedIn:'root'
+  })
+  export class TagsResolver implements Resolve<any>{
+    constructor(private _companyService:CompanyService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._companyService.getTags();
+    }
+  }
 

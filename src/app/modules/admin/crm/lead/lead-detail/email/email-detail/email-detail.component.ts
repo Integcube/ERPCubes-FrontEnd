@@ -38,8 +38,8 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
     ngOnInit(): void {
-        this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data }; this.createForm()})
-
+        this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data };})
+        this.createForm();
     }
     createForm() {
         this.composeForm = this._formBuilder.group({
@@ -67,11 +67,16 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
             catchError(err=>{alert(err);
             return EMPTY})).subscribe(data=>this.matDialogRef.close())
     }
-    discard(): void {
+    close(): void {
         this.matDialogRef.close();
     }
     saveAsDraft(): void {
 
+    }
+
+    delete(){
+        this._leadService.deleteEmail(this.composeForm.value.emailId, this.lead.leadId)
+        .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
     }
     send(): void {
 

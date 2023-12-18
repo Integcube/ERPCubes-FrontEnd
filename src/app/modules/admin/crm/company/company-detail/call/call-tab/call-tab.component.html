@@ -31,12 +31,12 @@
                             <span
                                 class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
                                 [ngClass]="{'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': call.startTime}">
-                                <span class="leading-relaxed whitespace-nowrap">Start Time: {{call.startTime | date:'shortTime':'GMT'}}</span>
+                                <span class="leading-relaxed whitespace-nowrap">Start Time: {{call.startTime | date:'shortTime'}}</span>
                             </span>
                             <span
                                 class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
                                 [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': call.endTime}">
-                                <span class="leading-relaxed whitespace-nowrap">End Time: {{call.endTime | date:'shortTime':'GMT'}}</span>
+                                <span class="leading-relaxed whitespace-nowrap">End Time: {{call.endTime | date:'shortTime'}}</span>
                             </span>
                         </div>
                     </div>                   

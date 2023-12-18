@@ -2,9 +2,9 @@ import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef} from '@a
 import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
-import { NoteDetailComponent } from '../note-detail/note-detail.component';
 import { CompanyService } from '../../../company.service';
 import { Note } from '../../../company.type';
+import { NoteDetailComponent } from '../note-detail/note-detail.component';
 
 @Component({
   selector: 'app-note-tab',

@@ -41,6 +41,10 @@ export class LeadService {
   private readonly saveNotesUrl = `${environment.url}/Notes/save`
   private readonly deleteNotesURL = `${environment.url}/Notes/delete`
   private readonly updateTaskPriorityUrl = `${environment.url}/Task/updatePriority`
+  private readonly deleteEmailsUrl = `${environment.url}/Email/delete`
+  private readonly deleteCallsUrl = `${environment.url}/Call/delete`
+  private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
+  
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -766,6 +770,48 @@ export class LeadService {
       tap((response: Activity[]) => {
         this._activities.next(response);
       })
+    );
+  }
+  deleteEmail(emailId: number, leadId: number): Observable<Email> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      emailId: emailId,
+
+    }
+    return this._httpClient.post<Email>(this.deleteEmailsUrl, data).pipe(
+      tap((customList) => {
+        this.getEmails(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteCall(callId: number, leadId: number): Observable<Call> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      callId: callId,
+
+    }
+    return this._httpClient.post<Call>(this.deleteCallsUrl, data).pipe(
+      tap((customList) => {
+        this.getCalls(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteMeeting(meetingId: number, leadId: number): Observable<Meeting> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      meetingId: meetingId,
+
+    }
+    return this._httpClient.post<Meeting>(this.deleteMeetingsUrl, data).pipe(
+      tap((customList) => {
+        this.getMeetings(leadId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
     );
   }
 }

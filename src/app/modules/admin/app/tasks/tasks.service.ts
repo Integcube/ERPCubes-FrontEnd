@@ -115,8 +115,6 @@ export class TasksService
                 dueDate:task.value.dueDate,
                }
         }
-        debugger;
-
         return this._httpClient.post<Task[]>(this.saveTasksURL, data).pipe(
             tap((tasks) => {
                 this.getTasks().subscribe();
@@ -152,7 +150,6 @@ export class TasksService
         this._task.next(selectedTask);
     }
     updateTaskOrders(tasks: Task[]): Observable<Task[]> {
-        debugger;
         let data = {
             tasks
         }

@@ -39,6 +39,12 @@ export class CompanyService {
   private readonly saveTaskUrl = `${environment.url}/Task/save`
   private readonly deleteTaskUrl = `${environment.url}/Task/delete`
   private readonly updateTaskPriorityUrl = `${environment.url}/Task/updatePriority`
+  private readonly deleteEmailsUrl = `${environment.url}/Email/delete`
+  private readonly allTagsUrl = `${environment.url}/Tags/all`
+  private readonly deleteCallsUrl = `${environment.url}/Call/delete`
+  private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
+
+  
   user: User;
 
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
@@ -61,6 +67,7 @@ export class CompanyService {
   private _meetings:BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _meeting:BehaviorSubject<Meeting | null> = new BehaviorSubject(null);
   private _tasks: BehaviorSubject<TaskModel[] | null> = new BehaviorSubject(null);
+
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -126,6 +133,7 @@ export class CompanyService {
   get tasks$(): Observable<TaskModel[]> {
     return this._tasks.asObservable();
   }
+  
   filteredCompanies$ = combineLatest(
     this.companies$,
     this.filter$
@@ -430,7 +438,6 @@ export class CompanyService {
     );
   }
   saveCall(call: any, companyId: number): Observable<any> {
-    debugger;
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -442,7 +449,6 @@ export class CompanyService {
       startTime: call.startTime,
       endTime: call.endTime
     }
-    debugger;
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
         this.getCalls(companyId).subscribe();
@@ -704,6 +710,60 @@ export class CompanyService {
     return this._httpClient.post<any>(this.updateTaskPriorityUrl, data).pipe(
       tap((customList) => {
         this.getTasks(companyId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteEmail(emailId: number, companyId: number): Observable<Email> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      emailId: emailId,
+
+    }
+    return this._httpClient.post<Email>(this.deleteEmailsUrl, data).pipe(
+      tap((customList) => {
+        this.getEmails(companyId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  getTags(): Observable<Tag[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Tag[]>(this.allTagsUrl, data).pipe(
+      tap((tags) => {
+        this._tags.next(tags);
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteCall(callId: number, companyId: number): Observable<Call> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      callId: callId,
+
+    }
+    return this._httpClient.post<Call>(this.deleteCallsUrl, data).pipe(
+      tap((customList) => {
+        this.getCalls(companyId).subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+  deleteMeeting(meetingId: number, companyId: number): Observable<Meeting> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      meetingId: meetingId,
+
+    }
+    return this._httpClient.post<Meeting>(this.deleteMeetingsUrl, data).pipe(
+      tap((customList) => {
+        this.getMeetings(companyId).subscribe();
       }),
       catchError(error => { alert(error); return EMPTY })
     );

@@ -41,8 +41,8 @@
         </div>
     </div>
     <div class="flex flex-row justify-between w-full border-b px-6 pb-6">
-        <div class="flex flex-col justify-center">
-            <button mat-icon-button>
+        <div class="flex flex-col justify-center" (click)="addNote()">
+            <button mat-icon-button >
                 <mat-icon class="icon-size-5">edit_note</mat-icon>
             </button>
             <span class="text-sm text-center">
@@ -50,14 +50,14 @@
             </span>
         </div>
         <div class="flex flex-col justify-center">
-            <button mat-icon-button>
+            <button mat-icon-button (click)="addEmail()">
                 <mat-icon class="icon-size-5">email</mat-icon>
             </button>
             <span class="text-sm text-center">
                 Email
             </span>
         </div>
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-center" (click)="addCall()">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5">call</mat-icon>
             </button>
@@ -65,7 +65,7 @@
                 Call
             </span>
         </div>
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-center" (click)="addTask()">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5">add_task</mat-icon>
             </button>
@@ -73,12 +73,12 @@
                 Task
             </span>
         </div>
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-col justify-center"  (click)="addMeeting()">
             <button mat-icon-button>
-                <mat-icon class="icon-size-5">calendar_today</mat-icon>
+                <mat-icon class="icon-size-5">person</mat-icon>
             </button>
             <span class="text-sm text-center">
-                Calender
+                Meeting
             </span>
         </div>
         <div class="flex flex-col justify-center">

@@ -46,8 +46,8 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
         // bcc    : ['', [Validators.email]],
         subject: [this._data.meeting.subject],
         note: [this._data.meeting.note, [Validators.required]],
-        startTime: [this._data.meeting.startTime],
-        endTime: [this._data.meeting.endTime]
+        startTime: [this.formatTime(this._data.meeting.startTime)],
+        endTime: [this.formatTime(this._data.meeting.endTime)],
     });
 }
   isOverdue(date: string): boolean {
@@ -61,12 +61,46 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     this._matDialogRef.close();
   }
  
+  formatTime(time: Date | string): string {
+    if (time instanceof Date) {
+      const offsetMinutes = time.getTimezoneOffset();
+      const localTime = new Date(time.getTime() - offsetMinutes * 60000); // Adjust for time zone offset
+  
+      const hours = ('0' + localTime.getHours()).slice(-2);
+      const minutes = ('0' + localTime.getMinutes()).slice(-2);
+  
+      return `${hours}:${minutes}`;
+    } else {
+      return time; // If it's not a Date, assume it's already in the correct format (string)
+    }
+  }
+  save(){
 
-    save(){
-    this._leadService.saveMeeting(this.composeForm.value, 1).pipe(
+    const startTimeValue = this.composeForm.get('startTime').value;
+    const endTimeValue = this.composeForm.get('endTime').value;
+
+    // Assuming that the date is the same for both start and end time, you may need to adjust this based on your requirements
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    const formattedStartTime = `${currentDate}T${startTimeValue}`;
+    const formattedEndTime = `${currentDate}T${endTimeValue}`;
+
+    this.composeForm.patchValue({
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+    });
+    
+    this._leadService.saveMeeting(this.composeForm.value, this.lead.leadId).pipe(
       takeUntil(this._unsubscribeAll),
       catchError(err=>{alert(err);
       return EMPTY})).subscribe(data=>this.matDialogRef.close())
+  }
+  close(){
+    this.matDialogRef.close();
+  }
+  delete(){
+    this._leadService.deleteMeeting(this.composeForm.value.meetingId, this.lead.leadId)
+    .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
   }
 }
 

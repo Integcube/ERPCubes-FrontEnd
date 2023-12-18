@@ -1,14 +1,15 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { EMPTY, Subject, catchError, combineLatest, map, takeUntil } from 'rxjs';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
 import { cloneDeep, filter } from 'lodash';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDrawer, MatDrawerToggleResult } from '@angular/material/sidenav';
-import { Meeting } from '../../../company.type';
+import { Company, Meeting } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
+
 
 
 @Component({
@@ -18,11 +19,14 @@ import { CompanyService } from '../../../company.service';
 })
 export class MeetingDetailComponent implements OnInit, OnDestroy {
 
-  meetingForm: UntypedFormGroup;
+  composeForm: UntypedFormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  meeting: Meeting;
-  meeting$ = this._companyService.meeting$;
+  // meeting: Meeting;
+  // meeting$ = this._leadService.meeting$;
+  company: Company
+
   constructor(
+    public matDialogRef: MatDialogRef<MeetingDetailComponent>,
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) private _data: { meeting: Meeting },
     private _companyService: CompanyService,
@@ -30,29 +34,36 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     private _matDialogRef: MatDialogRef<MeetingDetailComponent>
   ) { }
   ngOnInit(): void {
-    this.meetingForm = this._formBuilder.group({
-      meetingId: ['', Validators.required],
-      subject: ['', Validators.required],
-      note: [''],
-      startTime: [null],
-      endTime: [null],
-      createdBy:[''], 
-      createdDate: [null],
-    });
-    if (this._data.meeting.meetingId) {
-      this._companyService.getMeetingById(this._data.meeting.meetingId).pipe(
-        takeUntil(this._unsubscribeAll),
-      ).subscribe(
-        (data) => {
-          this.meetingForm.patchValue(data, { emitEvent: false });
-          this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
-        }
-      );
-    }
+    this._companyService.company$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.company = { ...data }; })
+    this.createForm();
   }
+
+  createForm() {
+    this.composeForm = this._formBuilder.group({
+        meetingId:[this._data.meeting.meetingId, Validators.required],
+        // to: [this.lead.firstName, [Validators.required, Validators.email]],
+        // cc     : ['', [Validators.email]],
+        // bcc    : ['', [Validators.email]],
+        subject: [this._data.meeting.subject],
+        note: [this._data.meeting.note, [Validators.required]],
+        startTime: [this.formatTime(this._data.meeting.startTime)],
+        endTime: [this.formatTime(this._data.meeting.endTime)],
+    });
+}
+formatTime(time: Date | string): string {
+  if (time instanceof Date) {
+    const offsetMinutes = time.getTimezoneOffset();
+    const localTime = new Date(time.getTime() - offsetMinutes * 60000); // Adjust for time zone offset
+
+    const hours = ('0' + localTime.getHours()).slice(-2);
+    const minutes = ('0' + localTime.getMinutes()).slice(-2);
+
+    return `${hours}:${minutes}`;
+  } else {
+    return time; // If it's not a Date, assume it's already in the correct format (string)
+  }
+}
+
   isOverdue(date: string): boolean {
     return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
   }
@@ -65,8 +76,32 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
   }
  
 
-    save(){
-    this._companyService.saveMeeting(this.meetingForm, 1).subscribe(data=>{this._changeDetectorRef.markForCheck()});
+  save(){
+    const startTimeValue = this.composeForm.get('startTime').value;
+    const endTimeValue = this.composeForm.get('endTime').value;
+
+    // Assuming that the date is the same for both start and end time, you may need to adjust this based on your requirements
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    const formattedStartTime = `${currentDate}T${startTimeValue}`;
+    const formattedEndTime = `${currentDate}T${endTimeValue}`;
+
+    this.composeForm.patchValue({
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+    });
+    
+    this._companyService.saveMeeting(this.composeForm.value, this.company.companyId).pipe(
+      takeUntil(this._unsubscribeAll),
+      catchError(err=>{alert(err);
+      return EMPTY})).subscribe(data=>this.matDialogRef.close())
+  }
+  close(){
+    this.matDialogRef.close();
+  }
+  delete(){
+    this._companyService.deleteMeeting(this.composeForm.value.meetingId, this.company.companyId)
+    .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
   }
 }
 

@@ -79,7 +79,7 @@
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'industryId'" [spellcheck]="false" #leadStatus>
+                            <mat-select [formControlName]="'status'" [spellcheck]="false" #leadStatus>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="leadStatus$|async as status">
                                     <mat-option *ngFor="let s of status"

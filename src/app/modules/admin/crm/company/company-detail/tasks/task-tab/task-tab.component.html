@@ -32,25 +32,26 @@
                                                     'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-green-50': task.status === 2}">
                                         <span class="leading-relaxed whitespace-nowrap">{{task.statusTitle}}</span>
                                     </span>
-                                        <div>
-                                            <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
-                                               <mat-icon svgIcon="heroicons_solid:flag"  [ngClass]="{ 'text-red-600' : task.priority === 1,
-                                                      'text-yellow-400': task.priority === 2,
-                                                      ' text-green-500 ': task.status === 3}">
-                                               </mat-icon>
-                                            </span>                                                                     
-                                            <mat-menu #actionMenu="matMenu">
-                                                <button mat-menu-item>
-                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600"></mat-icon> High
-                                                </button>
-                                                <button mat-menu-item>
-                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400"></mat-icon>Medium
-                                                </button>
-                                                <button mat-menu-item>
-                                                    <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500"></mat-icon>Low
-                                                </button>
-                                            </mat-menu>
-                                        </div>
+                                    <div class="flex items-center">
+                                        <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                            <mat-icon svgIcon="heroicons_solid:flag" [ngClass]="{
+                                                'text-red-600': task.priority === 1,
+                                                'text-yellow-400': task.priority === 2,
+                                                'text-green-500': task.priority === 3
+                                            }"></mat-icon>
+                                        </span>
+                                        <mat-menu #actionMenu="matMenu">
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 1)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600"></mat-icon> High
+                                          </button>
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 2)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400"></mat-icon> Medium
+                                          </button>
+                                          <button mat-menu-item (click)="togglePriority(task.taskId, task.priority, task.taskTitle, 3)">
+                                            <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500"></mat-icon> Low
+                                          </button>
+                                        </mat-menu>
+                                      </div>
                                 </div>
                             </div>               
                     </fuse-card>

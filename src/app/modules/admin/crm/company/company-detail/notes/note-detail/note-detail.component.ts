@@ -5,7 +5,6 @@ import { takeUntil, tap, map, catchError, take } from 'rxjs/operators';
 import { Company, Note, Tag, Tasks } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
 
-
 @Component({
   selector: 'app-note-detail',
   templateUrl: './note-detail.component.html',
@@ -72,6 +71,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
           console.error("Error fetching data: ", error);
         }
       )
+      this._companyService.company$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.company = { ...data };})
     }
     
   }
@@ -141,10 +141,10 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return item.id || index;
   }
   save(){
-    this._companyService.saveNote(this.note, 1).subscribe(data=>this.closeDialog());
+    this._companyService.saveNote(this.note, this.company.companyId).subscribe(data=>this.closeDialog());
    }
    delete(){
-    this._companyService.deleteNote(this.note.noteId,1).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+    this._companyService.deleteNote(this.note.noteId,this.company.companyId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
    }
 }
 
