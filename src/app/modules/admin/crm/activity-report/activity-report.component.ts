@@ -47,7 +47,6 @@ export class ActivityReportComponent {
     this.activityReportWithUser$.subscribe((report) => {
         this.activityReportCount = report.length;
         this.dataSource = new MatTableDataSource(report);
-        console.log('DataSource:', this.dataSource.data);
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
     });

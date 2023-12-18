@@ -14,7 +14,6 @@ import { AppComponent } from 'app/app.component';
 import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -23,7 +22,7 @@ const routerConfig: ExtraOptions = {
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserModule,
