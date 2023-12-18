@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 import { LeadReportComponent } from "./lead-report.component";
-import { UserResolver, LeadReportResolver, LeadStatusResolver } from "./lead-report.resolver";
+import { UserResolver, LeadReportResolver, LeadStatusResolver, ProductResolver } from "./lead-report.resolver";
 
 
 export const leadReportRoutes: Routes = [
@@ -11,7 +11,7 @@ export const leadReportRoutes: Routes = [
             users: UserResolver,
             leadReport: LeadReportResolver,
             leadStatus: LeadStatusResolver,
+            products: ProductResolver
         }
-
     },
 ];

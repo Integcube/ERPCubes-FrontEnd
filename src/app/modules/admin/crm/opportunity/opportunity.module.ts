@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LeadReportComponent } from './lead-report.component';
-import { RouterModule } from '@angular/router';
-import { leadReportRoutes } from './lead-report.routing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { OpportunityComponent } from './opportunity.component';
+import { OpportunityListComponent } from './opportunity-list/opportunity-list.component';
+import { OpportunityFormComponent } from './opportunity-form/opportunity-form.component';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,23 +19,24 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
-import {CdkTableModule} from '@angular/cdk/table';
-import {MatNativeDateModule} from '@angular/material/core';
+import { opportunityRoutes } from './opportunity.routing';
+
+
 
 @NgModule({
   declarations: [
-    LeadReportComponent
+    OpportunityComponent,
+    OpportunityListComponent,
+    OpportunityFormComponent
   ],
   imports: [
-    RouterModule.forChild(leadReportRoutes),
-    MatSnackBarModule,
+    RouterModule.forChild(opportunityRoutes),
     CommonModule,
-    MatSortModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatPaginatorModule,
@@ -48,16 +48,33 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatInputModule,
     MatMenuModule,
     MatMomentDateModule,
-    MatNativeDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatRippleModule,
     MatSelectModule,
     MatSidenavModule,
-    CdkTableModule,
+    MatTableModule,
+    MatTooltipModule,
+    FuseFindByKeyPipeModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatMenuModule,
+    MatMomentDateModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
     SharedModule
   ]
 })
-export class LeadReportModule { }
+export class OpportunityModule { }

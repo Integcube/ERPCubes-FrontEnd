@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { ActivitiesComponent } from './activities.component';
-import { ActivitiesResolver } from './activities.resolvers';
+import { ActivitiesResolver, UserResolver } from './activities.resolvers';
 
 
 export const activitiesRoutes: Route[] = [
@@ -8,7 +8,8 @@ export const activitiesRoutes: Route[] = [
         path     : '',
         component: ActivitiesComponent,
         resolve  : {
-            activities: ActivitiesResolver
+            activities: ActivitiesResolver,
+            users: UserResolver
         }
     }
 ];

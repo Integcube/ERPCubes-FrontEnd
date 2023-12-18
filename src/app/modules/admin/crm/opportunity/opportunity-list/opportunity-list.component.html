@@ -1,0 +1,113 @@
+<p>opportunity-list works!</p>
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-default">
+    <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
+        <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="false" #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+        <mat-drawer-content class="flex flex-col">
+            <div class="flex-auto">
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-12 px-6 md:px-8">
+                    <div>
+                        <div class="text-3xl font-bold tracking-tight leading-none">Opportunities</div>
+                        <div class="mt-1 font-medium text-secondary">
+                            <ng-container *ngIf="opportunityListCount > 0">
+                                {{opportunityListCount}}
+                            </ng-container>
+                            {{opportunityListCount | i18nPlural: {
+                            '=0' : 'No Opportunities',
+                            '=1' : 'One Opportunity',
+                            'other': 'Opportunities'
+                            } }}
+                        </div>
+                    </div>
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <div class="flex-auto">
+                            <mat-form-field
+                                class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                                    [autocomplete]="'off'" [placeholder]="'Search Opportunities'">
+                            </mat-form-field>
+                        </div>
+                        <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="createOpportunity()">
+                            <span class="ml-1 mr-1">Create Opportunity</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex-auto pt-12 bg-default min-h-3/4 pb-10">
+                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+                        <ng-container *ngIf="opportunityList$ | async as opportunities">
+                            <ng-container *ngIf="opportunities.length; else noOpportunities">
+                                <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                                    <table mat-table [dataSource]="dataSource" matSort>
+                                        <ng-container matColumnDef="select">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                                    [checked]="selection.hasValue() && isAllSelected()" color="accent"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                    [aria-label]="checkboxLabel()">
+                                                </mat-checkbox>
+                                            </th>
+                                            <td mat-cell *matCellDef="let row" class="w-10">
+                                                <mat-checkbox (click)="$event.stopPropagation()"
+                                                    (change)="$event ? selection.toggle(row) : null" color="accent"
+                                                    [checked]="selection.isSelected(row)"
+                                                    [aria-label]="checkboxLabel(row)">
+                                                </mat-checkbox>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="opportunityTitle">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                style="width: 20rem!important;">
+                                                Opportunity Title
+                                            </th>
+                                            <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"
+                                                class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)"
+                                                (mouseleave)="onMouseLeave(row)" style="width: 20rem;">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="hover:text-clip ">
+                                                        <u>
+                                                            {{row.opportunityTitle | tblimit: row.isHovered}}
+                                                        </u>
+                                                    </span>
+                                                    <span *ngIf="row.isHovered" class="relative right-0">
+                                                        <button mat-stroked-button (click)="updateOpportunity(row)"
+                                                            class="h-8">
+                                                            <span class="text-xs">Preview</span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                        </ng-container>
+                                        <ng-container matColumnDef="opportunitySource">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opportunity Source
+                                            </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.opportunitySource}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="opportunityDetail">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opportunity Details
+                                            </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.opportunityDetail}} </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        <tr class="mat-row" *matNoDataRow>
+                                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator [pageSizeOptions]="[10, 25, 100]"
+                                        aria-label="Select page of users"></mat-paginator>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #noOpportunity>
+                            <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                                There are no Opportunities!
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

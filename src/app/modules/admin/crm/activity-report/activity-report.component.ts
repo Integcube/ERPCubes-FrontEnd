@@ -1,13 +1,15 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, ViewChild } from '@angular/core';
 import { ActivityReportService } from './activity-report.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Subject, combineLatest, map } from 'rxjs';
 import { ActivityReport } from './activity-report.type';
-import { Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-activity-report',
   templateUrl: './activity-report.component.html',
@@ -18,7 +20,7 @@ export class ActivityReportComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<ActivityReport>;
-  displayedColumns: string[] = [ 'select', 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting'];
+  displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting'];
   selection = new SelectionModel<ActivityReport>(true, []);
   activityReportCount: number = 0;
 
@@ -27,12 +29,9 @@ export class ActivityReportComponent {
   errorMessage$ = this.errorMessageSubject.asObservable();
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
-    //_unsubscribeAll: Subject<any> = new Subject<any>(),
     private _activityReportService: ActivityReportService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _router: Router,
+    private _changeDetectorRef: ChangeDetectorRef
   ) { }
-  
   usernames$ = this._activityReportService.users$
   reports$ = this._activityReportService.activityReport$
   activityReportWithUser$ = combineLatest(
@@ -49,8 +48,7 @@ export class ActivityReportComponent {
         this.activityReportCount = report.length;
         this.dataSource = new MatTableDataSource(report);
         console.log('DataSource:', this.dataSource.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
     });
   }

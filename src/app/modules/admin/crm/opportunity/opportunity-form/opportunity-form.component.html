@@ -1,0 +1,71 @@
+<div class="flex flex-col w-full">
+    <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
+        <div class="flex justify-start items-center w-full">
+            <ng-container *ngIf="opportunity$|async as opportunity">
+                <a class="text-2xl text-white font-bold truncate">{{opportunity.opportunityId == -1?"Create
+                    Opportunity":opportunity.opportunityTitle}}</a>
+            </ng-container>
+        </div>
+        <div class="flex items-center justify-end">
+            <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <ng-container>
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12 pt-6">
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="opportunityForm">
+                    <div>
+                        <mat-form-field class="fuse-mat-dense  w-full">
+                            <mat-label>Opportunity Title</mat-label>
+                            <input matInput [formControlName]="'opportunityTitle'" [spellcheck]="false" class="h-2!"
+                                #opportunityTitle>
+                            <mat-error *ngIf="opportunityForm.get('opportunityTitle').hasError('required')">
+                                Opportunity Title is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="fuse-mat-dense flex-auto w-full">
+                            <mat-label>Opportunity Source</mat-label>
+                            <mat-select [formControlName]="'opportunitySource'" [spellcheck]="false" #opportunitySource>
+                                <!-- <mat-option value="-1"></mat-option> -->
+                                <ng-container *ngIf="source$|async as sources">
+                                    <mat-option *ngFor="let source of sources"
+                                        [value]="source.sourceId">{{source.sourceTitle}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error *ngIf="opportunityForm.get('opportunitySource').hasError('required')">
+                                Opportunity Source is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <mat-form-field class="fuse-mat-dense  w-full">
+                            <mat-label>Opportunity Details</mat-label>
+                            <textarea matInput [formControlName]="'opportunityDetail'" [spellcheck]="false" class="h-2!"
+                                #opportunityDetail></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div
+                        class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <ng-container *ngIf="selectedOpportunity.opportunityId !== -1">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                                Delete
+                            </button>
+                        </ng-container>
+                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
+                            [routerLink]="['../']">
+                            Cancel
+                        </button>
+                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="opportunityForm.invalid"
+                            [matTooltip]="'Save'" (click)="save()">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</div>
