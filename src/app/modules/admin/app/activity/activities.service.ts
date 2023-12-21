@@ -53,7 +53,6 @@ export class ActivitiesService
             id: this.user.id,
             tenantId: this.user.tenantId,
         }
-        debugger;
         return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
             tap((users) => {
                 this._users.next(users);

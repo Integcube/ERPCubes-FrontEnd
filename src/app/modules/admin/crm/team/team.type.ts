@@ -8,7 +8,7 @@ export class Team{
 
     teamId: number;
     teamName: string = '';
-    teamLeaderId: string = '';
+    teamLeader: string = '';
     teamLeaderName: string = '';
     teamMembersId: string = '';
     teamMembersName: string = '';

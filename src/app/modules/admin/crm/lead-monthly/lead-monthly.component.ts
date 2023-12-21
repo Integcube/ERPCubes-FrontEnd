@@ -17,7 +17,7 @@ import { LeadMonthlyService } from './lead-monthly.service';
 export class LeadMonthlyComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+originalData: LeadMonthly[];
   dataSource: MatTableDataSource<LeadMonthly>;
   displayedColumns: string[] = [
     // 'select',
@@ -91,6 +91,7 @@ export class LeadMonthlyComponent {
     this.monthly$.subscribe((report) => {
       const emptyMonths = this.generateEmptyMonths(report);
       this.leadMonthlyCount = emptyMonths.length;
+      this.originalData = emptyMonths;
       this.dataSource = new MatTableDataSource(emptyMonths);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -151,11 +152,40 @@ getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+  
+    // Check if the filter value is empty
+    if (filterValue === '') {
+      // If empty, reset the filter to show the original data
+      this.dataSource.data = this.originalData;
+  
+      // Reset paginator to the first page
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
+    } else {
+      // If not empty, filter based on the first letter of month names
+      const filteredData = this.dataSource.data.filter(row =>
+        (this.monthToWord(row.month).toLowerCase().startsWith(filterValue) ||
+         this.monthToWord(row.month).toLowerCase().includes(' ' + filterValue))
+        && (!this.selectedYear || row.year === this.selectedYear)
+      );
+  
+      // Update the data source with the filtered data
+      this.dataSource.data = filteredData;
+  
+      // Reset paginator to the first page
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     }
+  }
+
+  monthToWord(month: number): string {
+    // Implement your logic to convert month number to word
+    // For example, you can use an array of month names
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return monthNames[month - 1] || '';
   }
 
   filterByYear(year: number) {

@@ -30,11 +30,12 @@
             [bounds]="'self'"
             [modules]="quillModules">
         </quill-editor> -->
-        <mat-form-field class="w-full">
+        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
             <mat-label>Response</mat-label>
-            <input matInput [formControlName]="'response'" class="w-full h-16">
+            <textarea matInput [formControlName]="'response'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
+                class="resize-none h-16">
+            </textarea>
         </mat-form-field>
-
         <!-- Start Time -->
         <mat-form-field>
             <mat-label>Start Time</mat-label>
