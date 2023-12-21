@@ -12,6 +12,8 @@ export const crmRoutes: Routes = [
     path: 'reports', children: [
         { path: 'lead-report', loadChildren: () => import('app/modules/admin/crm/lead-report/lead-report.module').then(m => m.LeadReportModule) },
         { path: 'activity-report', loadChildren: () => import('app/modules/admin/crm/activity-report/activity-report.module').then(m => m.ActivityReportModule) },
+        { path: 'lead-monthly', loadChildren: () => import('app/modules/admin/crm/lead-monthly/lead-monthly.module').then(m => m.LeadMonthlyModule) },
+
     ]
 },
 {
