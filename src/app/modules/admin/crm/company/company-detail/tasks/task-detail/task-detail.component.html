@@ -26,7 +26,7 @@
                     </textarea>
             </mat-form-field>
                 <mat-form-field class="w-full">
-                    <mat-label>lead Owner</mat-label>
+                    <mat-label>Lead Owner</mat-label>
                     <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #leadOwner>
                         <mat-option value="-1"></mat-option>
                         <ng-container *ngIf="users$|async as users">

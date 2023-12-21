@@ -38,6 +38,7 @@ export class LeadReportComponent implements OnInit, OnDestroy {
     this.leadReportWithUser$.subscribe((report) => {
       this.leadReportCount = report.length;
       this.userList = [...report];
+      console.log(this.userList)
       this._changeDetectorRef.markForCheck();
     });
     this.leadStatus$.subscribe(

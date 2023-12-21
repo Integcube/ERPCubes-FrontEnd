@@ -36,7 +36,7 @@ export class ProductService {
     return this._products.asObservable();
   }
   getProducts(): Observable<Product[]> {
-    debugger;
+    
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -48,7 +48,7 @@ export class ProductService {
     );
   }
   saveProduct(product:FormGroup){
-    debugger;
+    
     let data : Product= {
       id:this.user.id,
       tenantId: this.user.tenantId,
@@ -61,7 +61,7 @@ export class ProductService {
     );
   }
   deleteProduct(product:Product){
-    debugger;
+    
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -77,18 +77,18 @@ export class ProductService {
     this._product.next(selectedProduct);
   }
   getProductById(id: number): Observable<Product> {
-    debugger;
+    
     return this._products.pipe(
       take(1),
       map((products) => {
         if (id === -1) {
-          debugger;
+          
           const product = new Product({});
           this._product.next(product);
           return product;
         }
         else {
-           debugger;
+           
           const product = products.find(item => item.productId === id) || null;
           this._product.next(product);
           return product;

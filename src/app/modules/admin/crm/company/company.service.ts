@@ -20,7 +20,6 @@ export class CompanyService {
   private readonly saveCustomListUrl = `${environment.url}/CustomList/save`
   private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
   private readonly saveCustomListFilterUrl = `${environment.url}/CustomList/saveFilter`
-
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
   private readonly getNotesUrl = `${environment.url}/Notes/all`
   private readonly getTaskUrl = `${environment.url}/Notes/tasks`
@@ -353,6 +352,7 @@ export class CompanyService {
       count,
       companyId,
       leadId: -1,
+      opportunityId: -1,
     }
     return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
       tap((response: Activity[]) => {
@@ -368,6 +368,7 @@ export class CompanyService {
       id: "-1",
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId
     }
     return this._httpClient.post<Note[]>(this.getNotesUrl, data).pipe(
@@ -383,6 +384,7 @@ export class CompanyService {
       id: "-1",
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId
     }
     return this._httpClient.post<Call[]>(this.getCallsUrl, data).pipe(
@@ -398,6 +400,7 @@ export class CompanyService {
       id: "-1",
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId
     }
     return this._httpClient.post<TaskModel[]>(this.getCompanyTaskUrl, data).pipe(
@@ -413,6 +416,7 @@ export class CompanyService {
       id: "-1",
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId
     }
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
@@ -427,6 +431,7 @@ export class CompanyService {
       id: "-1",
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId
     }
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
@@ -442,6 +447,7 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId: companyId,
       callId: call.callId,
       subject: call.subject,
@@ -461,6 +467,7 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId: companyId,
       emailId: email.emailId,
       subject: email.subject,
@@ -478,6 +485,7 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId: companyId,
       meetingId: meeting.meetingId,
       subject: meeting.subject,
@@ -520,6 +528,7 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       leadId: -1,
+      opportunityId: -1,
       companyId: companyId,
       note: {
         noteId: note.noteId,
@@ -630,11 +639,13 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      type: 'task',
       leadId: -1,
+      opportunityId: -1,
       companyId: companyId,
       task: {
         ...taskForm.value,
-        type: 'task',
+
         priorityId: -1,
         statusId: -1,
         tags: taskForm.value.tags.join(',')

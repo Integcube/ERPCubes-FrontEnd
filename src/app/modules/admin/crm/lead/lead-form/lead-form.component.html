@@ -50,7 +50,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                            <mat-label>lead Owner</mat-label>
+                            <mat-label>Lead Owner</mat-label>
                             <mat-select [formControlName]="'leadOwner'" [spellcheck]="false" #leadOwner>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="users$|async as users">
@@ -58,7 +58,7 @@
                                 </ng-container>
                             </mat-select>
                             <mat-error *ngIf="leadForm.get('leadOwner').hasError('required')">
-                                lead Owner is required
+                                Lead Owner is required
                             </mat-error>
                         </mat-form-field>
 

@@ -81,9 +81,9 @@ export class UserFormComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
   save() {
-    debugger;
+    
     this.closeDrawer();
-    debugger;
+    
     if(this.selectedUser.id==-1){
       this._userFormService.saveUser(this.selectedUser.id, this.userForm).subscribe();
     }

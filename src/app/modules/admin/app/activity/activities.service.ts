@@ -39,6 +39,7 @@ export class ActivitiesService
             count,
             leadId : -1,
             companyId: -1,
+            opportunityId: -1,
         }
         return this._httpClient.post<Activity[]>(this.getUserActivityURL, data).pipe(
             tap((response: Activity[]) => {

@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 })
 export class UserComponent implements OnInit {
 
-  constructor() { debugger;}
+  constructor() { }
 
   ngOnInit(): void {
   }

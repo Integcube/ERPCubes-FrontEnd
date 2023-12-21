@@ -1,23 +1,22 @@
-<div class="relative flex flex-col flex-auto min-w-0 overflow-y-auto">
-    <div class="flex flex-col flex-auto" >
-        <div class="w-full max-w-3xl overflow-auto" (scroll)="onScroll()">
-            <div class="text-2xl font-bold tracking-tight leading-none">All Activities</div>
+<div class="relative flex flex-col flex-auto min-w-0 overflow-auto h-screen">
+    <div class="flex flex-col flex-auto px-6 py-10 sm:px-16 sm:pt-3 sm:pb-3">
+        <div class="w-full max-w-3xl">
             <ng-container *ngIf="(activitiesz$ | async) as activities; else loading">
                 <ng-container *ngIf="activities.length; else noActivity">
-                    <div class="mt-2">
+                    <div class="mt-1">
                         <ol>
                             <ng-container
                                 *ngFor="let activity of activities; let i = index; let first = first; let last = last; trackBy: trackByFn">
                                 <ng-container
                                     *ngIf="first || !isSameDay(activity.createdDate, activities[i - 1].createdDate)">
-                                    <li class="relative flex py-3">
+                                    <li class="relative flex py-7">
                                         <div
                                             class="relative py-2 px-8 text-md font-medium leading-5 rounded-full bg-primary text-on-primary">
                                             {{getRelativeFormat(activity.createdDate)}}
                                         </div>
                                     </li>
                                 </ng-container>
-                                <li class="relative flex py-3">
+                                <li class="relative flex py-7">
                                     <ng-container
                                         *ngIf="!last && isSameDay(activity.createdDate, activities[i + 1].createdDate)">
                                         <div
@@ -37,17 +36,22 @@
                                                 [src]="activity.image" [alt]="'Activity image'">
                                         </ng-container>
                                         <div class="flex flex-col flex-auto items-start">
-                                            <ng-container *ngIf="activity.detail">
-                                                <div [innerHTML]="activity.detail"></div>
+                                            <ng-container
+                                                *ngIf="activity.activityType && activity.userId == this.user.id">
+                                                <div class="text-sm">
+                                                    {{activity.activityType}} created by you on
+                                                    {{activity.createdDate | date: 'dd-MMM-yy'}}
+                                                </div>
                                             </ng-container>
-                                            <div *ngIf="activity.activityType == 'Task' ">
-                                                Created By: {{activity.userName}}
-                                            </div>
+                                            <ng-container
+                                                *ngIf="activity.activityType && activity.userId !== this.user.id">
+                                                <div class="text-sm">
+                                                    {{activity.activityType}} created by <span [innerHTML] = "sanitizeHtml(activity.userName| bold)"></span> on
+                                                    {{activity.createdDate | date: 'dd-MMM-yy'}}
+                                                </div>
+                                            </ng-container>
                                             <div
                                                 class="flex flex-col sm:flex-row sm:items-center mt-2 sm:mt-1 sm:space-x-2 text-md leading-5">
-                                                <div class="text-secondary">
-                                                    {{activity.createdDate | date:'MMM dd, h:mm a'}}
-                                                </div>
                                                 <ng-container *ngIf="activity.linkedContent">
                                                     <div class="hidden sm:block">&bull;</div>
                                                     <ng-container *ngIf="activity.useRouter">
@@ -65,29 +69,12 @@
                                                 </ng-container>
                                             </div>
                                             <ng-container
-                                                *ngIf="activity.activityType == 'Task' && activity.createdBy == this.user.id">
+                                                *ngIf="activity.activityType">
                                                 <div class="mt-4 py-4 px-5 rounded-lg bg-gray-200 dark:bg-gray-800">
-                                                    Task Created by You on {{activity.createdDate}}
+                                                    <span class="flex flex-wrap text-md line-clamp-3"
+                                                        [innerHTML]="sanitizeHtml(activity.detail)"></span>
                                                 </div>
                                             </ng-container>
-                                            <ng-container
-                                            *ngIf="activity.activityType == 'Task' && activity.createdBy == this.user.id">
-                                            <div class="mt-4 py-4 px-5 rounded-lg bg-gray-200 dark:bg-gray-800">
-                                                Task Created by You on {{activity.createdDate}}
-                                            </div>
-                                        </ng-container>
-                                        <ng-container
-                                        *ngIf="activity.activityType == 'Task' && activity.createdBy == this.user.id">
-                                        <div class="mt-4 py-4 px-5 rounded-lg bg-gray-200 dark:bg-gray-800">
-                                            Task Created by You on {{activity.createdDate}}
-                                        </div>
-                                    </ng-container>
-                                    <ng-container
-                                    *ngIf="activity.activityType == 'Task' && activity.createdBy == this.user.id">
-                                    <div class="mt-4 py-4 px-5 rounded-lg bg-gray-200 dark:bg-gray-800">
-                                        Task Created by You on {{activity.createdDate}}
-                                    </div>
-                                </ng-container>
                                         </div>
                                     </div>
                                 </li>
@@ -100,10 +87,8 @@
                 Loading...
             </ng-template>
             <ng-template #noActivity>
-                There are is activity at the moment...
+                There are is No Activity at the moment...
             </ng-template>
-
         </div>
     </div>
-
 </div>

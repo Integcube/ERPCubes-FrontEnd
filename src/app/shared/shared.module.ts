@@ -5,6 +5,7 @@ import { TableLimitPipe } from '@fuse/pipes/table-limit/table-limit.pipe';
 import { UniquePipe } from '@fuse/pipes/unique-pipe/unique.pipe';
 import { CustomFilterPipe } from '@fuse/pipes/customFilter/customFilter.pipe';
 import { CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
+import { BoldPipe } from '@fuse/pipes/bold/bold.pipe';
 
 @NgModule({
     declarations:[
@@ -12,7 +13,7 @@ import { CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
         UniquePipe,
         CustomFilterPipe,
         CustomFilterPipe2,
-        
+        BoldPipe
     ],
     imports: [
         CommonModule,
@@ -27,6 +28,7 @@ import { CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
         UniquePipe,
         CustomFilterPipe,
         CustomFilterPipe2,
+        BoldPipe
     ]
 })
 export class SharedModule

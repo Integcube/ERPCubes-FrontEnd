@@ -6,6 +6,25 @@ import { LeadDetailComponent } from './lead-detail/lead-detail.component';
 import { LeadInfoComponent } from './lead-detail/lead-info/lead-info.component';
 import { LeadDataComponent } from './lead-detail/lead-data/lead-data.component';
 import { LeadActivityComponent } from './lead-detail/lead-wrapper/lead-activity/lead-activity.component';
+import { LeadOverviewComponent } from './lead-detail/lead-wrapper/lead-overview/lead-overview.component';
+import { LeadWrapperComponent } from './lead-detail/lead-wrapper/lead-wrapper.component';
+import { NoteDetailComponent } from './lead-detail/notes/note-detail/note-detail.component';
+import { NoteTabComponent } from './lead-detail/notes/note-tab/note-tab.component';
+import { TaskDetailComponent } from './lead-detail/tasks/task-detail/task-detail.component';
+import { TaskTabComponent } from './lead-detail/tasks/task-tab/task-tab.component';
+import { ViewDetailComponent } from './lead-detail/view/view-detail/view-detail.component';
+import { EmailTabComponent } from './lead-detail/email/email-tab/email-tab.component';
+import { EmailDetailComponent } from './lead-detail/email/email-detail/email-detail.component';
+import { ActivityDetailComponent } from './lead-detail/activity/activity-detail/activity-detail.component';
+import { CallDetailComponent } from './lead-detail/call/call-detail/call-detail.component';
+import { CallTabComponent } from './lead-detail/call/call-tab/call-tab.component';
+import { MeetingDetailComponent } from './lead-detail/meeting/meeting-detail/meeting-detail.component';
+import { MeetingTabComponent } from './lead-detail/meeting/meeting-tab/meeting-tab.component';
+import { leadRoutes } from './lead.routing';
+import { RouterModule } from '@angular/router';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { QuillModule } from 'ngx-quill';
+import { FormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -25,31 +44,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
+import { FuseCardModule } from '@fuse/components/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from 'app/shared/shared.module';
 import moment from 'moment';
-import { leadRoutes } from './lead.routing';
-import { LeadOverviewComponent } from './lead-detail/lead-wrapper/lead-overview/lead-overview.component';
-import { LeadWrapperComponent } from './lead-detail/lead-wrapper/lead-wrapper.component';
-import { NoteDetailComponent } from './lead-detail/notes/note-detail/note-detail.component';
-import { NoteTabComponent } from './lead-detail/notes/note-tab/note-tab.component';
-import { FuseCardModule } from '@fuse/components/card';
-import { TaskDetailComponent } from './lead-detail/tasks/task-detail/task-detail.component';
-import { TaskTabComponent } from './lead-detail/tasks/task-tab/task-tab.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatDialogModule } from '@angular/material/dialog';
-import { ViewDetailComponent } from './lead-detail/view/view-detail/view-detail.component';
-import { EmailTabComponent } from './lead-detail/email/email-tab/email-tab.component';
-import { EmailDetailComponent } from './lead-detail/email/email-detail/email-detail.component';
-import { QuillModule } from 'ngx-quill';
-import { ActivityDetailComponent } from './lead-detail/activity/activity-detail/activity-detail.component';
-import { CallDetailComponent } from './lead-detail/call/call-detail/call-detail.component';
-import { CallTabComponent } from './lead-detail/call/call-tab/call-tab.component';
-import { MeetingDetailComponent } from './lead-detail/meeting/meeting-detail/meeting-detail.component';
-import { MeetingTabComponent } from './lead-detail/meeting/meeting-tab/meeting-tab.component';
-
-
 
 @NgModule({
   declarations: [
@@ -96,12 +95,13 @@ import { MeetingTabComponent } from './lead-detail/meeting/meeting-tab/meeting-t
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule,
+    FormsModule,
     MatExpansionModule,
     MatTabsModule,
     FuseCardModule,
     DragDropModule,
     MatDialogModule,
+    SharedModule
   ],
   providers: [
     {

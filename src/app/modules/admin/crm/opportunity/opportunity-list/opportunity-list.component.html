@@ -25,7 +25,7 @@
                         <div class="flex-auto">
                             <mat-form-field
                                 class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
-                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <mat-icon class="icon-size-5" matPrefix svgIcon="heroicons_solid:search"></mat-icon>
                                 <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
                                     [autocomplete]="'off'" [placeholder]="'Search Opportunities'">
                             </mat-form-field>
@@ -57,46 +57,53 @@
                                                 </mat-checkbox>
                                             </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="opportunityTitle">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                                style="width: 20rem!important;">
-                                                Opportunity Title
-                                            </th>
+                                        <ng-container matColumnDef="name">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;">
+                                                Name </th>
                                             <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"
                                                 class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)"
-                                                (mouseleave)="onMouseLeave(row)" style="width: 20rem;">
+                                                (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
                                                 <div class="flex items-center justify-between">
-                                                    <span class="hover:text-clip ">
+                                                    <span (click)="updateOpportunity(row)" class="hover:text-clip truncate">
                                                         <u>
-                                                            {{row.opportunityTitle | tblimit: row.isHovered}}
+                                                            {{row.firstName + " " + row.lastName | tblimit: row.isHovered}}
                                                         </u>
                                                     </span>
                                                     <span *ngIf="row.isHovered" class="relative right-0">
-                                                        <button mat-stroked-button (click)="updateOpportunity(row)"
+                                                        <button mat-stroked-button (click)="previewOpportunity(row)"
                                                             class="h-8">
                                                             <span class="text-xs">Preview</span>
                                                         </button>
                                                     </span>
                                                 </div>
+                                            </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="opportunitySource">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opportunity Source
-                                            </th>
-                                            <td mat-cell *matCellDef="let row"> {{row.opportunitySource}} </td>
+
+                                        <ng-container matColumnDef="createdDate">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.createdDate | date}} </td>
                                         </ng-container>
-                                        <ng-container matColumnDef="opportunityDetail">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Opportunity Details
-                                            </th>
-                                            <td mat-cell *matCellDef="let row"> {{row.opportunityDetail}} </td>
+                                        <ng-container matColumnDef="phone">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.mobile}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="email">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="status">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                                            <td mat-cell *matCellDef="let row"> {{row.statusTitle}} </td>
                                         </ng-container>
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        <!-- Row shown when there is no matching data. -->
                                         <tr class="mat-row" *matNoDataRow>
                                             <td class="mat-cell" colspan="4">No data matching the filter</td>
                                         </tr>
                                     </table>
                                     <mat-paginator [pageSizeOptions]="[10, 25, 100]"
-                                        aria-label="Select page of users"></mat-paginator>
+                                        aria-label="Select page"></mat-paginator>
                                 </div>
                             </ng-container>
                         </ng-container>

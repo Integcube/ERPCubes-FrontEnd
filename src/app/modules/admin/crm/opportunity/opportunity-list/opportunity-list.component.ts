@@ -15,26 +15,24 @@ import { OpportunityService } from '../opportunity.service';
 @Component({
   selector: 'app-opportunity-list',
   templateUrl: './opportunity-list.component.html',
-  styleUrls: ['./opportunity-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpportunityListComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  drawerMode: 'side' | 'over';
   dataSource: MatTableDataSource<Opportunity>;
-  displayedColumns: string[] = ['select', 'opportunityTitle', 'opportunitySource', 'opportunityDetail'];
+  displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'status', 'createdDate'];
   selection = new SelectionModel<Opportunity>(true, []);
+  searchInputControl: UntypedFormControl = new UntypedFormControl();
+  private errorMessageSubject = new Subject<string>();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
   opportunityList$: Observable<Opportunity[]>;
   opportunityList: Opportunity[];
   opportunityListCount: number = 0;
   selectedOpportunity: Opportunity;
-  drawerMode: 'side' | 'over';
-  searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -117,10 +115,13 @@ export class OpportunityListComponent implements OnInit {
     this._router.navigate(['./', newOpportunity.opportunityId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-  updateOpportunity(selectedOpportunity: Opportunity) {
+  previewOpportunity(selectedOpportunity: Opportunity) {
     this._opportunityService.selectedOpportunity(selectedOpportunity);
     this._router.navigate(['./', selectedOpportunity.opportunityId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
+  }
+  updateOpportunity(row: Opportunity) {
+    this._router.navigate(['detail-view', row.opportunityId], { relativeTo: this._activatedRoute });
   }
   onBackdropClicked(): void {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });

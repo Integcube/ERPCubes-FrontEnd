@@ -12,21 +12,11 @@ import { OpportunityService } from '../opportunity.service';
 @Component({
   selector: 'app-opportunity-form',
   templateUrl: './opportunity-form.component.html',
-  styleUrls: ['./opportunity-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpportunityFormComponent implements OnInit {
-  @ViewChild('opportunityTitle') private _titleField: ElementRef;
-  private opportunitySubject = new Subject<Opportunity>();
-  opportunity$ = this.opportunitySubject.asObservable();
+  @ViewChild('firstName') private _titleField: ElementRef;
   user: User;
-  source$ = this._opportunityService.opportunitySource$;
-  opportunityForm: FormGroup;
-  editMode: boolean = false;
-  selectedOpportunity: Opportunity;
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
   constructor(
     private _formBuilder: FormBuilder,
     private _opportunityListComponent: OpportunityListComponent,
@@ -35,6 +25,20 @@ export class OpportunityFormComponent implements OnInit {
     private _userService: UserService,
     private _fuseConfirmationService: FuseConfirmationService,
   ) { }
+  private opportunitySubject = new Subject<Opportunity>();
+  opportunity$ = this.opportunitySubject.asObservable();
+  users$ = this._opportunityService.users$;
+  source$ = this._opportunityService.opportunitySource$;
+  industries$ = this._opportunityService.industries$;
+  opportunityStatus$ = this._opportunityService.opportunityStatus$;
+  opportunitySource$ = this._opportunityService.opportunitySource$;
+  product$ = this._opportunityService.product$;
+  opportunityForm: FormGroup;
+  editMode: boolean = false;
+  selectedOpportunity: Opportunity;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
   ngOnInit(): void {
     this._opportunityListComponent.matDrawer.open();
     this._userService.user$.subscribe(user => {
@@ -44,9 +48,23 @@ export class OpportunityFormComponent implements OnInit {
     this.opportunity$ = this._opportunityService.opportunity$;
     this.opportunityForm = this._formBuilder.group({
       opportunityId: [, Validators.required],
-      opportunityTitle: ['', Validators.required],
-      opportunitySource: [null, Validators.required],
-      opportunityDetail: ''
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      opportunityOwner: [, Validators.required],
+      statusId: ['', Validators.required],
+      email: [''],
+      mobile: [''],
+      work: [''],
+      address: [''],
+      street: [''],
+      city: [''],
+      zip: [''],
+      state: [''],
+      country: [''],
+      sourceId: [],
+      industryId: [],
+      productId: [],
+      createdDate: ['']
     });
     this._opportunityService.opportunity$.pipe(takeUntil(this._unsubscribeAll),
       catchError(err => {
@@ -79,7 +97,7 @@ export class OpportunityFormComponent implements OnInit {
   }
   save() {
     this.selectedOpportunity = { ...this.opportunityForm.value }
-    debugger;
+    
     this._opportunityService.saveOpportunity(this.selectedOpportunity).subscribe(
       {
         next: () => {
