@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Observable, catchError, of, throwError } from 'rxjs';
 import { OpportunityService } from './opportunity.service';
-import { Opportunity, TaskModel } from './opportunity.types';
+import { Opportunity, OpportunityFilter, TaskModel } from './opportunity.types';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,7 @@ export class OpportunityResolver implements Resolve<boolean> {
   constructor (
     private _opportunityService: OpportunityService){}
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+    this._opportunityService.setFilter(new OpportunityFilter())
     return this._opportunityService.getOpportunity();
   }
 }

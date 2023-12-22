@@ -99,12 +99,6 @@ export class LeadService {
       })
     })
   )
-  updateSearchQuery(value: any) {
-    this._serachQuery.next(value);
-  }
-  get activities$(): Observable<any> {
-    return this._activities.asObservable();
-  }
   selectedNoteTask$ = this.note$.pipe(
     switchMap((note) => {
       if (note.noteId != -1) {
@@ -156,6 +150,9 @@ export class LeadService {
     ,
     catchError(error => { alert(error); return EMPTY })
   )
+  get activities$(): Observable<any> {
+    return this._activities.asObservable();
+  }
   get filter$(): Observable<LeadFilter> {
     return this._filter.asObservable();
   }
@@ -210,7 +207,9 @@ export class LeadService {
   get meetings$(): Observable<Meeting[]> {
     return this._meetings.asObservable();
   }
-
+  get emails$(): Observable<Email[]> {
+    return this._emails.asObservable();
+  }
   getTags(): Observable<Tag[]> {
     let data = {
       id: this.user.id,
@@ -586,6 +585,9 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
+  updateSearchQuery(value: any) {
+    this._serachQuery.next(value);
+  }
   deleteTask(taskId: number, taskTitle: string, leadId: number): Observable<TaskModel> {
     let data = {
       id: this.user.id,
@@ -677,9 +679,6 @@ export class LeadService {
       }),
       catchError(error => { alert(error); return EMPTY })
     );
-  }
-  get emails$(): Observable<Email[]> {
-    return this._emails.asObservable();
   }
   saveMeeting(meeting: any, leadId: number): Observable<any> {
     let data = {

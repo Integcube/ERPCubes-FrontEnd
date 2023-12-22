@@ -61,16 +61,6 @@ export class OpportunityFilter {
     modifiedDate: Date = null;
     opportunityStatus: number[] = [];
 }
-export class Email {
-    emailId: number;
-    subject: string;
-    description: string;
-    createdBy: string;
-    createdDate: Date;
-    constructor(reg) {
-        this.emailId = reg.emailId ? reg.emailId : -1
-    }
-}
 export interface Activity {
     activityId: string;
     userId: string;
@@ -94,6 +84,20 @@ export class Call {
     createdDate: Date;
     constructor(reg) {
         this.callId = reg.callId ? reg.callId : -1
+    }
+}
+export interface Industry {
+    industryId: number,
+    industryTitle: string
+}
+export class Email {
+    emailId: number;
+    subject: string;
+    description: string;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg) {
+        this.emailId = reg.emailId ? reg.emailId : -1
     }
 }
 export class Meeting{
@@ -121,6 +125,12 @@ export class Note {
         this.noteId = reg.noteId ? reg.noteId : -1
     }
 }
+export interface Product {
+    productId: number;
+    productName: string;
+    description: string;
+    price: number;
+}
 export class Tag {
     tagId: number;
     tagTitle: string;
@@ -137,16 +147,6 @@ export class Task {
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
     }
-}
-export interface Industry {
-    industryId: number,
-    industryTitle: string
-}
-export interface Product {
-    productId: number;
-    productName: string;
-    description: string;
-    price: number;
 }
 export class TaskModel {
     taskId: number;

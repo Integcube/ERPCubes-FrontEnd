@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, EMPTY, Observable, catchError, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Activity, Call, Email, Industry, Meeting, Note, Opportunity, OpportunityCustomList, OpportunityFilter, OpportunitySource, OpportunityStatus, Product, Tag, TaskModel } from './opportunity.types';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
@@ -186,6 +186,31 @@ export class OpportunityService {
     })
     ,
     catchError(error => { alert(error); return EMPTY })
+  )
+  filteredOpportunityList$ = combineLatest(
+    this.opportunityList$,
+    this.filter$
+  ).pipe(
+    map(([opportunityList, filter]) => {
+      return opportunityList.filter(opportunity => {
+        let passFilter = true;
+        if (filter.opportunityOwner.length > 0) {
+          passFilter = passFilter && filter.opportunityOwner.includes(opportunity.opportunityOwner);
+        }
+        if (filter.opportunityStatus.length > 0) {
+          passFilter = passFilter && filter.opportunityStatus.includes(opportunity.statusId);
+        }
+        if (filter.createdDate) {
+          let c = new Date(filter.createdDate);
+          passFilter = passFilter && c >= filter.createdDate;
+        }
+        if (filter.modifiedDate) {
+          let d = new Date(filter.modifiedDate);
+          passFilter = passFilter && d >= filter.modifiedDate;
+        }
+        return passFilter;
+      })
+    })
   )
   getOpportunity(): Observable<Opportunity[]>{
     let data = {
