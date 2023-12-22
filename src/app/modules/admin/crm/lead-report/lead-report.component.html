@@ -1,10 +1,6 @@
-<p>lead-report works!</p>
 <div class="absolute inset-0 flex flex-col min-w-0 bg-default ">
-    <!-- Main -->
-    <div class="flex-auto">
-        <!-- Header -->
-        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-12 px-6 md:px-8">
-            <!-- Title -->
+    <div class="flex-auto bg-gray-200">
+        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-6 px-6 md:px-8">
             <div>
                 <div class="text-3xl font-bold tracking-tight leading-none">Lead Reports</div>
                 <div class="ml-0.5 font-medium text-secondary">
@@ -18,31 +14,62 @@
                     } }}
                 </div>
             </div>
+            <div class="flex justify-start pt-4 pb-4 gap-6">
+                <div class = "w-full max-w-sm">
+                    <mat-form-field class="fuse-mat-dense flex-auto w-full">
+                        <mat-label>Enter a Date Range</mat-label>                       
+                        <mat-date-range-input class="w-128" [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date" [(ngModel)]="startDate" [spellcheck]="false">
+                            <input matEndDate placeholder="End date" [(ngModel)]="endDate" [spellcheck]="false">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                </div>
+                <div class = "w-full max-w-sm">
+                    <mat-form-field class="fuse-mat-dense flex-auto w-full">
+                        <mat-label>Products</mat-label>
+                        <mat-select [(ngModel)]="prodId" [spellcheck]="false">
+                            <mat-option value="-1"> All Products</mat-option>
+                            <mat-option *ngFor="let product of products"
+                                [value]="product.productId">{{product.productName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div class = "mt-6">
+                    <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
+                        <span class="ml-2 mr-1">Get Reports</span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <!-- Team list -->
-        <div class="flex-auto pt-12 bg-default min-h-3/4 pb-10">
+        <div class="m-2" *ngFor="let dx of userList  | unique:'prodId'">
             <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
-                <div *ngFor="let dx of userList  | unique:'prodId'">
-                    <h2 class="font-bold p-4">{{dx.prodName}}</h2>
-                    <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                <div class="flex-auto p-6 bg-default min-h-3/4">
+                    <h2 class="font-bold p-4 mx-4">{{dx.prodName}}</h2>
+                    <div class="flex-auto border-white py-1 bg-card overflow-x-auto mx-8">
                         <table>
                             <tr>
-                                <td>Lead Owner</td>
-                                <td *ngFor="let s of status">{{s.statusTitle}}</td>
+                                <th class="border-b-2 text-left font-semibold">Lead Owner</th>
+                                <th class="border-l-2 border-b-2 text-center font-semibold" *ngFor="let s of status">
+                                    {{s.statusTitle}}
+                                </th>
                             </tr>
-                            <tr *ngFor="let d of userList | filterx:dx.prodId | unique:'leadOwner'" >
-                                <td>{{d.leadOwnerName}}</td>
+                            <tr *ngFor="let d of userList | filterx:dx.prodId | unique:'leadOwner'">
+                                <td class="border-top-2 text-left">{{d.leadOwnerName}}</td>
                                 <ng-container *ngFor="let sq of status">
                                     <ng-container *ngFor="let dq of userList | filterxy:sq.sId">
-                                        <td *ngIf="dq.sId === sq.statusId &&  dq.leadOwnerId === d.leadOwnerId && dq.prodId === dx.prodId">{{dq.count}}</td>
+                                        <td class="border-l-2 text-center"
+                                            *ngIf="dq.sId === sq.statusId &&  dq.leadOwnerId === d.leadOwnerId && dq.prodId === dx.prodId">
+                                            {{dq.count}}
+                                        </td>
                                     </ng-container>
                                 </ng-container>
                             </tr>
                         </table>
                     </div>
                 </div>
-
-                <!-- No Reports -->
                 <ng-template #noReports>
                     <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
                         Reports!</div>

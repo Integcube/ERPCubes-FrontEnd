@@ -4,7 +4,6 @@ import { LeadReportComponent } from './lead-report.component';
 import { RouterModule } from '@angular/router';
 import { leadReportRoutes } from './lead-report.routing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {CdkTableModule} from '@angular/cdk/table'; 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,17 +21,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
-import { CustomFilterPipe, CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
-
+import {CdkTableModule} from '@angular/cdk/table';
+import {MatNativeDateModule} from '@angular/material/core';
 
 @NgModule({
   declarations: [
-    LeadReportComponent,
-    CustomFilterPipe,
-    CustomFilterPipe2
+    LeadReportComponent
   ],
   imports: [
     RouterModule.forChild(leadReportRoutes),
@@ -50,6 +48,7 @@ import { CustomFilterPipe, CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/fil
     MatInputModule,
     MatMenuModule,
     MatMomentDateModule,
+    MatNativeDateModule,
     MatProgressBarModule,
     MatRadioModule,
     MatRippleModule,

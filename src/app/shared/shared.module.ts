@@ -3,12 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableLimitPipe } from '@fuse/pipes/table-limit/table-limit.pipe';
 import { UniquePipe } from '@fuse/pipes/unique-pipe/unique.pipe';
+import { CustomFilterPipe } from '@fuse/pipes/customFilter/customFilter.pipe';
+import { CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
+import { BoldPipe } from '@fuse/pipes/bold/bold.pipe';
+import { MonthToWordPipe } from '@fuse/pipes/month-convert/month-convert.pipe';
 
 @NgModule({
     declarations:[
         TableLimitPipe,
         UniquePipe,
-        
+        CustomFilterPipe,
+        CustomFilterPipe2,
+        BoldPipe,
+        MonthToWordPipe
     ],
     imports: [
         CommonModule,
@@ -21,6 +28,10 @@ import { UniquePipe } from '@fuse/pipes/unique-pipe/unique.pipe';
         ReactiveFormsModule,
         TableLimitPipe,
         UniquePipe,
+        CustomFilterPipe,
+        CustomFilterPipe2,
+        BoldPipe,
+        MonthToWordPipe
     ]
 })
 export class SharedModule

@@ -4,6 +4,9 @@ import moment from 'moment';
 import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 import { Company } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
     selector: 'app-activity-detail',
     templateUrl: './activity-detail.component.html',
@@ -19,7 +22,7 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             if (activities) {
                 return activities.map(activity => ({
                     ...activity,
-                    userName: users.find(u => u.id == activity.createdBy)?.name // Access the username property from the user
+                    userName: users.find(u => u.id == activity.userId)?.name // Access the username property from the user
                 } as Activity))
             }
         }
@@ -34,9 +37,16 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             }, 500);
         }
     }
+    user: User
     constructor(public _companyService: CompanyService,
         private _changeDetectorRef: ChangeDetectorRef,
-    ) { }
+        private _userService: UserService,
+        private _sanitizer: DomSanitizer
+    )
+    { 
+        this._userService.user$.subscribe(user => 
+            this.user = user)
+    }
     ngOnInit(): void {
         this._companyService.company$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
             this.company = { ...data }; this.getActivity();
@@ -63,6 +73,9 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             return 'Yesterday';
         }
         return moment(createdDate, moment.ISO_8601).fromNow();
+    }
+    sanitizeHtml(htmlString: string): SafeHtml {
+        return this._sanitizer.bypassSecurityTrustHtml(htmlString);
     }
     trackByFn(index: number, item: any): any {
         return item.id || index;

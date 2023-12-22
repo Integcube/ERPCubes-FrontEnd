@@ -130,14 +130,14 @@ export class ProductListComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
   createProduct() {
-    debugger;
+    
     let newProduct:Product = new Product({});
     this._productService.selectedProduct(newProduct);
     this._router.navigate(['./', newProduct.productId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
   updateProduct(selectedProduct:Product){
-    debugger;
+    
     this._productService.selectedProduct(selectedProduct);
     this._router.navigate(['./', selectedProduct.productId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();

@@ -16,13 +16,18 @@
             <input matInput [formControlName]="'subject'">
         </mat-form-field>
         <!-- Body -->
-        <quill-editor
+        <!-- <quill-editor
             class="mt-2"
             [formControlName]="'response'"
             [bounds]="'self'"
             [modules]="quillModules">
-        </quill-editor>
-
+        </quill-editor> -->
+        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+            <mat-label>Response</mat-label>
+            <textarea matInput [formControlName]="'response'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
+                class="resize-none h-16">
+            </textarea>
+        </mat-form-field> 
         <!-- Start Time -->
         <mat-form-field>
             <mat-label>Start Time</mat-label>

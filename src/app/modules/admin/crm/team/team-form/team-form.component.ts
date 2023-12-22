@@ -101,13 +101,14 @@ export class TeamFormComponent implements OnInit {
   }
 
   saveTeam() {
+    debugger;
     this._teamService.saveTeam(this.teamForm.value).pipe(takeUntil(this._unsubscribeAll),
       catchError(err => {
         this.errorMessageSubject.next(err);
         return EMPTY;
       })).subscribe(data => {
-        this._teamListComponent.onBackdropClicked();
         this.closeDrawer();
+        this._teamListComponent.onBackdropClicked();
         this._changeDetectorRef.markForCheck();
       }
       );

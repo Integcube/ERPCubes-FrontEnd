@@ -117,9 +117,9 @@ export class TeamListComponent implements OnInit  {
     row.isHovered=false;
   }
 
-  previewTeam(row: Team) {
-    this._router.navigate(['detail-view', row.teamId], { relativeTo: this._activatedRoute });
-  }
+  // previewTeam(row: Team) {
+  //   this._router.navigate(['detail-view', row.teamId], { relativeTo: this._activatedRoute });
+  // }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

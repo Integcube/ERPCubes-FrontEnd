@@ -411,21 +411,6 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-  cancelFilters(filterId: number): void {
-    if (filterId == 1) {
-      this.filter.leadOwner = [];
-    }
-    else if (filterId == 2) {
-      this.filter.createdDate = null;
-    }
-    else if (filterId == 3) {
-      this.filter.modifiedDate = null;
-    }
-    else if (filterId == 4) {
-      this.filter.leadStatus = [];
-    }
-    this._leadService.setFilter(this.filter);
-  }
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
@@ -450,6 +435,24 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  cancelFilters(filterId: number): void {
+    if (filterId == 1) {
+      this.filter.leadOwner = [];
+    }
+    else if (filterId == 2) {
+      this.filter.createdDate = null;
+    }
+    else if (filterId == 3) {
+      this.filter.modifiedDate = null;
+    }
+    else if (filterId == 4) {
+      this.filter.leadStatus = [];
+    }
+    this._leadService.setFilter(this.filter);
+  }
+  saveFilter(list: LeadCustomList): any {
+    this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe();
   }
   filterUsers(event): void {
     const value = event.target.value.toLowerCase();
@@ -497,8 +500,5 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   }
   trackByFn(index: number, item: any): any {
     return item.id || index;
-  }
-  saveFilter(list: LeadCustomList): any {
-    this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe();
   }
 }

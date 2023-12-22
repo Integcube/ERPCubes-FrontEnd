@@ -6,7 +6,6 @@ import {
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { ActivityReportService } from './activity-report.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +16,6 @@ export class ActivityReportResolver implements Resolve<any> {
     return this._activityReportService.getActivityReport();
   }
 }
-
 @Injectable({
   providedIn: 'root'
 })

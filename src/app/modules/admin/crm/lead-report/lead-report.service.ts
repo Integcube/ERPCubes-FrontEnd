@@ -41,16 +41,22 @@ export class LeadReportService {
     get leadReport$(): Observable<LeadReport[]> {
         return this._leadReport.asObservable()
     }
-    getLeadReport(): Observable<LeadReport[]> {
-        let data = {
+    getLeadReport(startDate: string, endDate: string, prodId: number): Observable<LeadReport[]> {
+        let data : any = {
             id: this.user.id,
             tenantId: this.user.tenantId,
+            startDate: startDate,
+            endDate: endDate,
+            prodId: +prodId
         }
         return this._httpClient.post<LeadReport[]>(this.getLeadReportUrl, data).pipe(
             tap((report) => {
                 this._leadReport.next(report);
             }),
-            catchError(err=>this.handleError(err))
+            catchError(err => {
+                console.error('Error in getLeadReport:', err);
+                return this.handleError(err);
+            })
         );
     }
     getProducts(): Observable<Product[]> {

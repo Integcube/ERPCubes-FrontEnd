@@ -130,20 +130,20 @@ export class UserListComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
   createUser() {
-    debugger;
+    
     let newUser:UserForm = new UserForm({});
-    debugger;
+    
     this._userFormService.selectedUser(newUser);
-    debugger;
+    
     this._router.navigate(['./', newUser.id], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
   updateUser(selectedUser:UserForm){
-    debugger;
+    
     this._userFormService.selectedUser(selectedUser);
-    debugger;
+    
     this._router.navigate(['./', selectedUser.id], { relativeTo: this._activatedRoute });
-    debugger;
+    
     this._changeDetectorRef.markForCheck();
   }
   onBackdropClicked(): void {

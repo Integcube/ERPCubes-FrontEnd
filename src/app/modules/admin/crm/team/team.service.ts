@@ -60,15 +60,15 @@ export class TeamService {
     );
   }
   saveTeam(team: any): Observable<Team[]> {
-    let data: Team = {
+    let data = {
       tenantId: this.user.tenantId,
       userId: this.user.id,
-      ...team,
       teamId: team.teamId,
       teamName: team.teamName,
       teamLeader: team.teamLeaderId,
       teamMembersId: team.teamMembersId.join(','),
     }
+    debugger;
     return this._httpClient.post<Team[]>(this.saveTeamURL, data).pipe(
       tap((teams) => {
         this.getTeams().subscribe();

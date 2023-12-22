@@ -1,12 +1,14 @@
 export interface Activity
 {
-    id: string;
-    icon?: string;
+    activityId: string;
+    userId: string;
+    userName: string;
+    activityType: string;
+    activityTypeId: string;
+    activityStatus: number;
     image?: string;
-    description?: string;
-    date: string;
-    extraContent?: string;
-    linkedContent?: string;
-    link?: string;
-    useRouter?: boolean;
+    detail?: string;
+    createdDate: string;
+    icon?: string;
+    createdBy: string;
 }

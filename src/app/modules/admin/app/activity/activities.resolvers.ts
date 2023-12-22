@@ -8,25 +8,17 @@ import { ActivitiesService } from './activities.service';
 })
 export class ActivitiesResolver implements Resolve<any>
 {
-    /**
-     * Constructor
-     */
-    constructor(private _activityService: ActivitiesService)
-    {
+    constructor(private _activityService: ActivitiesService) { }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+        return this._activityService.getActivities(1);
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolve
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any>
-    {
-        return this._activityService.getActivities();
+}
+@Injectable({
+    providedIn:'root'
+})
+export class UserResolver implements Resolve<any>{
+    constructor(private _activityService: ActivitiesService) { }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+      return this._activityService.getUsers();
     }
 }

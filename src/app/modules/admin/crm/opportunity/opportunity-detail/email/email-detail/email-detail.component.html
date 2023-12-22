@@ -1,0 +1,53 @@
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">New Message</div>
+        <button mat-icon-button (click)="close()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <!-- Compose form -->
+    <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="composeForm">
+
+        <!-- To -->
+        <mat-form-field>
+            <mat-label>To</mat-label>
+            <input matInput [formControlName]="'to'" readonly="true">
+            <mat-error *ngIf="composeForm.get('to').hasError('required')">
+                Sender email is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Subject -->
+        <mat-form-field>
+            <mat-label>Subject</mat-label>
+            <input matInput [formControlName]="'subject'">
+        </mat-form-field>
+
+        <!-- Body -->
+        <quill-editor class="mt-2" [formControlName]="'description'" [bounds]="'self'" [modules]="quillModules"></quill-editor>
+
+        <!-- Actions -->
+        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
+            <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+            <!-- Delete -->
+            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                Delete
+            </button>
+
+            <!-- Cancel -->
+            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()">
+                Cancel
+            </button>
+
+            <!-- Save -->
+            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()">
+                Save
+            </button>
+        </div>
+       </div>
+
+    </form>
+</div>

@@ -79,7 +79,7 @@
                                             <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'" class="group relative overflow-hidden"
                                                 (mouseenter)="onMouseEnter(row)" (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
                                                 <div class="flex items-center justify-between">
-                                                    <span (click)="previewTeam(row)" class="hover:text-clip truncate"><u>{{row.teamName
+                                                    <span class="hover:text-clip truncate"><u>{{row.teamName
                                                             | tblimit:
                                                             row.isHovered}}</u></span>
                                                     <span *ngIf="row.isHovered" class="relative right-0">

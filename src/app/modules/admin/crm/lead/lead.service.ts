@@ -25,26 +25,25 @@ export class LeadService {
   private readonly getLeadTaskUrl = `${environment.url}/Task/all`
   private readonly getTaskTagsUrl = `${environment.url}/Task/tags`
   private readonly getCustomListUrl = `${environment.url}/CustomList/all`
-  private readonly saveCustomListUrl = `${environment.url}/CustomList/save`
-  private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
-  private readonly saveCustomListFilterUrl = `${environment.url}/CustomList/saveFilter`
-  private readonly deleteTaskUrl = `${environment.url}/Task/delete`
-  private readonly saveTaskUrl = `${environment.url}/Task/save`
-  private readonly updateTaskStatusUrl = `${environment.url}/Task/updateStatus`
   private readonly getEmailsUrl = `${environment.url}/Email/all`
-  private readonly saveEmailsUrl = `${environment.url}/Email/save`
   private readonly getCallsUrl = `${environment.url}/Call/all`
-  private readonly saveCallsUrl = `${environment.url}/Call/save`
   private readonly getMeetingsUrl = `${environment.url}/Meeting/all`
-  private readonly saveMeetingsUrl = `${environment.url}/Meeting/save`
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
+  private readonly saveCustomListUrl = `${environment.url}/CustomList/save`
+  private readonly saveCustomListFilterUrl = `${environment.url}/CustomList/saveFilter`
+  private readonly saveTaskUrl = `${environment.url}/Task/save`
+  private readonly saveEmailsUrl = `${environment.url}/Email/save`
+  private readonly saveCallsUrl = `${environment.url}/Call/save`
+  private readonly saveMeetingsUrl = `${environment.url}/Meeting/save`
   private readonly saveNotesUrl = `${environment.url}/Notes/save`
-  private readonly deleteNotesURL = `${environment.url}/Notes/delete`
+  private readonly updateTaskStatusUrl = `${environment.url}/Task/updateStatus`
   private readonly updateTaskPriorityUrl = `${environment.url}/Task/updatePriority`
+  private readonly deleteTaskUrl = `${environment.url}/Task/delete`
+  private readonly deleteNotesURL = `${environment.url}/Notes/delete`
   private readonly deleteEmailsUrl = `${environment.url}/Email/delete`
   private readonly deleteCallsUrl = `${environment.url}/Call/delete`
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
-  
+  private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -100,12 +99,6 @@ export class LeadService {
       })
     })
   )
-  updateSearchQuery(value: any) {
-    this._serachQuery.next(value);
-  }
-  get activities$(): Observable<any> {
-    return this._activities.asObservable();
-  }
   selectedNoteTask$ = this.note$.pipe(
     switchMap((note) => {
       if (note.noteId != -1) {
@@ -157,6 +150,9 @@ export class LeadService {
     ,
     catchError(error => { alert(error); return EMPTY })
   )
+  get activities$(): Observable<any> {
+    return this._activities.asObservable();
+  }
   get filter$(): Observable<LeadFilter> {
     return this._filter.asObservable();
   }
@@ -211,7 +207,9 @@ export class LeadService {
   get meetings$(): Observable<Meeting[]> {
     return this._meetings.asObservable();
   }
-
+  get emails$(): Observable<Email[]> {
+    return this._emails.asObservable();
+  }
   getTags(): Observable<Tag[]> {
     let data = {
       id: this.user.id,
@@ -229,6 +227,7 @@ export class LeadService {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId
     }
     return this._httpClient.post<TaskModel[]>(this.getLeadTaskUrl, data).pipe(
@@ -244,6 +243,7 @@ export class LeadService {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId
     }
     return this._httpClient.post<Note[]>(this.getNotesUrl, data).pipe(
@@ -362,6 +362,7 @@ export class LeadService {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId
     }
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
@@ -584,6 +585,9 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
+  updateSearchQuery(value: any) {
+    this._serachQuery.next(value);
+  }
   deleteTask(taskId: number, taskTitle: string, leadId: number): Observable<TaskModel> {
     let data = {
       id: this.user.id,
@@ -602,11 +606,12 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      type: 'task',
       companyId: -1,
+      opportunityId: -1,
       leadId: leadId,
       task: {
         ...taskForm.value,
-        type: 'task',
         priorityId: -1,
         statusId: -1,
         tags: taskForm.value.tags.join(',')
@@ -637,6 +642,7 @@ export class LeadService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId: leadId,
       note: {
         noteId: note.noteId,
@@ -661,6 +667,7 @@ export class LeadService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId: leadId,
       emailId: email.emailId,
       subject: email.subject,
@@ -673,14 +680,12 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
-  get emails$(): Observable<Email[]> {
-    return this._emails.asObservable();
-  }
   saveMeeting(meeting: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId: leadId,
       meetingId: meeting.meetingId,
       subject: meeting.subject,
@@ -700,6 +705,7 @@ export class LeadService {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId
     }
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
@@ -714,6 +720,7 @@ export class LeadService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId: leadId,
       callId: call.callId,
       subject: call.subject,
@@ -733,6 +740,7 @@ export class LeadService {
       id: "-1",
       tenantId: this.user.tenantId,
       companyId: -1,
+      opportunityId: -1,
       leadId
     }
     return this._httpClient.post<Call[]>(this.getCallsUrl, data).pipe(
@@ -765,6 +773,7 @@ export class LeadService {
       count,
       leadId,
       companyId: -1,
+      opportunityId: -1,
     }
     return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
       tap((response: Activity[]) => {

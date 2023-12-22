@@ -1,17 +1,3 @@
-
-export interface Activity {
-    activityId: string;
-    userId: string;
-    userName: string;
-    activityType: string;
-    activityTypeId: string;
-    activityStatus: number;
-    image?: string;
-    detail?: string;
-    createdDate: string;
-    icon?: string;
-    createdBy: string;
-}
 export class Lead {
     leadId: number;
     firstName: string = "";
@@ -47,43 +33,15 @@ export class Lead {
         this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
     }
 }
+export interface LeadSource {
+    sourceId: number;
+    sourceTitle: string;
+}
 export interface LeadStatus {
     statusId: number;
     statusTitle: string;
     isDeletable: number;
     order: number;
-}
-export interface LeadSource {
-    sourceId: number;
-    sourceTitle: string;
-}
-export interface Industry {
-    industryId: number,
-    industryTitle: string
-}
-export interface Product {
-    productId: number;
-    productName: string;
-    description: string;
-    price: number;
-}
-export class Tag {
-    tagId: number;
-    tagTitle: string;
-    isSelected: boolean
-    constructor(reg) {
-        this.tagId = reg.tagId ? reg.tagId : -1
-    }
-}
-export class Email {
-    emailId: number;
-    subject: string;
-    description: string;
-    createdBy: string;
-    createdDate: Date;
-    constructor(reg) {
-        this.emailId = reg.emailId ? reg.emailId : -1
-    }
 }
 export class LeadCustomList {
     listId: number = -1;
@@ -103,6 +61,57 @@ export class LeadFilter {
     modifiedDate: Date = null;
     leadStatus: number[] = [];
 }
+export interface Activity {
+    activityId: string;
+    userId: string;
+    userName: string;
+    activityType: string;
+    activityTypeId: string;
+    activityStatus: number;
+    image?: string;
+    detail?: string;
+    createdDate: string;
+    icon?: string;
+    createdBy: string;
+}
+export class Call {
+    callId: number;
+    subject: string;
+    response: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg) {
+        this.callId = reg.callId ? reg.callId : -1
+    }
+}
+export class Email {
+    emailId: number;
+    subject: string;
+    description: string;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg) {
+        this.emailId = reg.emailId ? reg.emailId : -1
+    }
+}
+export interface Industry {
+    industryId: number,
+    industryTitle: string
+}
+export class Meeting{
+    meetingId: number;
+    subject: string;
+    note: string;
+    startTime: Date;
+    endTime: Date;
+    createdBy: string;
+    createdDate: Date;
+    constructor(reg){
+        this.meetingId = reg.meetingId?reg.meetingId:-1
+    }
+}
 export class Note {
     noteId: number;
     noteTitle: string;
@@ -116,6 +125,20 @@ export class Note {
         this.noteId = reg.noteId ? reg.noteId : -1
     }
 }
+export interface Product {
+    productId: number;
+    productName: string;
+    description: string;
+    price: number;
+}
+export class Tag {
+    tagId: number;
+    tagTitle: string;
+    isSelected: boolean
+    constructor(reg) {
+        this.tagId = reg.tagId ? reg.tagId : -1
+    }
+}
 export class Tasks {
     taskId: number;
     task: string;
@@ -125,7 +148,6 @@ export class Tasks {
         this.taskId = reg.taskId ? reg.taskId : -1
     }
 }
-
 export class TaskModel {
     taskId: number;
     taskTitle: string;
@@ -142,29 +164,5 @@ export class TaskModel {
     tags: Tag[];
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
-    }
-}
-export class Call {
-    callId: number;
-    subject: string;
-    response: string;
-    startTime: Date;
-    endTime: Date;
-    createdBy: string;
-    createdDate: Date;
-    constructor(reg) {
-        this.callId = reg.callId ? reg.callId : -1
-    }
-}
-export class Meeting{
-    meetingId: number;
-    subject: string;
-    note: string;
-    startTime: Date;
-    endTime: Date;
-    createdBy: string;
-    createdDate: Date;
-    constructor(reg){
-        this.meetingId = reg.meetingId?reg.meetingId:-1
     }
 }
