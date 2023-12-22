@@ -1,0 +1,47 @@
+<div class="flex flex-col flex-auto md:w-120 md:min-w-120 max-h-120  -m-6 overflow-y-auto">
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Create ad account</div>
+        <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+    <div class="flex flex-col px-6 my-10 justify-center gap-4">
+        <div
+            class="flex p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between">
+            <div class="flex gap-2 items-center">
+                <span class="items-center">
+                    <img class="h-5" src="/assets/images/logo/facebook.svg" alt="facebook">
+                </span>
+                <span class="items-center">Facebook</span>
+            </div>
+            <div class="items-center">
+                <mat-icon class="items-center" svgIcon="heroicons_outline:link" class="icon-size-4"></mat-icon>
+            </div>
+        </div>
+        <div
+            class="flex p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between">
+            <div class="flex gap-2 items-center">
+                <span class="items-center">
+                    <img class="h-5" src="/assets/images/logo/google-ads.svg" alt="google-ads">
+                </span>
+                <span class="items-center">Google Ads</span>
+            </div>
+            <div class="items-center">
+                <mat-icon class="items-center" svgIcon="heroicons_outline:link" class="icon-size-4"></mat-icon>
+            </div>
+        </div>
+        <div
+            class="flex p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between">
+            <div class="flex gap-2 items-center">
+                <span class="items-center">
+                    <img class="h-5" src="/assets/images/logo/linkedin.svg" alt="linekdin">
+                </span>
+                <span class="items-center">LinkedIn</span>
+            </div>
+            <div class="items-center">
+                <mat-icon class="items-center" svgIcon="heroicons_outline:link" class="icon-size-4"></mat-icon>
+            </div>
+        </div>
+    </div>
+</div>

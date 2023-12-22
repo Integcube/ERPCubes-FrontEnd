@@ -88,7 +88,9 @@ export const appRoutes: Route[] = [
                 {path: 'file-manager', loadChildren: () => import('app/modules/admin/app/file-manager/file-manager.module').then(m => m.FileManagerModule)},
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/app/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
             ]},
-           //Configurator
+           //Marketing
+           {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)},
+
         ]
     }
 ];

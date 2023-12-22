@@ -52,19 +52,15 @@ export class UserFormService {
       }
 
       getUserById(id: any): Observable<UserForm> {
-        debugger;
         return this._users.pipe(
           take(1),
           switchMap((users) => {
             const user = users.find(item => item.id === id) || null;
-      
             if (!user) {
-              debugger;
               const user = new UserForm({});
               this._user.next(user);
               return of(user);
             } else {
-              debugger;
               this._user.next(user);
               return of(user);
             }
@@ -79,24 +75,20 @@ export class UserFormService {
       }
 
       saveUser(userId: any, user:FormGroup){
-        debugger;
         let data : UserForm= {
           id: userId,
           tenantId: this.user.tenantId,
           ...user.value
         }
 
-          debugger;
         return this._httpClient.post<UserForm[]>(this.adduserListURL, data).pipe(
           tap((users) => {
-            debugger;
             this.getUsers();
           })
         );
       }
       
       updateUser(userId: any, user:FormGroup){
-        debugger;
         let data : any= {
           tenantId: this.user.tenantId,
           firstName: user.value.firstName,
@@ -107,11 +99,9 @@ export class UserFormService {
         }
         return this._httpClient.post<UserForm[]>(this.updateUserURL, data).pipe(
           tap((users) => {
-            debugger;
-            this.getUsers();
+           this.getUsers();
           })
         );
-
       }
       deleteCompany(user:UserForm){
         let data = {
@@ -126,7 +116,6 @@ export class UserFormService {
         );
       }
       selectedUser(selectedUser: UserForm) {
-        debugger;
         this._user.next(selectedUser);
       }
 }

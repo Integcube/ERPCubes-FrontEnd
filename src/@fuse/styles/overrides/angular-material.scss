@@ -8,6 +8,17 @@
 .fuse-backdrop-on-mobile {
     @apply bg-black bg-opacity-60 sm:bg-transparent #{'!important'};
 }
+.mat-dialog-container {
+    padding-bottom: 0px!important;
+}
+
+
+
+// 
+.mat-stepper-label-position-bottom .mat-horizontal-stepper-header .mat-step-label {
+    padding: 2px 0 0 0;
+    font-size: 12px;
+}
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Calendar
 /* ----------------------------------------------------------------------------------------------------- */

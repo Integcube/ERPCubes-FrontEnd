@@ -1,0 +1,59 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-4 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div>
+                <h2 class="text-3xl md:text-3xl font-bold tracking-tight leading-7 sm:leading-10 truncate">
+                    Ads
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6  sm:p-10">
+        <div class="flex gap-14 justify-center px-50">
+            <div class="flex flex-col justify-center flex-1">
+                <h3 class="font-semibold text-3xl">
+                    See which ads are turning visitors into customers
+                </h3>
+                <p class="mt-2">
+                    Your all-in-one place to manage all your Facebook, Instagram, LinkedIn, and Google ad campaigns.
+                </p>
+                <div class="felx flex-col gap-4 my-8">
+                    <p>
+                        - Tie ad spend directly to company revenue.
+                    </p>
+                    <p>
+                        - See who is interacting with each ad.
+                    </p>
+                    <p>
+                        - Re-engage with existing contacts.
+                    </p>
+                    <p>
+                        - Align advertising with the rest of your marketing.
+                    </p>
+                </div>
+                <p>
+                    Once you connect an account, you may be eligible for $500 USD in ad credits. Learn more about the
+                    LinkedIn Offer and Google Offer
+                </p>
+                <div class="flex gap-5 my-4 justify-start">
+                    <button class="h-9" mat-flat-button [color]="'primary'" (click)="openConnectorDialog()">
+                        <span class="ml-2 mr-1">Connect accounts</span>
+                    </button>
+                    <button class=" h-9" mat-stroked-button>
+                        <span class="ml-2 mr-1">See a quick demo</span>
+                    </button>
+                </div>
+                <p class=" text-lg font-bold text-accent2 hover:underline cursor-pointer" (click)="openCreatorDialog()">Create ad account</p>
+            </div>
+            <div class="flex justify-center flex-2">
+                <img class="h-100" src="/assets/images/logo/add-on-ads.svg" alt="add-on-ads">
+            </div>
+        </div>
+    </div>
+</div>

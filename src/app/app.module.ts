@@ -15,6 +15,7 @@ import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -38,6 +39,7 @@ const routerConfig: ExtraOptions = {
         LayoutModule,
         MarkdownModule.forRoot({})
     ],
+
     bootstrap: [
         AppComponent
     ]
