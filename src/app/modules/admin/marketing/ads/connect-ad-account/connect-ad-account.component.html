@@ -146,9 +146,9 @@
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full" [(ngModel)]="ad.firstName" #leadOwner>
+                                                        <select class="w-full font-medium leading-5 bg-transparent h-full"  (change)="setSelection($event, ad,1)" #leadOwner>
                                                             <option  [value]=-1>--Non--</option>
-                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]" (change)="onSelectionChange($event)">{{a.name}}</option>
+                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]" >{{a.name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="items-center self-center">
@@ -173,9 +173,9 @@
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full" [(ngModel)]="ad.lastName" #leadOwner>
+                                                        <select class="w-full font-medium leading-5 bg-transparent h-full"(change)="setSelection($event, ad,2)" #leadOwner>
                                                             <option  [value]=-1>--Non--</option>
-                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]" >{{a.name}}</option>
+                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]"  >{{a.name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="items-center self-center">
@@ -186,6 +186,7 @@
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
                                                         <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
                                                             [(ngModel)]="ad.lastName" #lastName name="lastName">
+                                                            
                                                     </div>
                                                 </div>
                                                 <div class="flex w-full gap-4 ">
@@ -200,7 +201,7 @@
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full" [(ngModel)]="ad.email">
+                                                        <select class="w-full font-medium leading-5 bg-transparent h-full" (change)="setSelection($event, ad,3)">
                                                             <option  [value]=-1>--Non--</option>
                                                             <option *ngFor="let a of ad.field_data" [value]="a.values[0]" >{{a.name}}</option>
                                                         </select>
@@ -239,7 +240,7 @@
             <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2" (click)="moveStepperToNextStep()">
                 <span class="ml-2 mr-1">Next</span>
             </button>
-            <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="closeDialog()">
+            <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="saveLeads()">
                 <span class="ml-2 mr-1">Done</span>
             </button>
         </div>

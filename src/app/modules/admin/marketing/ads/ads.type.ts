@@ -42,6 +42,7 @@ export class LeadList{
     leadId:number = -1
     sourceId:number = 4;
     field_data:LeadForm[];
+    productId:number = 15;
 }
 export interface LeadForm{
     name:string;

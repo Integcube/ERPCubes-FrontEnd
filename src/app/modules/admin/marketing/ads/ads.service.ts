@@ -5,7 +5,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, EMPTY, Observable, catchError, forkJoin, map, mergeMap, switchMap, tap } from 'rxjs';
 import { SocialUser } from '@abacritt/angularx-social-login';
-import { AdAccountList, AdAccounts, AdAcountName, AdList, Product } from './ads.type';
+import { AdAccountList, AdAccounts, AdAcountName, AdList, LeadList, Product } from './ads.type';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ import { AdAccountList, AdAccounts, AdAcountName, AdList, Product } from './ads.
 export class AdsService {
   private apiUrl = 'https://graph.facebook.com/v18.0';
   private readonly getProductUrl = `${environment.url}/Product/all`
+  private readonly saveLeadUrl = `${environment.url}/Lead/bulkSave`
 
   private readonly loginFacebookUrl = `${environment.url}/FacebookLogin/facebook-login`
   user: User;
@@ -67,7 +68,19 @@ export class AdsService {
       })
     );
   }
-
+  saveLeads(leads:LeadList[]): Observable<any> {
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      lead: leads
+    };
+    debugger;
+    return this._httpClient.post<any>(this.saveLeadUrl, data).pipe(
+      tap(data => {
+      })
+    );
+  }
+  
   setSocialUser(user: SocialUser) {
     this._loggedInUser.next(user);
   }

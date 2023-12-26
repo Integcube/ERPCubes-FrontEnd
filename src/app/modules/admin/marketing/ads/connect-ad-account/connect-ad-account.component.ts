@@ -42,7 +42,10 @@ export class ConnectAdAccountComponent implements OnInit {
     })
   }
 
-
+  saveLeads(){
+this.adService.saveLeads(this.allLeads).subscribe();
+    this.closeDialog()
+  }
   displayedColumns: string[] = ['name', 'id', 'product'];
 
   closeDialog() {
@@ -98,7 +101,24 @@ export class ConnectAdAccountComponent implements OnInit {
   linkedIn(): void {
     this.socialMediaLogin = 'linkedin'
   }
+  setSelection(event, lead, num){
+    debugger;
+    let index = this.allLeads.findIndex(a=>a.id === lead.id);
+    if(index>-1){
+      if(num == 1){
+        this.allLeads[index].firstName = event.target.value
 
+      }
+      else if(num == 2){
+        this.allLeads[index].lastName = event.target.value
+
+      }
+      else{
+        this.allLeads[index].email = event.target.value
+
+      }
+    }
+  }
 
 
   getAllLeads() {
