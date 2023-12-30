@@ -7,8 +7,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-lead-Pipeline',
-  templateUrl: './lead-Pipeline.component.html',
-  styleUrls: ['./lead-Pipeline.component.scss'],
+  templateUrl: './lead-pipeline.component.html',
+  styleUrls: ['./lead-pipeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeadPipelineComponent implements OnInit, OnDestroy {
@@ -17,16 +17,16 @@ export class LeadPipelineComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [ 'statusTitle', 'totalLeads', 'totalLeadValue', 'averageDealValue', 'winLeads', 'winRate', 'convertedLeads','conversionRate','expectedRevenue'];
 
 
-  status: number
-  statusTitle:string  
-  totalLeads: number
-  totalLeadValue: number
-  averageDealValue: number
-  winLeads: number
-  winRate: number
-  convertedLeads: number
-  conversionRate: number
-  expectedRevenue: number
+  // status: number
+  // statusTitle:string  
+  // totalLeads: number
+  // totalLeadValue: number
+  // averageDealValue: number
+  // winLeads: number
+  // winRate: number
+  // convertedLeads: number
+  // conversionRate: number
+  // expectedRevenue: number
   constructor(
     private _leadPipelineService: leadPipelineService,
     private _changeDetectorRef: ChangeDetectorRef

@@ -21,9 +21,14 @@ export class LeadPipelineFilter {
         this.sourceId = reg.sourceId?reg.sourceId:-1; 
         this.productId = reg.productId?reg.productId:-1;
         this.status =  reg.status?reg.status:-1;
-        this.startDate =reg.startDate?reg.startDate:new Date(); 
+        if (reg.startDate === null || reg.startDate === undefined) {
+            const currentDate = new Date();
+            this.startDate = new Date(currentDate.setDate(currentDate.getDate() - 30));
+        } else {
+            this.startDate = reg.startDate;
+        }
         this.endDate = reg.endDate?reg.endDate:new Date(); 
-        this.startDate.setDate(this.startDate.getDate() - 30);
+        // this.startDate.setDate(this.startDate.getDate() - 30);
     }
 }
 
@@ -45,14 +50,3 @@ export interface LeadSource {
     sourceTitle: string;
 }
 
-export const MY_DATE_FORMATS = {
-    parse: {
-      dateInput: 'DD-MM-YYYY',
-    },
-    display: {
-      dateInput: 'MMM DD, YYYY',
-      monthYearLabel: 'MMMM YYYY',
-      dateA11yLabel: 'LL',
-      monthYearA11yLabel: 'MMMM YYYY'
-    },
-};
