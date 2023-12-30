@@ -60,7 +60,7 @@ export class CampaignService {
       title: campaign.value.title,
       productId: +campaign.value.productId,
       sourceId: +campaign.value.sourceId,
-      budget: campaign.value.budget.toString(),
+      budget: campaign.value.budget,
       tenantId: this.user.tenantId,
       id: this.user.id,
     }

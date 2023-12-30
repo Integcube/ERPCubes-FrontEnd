@@ -16,6 +16,10 @@ export const crmRoutes: Routes = [
         { path: 'lead-Pipeline-Report', loadChildren: () => import('app/modules/admin/crm/lead-pipeline-report/lead-pipeline.module').then(m => m.leadPipelineModule) },
         { path: 'campaig-effectiveness-reports', loadChildren: () => import('app/modules/admin/crm/campaig-effectiveness-reports/campaig-effectiveness.module').then(m => m.CampaigEffectivenessModule) },
        
+        { path: 'leadsource-report', loadChildren: () => import('app/modules/admin/crm/leadsource-report/leadsource-report.module').then(m => m.LeadSourceReportModule) },
+        { path: 'leadowner-report', loadChildren: () => import('app/modules/admin/crm/leadowner-report/leadowner-report.module').then(m => m.LeadOwnerReportModule) },
+
+
     ]
 },
 {

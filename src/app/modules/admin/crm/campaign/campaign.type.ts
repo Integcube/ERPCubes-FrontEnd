@@ -4,7 +4,7 @@ export class Campaign {
     title: string
     productId: number
     sourceId: number
-    budget: string
+    budget: number
     isHovered: boolean
     constructor(reg){
         this.campaignId = reg.campaignId? reg.campaignId : "-1";

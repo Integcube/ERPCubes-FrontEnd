@@ -73,26 +73,12 @@
                         <ng-container matColumnDef="month">
                             <th mat-header-cell *matHeaderCellDef mat-header-sort> Month </th>
                             <td mat-cell *matCellDef="let row"> {{row.month | monthToWord}} </td>
-                        </ng-container>
-                        
-                        <!-- <ng-container matColumnDef="year">
-                            <th mat-header-cell *matHeaderCellDef mat-header-sort> Year </th>
-                            <td mat-cell *matCellDef="let row"> {{row.year}} </td>
-                        </ng-container> -->
+                        </ng-container>                     
                         
                         <ng-container matColumnDef="totalLeads">
                             <th mat-header-cell *matHeaderCellDef mat-header-sort> Total Leads </th>
                             <td mat-cell *matCellDef="let row"> {{row.totalLeads}} </td>
-                        </ng-container>
-                        
-                        <!-- <ng-container matColumnDef="leadStatusList">
-                            <th mat-header-cell *matHeaderCellDef> Lead Status List </th>
-                            <td mat-cell *matCellDef="let row">
-                                <div *ngFor="let status of row.leadStatusList">
-                                    {{ status.count }}
-                                </div>
-                            </td>
-                        </ng-container> -->
+                        </ng-container>                  
 
                         <ng-container matColumnDef="newLead">
                             <th mat-header-cell *matHeaderCellDef mat-header-sort> New Leads </th>
