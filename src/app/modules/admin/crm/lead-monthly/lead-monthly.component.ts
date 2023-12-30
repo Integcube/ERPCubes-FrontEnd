@@ -20,11 +20,8 @@ export class LeadMonthlyComponent {
 originalData: LeadMonthly[];
   dataSource: MatTableDataSource<LeadMonthly>;
   displayedColumns: string[] = [
-    // 'select',
     'month',
-    // 'year',
     'totalLeads',
-    // 'leadStatusList',
     'newLead',
     'contactedLead',
     'interestedLead',
@@ -205,4 +202,5 @@ getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
   onYearSelected(year: number) {
     this.filterByYear(year);
   }
+  
 }
