@@ -26,7 +26,7 @@ export class LeadOwnerReportComponent {
   startDate: Date
   endDate: Date
   dataSource: MatTableDataSource<LeadOwnerReport>;
-  displayedColumns: string[] = [ 'leadOwner', 'totalLeads', 'totalRevenue', 'averageDealSize', 'winLeads', 'winRates', 'convertedleads', 'conversionRate'];
+  displayedColumns: string[] = [ 'leadOwnerName', 'totalLeads', 'totalRevenue', 'averageDealSize', 'winLeads', 'winRates', 'convertedleads', 'conversionRate'];
   selection = new SelectionModel<LeadOwnerReport>(true, []);
   leadOwnerReportCount: number = 0;
   totalLeadOwner: number = 0;
