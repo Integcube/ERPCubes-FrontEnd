@@ -3,14 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { EMPTY, Observable, Subject, catchError, filter, map, startWith, takeUntil } from 'rxjs';
 import { CampaignListComponent } from '../campaign-list/campaign-list.component';
-import { Campaign, Source } from '../campaign.type';
+import { Campaign, Source, Product } from '../campaign.type';
 import { CampaignService } from '../campaign.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { User } from 'app/core/user/user.types';
-import { Product } from '../../product/product.type';
 
 @Component({
   selector: 'app-campaign-form',

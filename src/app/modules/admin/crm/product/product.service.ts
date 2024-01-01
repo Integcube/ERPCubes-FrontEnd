@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Product } from './product.type';
+import { Product, Project } from './product.type';
 import { FormGroup } from '@angular/forms';
 
 
@@ -16,11 +16,11 @@ export class ProductService {
   private readonly getproductListURL = `${environment.url}/Product/all`
   private readonly saveProductURL = `${environment.url}/Product/save`
   private readonly deleteProductURL = `${environment.url}/Product/delete`
-
+  private readonly getProjectURL = `${environment.url}/Project/all`
   user: User;
   private _product: BehaviorSubject<Product | null> = new BehaviorSubject(null);
   private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
-
+  private _projects: BehaviorSubject<Project[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -35,6 +35,9 @@ export class ProductService {
   get products$(): Observable<Product[]> {
     return this._products.asObservable();
   }
+  get projects$(): Observable<Project[]> {
+    return this._projects.asObservable();
+  }
   getProducts(): Observable<Product[]> {
     
     let data = {
@@ -44,6 +47,18 @@ export class ProductService {
     return this._httpClient.post<Product[]>(this.getproductListURL, data).pipe(
       tap((products) => {
         this._products.next(products);
+      })
+    );
+  }
+  getProjects(): Observable<Project[]> {
+    
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Project[]>(this.getProjectURL, data).pipe(
+      tap((projects) => {
+        this._projects.next(projects);
       })
     );
   }

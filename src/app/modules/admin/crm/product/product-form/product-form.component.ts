@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Product } from '../product.type';
+import { Product, Project } from '../product.type';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { Subject, takeUntil, catchError, EMPTY, filter } from 'rxjs';
@@ -21,6 +21,8 @@ export class ProductFormComponent implements OnInit {
   productForm: FormGroup;
   editMode: boolean = false;
   selectedProduct: Product;
+  projects$ = this._productService.projects$;
+  projects: Project[]
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
@@ -53,18 +55,29 @@ export class ProductFormComponent implements OnInit {
     .subscribe((product: Product) => {
       this._productListComponent.matDrawer.open();
       this.selectedProduct = { ...product };
-
+      debugger;
       // Move the creation of productForm inside the subscription
       this.productForm = this._formBuilder.group({
         productId: [this.selectedProduct.productId, Validators.required],
         productName: [this.selectedProduct.productName],
         description: [this.selectedProduct.description],
         price: [this.selectedProduct.price],
+        projectId: [this.selectedProduct.projectId],
       });
 
       this._changeDetectorRef.markForCheck();
     });
-
+    
+    this._productService.projects$.pipe(
+      takeUntil(this._unsubscribeAll),
+      catchError(err => {
+        this.errorMessageSubject.next(err);
+        return EMPTY;
+      }))
+    .subscribe((projects: Project[]) => {
+      this.projects = projects
+      this._changeDetectorRef.markForCheck();
+    });
   }
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._productListComponent.matDrawer.close();

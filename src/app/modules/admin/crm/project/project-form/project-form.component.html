@@ -1,0 +1,79 @@
+<div class="flex flex-col w-full">
+    <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
+        <div class="flex justify-start items-center w-full">
+            <a class="text-2xl text-white font-bold">Create Project</a>
+        </div>
+        <div class="flex items-center justify-end">
+            <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <ng-container>
+        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12 pt-6">
+            <div class="w-full max-w-3xl">
+                <form [formGroup]="projectForm">
+                    <div class="flex flex-col h-screen">
+                        <div>
+                            <mat-form-field class="fuse-mat-dense  w-full">
+                                <mat-label>Project Title</mat-label>
+                                <input matInput [formControlName]="'title'" [spellcheck]="false" #title>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                                <mat-label>Company</mat-label>
+                                <mat-select [formControlName]="'companyId'" [spellcheck]="false" #companyId>
+                                    <mat-option value="-1"></mat-option>
+                                    <ng-container *ngIf="companiesz">
+                                        <mat-option *ngFor="let company of companiesz"
+                                            [value]="company.companyId">{{company.name}}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field >
+                                <mat-label>Budget</mat-label>
+                                <span matTextPrefix class="left-align">$</span>
+                                <input matInput [formControlName]="'budget'" type="number"  placeholder="0" #budget>
+                                <span matTextSuffix class="">.00</span>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                                <mat-label>Code</mat-label>
+                                <input matInput [formControlName]="'code'" #code>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput [formControlName]="'description'" class="w-full" #description></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div
+                        class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12  pr-1 pl-1 sm:pr-7 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                        <ng-container *ngIf="selectedProject.projectId !== -1">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'"
+                                (click)="deleteProjectCall(); $event.preventDefault()">
+                                Delete
+                            </button>
+                        </ng-container>
+                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'"
+                            (click)="closeDrawer(); $event.preventDefault()" [routerLink]="['../']">
+                            Cancel
+                        </button>
+                        <div class="m-4">
+                            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="!projectForm.valid"
+                                (click)="saveProject()" [matTooltip]="'Save'" type="submit">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+</div>

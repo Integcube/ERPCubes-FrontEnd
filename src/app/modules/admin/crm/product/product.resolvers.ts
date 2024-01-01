@@ -14,7 +14,16 @@ export class ProductsResolver implements Resolve<any>{
        return this._productService.getProducts();
     }
 }
-
+@Injectable({
+    providedIn: 'root'
+})
+export class ProjectResolver implements Resolve<any>{
+    constructor(private _productService:ProductService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+       return this._productService.getProjects();
+    }
+}
 @Injectable({
     providedIn: 'root'
 })

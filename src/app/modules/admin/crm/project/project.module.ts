@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProductComponent } from './product.component';
-import { ProductListComponent } from './product-list/product-list.component';
-import { ProductFormComponent } from './product-form/product-form.component';
+import { ProjectComponent } from './project.component';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ProjectFormComponent } from './project-form/project-form.component';
+import { projectRoutes } from './project.routing';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DATE_FORMATS, MatRippleModule } from '@angular/material/core';
@@ -23,24 +24,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
-import { companyRoutes } from '../company/company.routing';
 import moment from 'moment';
-import { productRoutes } from './product.routing';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
-
-
 
 @NgModule({
   declarations: [
-    ProductComponent,
-    ProductListComponent,
-    ProductFormComponent
+    ProjectComponent,
+    ProjectListComponent,
+    ProjectFormComponent
   ],
   imports: [
-    CommonModule,
-    RouterModule.forChild(productRoutes),
-    MatButtonModule,
+    RouterModule.forChild(projectRoutes),
+    MatAutocompleteModule,
     MatPaginatorModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -57,6 +51,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSidenavModule,
     MatTableModule,
     MatTooltipModule,
+    MatButtonModule,
     FuseFindByKeyPipeModule,
     MatAutocompleteModule,
     SharedModule
@@ -76,6 +71,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
             }
         }
     }
-  ]
+]
 })
-export class ProductModule { }
+export class ProjectModule { }

@@ -26,6 +26,7 @@ export const crmRoutes: Routes = [
         { path: 'teams', loadChildren: () => import('app/modules/admin/crm/team/team.module').then(m => m.TeamModule) },
         { path: 'products',loadChildren:()=> import('app/modules/admin/crm/product/product.module').then(m=>m.ProductModule)},
         { path: 'campaign',loadChildren:()=> import('app/modules/admin/crm/campaign/campaign.module').then(m=>m.CampaignModule)},
+        { path: 'project',loadChildren:()=> import('app/modules/admin/crm/project/project.module').then(m=>m.ProjectModule)},
     ]
 },
 ]

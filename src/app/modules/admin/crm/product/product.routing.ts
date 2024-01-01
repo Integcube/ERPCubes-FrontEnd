@@ -1,6 +1,5 @@
 import { Routes } from "@angular/router";
-
-import { ProductsResolver, SelectedProductResolver } from "./product.resolvers";
+import { ProductsResolver, ProjectResolver, SelectedProductResolver } from "./product.resolvers";
 import { ProductComponent } from "./product.component";
 import { ProductListComponent } from "./product-list/product-list.component";
 import { ProductFormComponent } from "./product-form/product-form.component";
@@ -20,7 +19,8 @@ export const productRoutes: Routes = [
                     path: ':id',
                     component: ProductFormComponent,
                     resolve:{
-                        selectedCompany:SelectedProductResolver
+                        selectedCompany:SelectedProductResolver,
+                        projects: ProjectResolver
                     },
                 }
                 

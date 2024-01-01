@@ -5,14 +5,8 @@
             <a class="text-2xl text-white font-bold">Create Product</a>
         </div>
         <div class="flex items-center justify-end">
-            <a
-                mat-icon-button
-                [matTooltip]="'Close'"
-                [routerLink]="['../']"
-                (click)="closeDrawer()">
-                <mat-icon
-                    class="text-white"
-                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
+                <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </a>
         </div>
     </div>
@@ -26,7 +20,8 @@
                         <div>
                             <mat-form-field class="fuse-mat-no-subscript w-full">
                                 <mat-label>Product Name</mat-label>
-                                <input matInput [formControlName]="'productName'" [spellcheck]="false" class="h-2!" #productName>
+                                <input matInput [formControlName]="'productName'" [spellcheck]="false" class="h-2!"
+                                    #productName>
                             </mat-form-field>
                         </div>
                         <div class="mt-8">
@@ -41,30 +36,41 @@
                                 <input matInput [formControlName]="'price'" [spellcheck]="false" #price>
                             </mat-form-field>
                         </div>
+                        <div class="mt-8">
+                            <mat-form-field class="fuse-mat-no-subscript w-full">
+                                <mat-label>Project</mat-label>
+                                <mat-select matInput [formControlName]="'projectId'" [spellcheck]="false" #productId>
+                                    <mat-option value="-1"></mat-option>
+                                    <ng-container *ngIf="projects$ | async as projects">
+                                        <mat-option *ngFor="let p of projects" [value]="p.projectId">{{p.title}}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                     </div>
-                  
-                  
                     <!-- Actions -->
-                    <div class="flex sticky bottom-0 items-center mt-10 -mx-6 mb-0 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                    <div
+                        class="flex sticky bottom-0 items-center mt-10 -mx-6 mb-0 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <!-- Delete -->
-        <ng-container *ngIf="selectedProduct.productId !== -1">
-            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()"[routerLink]="['../']">
-                Delete
-            </button>
-        </ng-container>
+                        <ng-container *ngIf="selectedProduct.productId !== -1">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()"
+                                [routerLink]="['../']">
+                                Delete
+                            </button>
+                        </ng-container>
 
-   
-        <!-- Cancel -->
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()" [routerLink]="['../']">
-            Cancel
-        </button>
-        <!-- Save -->
-        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="productName.invalid"
-            [matTooltip]="'Save'"
-            type="submit">
-            Save
-        </button>
-                     
+
+                        <!-- Cancel -->
+                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
+                            [routerLink]="['../']">
+                            Cancel
+                        </button>
+                        <!-- Save -->
+                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="productName.invalid"
+                            [matTooltip]="'Save'" type="submit">
+                            Save
+                        </button>
+
                     </div>
                 </form>
             </div>
@@ -84,7 +90,7 @@
 
 
 
-  <!-- <div class="mt-8">
+<!-- <div class="mt-8">
                         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                             <mat-label>Tenant Id</mat-label>
                             <input matInput [formControlName]="'tenantId'" [spellcheck]="false" #tenantId>
