@@ -86,9 +86,9 @@
                     <div class="flex-auto  py-1 bg-card overflow-x-auto">
                         <table mat-table [dataSource]="dataSource" matSort>
                             <!-- Username Column -->
-                            <ng-container matColumnDef="leadOwner">
+                            <ng-container matColumnDef="leadOwnerName">
                                 <th mat-header-cell *matHeaderCellDef mat-header-sort> Lead Owner </th>
-                                <td mat-cell *matCellDef="let row"> {{row.leadOwner}} </td>
+                                <td mat-cell *matCellDef="let row"> {{row.leadOwnerName}} </td>
                             </ng-container>
                             <!-- Leads Column -->
                             <ng-container matColumnDef="totalLeads">
