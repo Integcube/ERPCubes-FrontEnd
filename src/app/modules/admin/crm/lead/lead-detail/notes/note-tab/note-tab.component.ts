@@ -5,6 +5,7 @@ import { Note } from '../../../lead.type';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { NoteDetailComponent } from '../note-detail/note-detail.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-note-tab',
@@ -15,6 +16,7 @@ import { NoteDetailComponent } from '../note-detail/note-detail.component';
 export class NoteTabComponent implements OnInit {
   notes$ = this._leadService.notes$;
   users$ = this._leadService.users$;
+  private _matDialogRef: MatDialogRef<NoteTabComponent>
   notesWithUser$ = combineLatest([
     this.notes$,
     this.users$
@@ -55,6 +57,10 @@ export class NoteTabComponent implements OnInit {
           note: cloneDeep(note)
       }
   });
+  }
+
+  close(): void {
+    this._matDialogRef.close();
   }
   updateNote(note:Note):void{
     // this._changeDetectorRef.markForCheck();

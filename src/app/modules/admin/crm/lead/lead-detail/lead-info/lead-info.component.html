@@ -1,5 +1,5 @@
-<div class="flex flex-col flex-auto justify-start bg-white h-main-section overflow-auto ">
-    <div class="flex justify-between w-full px-6 pt-6">
+<div class="flex flex-col flex-auto justify-start bg-white h-main-section">
+    <div class="flex justify-between w-full px-3 pt-3">
         <div class="flex items-center">
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-left"></mat-icon>
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
@@ -7,7 +7,15 @@
                 Leads
             </span>
         </div>
-        <div class="flex items-center">
+        <!-- <button
+            class="-ml-3 sm:ml-0 mb-2 sm:mb-0 order-first sm:order-last"
+            mat-icon-button
+            (click)="toggleDrawer()">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button> -->
+
+        
+     <!--    <div class="flex items-center">
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [matMenuTriggerFor]="actionMenu">
                 Actions
@@ -18,9 +26,9 @@
                 <button mat-menu-item>3 days ago</button>
             </mat-menu>
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-down"></mat-icon>
-        </div>
+        </div> -->
     </div>
-    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30">
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 border-b " >
         <!-- Avatar and name -->
         <div class="flex flex-auto items-center min-w-0">
             <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden">
@@ -35,12 +43,12 @@
                 </ng-container>
             </div>
             <div class="min-w-0 ml-4">
-                <div class="text-xl leading-5 truncate">{{selectedLead.firstName + " " + selectedLead.lastName }}</div>
+                <div class="text-xl leading-5 truncate" style="font-weight: 600;color: #287443">{{selectedLead.firstName + " " + selectedLead.lastName }}</div>
                 <div class="leading-5 truncate text-secondary">{{selectedLead.email}}</div>
             </div>
         </div>
     </div>
-    <div class="flex flex-row justify-between w-full border-b px-6 pb-6">
+    <div class="flex flex-row justify-between w-full  border-b px-6 pb-3 bg-default text-on-default">
         <div class="flex flex-col justify-center" (click)="addNote()">
             <button mat-icon-button >
                 <mat-icon class="icon-size-5">edit_note</mat-icon>
@@ -90,7 +98,7 @@
             </span>
         </div>
     </div>
-    <div class="flex flex-row justify-between w-full">
+    <div class="flex flex-row justify-between w-full " fuseScrollbar>
         <mat-accordion>
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
@@ -250,7 +258,7 @@
                     <!-- </div> -->
                 </div>
             </mat-expansion-panel>
-            <mat-expansion-panel [togglePosition]="'before'">
+            <!-- <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
                         <span class="text-base font-semibold">Website Activity</span>
@@ -265,7 +273,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <p class="text-primary">Track the customer requests associated with this record.</p>
-            </mat-expansion-panel>
+            </mat-expansion-panel>  -->
         </mat-accordion>
     </div>
 </div>

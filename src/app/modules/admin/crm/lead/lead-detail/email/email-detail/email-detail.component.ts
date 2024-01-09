@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Email, Lead, TaskModel } from '../../../lead.type';
@@ -8,7 +8,9 @@ import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
 @Component({
     selector: 'app-email-detail',
     templateUrl: './email-detail.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
+
 })
 export class EmailDetailComponent implements OnInit, OnDestroy {
     lead: Lead

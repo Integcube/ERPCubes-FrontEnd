@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { User } from "app/core/user/user.types";
 import { environment } from "environments/environment";
 import { BehaviorSubject,EMPTY, Observable, catchError, tap, throwError } from "rxjs";
-import { LeadReport, LeadStatus, Product,LeadSource,LeadPipelineFilter } from "./lead-Pipeline.type";
+import { LeadReport, LeadStatus, Product,LeadSource,LeadPipelineFilter } from "./lead-pipeline.type";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { UserService } from "app/core/user/user.service";
 import { MatSnackBar } from "@angular/material/snack-bar";

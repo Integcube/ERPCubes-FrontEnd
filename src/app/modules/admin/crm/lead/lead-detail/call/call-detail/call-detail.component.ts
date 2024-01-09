@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit,Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit,Inject, ChangeDetectionStrategy,ChangeDetectorRef  } from '@angular/core';
 import { Call, Lead } from '../../../lead.type';
 import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LeadService } from '../../../lead.service';
+import moment from 'moment';
 
 @Component({
   selector: 'app-call-detail',
@@ -14,6 +15,9 @@ export class CallDetailComponent implements OnInit , OnDestroy {
   lead: Lead
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   composeForm: UntypedFormGroup;
+
+  selectedScenario:any;
+  selectedIsTask:any;
   copyFields: { cc: boolean; bcc: boolean } = {
       cc: false,
       bcc: false
@@ -31,68 +35,103 @@ export class CallDetailComponent implements OnInit , OnDestroy {
       @Inject(MAT_DIALOG_DATA) private _data: { call: Call },
       private _formBuilder: UntypedFormBuilder,
       private _leadService: LeadService,
+      private cdr: ChangeDetectorRef
   ) {
+
+   
   }
+  scenarioslist$=this._leadService.CallReason$
+ 
   ngOnDestroy(): void {
       this._unsubscribeAll.next(null);
       this._unsubscribeAll.complete();
   }
-  ngOnInit(): void {
-      this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data }; this.createForm()})
 
-  }
+ 
+  ngOnInit(): void {
+    
+      this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>
+    { this.lead = { ...data };    
+   
+    
+       this.createForm();
+      
+      })
+      this.onScenarioSelectionChange(this._data.call.reasonId);  
+     }
+
   createForm() {
       this.composeForm = this._formBuilder.group({
           callId:[this._data.call.callId, Validators.required],
           // to: [this.lead.firstName, [Validators.required, Validators.email]],
           // cc     : ['', [Validators.email]],
           // bcc    : ['', [Validators.email]],
-          subject: [this._data.call.subject],
-          response: [this._data.call.response, [Validators.required]],
-          startTime: [this.formatTime(this._data.call.startTime)],
-          endTime: [this.formatTime(this._data.call.endTime)],
+          subject: [this._data.call.subject,[Validators.required]],
+          response: [this._data.call.response],
+          startTime: [this.formatTime(this._data.call.startTime),[Validators.required]],
+          endTime: [this.formatTime(this._data.call.endTime),[Validators.required]],
+          reasonId:[this._data.call.reasonId],
+          dueDate: [this._data.call.dueDate],
+          isTask: [this._data.call.isTask],
+          taskId: [this._data.call.taskId],
+          tasktime: [this.formatTime(this._data.call.dueDate)],
+
       });
   }
-  // showCopyField(name: string): void
-  // {
-  //     if ( name !== 'cc' && name !== 'bcc' )
-  //     {
-  //         return;
-  //     }
-
-  //     this.copyFields[name] = true;
-  // }
-  formatTime(time: Date | string): string {
-    if (time instanceof Date) {
-      const offsetMinutes = time.getTimezoneOffset();
-      const localTime = new Date(time.getTime() - offsetMinutes * 60000); // Adjust for time zone offset
-  
-      const hours = ('0' + localTime.getHours()).slice(-2);
-      const minutes = ('0' + localTime.getMinutes()).slice(-2);
-  
-      return `${hours}:${minutes}`;
-    } else {
-      return time; // If it's not a Date, assume it's already in the correct format (string)
-    }
+   formatTime(time: string|Date): string {
+    const date = new Date(time);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${hours}:${minutes}`;
   }
 
+  onScenarioSelectionChange(selectedId: number): void {
+    this.scenarioslist$.subscribe(scenarios => {
+      const obj = scenarios.find(scenario => scenario.reasonId === selectedId);
+      this.selectedScenario = obj && obj.isShowResponse === 1;
+      this.selectedIsTask = obj && obj.isTask === 1;
+      const isTaskValue = this.selectedIsTask ? 1 : 0; 
+      this.composeForm.patchValue({ isTask: isTaskValue });
+    });
+  }
+  combineDateAndTime(dueDateString: Date, time: string): Date {
+    const date = new Date(dueDateString); 
+    const timeSplit = time.split(':'); 
+    const hours = parseInt(timeSplit[0], 10);
+    const minutes = parseInt(timeSplit[1], 10);
+    if (date instanceof Date) {
+    const combinedDateTime = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      hours,
+      minutes
+    );
+    return combinedDateTime;
+    }else {
+      console.error('Invalid Date object received:', date);
+    }
+  }
   saveAndClose(): void {
     const startTimeValue = this.composeForm.get('startTime').value;
     const endTimeValue = this.composeForm.get('endTime').value;
-
-    // Assuming that the date is the same for both start and end time, you may need to adjust this based on your requirements
     const currentDate = new Date().toISOString().split('T')[0];
-
     const formattedStartTime = `${currentDate}T${startTimeValue}`;
     const formattedEndTime = `${currentDate}T${endTimeValue}`;
-
     this.composeForm.patchValue({
       startTime: formattedStartTime,
       endTime: formattedEndTime,
     });
+    const dueDate = this.composeForm.get('dueDate').value;
+    const taskTime = this.composeForm.get('tasktime').value;
+    const combinedDateTime = this.combineDateAndTime(dueDate, taskTime);
+    debugger
+    this.composeForm.patchValue({
+      dueDate: combinedDateTime
+    });
 
-    this._leadService
-      .saveCall(this.composeForm.value, this.lead.leadId)
+
+    this._leadService.saveCall(this.composeForm.value, this.lead.leadId)
       .pipe(
         takeUntil(this._unsubscribeAll),
         catchError((err) => {
@@ -118,4 +157,13 @@ export class CallDetailComponent implements OnInit , OnDestroy {
   close(): void {
     this.matDialogRef.close();
   }
+
+  resetDueDate(): void {
+    this.composeForm.get('dueDate').setValue(null);
+    this.cdr.markForCheck()
+  }
+  isOverdue(date: string): boolean {
+    return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
+  }
+
 }

@@ -36,9 +36,9 @@
         }
 
         .ps__thumb-x {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgb(155 155 155 / 50%);
             box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
-            height: 6px;
+            height: 4px;
             transition: height 225ms cubic-bezier(0.25, 0.8, 0.25, 1);
         }
     }
@@ -60,9 +60,9 @@
         }
 
         .ps__thumb-y {
-            background: rgba(0, 0, 0, 0.5);
+           background:rgb(155 155 155 / 50%);
             box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
-            width: 6px;
+            width: 4px;
             transition: width 225ms cubic-bezier(0.25, 0.8, 0.25, 1);
         }
     }

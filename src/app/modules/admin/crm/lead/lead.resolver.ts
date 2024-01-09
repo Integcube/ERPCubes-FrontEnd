@@ -29,6 +29,19 @@ export class CallResolver implements Resolve<any>{
 @Injectable({
   providedIn:'root'
 })
+export class CallReasonCResolver implements Resolve<any>{
+  constructor(
+    private _leadService:LeadService)
+    { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadService.getScenarios();
+  }
+}
+
+
+@Injectable({
+  providedIn:'root'
+})
 export class MeetingResolver implements Resolve<any>{
   constructor(
     private _leadService:LeadService)

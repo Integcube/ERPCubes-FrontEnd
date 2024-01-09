@@ -1,5 +1,5 @@
 import { leadPipelineService } from './lead-pipeline.service';
-import { LeadReport, LeadStatus, Product ,LeadSource,LeadPipelineFilter } from "./lead-Pipeline.type";
+import { LeadReport, LeadStatus, Product ,LeadSource,LeadPipelineFilter } from "./lead-pipeline.type";
 import { ChangeDetectorRef, Component, Inject, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subject, combineLatest, map } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';

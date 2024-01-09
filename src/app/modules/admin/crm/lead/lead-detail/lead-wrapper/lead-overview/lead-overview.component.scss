@@ -17,7 +17,7 @@
 	color: #777;
 	cursor: default;
 	margin: 0px 2px 0 0;
-	padding: 8px 0px 8px 0px;
+	padding: 4px 0px 4px 0px;
 	width: 19%;
 	float: left;
 	position: relative;
@@ -42,8 +42,8 @@
 	right: -18px;
 	width: 0;
 	height: -2;
-	border-top: 19px solid transparent;
-	border-bottom: 19px solid transparent;
+	border-top: 14px solid transparent;
+	border-bottom: 14px solid transparent;
 	border-left: 19px solid #ddd;
 	z-index: 2;
 }
@@ -51,7 +51,7 @@
 .arrow-steps .step:before {
 	right: auto;
 	left: 0;
-	border-left: 19px solid #fff;
+	border-left: 19px solid #f1f5f9;
 	z-index: 0;
 }
 
@@ -89,7 +89,7 @@
 
 .arrow-steps .step.current {
 	color: #fff;
-	background-color: #12344D;
+	background-color:#287443;
 }
 
 .arrow-steps .step.current a {
@@ -98,12 +98,12 @@
 }
 
 .arrow-steps .step.current:after {
-	border-left: 19px solid #12344D;
+	border-left: 19px solid #287443
 }
 
 .arrow-steps .step.lastcurrent {
 	color: #fff;
-	background-color: #12344D;
+	background-color:#287443
 }
 
 .arrow-steps .step.lastcurrent a {
@@ -113,8 +113,8 @@
 
 
 .arrow-steps .step.done {
-	color: #173352;
-	background-color: #12344D;
+	color: #287443;
+	background-color:#287443;
 }
 
 .arrow-steps .step.done a {
@@ -123,6 +123,6 @@
 }
 
 .arrow-steps .step.done:after {
-	border-left: 19px solid #12344D;
+	border-left: 19px solid #287443
 }
 

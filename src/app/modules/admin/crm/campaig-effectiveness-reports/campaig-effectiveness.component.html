@@ -76,7 +76,7 @@
                             <!-- Username Column -->
                             <ng-container matColumnDef="campaignTitle">
                                 <th mat-header-cell *matHeaderCellDef mat-header-sort>Campaign</th>
-                                <td mat-cell *matCellDef="let row"> {{row.campaignTitle}} </td>
+                                <td mat-cell *matCellDef="let row" > {{row.campaignTitle}} </td>
                             </ng-container>
                             <!-- Leads Column -->
                             <ng-container matColumnDef="source">
@@ -85,8 +85,8 @@
                             </ng-container>
                             <!-- Notes Column -->
                             <ng-container matColumnDef="totalLeads">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Total Lead </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.totalLeads !== 0 ? row.totalLeads : '-' }} </td>
+                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort > Total Lead </th>
+                                <td mat-cell class = "text-right" *matCellDef="let row" style="background-color: #edf3f9;"> {{row.totalLeads !== 0 ? row.totalLeads : '-' }} </td>
                             </ng-container>
                             <ng-container matColumnDef="convertedLeads">
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Converted Leads </th>
@@ -136,7 +136,7 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             <tr class="mat-row" *matNoDataRow>
-                                <td class="mat-cell text-center" colspan="9">Data Not Found</td>
+                                <td class="mat-cell text-center" colspan="11">Data Not Found</td>
                             </tr>
                         </table>
                         <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of reports"></mat-paginator>

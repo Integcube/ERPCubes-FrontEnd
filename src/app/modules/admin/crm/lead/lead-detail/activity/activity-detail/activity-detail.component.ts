@@ -22,13 +22,14 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
             if (activities) {
                 return activities.map(activity => ({
                     ...activity,
-                    userName: users.find(u => u.id == activity.userId)?.name // Access the username property from the user
+                    userName: users.find(u => u.id == activity.userId)?.name 
                 } as Activity))
             }
         }
         ));
     @HostListener('window:scroll', ['$event'])
     onScroll(): void {
+        debugger
         const scrollPosition = window.innerHeight + window.scrollY;
         const documentHeight = document.body.scrollHeight;
         if (scrollPosition >= documentHeight - 1 && !this.loadingMore) {

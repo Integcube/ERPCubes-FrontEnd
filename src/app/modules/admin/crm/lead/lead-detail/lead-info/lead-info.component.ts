@@ -10,7 +10,7 @@ import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component'
 import { EmailDetailComponent } from '../email/email-detail/email-detail.component';
 import { CallDetailComponent } from '../call/call-detail/call-detail.component';
 import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
-
+import{LeadDetailComponent} from 'app/modules/admin/crm/lead/lead-detail/lead-detail.component'
 @Component({
   selector: 'app-lead-info',
   templateUrl: './lead-info.component.html',
@@ -34,6 +34,8 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
     private _leadService: LeadService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _matDialog: MatDialog,
+    private _fuseComponentsComponent: LeadDetailComponent
+
 
     ) {
   }
@@ -97,6 +99,8 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
+
+
   addTask(){
     let tasks = new TaskModel({})
     this._matDialog.open(TaskDetailComponent, {
@@ -105,6 +109,11 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
           task: cloneDeep(tasks)
       }
   });
+  }
+ toggleDrawer(): void
+  {
+      // Toggle the drawer
+      this._fuseComponentsComponent.matDrawer.toggle();
   }
   addMeeting(){
     let meeting = new Meeting({})

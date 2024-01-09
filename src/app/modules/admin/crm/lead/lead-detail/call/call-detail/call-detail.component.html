@@ -1,8 +1,6 @@
 <div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
-
-    <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium">New Call</div>
+        <div class="text-lg font-medium">Call</div>
         <button
             mat-icon-button
             (click)="discard()"
@@ -12,55 +10,93 @@
                 [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
     </div>
-
-    <!-- Compose form -->
     <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="composeForm">
-        <!-- Subject -->
         <mat-form-field>
             <mat-label>Subject</mat-label>
             <input
                 matInput
                 [formControlName]="'subject'">
         </mat-form-field>
-        <!-- Body -->
-        <!-- <mat-label class="font-semibold text-base">Response</mat-label>
-        <quill-editor
-            class="mt-2"
-            [formControlName]="'response'"
-            [bounds]="'self'"
-            [modules]="quillModules">
-        </quill-editor> -->
-        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
+        <mat-form-field class="w-full">
+            <mat-label>Call Scenario</mat-label>
+            <mat-select [formControlName]="'reasonId'" [spellcheck]="false" #leadOwner (selectionChange)="onScenarioSelectionChange($event.value)">
+                <mat-option [value]="-1">--Select Call Scenario--</mat-option>
+                <ng-container *ngIf="scenarioslist$|async as scenarios">
+                    <mat-option *ngFor="let user of scenarios" [value]="user.reasonId">{{user.title}}</mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+     
+    
+        <div *ngIf="selectedIsTask==1" class="w-full">
+            <span class="text-sm text-hint">Task will be automatically created for this Call Scenario.</span>
+         </div>
+            <!-- Due date -->
+            <div  *ngIf="selectedIsTask==1" class="flex justify-between">
+                <div>
+                    <div class="font-semibold">Task Date</div>
+                    <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
+                        [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !composeForm.value.dueDate,
+                                            'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': composeForm.value.dueDate && !isOverdue(composeForm.value.dueDate),
+                                            'text-red-800 bg-red-200 dark:text-red-100 dark:bg-red-500': composeForm.value.dueDate && isOverdue(composeForm.value.dueDate)}" (click)="dueDatePicker.open()">
+                        <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                        <span class="ml-2 text-md font-medium">
+                            <ng-container *ngIf="composeForm.value.dueDate">{{composeForm.value.dueDate
+                                |date:"dd-MMM-yyyy"}}</ng-container>
+                            <ng-container *ngIf="!composeForm.value.dueDate">Set Date For Task</ng-container>
+                        </span>
+    
+                        <mat-form-field
+                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                            <input matInput [formControlName]="'dueDate'" [matDatepicker]="dueDatePicker">
+                            <mat-datepicker #dueDatePicker>
+                                <mat-datepicker-actions>
+                                    <button mat-button (click)="resetDueDate()" matDatepickerCancel>
+                                        Clear
+                                    </button>
+                                    <button mat-flat-button [color]="'primary'" matDatepickerApply>
+                                        Select
+                                    </button>
+                                </mat-datepicker-actions>
+                            </mat-datepicker>
+                        </mat-form-field>
+                       
+                    </div>
+                </div>
+              
+                <div>
+                    <mat-form-field class="w-60 mr-2">
+                        <mat-label>Task Time</mat-label>
+                        <input matInput type="time" [formControlName]="'tasktime'">
+                    </mat-form-field>
+                </div>
+             
+            </div>
+           
+        <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full pt-2" *ngIf="selectedScenario==1">
             <mat-label>Response</mat-label>
             <textarea matInput [formControlName]="'response'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
                 class="resize-none h-16">
             </textarea>
         </mat-form-field>
-        <!-- Start Time -->
-        <mat-form-field>
+        <div class="flex justify-between mt-2"> 
+        <mat-form-field class="w-full mr-2">
             <mat-label>Start Time</mat-label>
             <input matInput type="time" [formControlName]="'startTime'">
         </mat-form-field>
-
-        <!-- End Time -->
-        <mat-form-field>
+        <mat-form-field class="w-full">
             <mat-label>End Time</mat-label>
             <input matInput type="time" [formControlName]="'endTime'">
         </mat-form-field>
-       <!-- Actions -->
+       </div>
        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
        <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
-        <!-- Delete -->
         <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
             Delete
         </button>
-
-        <!-- Cancel -->
         <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()">
             Cancel
         </button>
-
-        <!-- Save -->
         <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()">
             Save
         </button>

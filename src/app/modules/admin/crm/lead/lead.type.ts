@@ -82,8 +82,20 @@ export class Call {
     endTime: Date;
     createdBy: string;
     createdDate: Date;
+    createdByName: string;
+    reasonId: number;
+    dueDate: Date | null;
+    taskId: number;
+    isTask:number;
+    tasktime:number;
     constructor(reg) {
         this.callId = reg.callId ? reg.callId : -1
+        this.reasonId = reg.reasonId ? reg.reasonId : -1
+        this.startTime = reg.startTime || new Date(); 
+        this.endTime = reg.endTime || new Date(); 
+        this.taskId = reg.taskId ? reg.taskId : -1
+        this.isTask = reg.isTask ? reg.isTask : -1
+        
     }
 }
 export class Email {
@@ -92,6 +104,7 @@ export class Email {
     description: string;
     createdBy: string;
     createdDate: Date;
+    createdbyName:string;
     constructor(reg) {
         this.emailId = reg.emailId ? reg.emailId : -1
     }
@@ -108,8 +121,11 @@ export class Meeting{
     endTime: Date;
     createdBy: string;
     createdDate: Date;
+    createdbyName:string;
     constructor(reg){
         this.meetingId = reg.meetingId?reg.meetingId:-1
+        this.startTime = reg.startTime || new Date(); 
+        this.endTime = reg.endTime || new Date(); 
     }
 }
 export class Note {

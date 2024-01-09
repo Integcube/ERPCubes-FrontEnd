@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-  Router, Resolve,
+  Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
 import { ActivityReportService } from './activity-report.service';
 @Injectable({
   providedIn: 'root'

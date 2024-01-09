@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule ,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { LeadComponent } from './lead.component';
 import { LeadListComponent } from './lead-list/lead-list.component';
 import { LeadFormComponent } from './lead-form/lead-form.component';
@@ -25,6 +25,7 @@ import { RouterModule } from '@angular/router';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -48,7 +49,10 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { FuseCardModule } from '@fuse/components/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from 'app/shared/shared.module';
+import { FuseDrawerModule } from '@fuse/components/drawer';
+import { FuseNavigationModule } from '@fuse/components/navigation';
 import moment from 'moment';
+import { SearchBarComponent } from './lead-detail/search-bar/search';
 
 @NgModule({
   declarations: [
@@ -72,7 +76,8 @@ import moment from 'moment';
     CallDetailComponent,
     CallTabComponent,
     MeetingDetailComponent,
-    MeetingTabComponent
+    MeetingTabComponent,
+    SearchBarComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),
@@ -101,7 +106,11 @@ import moment from 'moment';
     FuseCardModule,
     DragDropModule,
     MatDialogModule,
-    SharedModule
+    SharedModule,
+    FuseScrollbarModule ,
+    FuseDrawerModule,
+  ],schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     {

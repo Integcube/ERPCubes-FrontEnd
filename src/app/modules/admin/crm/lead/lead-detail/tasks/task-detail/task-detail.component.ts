@@ -85,6 +85,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         }
       )
     }
+
+  
   }
   resetDueDate(): void {
     this.taskForm.get('dueDate').setValue(null);
@@ -125,4 +127,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   delete() {
     this._leadService.deleteTask(+this.taskForm.value.taskId, this.taskForm.value.taskTitle, this.selectedLead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
   }
+
+
+
 }

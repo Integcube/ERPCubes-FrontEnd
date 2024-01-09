@@ -2,8 +2,6 @@ import { LeadReport, LeadStatus, Product ,LeadSource,LeadPipelineFilter } from "
 import { ChangeDetectorRef, Component, Inject, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subject, combineLatest, map } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { CampaigEffectivenessService } from "./campaig-effectiveness.service";
 @Component({
   selector: 'app-lead-Pipeline',

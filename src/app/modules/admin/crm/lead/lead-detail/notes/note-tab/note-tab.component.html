@@ -1,32 +1,79 @@
 <div class="flex flex-col w-full">
-    <div class="flex justify-end">
+    <div class="flex items-center mb-2 sm:mt-0 ">
+        <div class="flex-auto">
+            <search-bar></search-bar>
+        </div>
+    <div class="flex justify-end mb-1">
+
         <button mat-flat-button [color]="'primary'" class="text-xs h-8" [matTooltip]="'Create New Note'"
             (click)="addNote()">
-            Add Note
+            <mat-icon
+            class="icon-size-5"
+               [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+            <span class="hidden sm:inline-block ml-2">New</span>
         </button>
     </div>
-    <div class="relative my-4">
+</div>
+    <div class="relative">
         <ng-container *ngIf="filteredData$|async as notes; else noNotes">
             <ng-container *ngIf="notes.length else noNotes">
                 <ng-container *ngFor="let note of notes">
-                    <div class="flex flex-col shadow square-2xl my-2 overflow-hidden cursor-pointer bg-card"
-                        (click)="updateNote(note)">
-                        <div class="flex flex-auto flex-col p-4 space-y-3">
-                            <ng-container *ngIf="note.noteTitle">
-                                <div>
-                                    {{note.noteTitle}}
-                                </div>
+                    <div class="relative mb-4 bg-white">
+                        <!-- Mail list -->
+                        <div class="overflow-y-auto" #emailList>
+                            <!-- Item loop -->
+                            <ng-container >
+    
+                                <!-- Item -->
+                                <a class="relative flex border-t first:border-0"
+                                  (click)="updateNote(note)">
+    
+                                    <!-- Item content -->
+                                    <div class="flex flex-col items-start justify-start w-full py-6 pr-4 pl-5 border-l-4 border-transparent" >
+    
+                                        <!-- Info -->
+                                        <div class="flex items-center w-full">
+                                            <mat-icon class="mr-3 icon-size-5 text-primary-500 dark:text-primary-600"
+                                               
+                                                [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+                                            <!-- Sender name -->
+                                            <div class="mr-2 font-semibold truncate">
+                                               
+                                                        {{note.noteTitle}}
+                                               
+                                            </div>
+                                        
+                                            <!-- Date -->
+                                           
+                                            <div class="ml-auto text-md text-right whitespace-nowrap text-hint">
+                                                 {{note.createdDate | date:'dd-MMM-yyyy hh:mm a'}}
+                                            </div>
+                                        </div>
+                                        <!-- Expert -->
+                                        <div class="mt-2 leading-normal line-clamp-2 text-secondary">
+                                            <span class="flex flex-wrap text-md line-clamp-2" >{{note.content}}</span>
+                                        </div>
+    
+                                    </div>
+    
+                                </a>
+    
                             </ng-container>
+    
                         </div>
+    
                     </div>
                 </ng-container>
             </ng-container>
         </ng-container>
+
+
     </div>
     <ng-template #noNotes>
-        <div class="flex flex-auto flex-col items-center mt-4 justify-center bg-gray-100 dark:bg-transparent">
+        <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
             <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
             <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No note found!</div>
+            <span class="underline cursor-pointer"   (click)="addNote()">Click to add</span>
         </div>
     </ng-template>
 </div>

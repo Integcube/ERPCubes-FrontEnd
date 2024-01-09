@@ -1,11 +1,39 @@
-<div class="flex justify-between max-w-full min-w-full">
-    <div class="flex-1" style="max-width: 22rem!important;">
+<!-- <div class="flex justify-between max-w-full min-w-full">
+    <div class="flex-1" style="max-width: 22rem!important;" >
         <app-lead-info></app-lead-info>
     </div>
     <div class="flex-1 flex-grow">
         <app-lead-wrapper></app-lead-wrapper>
     </div>
-    <!-- <div class="flex-1" style="max-width: 18rem!important;">
+     <div class="flex-1" style="max-width: 18rem!important;">
         <app-lead-data></app-lead-data>
-    </div> -->
+    </div> 
+</div> -->
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container class="flex-auto h-full">
+
+        <!-- Drawer -->
+        <mat-drawer
+            class="flex w-80 min-w-80 dark:bg-gray-900"
+            [autoFocus]="false"
+            [mode]="drawerMode"
+            [opened]="drawerOpened"
+            #matDrawer>
+            <app-lead-info></app-lead-info>
+        </mat-drawer>
+
+        <!-- Drawer content -->
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+                <app-lead-wrapper></app-lead-wrapper>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
 </div>

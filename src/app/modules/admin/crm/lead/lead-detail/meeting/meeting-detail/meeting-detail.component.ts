@@ -61,19 +61,13 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     this._matDialogRef.close();
   }
  
-  formatTime(time: Date | string): string {
-    if (time instanceof Date) {
-      const offsetMinutes = time.getTimezoneOffset();
-      const localTime = new Date(time.getTime() - offsetMinutes * 60000); // Adjust for time zone offset
-  
-      const hours = ('0' + localTime.getHours()).slice(-2);
-      const minutes = ('0' + localTime.getMinutes()).slice(-2);
-  
-      return `${hours}:${minutes}`;
-    } else {
-      return time; // If it's not a Date, assume it's already in the correct format (string)
-    }
+  formatTime(time: string|Date): string {
+    const date = new Date(time);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${hours}:${minutes}`;
   }
+
   save(){
 
     const startTimeValue = this.composeForm.get('startTime').value;

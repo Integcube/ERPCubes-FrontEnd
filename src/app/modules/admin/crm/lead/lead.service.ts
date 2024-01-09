@@ -27,6 +27,7 @@ export class LeadService {
   private readonly getCustomListUrl = `${environment.url}/CustomList/all`
   private readonly getEmailsUrl = `${environment.url}/Email/all`
   private readonly getCallsUrl = `${environment.url}/Call/all`
+  private readonly getScenariosUrl = `${environment.url}/Call/allscenarios`
   private readonly getMeetingsUrl = `${environment.url}/Meeting/all`
   private readonly getUserActivityListURL = `${environment.url}/UserActivity/Get`
   private readonly saveCustomListUrl = `${environment.url}/CustomList/save`
@@ -44,6 +45,7 @@ export class LeadService {
   private readonly deleteCallsUrl = `${environment.url}/Call/delete`
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
   private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
+  private readonly changeLeadStatus = `${environment.url}/Lead/ChangeLeadStatus`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -65,6 +67,7 @@ export class LeadService {
   private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
   private _meetings: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+  private _callreasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
 
   constructor(
     private _userService: UserService,
@@ -200,6 +203,11 @@ export class LeadService {
   }
   get product$(): Observable<Product[]> {
     return this._product.asObservable();
+  }
+
+  
+  get CallReason$(): Observable<any[]> {
+    return this._callreasons.asObservable();
   }
   get calls$(): Observable<Call[]> {
     return this._calls.asObservable();
@@ -366,6 +374,7 @@ export class LeadService {
       leadId
     }
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
+     
       tap((meetings) => {
         this._meetings.next(meetings);
       }),
@@ -726,7 +735,11 @@ export class LeadService {
       subject: call.subject,
       response: call.response,
       startTime: call.startTime,
-      endTime: call.endTime
+      endTime: call.endTime,
+      reasonId: call.reasonId,
+      dueDate:call.dueDate,
+      isTask:call.isTask,
+      taskId:call.taskId,
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
@@ -751,6 +764,16 @@ export class LeadService {
 
     );
   }
+  getScenarios(): Observable<any[]> {
+    return this._httpClient.get<any[]>(this.getScenariosUrl).pipe(
+      tap((calls) => {
+        this._callreasons.next(calls);
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
+  }
+ 
+  
   updateTaskPriority(taskId: number, taskTitle, priority, leadId){
     let data = {
       id: this.user.id,
@@ -767,6 +790,7 @@ export class LeadService {
     );
   }
   getActivities(count: number, leadId: number): Observable<any> {
+   debugger
     let data = {
       tenantId: this.user.tenantId,
       id: this.user.id,
@@ -809,6 +833,7 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
+
   deleteMeeting(meetingId: number, leadId: number): Observable<Meeting> {
     let data = {
       id: this.user.id,
@@ -823,4 +848,22 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
+
+  ChangeLeadStatus(LeadId:number,statusId:number,StausTitle) {
+    let data = {
+      userId: this.user.id,
+      tenantId: this.user.tenantId,
+      leadId: LeadId,
+      statusId: statusId,
+      stausTitle:StausTitle
+    }
+    return this._httpClient.post<Lead[]>(this.changeLeadStatus, data).pipe(
+      tap((company) => {
+        this.getLeads().subscribe();
+      }),
+      catchError(error => { alert(error); return EMPTY })
+  
+    );
+  }
 }
+

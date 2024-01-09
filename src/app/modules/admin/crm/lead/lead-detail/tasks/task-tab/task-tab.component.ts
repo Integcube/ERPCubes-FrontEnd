@@ -49,6 +49,7 @@ export class TaskTabComponent implements OnInit, OnDestroy {
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
       this.lead = { ...data }; this._changeDetectorRef.markForCheck();
     })
+    this.getTask();
   }
   toggleStatus(taskId: number, statusId: number, taskTitle:string) {
     let status:number=-1;
@@ -92,5 +93,9 @@ export class TaskTabComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  getTask() {
+    this._leadService.getTasks(this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe((newEntries) => {
+        this._changeDetectorRef.markForCheck();
+    });
+}
 }

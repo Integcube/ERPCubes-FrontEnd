@@ -16,6 +16,8 @@ export class CallTabComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   calls$ = this._leadService.calls$;
   users$ = this._leadService.users$;
+ 
+
   callWithUser$ = combineLatest([
     this.calls$,
     this.users$
@@ -47,6 +49,7 @@ export class CallTabComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(htmlString);
   }
   ngOnInit(): void {
+
   }
   addCall(){
     let call = new Call({})
@@ -58,8 +61,10 @@ export class CallTabComponent implements OnInit {
       }
   });
   }
+
+
   updateCall(call:Call):void{
-    // this._changeDetectorRef.markForCheck();
+   // this._changeDetectorRef.markForCheck();
     this._matDialog.open(CallDetailComponent, {
       autoFocus: false,
       data     : {
@@ -67,5 +72,7 @@ export class CallTabComponent implements OnInit {
       }
   });
   }
+
+
 
 }

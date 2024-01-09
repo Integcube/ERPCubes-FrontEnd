@@ -3,7 +3,7 @@ import { LeadComponent } from "./lead.component";
 import { LeadListComponent } from "./lead-list/lead-list.component";
 import { LeadFormComponent } from "./lead-form/lead-form.component";
 import { LeadDetailComponent } from "./lead-detail/lead-detail.component";
-import { CallResolver, CustomListResolver, EmailResolver, IndustryResolver, LeadSourceResolver, LeadStatusResolver, LeadsResolver, MeetingResolver, NoteResolver, ProductResolver, SelectedLeadResolver, TagsResolver, TaskResolver, UserResolver } from "./lead.resolver";
+import { CallResolver, CustomListResolver, EmailResolver, IndustryResolver,CallReasonCResolver, LeadSourceResolver, LeadStatusResolver, LeadsResolver, MeetingResolver, NoteResolver, ProductResolver, SelectedLeadResolver, TagsResolver, TaskResolver, UserResolver } from "./lead.resolver";
 import { LeadGuard } from "./lead.guard";
 
 export const leadRoutes: Routes = [
@@ -46,7 +46,8 @@ export const leadRoutes: Routes = [
                     tasks: TaskResolver,
                     email: EmailResolver,
                     call: CallResolver,
-                    meeting: MeetingResolver
+                    meeting: MeetingResolver,
+                    CallReason:CallReasonCResolver
                 },
             }]
     },

@@ -45,6 +45,7 @@ export class MeetingTabComponent implements OnInit {
       }
   });
   }
+
   updateMeeting(meeting:Meeting):void{
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(MeetingDetailComponent, {
