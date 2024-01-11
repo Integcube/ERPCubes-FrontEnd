@@ -1,11 +1,11 @@
-<div class="flex flex-col justify-between">
+<div class="absolute flex flex-col justify-between h-full">
     <div class="flex flex-grow justify-between gap-4">
         <div class="flex  min-w-20 items-baseline text-bold">Ads Setup</div>
-        <div class="flex max-w-1/2!">
+        <div class="flex flex-grow max-w-1/2!">
             <mat-stepper labelPosition="bottom" #stepper [linear]="true">
                 <mat-step>
                     <ng-template matStepLabel>CONNECT ACCOUNT</ng-template>
-                    <div class="flex flex-col flex-grow justify-center items-center mt-4 ">
+                    <div class="flex flex-col flex-grow self-center justify-center items-center mt-4 ">
                         <div class="flex flex-col justify-center items-center">
                             <h3 class="text-bold font-semibold text-3xl">Connect an ad account</h3>
                             <p class="text-center mt-2">Pull all your ad campaign data into ERPCubes to begin tracking
@@ -14,7 +14,7 @@
                                 interacting with each ad.
                             </p>
                         </div>
-                        <div class="flex flex-grow flex-col w-1/2 px-6 my-10 self-center gap-4 justify-between">
+                        <div class="flex flex-grow flex-col w-1/2 px-6 my-10 self-center gap-4 justify-between overflow-auto">
                             <div (click)="loginFacebook()"
                                 class="flex flex-col gap-2 p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between cursor-pointer">
                                 <div class="flex gap-2 justify-between items-center">
@@ -39,7 +39,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <div
+                            <!-- <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button> -->
+                            <div (click)="connectGoogle()"
                                 class="flex p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between">
                                 <div class="flex gap-2 items-center">
                                     <span class="items-center">
@@ -58,7 +59,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </mat-step>
                 <mat-step>
@@ -75,8 +75,8 @@
                             <p class="text-center mt-2 text-sm">
                                 Select below ad(s) and map them to their related product </p>
                         </div>
-                        <div class="flex flex-grow flex-col  my-5 self-center justify-between w-full">
-                            <table class="min-w-full overflow-y-auto" mat-table [dataSource]="ads">
+                        <div class="flex flex-grow flex-col  my-5 self-center justify-between w-full overflow-auto">
+                            <table class="min-w-full max-h-full overflow-y-auto" mat-table [dataSource]="ads">
                                 <ng-container matColumnDef="name">
                                     <th mat-header-cell *matHeaderCellDef>
                                         Ad Name
@@ -123,7 +123,7 @@
                     <ng-template matStepLabel>COMPLETION</ng-template>
                     <div class="flex flex-col w-full justify-start flex-grow items-center mt-4 gap-8">
                         <h3 class="text-bold font-semibold text-3xl">Map Leads</h3>
-                        <div class="flex bg-default p-10 w-full rounded-lg shadow-md">
+                        <div class="flex bg-default p-10 w-full rounded-lg shadow-md overflow-auto max-h-full">
                             <mat-accordion class="flex flex-col w-full">
                                 <div class="py-5" *ngFor="let ad of allLeads">
                                     <mat-expansion-panel [togglePosition]="'before'">
@@ -217,7 +217,6 @@
                                                     </div>
                                                 </div>
                                             </form>
-
                                         </div>
                                  </mat-expansion-panel>
                                 </div>
@@ -229,8 +228,8 @@
         </div>
         <div class="flex items-baseline min-w-20">Step {{stepper.selectedIndex + 1}} of 3 </div>
     </div>
-    <div class="bg-default sticky bottom-0 -mx-6 z-999">
-        <div class="flex px-10 my-4 justify-between">
+    <div class="flex bg-default sticky bottom-0 -mx-6 z-999">
+        <div class="flex px-10 my-4 justify-between w-full">
             <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex === 0" (click)="closeDialog()">
                 <span class="ml-2 mr-1">Cancel</span>
             </button>

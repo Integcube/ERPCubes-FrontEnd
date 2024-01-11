@@ -29,6 +29,8 @@ export const crmRoutes: Routes = [
         { path: 'products',loadChildren:()=> import('app/modules/admin/crm/product/product.module').then(m=>m.ProductModule)},
         { path: 'campaign',loadChildren:()=> import('app/modules/admin/crm/campaign/campaign.module').then(m=>m.CampaignModule)},
         { path: 'project',loadChildren:()=> import('app/modules/admin/crm/project/project.module').then(m=>m.ProjectModule)},
+        { path: 'forms',loadChildren:()=> import('app/modules/admin/crm/form-builder/form-builder.module').then(m=>m.FormBuilderModule)},
+
     ]
 },
 ]

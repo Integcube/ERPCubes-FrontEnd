@@ -1,0 +1,28 @@
+<div class="flex flex-col w-full h-full min-h-full max-h-full">
+    <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
+        <!-- Close button -->
+        <div class="flex justify-start items-center w-full">
+            <a class="text-2xl text-white font-bold">Create Product</a>
+        </div>
+        <div class="flex items-center justify-end">
+            <a
+                mat-icon-button
+                [matTooltip]="'Close'"
+                [routerLink]="['../']"
+                (click)="closeDrawer()">
+                <mat-icon
+                    class="text-white"
+                    [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </a>
+        </div>
+    </div>
+    <!-- Edit mode -->
+    <ng-container>
+        <!-- Contact form -->
+        <div class="relative flex flex-col flex-auto justify-start items-center px-6 sm:px-12 pt-6">
+            <div class="w-full max-w-3xl">
+            
+            </div>
+        </div>
+    </ng-container>
+</div>

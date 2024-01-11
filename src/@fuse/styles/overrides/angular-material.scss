@@ -1250,20 +1250,33 @@ table {
 
 .mat-cell {
     border-right: 1px solid rgb(232, 232, 232);
-}
-
-.mat-header-cell {
+    border-top: 1px solid rgb(232, 232, 232);
+    min-width: 13rem;
+  }
+  .mat-row:last-child .mat-cell {
+    border-bottom: none; /* Remove the bottom border from the last cell in the last row */
+  }
+  .mat-cell:last-child {
+    border-right: none; /* Remove the border on the last cell */
+  }
+  
+  .mat-header-cell {
     border-right: 1px solid rgb(232, 232, 232);
+    border-top: 1px solid rgb(232, 232, 232);
+  }
+  
+  .mat-header-cell:last-child {
+    border-right: none; /* Remove the border on the last header cell */
+  }
 
-}
 
 .mat-row {
-    height: 30 !important;
+    height: 10 !important;
 }
 
 .mat-cell,
 .mat-header-cell {
-    padding: 5px 15px !important;
+    padding: 1px 10px !important;
 }
 
 // @media only screen and (max-width: 768px) {
@@ -1281,7 +1294,7 @@ table {
 .mat-paginator {
 
     .mat-paginator-container {
-        padding: 8px 16px;
+        // padding: 8px 16px;
         justify-content: space-between;
 
         @screen sm {

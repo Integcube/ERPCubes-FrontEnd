@@ -1,0 +1,24 @@
+<div class="flex w-full">
+    <app-field-menu class="w-1/5 min-w-1/5 max-w-1/5" (dataEvent)="fieldSelect($event.value)"></app-field-menu>
+    <div class="flex flex-col flex-grow">
+        <mat-drawer-container class="flex-auto h-full bg-card dark:bg-transparent"
+            (backdropClick)="onBackdropClicked()">
+            <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
+                [disableClose]="false" #matDrawer>
+                <app-field-settings></app-field-settings>
+            </mat-drawer>
+            <mat-drawer-content class="flex justify-center bg-default w-full">
+                <div class="flex flex-col justify-center w-200 min-w-200 max-w-200  ">
+                    <div class="flex w-full justify-center h-12" style="background-color: #00bda5!important;">
+                       <span class="text-white font-bold text-2xl self-center">  Edit Form </span>
+                    </div>
+                    <div class="flex flex-col justify-start  gap-4 py-8 w-full h-4/5 rounded-md bg-white">
+                        <div class="flex h-10 w-2/3 bg-default self-center border-2" *ngFor="let f of FieldArray">
+                            <span class="self-center font-semibold ml-4">{{f.fieldLabel}}</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </div>
+</div>

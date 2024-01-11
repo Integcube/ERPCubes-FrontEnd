@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
@@ -12,6 +12,7 @@ import { AdAccountList, AdAccounts, AdAcountName, AdList, LeadList, Product } fr
 })
 export class AdsService {
   private apiUrl = 'https://graph.facebook.com/v18.0';
+  private googleUrl = 'https://www.googleapis.com/oauth2/v15'
   private readonly getProductUrl = `${environment.url}/Product/all`
   private readonly saveLeadUrl = `${environment.url}/Lead/bulkSave`
 
@@ -54,6 +55,22 @@ export class AdsService {
       tap(a => this._adAccounts.next(a))
     );
   }
+
+
+  getAdsAccountInfo(idToken: string, id:string) {
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${idToken}`)
+      .set('Content-Type', 'application/json');
+
+    // Replace 'customerId' with the actual Google Ads customer ID
+    const customerId = id; 
+
+    // Replace 'resource_name' with the resource you want to fetch (e.g., campaigns, ad accounts)
+    const resourceName = 'customers/' + customerId + '/campaigns';
+    debugger
+
+    return this._httpClient.get('https://googleads.googleapis.com/v8/' + resourceName, { headers });
+  }
   setAdAccount(acount: AdAccountList[]) {
     this._adAccounts.next(acount)
   }
@@ -74,13 +91,11 @@ export class AdsService {
       tenantId: this.user.tenantId,
       lead: leads
     };
-    debugger;
     return this._httpClient.post<any>(this.saveLeadUrl, data).pipe(
       tap(data => {
       })
     );
-  }
-  
+  } 
   setSocialUser(user: SocialUser) {
     this._loggedInUser.next(user);
   }
@@ -116,6 +131,22 @@ export class AdsService {
     });
     return forkJoin(requests).pipe(
       map(adDataArray => { return adDataArray.flat() })
+    );
+  }
+  getGoogleAdAccount(accessToken: string) {
+    const url = `${this.googleUrl}/customers?access_token=${accessToken}`;
+    return this._httpClient.get<any>(url).pipe(
+      tap(a => { debugger })
+    );
+  }
+  connectGoogle(){
+  const data = {
+    tenantId : this.user.tenantId, 
+    id :this.user.id
+  }
+    return this._httpClient.post<any>(`${environment.url}/ConnectGoogle/Connect`,data).pipe(
+      tap(a=>window.open(a.googleAuthUrl)),
+      catchError(error=>{debugger; return EMPTY})
     );
   }
 }

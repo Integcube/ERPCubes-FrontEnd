@@ -1,15 +1,15 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { AdsComponent } from './ads.component';
-import { RouterModule } from '@angular/router';
-import { SharedModule } from 'app/shared/shared.module';
-import { AdsDashboardComponent } from './ads-dashboard/ads-dashboard.component';
-import { CreateAdAccountComponent } from './create-ad-account/create-ad-account.component';
-import { ConnectAdAccountComponent } from './connect-ad-account/connect-ad-account.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilderListComponent } from './form-builder-list/form-builder-list.component';
+import { FormDialogComponent } from './form-dialog/form-dialog.component';
+import { FormConfiguratorComponent } from './form-configurator/form-configurator.component';
+import { MAT_DATE_FORMATS, MatRippleModule } from '@angular/material/core';
+import moment from 'moment';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRippleModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -26,32 +26,29 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
+import { SharedModule } from 'app/shared/shared.module';
 import { QuillModule } from 'ngx-quill';
-import { adsRoute } from './ads.routing';
-import { MatStepperModule } from '@angular/material/stepper';
-import {
-  SocialLoginModule,
-  SocialAuthServiceConfig,
-  GoogleLoginProvider,
+import { formBuilderRoutes } from './form-builder.routing';
+import { FormBuilderComponent } from './form-builder.component';
+import { FieldMenuComponent } from './config/field-menu/field-menu.component';
+import { FieldSettingsComponent } from './config/field-settings/field-settings.component';
 
-} from '@abacritt/angularx-social-login';
-
-import { SelectAdAccountComponent } from './select-ad-account/select-ad-account.component';
-import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
 
 
 @NgModule({
   declarations: [
-    AdsComponent,
-    AdsDashboardComponent,
-    CreateAdAccountComponent,
-    ConnectAdAccountComponent,
-    SelectAdAccountComponent
+    FormBuilderListComponent,
+    FormDialogComponent,
+    FormConfiguratorComponent,
+    FormBuilderComponent,
+    FieldMenuComponent,
+    FieldSettingsComponent
   ],
   imports: [
-    RouterModule.forChild(adsRoute),
+    RouterModule.forChild(formBuilderRoutes),
     MatButtonModule,
     MatPaginatorModule,
     MatCheckboxModule,
@@ -71,40 +68,28 @@ import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule,
+    FormsModule,
     MatExpansionModule,
     MatTabsModule,
-    SocialLoginModule,
     FuseCardModule,
     DragDropModule,
     MatDialogModule,
-    MatStepperModule,
-
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-
+    SharedModule  ],
   providers: [
     {
-      provide: 'SocialAuthServiceConfig',
+      provide: MAT_DATE_FORMATS,
       useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '37203354676-d1hp3vcmcsqhqeu8aqm7ii45n0s6j3eo.apps.googleusercontent.com'
-            )
-          },
-          {
-            id: CustomFacebookLoginProvider.PROVIDER_ID,
-            provider: new CustomFacebookLoginProvider('1043379676992727')
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
+        parse: {
+          dateInput: moment.ISO_8601
+        },
+        display: {
+          dateInput: 'll',
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY'
         }
-      } as SocialAuthServiceConfig,
+      }
     }
-  ],
+  ]
 })
-export class AdsModule { }
+export class FormBuilderModule { }

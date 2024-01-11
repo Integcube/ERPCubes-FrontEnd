@@ -1,0 +1,11 @@
+<div class="flex flex-col h-full justify-start bg-white w-full p-6">
+    <span class="text-lg font-semibold self-center py-2">Select a custom field</span>
+    <div class="grid grid-cols-2 gap-4 w-full">
+        <div *ngFor="let f of fieldArray" class="card rounded-md p-4 border bg-default" (click)="fieldSelect(f)">
+            <span class="flex flex-col items-center">
+                <mat-icon svgIcon="mat_outline:text_fields"></mat-icon>
+                <span >{{ f.typeName }}</span>
+            </span>
+        </div>
+    </div>
+</div>

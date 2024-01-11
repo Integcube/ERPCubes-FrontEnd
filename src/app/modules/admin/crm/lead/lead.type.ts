@@ -15,6 +15,8 @@ export class Lead {
     state: string = "";
     country: string = "";
     sourceId: number;
+    companyId:number;
+    companyTitle:string="";
     sourceTitle: string = "";
     industryId: number;
     industryTitle: string = "";

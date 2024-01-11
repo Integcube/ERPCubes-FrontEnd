@@ -1,40 +1,49 @@
-// import { Injectable } from '@angular/core';
-// import {
-//   HttpInterceptor,
-//   HttpRequest,
-//   HttpHandler,
-//   HttpEvent,
-//   HttpErrorResponse
-// } from '@angular/common/http';
-// import { Observable, throwError } from 'rxjs';
-// import { catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-// @Injectable()
-// export class ErrorInterceptor implements HttpInterceptor {
-//   constructor() {}
+@Injectable()
+export class ErrorInterceptor implements HttpInterceptor {
+    constructor(private snackBar: MatSnackBar
+    ) { }
+    showNotification(colorName, text, placementFrom, placementAlign) {
+        this.snackBar.open(text, "", {
+            duration: 2000,
+            verticalPosition: placementFrom,
+            horizontalPosition: placementAlign,
+            panelClass: colorName,
+        });
+    }
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
 
-//   intercept(
-//     request: HttpRequest<any>,
-//     next: HttpHandler
-//   ): Observable<HttpEvent<any>> {
-//     return next.handle(request).pipe(
-//       catchError((error: HttpErrorResponse) => {
-//         let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          // Client-side error
+          errorMessage = `An error occurred: ${error.error.message}`;
+        } else {
+          // Backend returned an unsuccessful response code
+          errorMessage = `Backend returned code ${error.status}: ${error.message}`;
+        }
 
-//         if (error.error instanceof ErrorEvent) {
-//           // Client-side error
-//           errorMessage = `An error occurred: ${error.error.message}`;
-//         } else {
-//           // Backend returned an unsuccessful response code
-//           errorMessage = `Backend returned code ${error.status}: ${error.message}`;
-//         }
+        // Handle error logging here (e.g., sending logs to a server)
 
-//         // Handle error logging here (e.g., sending logs to a server)
-
-//         console.error(error); // Log the error
-
-//         return throwError(errorMessage); // Pass the error message to the subscriber
-//       })
-//     );
-//   }
-// }
+        console.error(error); // Log the error
+        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+        return throwError(errorMessage); // Pass the error message to the subscriber
+      })
+    );
+  }
+}
