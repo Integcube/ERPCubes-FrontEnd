@@ -87,6 +87,8 @@ export const appRoutes: Route[] = [
                 {path: 'activities', loadChildren: () => import('app/modules/admin/app/activity/activity.module').then(m => m.ActivitiesModule)},
                 {path: 'file-manager', loadChildren: () => import('app/modules/admin/app/file-manager/file-manager.module').then(m => m.FileManagerModule)},
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/app/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
+                {path: 'chat', loadChildren: () => import('app/modules/admin/app/chat/chat.module').then(m => m.ChatModule)},
+
             ]},
            //Marketing
            {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)},

@@ -20,28 +20,29 @@
                             } }}
                         </div>
                     </div>
-                </div>
-                <div class="flex w-full max-w-screen-xl mx-auto px-6 sm:px-8 justify-between">
-                   <div class="flex">
-                   
-                    <div class="relative flex self-start pt-2 pb-1 pl-5 pr-5 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
-                        matRipple *ngFor="let customList of customLists$|async">
-                        <div class="flex items-center">
-                            <div class="overflow-hidden">
-                                    <div class="font-medium leading-6 truncate">{{customList.listTitle}}</div>
-                            </div>
+                    <!-- Main actions -->
+                    <div class="flex flex-row md:flex-row items-center mt-4 mb-2 sm:mt-0 md:mt-4 ">
+                        <!-- Search -->
+                        <div class="flex-auto">
+                            <mat-form-field
+                                class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                                    [autocomplete]="'off'" [placeholder]="'Search Leads'">
+                            </mat-form-field>
                         </div>
-                    </div>
-                   </div>
-                    <div class="flex -mt-2 gap-2">
-                        <button class="ml-4" mat-stroked-button class="h-9" (click)="createLead()">
-                            <mat-icon [svgIcon]="'heroicons_outline:arrow-down'" class="icon-size-3"></mat-icon>
-                            <span class="ml-2 mr-1">Import</span>
-                        </button>
-                        <button class="ml-4" mat-flat-button class="h-9" [color]="'primary'" (click)="createLead()">
-                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-2 mr-1">Add Lead</span>
-                        </button>
+                        <div class="flex flex-row">
+                            <button class=" ml-4 h-9" mat-stroked-button (click)="openConnectorDialog()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:arrow-down'"></mat-icon>
+                                <span class="ml-2 mr-1">Import</span>
+                            </button>
+                            <!-- Add contact button -->
+                            <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="createLead()">
+                                <!-- <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon> -->
+                                <span class="ml-2 mr-1">Create Lead</span>
+                            </button>
+                        </div>
+                        
                     </div>
                 </div>
                 <div class="flex-auto py-2 bg-default min-h-3/4 pb-10 overflow-hidden justify-between"> 

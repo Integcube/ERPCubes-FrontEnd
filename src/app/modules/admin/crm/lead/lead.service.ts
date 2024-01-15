@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, combineLatest, debounceTime, forkJoin, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
@@ -46,6 +46,7 @@ export class LeadService {
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
   private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
   private readonly changeLeadStatus = `${environment.url}/Lead/ChangeLeadStatus`
+  private readonly saveBulkLeadUrl = `${environment.url}/Lead/bulkSave`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -790,7 +791,6 @@ export class LeadService {
     );
   }
   getActivities(count: number, leadId: number): Observable<any> {
-   debugger
     let data = {
       tenantId: this.user.tenantId,
       id: this.user.id,
@@ -861,8 +861,18 @@ export class LeadService {
       tap((company) => {
         this.getLeads().subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
-  
+      catchError(error => { alert(error); return EMPTY }))
+    }
+    
+  saveBulkLeads(leads:Lead[]){
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      lead: leads
+    };
+    return this._httpClient.post<any>(this.saveBulkLeadUrl, data).pipe(
+      tap(data => {
+      })
     );
   }
 }

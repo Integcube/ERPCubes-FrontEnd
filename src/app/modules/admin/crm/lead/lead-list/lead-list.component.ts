@@ -16,6 +16,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { User } from 'app/core/user/user.types';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail.component';
+import { LeadImportComponent } from '../lead-import/lead-import.component';
 
 @Component({
   selector: 'app-lead-list',
@@ -82,7 +83,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     private _renderer2: Renderer2,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    public dialog: MatDialog
   ) { }
   onDateRangeChange(selectedValue: string,type: string) {
     let startDate: Date = new Date();
@@ -403,6 +405,9 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
+  importFile(){
+
+  }
   updateLead(selectedLead: Lead) {
     this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
@@ -500,5 +505,17 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   }
   trackByFn(index: number, item: any): any {
     return item.id || index;
+  }
+
+  
+  openConnectorDialog() {
+    const dialogRef = this.dialog.open(LeadImportComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%"
+      }
+    );
   }
 }
