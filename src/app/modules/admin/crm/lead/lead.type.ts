@@ -199,3 +199,33 @@ export class LeadList{
     sourceId:number = 4;
     productId:number = 15;
 }
+export class LeadImportList {
+    leadId: number;
+    firstName: string = "";
+    lastName: string = "";
+    email: string = "";
+    status: number;
+    statusTitle: string = "";
+    leadOwner: string = "";
+    mobile: string = "";
+    work: string = "";
+    address: string = "";
+    street: string = "";
+    city: string = "";
+    zip: string = "";
+    state: string = "";
+    country: string = "";
+    companyTitle:string="";
+    sourceTitle: string = "";
+    industryTitle: string = "";
+    productTitle: string = "";
+    createdDate: Date;
+    modifiedDate: Date;
+    isHovered: boolean;
+    avatar: any;
+    constructor(reg) {
+        this.leadId = reg.leadId ? reg.leadId : -1;
+        this.status = reg.status ? reg.status : 0;
+        this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
+    }
+}

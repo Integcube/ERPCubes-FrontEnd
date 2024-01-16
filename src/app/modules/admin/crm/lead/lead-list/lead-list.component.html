@@ -32,10 +32,23 @@
                             </mat-form-field>
                         </div>
                         <div class="flex flex-row">
-                            <button class=" ml-4 h-9" mat-stroked-button (click)="openConnectorDialog()">
-                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:arrow-down'"></mat-icon>
-                                <span class="ml-2 mr-1">Import</span>
-                            </button>
+                            <div class="flex gap-0">
+                                <button class="ml-4 h-9 border-r-0 rounded-r-none" mat-stroked-button (click)="openConnectorDialog()">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:arrow-down'"></mat-icon>
+                                    <span class="ml-2 mr-1">Import</span>
+                                </button>
+                                
+                                <button class="h-9 min-w-0 rounded-l-none p-0 m-0 " mat-stroked-button  matRipple
+                                [matMenuTriggerFor]="dropdownMenu">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
+                                    <mat-menu #dropdownMenu="matMenu">
+                                        <button mat-menu-item (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })"> 
+                                            <mat-icon svgIcon="mat_solid:assignment"></mat-icon> Export to Excel</button>
+                                    </mat-menu>
+                                </button>
+                            </div>
+                            
+                          
                             <!-- Add contact button -->
                             <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="createLead()">
                                 <!-- <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon> -->
@@ -269,7 +282,9 @@
                             <ng-container *ngIf="leads.length; else noLead">
                                 <div class="flex-auto  py-1 bg-card overflow-x-auto">
                                    
-                                    <table mat-table [dataSource]="dataSource" matSort>
+                                    <table mat-table [dataSource]="dataSource" matSort 
+                                    matTableExporter
+                                    #exporter="matTableExporter">
                                         <!-- Select -->
                                         <ng-container matColumnDef="select" [sticky]="true" class="shadow-sm">
                                             <th mat-header-cell *matHeaderCellDef class="min-w-1 border-r-0">

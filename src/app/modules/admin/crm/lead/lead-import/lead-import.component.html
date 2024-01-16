@@ -54,7 +54,7 @@
                       <!-- <button mat-flat-button color="primary" (click)="openColumnMappingDialog()">Map Columns</button> -->
                       <p class="mt-4 mb-4">Map the columns from your Excel file to corresponding fields</p>
                       
-                      <!-- Column Mapping Modal (similar to the Ads Account HTML) -->
+                      <!-- Column Mapping Modal -->
                       <ng-container *ngIf="stepper.selectedIndex === 2 && showColumnMapping">
                         <div class="xl:col-span-2 flex flex-col flex-grow bg-card shadow rounded-2xl overflow-x-auto w-full">
                             <mat-table [dataSource]="excelColumns">

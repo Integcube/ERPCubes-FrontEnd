@@ -55,6 +55,7 @@ import moment from 'moment';
 import { SearchBarComponent } from './lead-detail/search-bar/search';
 import { MatStepperModule } from '@angular/material/stepper';
 import { LeadImportComponent } from './lead-import/lead-import.component';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { LeadImportComponent } from './lead-import/lead-import.component';
     MeetingDetailComponent,
     MeetingTabComponent,
     SearchBarComponent,
-    LeadImportComponent
+    LeadImportComponent,
+     
   ],
   imports: [
     RouterModule.forChild(leadRoutes),
@@ -112,7 +114,8 @@ import { LeadImportComponent } from './lead-import/lead-import.component';
     SharedModule,
     FuseScrollbarModule ,
     FuseDrawerModule,
-    MatStepperModule
+    MatStepperModule,
+    MatTableExporterModule
   ],schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],

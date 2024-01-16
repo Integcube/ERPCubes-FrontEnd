@@ -1,17 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SocialAuthService, FacebookLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
 import { MatStepper } from '@angular/material/stepper';
-// import { AdsService } from '../ads.service';
-// import { SelectAdAccountComponent } from '../select-ad-account/select-ad-account.component';
 import { EMPTY, Subject, catchError } from 'rxjs';
-// import { AdAccountList, AdList, LeadList, Product } from '../ads.type';
 import { filter } from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadService } from '../lead.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http'; // Import necessary modules
 import * as XLSX from 'xlsx';
-import { Lead } from '../lead.type';
+import { Industry, Lead, LeadImportList, LeadSource } from '../lead.type';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 @Component({
@@ -23,7 +19,7 @@ export class LeadImportComponent implements OnInit {
   showColumnMapping = false;
   columnMappings: { [key: string]: string } = {};
   jsonData: any[] = [];
-  mappedLeads: Lead[] = [];
+  mappedLeads: LeadImportList[] = [];
   leadColumns: string[] = [];
   excelColumns: string[] = [];
   leads: Lead[] = []; 
@@ -35,10 +31,10 @@ export class LeadImportComponent implements OnInit {
   displayedColumns: string[] = ['Excel Column', 'Map to', 'Map Status'];
   invalidFileMessage: string | null = null;
   isFileValid = false;
+
   constructor(
     private _matDialogRef: MatDialogRef<LeadImportComponent>,
     public dialog: MatDialog,
-    private _formBuilder: FormBuilder,
     private leadService: LeadService,
     private _userService: UserService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -51,7 +47,8 @@ export class LeadImportComponent implements OnInit {
       this.user = user;
       this.getAllLeads(); // Fetch leads when the user changes
     });
-    this.leadColumns = Object.keys(new Lead({}));
+    this.leadColumns = Object.keys(new LeadImportList({}));
+
   }
 
 
@@ -76,59 +73,63 @@ export class LeadImportComponent implements OnInit {
   }
 
   getColumnColor(column: string): string {
-    // Check if the column is mapped to a valid value
     const leadColumn = this.columnMappings[column];
     return this.leadColumns.includes(leadColumn) ? 'green' : 'orange';
   }
   getColumnIcon(column: string): string {
-    // Check if the column is mapped to a valid value
     const leadColumn = this.columnMappings[column];
     return this.leadColumns.includes(leadColumn) ? 'heroicons_outline:check-circle' : 'mat_outline:warning_amber';
   }
-  // Event handler for dropdown selection change
   onLeadColumnChange(column: string, leadColumn: string) {
     this.columnMappings[column] = leadColumn;
   }
 
   applyColumnMapping() {
     // Apply column mapping to leads
-    const mappedLeads: Lead[] = this.jsonData.map((row) => {
-      const leadData: Lead = new Lead({});
+    const mappedLeads: LeadImportList[] = this.jsonData.map((row) => {
+      const leadData: LeadImportList = new LeadImportList({});
   
       // Handle specific mapping for firstName and lastName
-      leadData.firstName = row['First Name'] || '';  
-      leadData.lastName = row['Last Name'] || ''; 
+      leadData.firstName = row['First Name'] || '';
+      leadData.lastName = row['Last Name'] || '';
   
       // Generic column mapping
       Object.keys(this.columnMappings).forEach((excelColumn) => {
         const leadColumn = this.columnMappings[excelColumn];
   
-        // Skip "name" since it's already mapped to "firstName" and "lastName"
         if (excelColumn !== 'First Name' && excelColumn !== 'Last Name') {
           // Set the value to an empty string if the column is not present in the current row
           if (leadColumn.toLowerCase() === 'lastname') {
             leadData.lastName = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';
           } else {
-            leadData[leadColumn.toLowerCase()] = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';
-          }
+            leadData[leadColumn.toLowerCase()] = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';          }
         }
       });
   
       return leadData;
     });
   
-    // Log the mapped leads to the console
-    console.log('Mapped Leads:', mappedLeads);
+    
+    const c = mappedLeads.map((lead) => {
+      const c: any = { ...lead };
   
-    // Optionally, you can assign the mapped leads to a class property for further use
-    this.mappedLeads = mappedLeads;
+      // Apply transformation for all fields
+      Object.keys(c).forEach((field) => {
+        c[field] = c[field].toString();
+      });
   
-    // Close the mapping dialog
+      return c;
+    });
+  
+    console.log('Mapped Leads:', c);
+  
+    this.mappedLeads = c;
+  
     this.showColumnMapping = false;
-
-    this.leadService.saveBulkLeads(this.mappedLeads).subscribe(() => {
+    debugger;
+    this.leadService.saveBulkImportLeads(this.mappedLeads).subscribe(() => {
       this.closeDialog();
-      this.getAllLeads(); 
+      this.getAllLeads();
     });
   }
   
@@ -195,14 +196,7 @@ export class LeadImportComponent implements OnInit {
       console.error('No file selected');
       return;
     }
-    // const allowedFileExtensions = ['.xlsx', '.xls'];
-    // const fileExtension = this.file.name.toLowerCase();
   
-    // if (!allowedFileExtensions.some(ext => fileExtension.endsWith(ext))) {
-    //   // Set the error message for invalid file type
-    //   this.invalidFileMessage = 'Invalid file type. Please upload a valid Excel file.';
-    //   return;
-    // }
     const fileReader = new FileReader();
   
     fileReader.onload = (e) => {
@@ -233,7 +227,30 @@ export class LeadImportComponent implements OnInit {
         // Extract column names from the first row of the sheet data and add to the set
         if (sheetData.length > 0) {
           Object.keys(sheetData[0]).forEach((column) => {
-            uniqueColumns.add(column);
+            // Check if the column is not empty
+            if (column.trim() !== '') {
+              uniqueColumns.add(column);
+            }
+          });
+        }
+  
+        // Automatically map "Name" column to "FirstName" and "LastName"
+        if (uniqueColumns.has('Name') && !this.columnMappings['Name']) {
+          this.columnMappings['Name'] = 'Name'; // Map "Name" to itself initially
+  
+          const nameColumnIndex = this.excelColumns.indexOf('Name');
+          sheetData.forEach((row) => {
+            const nameValue = row['Name'];
+  
+            if (nameValue && nameValue.includes(' ')) {
+              // If "Name" contains a space, assume it's a combination of first name and last name
+              const [firstName, lastName] = nameValue.split(' ', 2);
+  
+              // Map to lead columns
+              this.columnMappings['Name'] = ''; // Clear previous mapping
+              this.columnMappings[firstName.trim()] = 'FirstName';
+              this.columnMappings[lastName.trim()] = 'LastName';
+            }
           });
         }
       });
@@ -243,6 +260,17 @@ export class LeadImportComponent implements OnInit {
   
       // Extract column names (headers) from the set of unique columns
       this.excelColumns = Array.from(uniqueColumns);
+  
+      // Automatically map columns to leadColumns dropdown
+      this.leadColumns.forEach((leadColumn) => {
+        const matchingExcelColumn = this.excelColumns.find((excelColumn) =>
+          excelColumn.toLowerCase().includes(leadColumn.toLowerCase())
+        );
+  
+        if (matchingExcelColumn) {
+          this.columnMappings[matchingExcelColumn] = leadColumn;
+        }
+      });
   
       console.log('Loaded Excel Data:', this.jsonData);
   
@@ -254,11 +282,6 @@ export class LeadImportComponent implements OnInit {
     fileReader.readAsArrayBuffer(this.file);
   }
   
-  // save(){
-  //   this.leadService.saveBulkLeads(this.mappedLeads).subscribe(() => {
-  //     this.closeDialog();
-  //     this.getAllLeads(); 
-  //   });
-  // }
+  
 
 }

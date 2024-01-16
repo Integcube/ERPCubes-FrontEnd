@@ -4,7 +4,7 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList } from './lead.type';
 
 @Injectable({
   providedIn: 'root'
@@ -865,6 +865,17 @@ export class LeadService {
     }
     
   saveBulkLeads(leads:Lead[]){
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      lead: leads
+    };
+    return this._httpClient.post<any>(this.saveBulkLeadUrl, data).pipe(
+      tap(data => {
+      })
+    );
+  }
+  saveBulkImportLeads(leads:LeadImportList[]){
     const data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
