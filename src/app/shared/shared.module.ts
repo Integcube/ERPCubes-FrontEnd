@@ -6,9 +6,9 @@ import { UniquePipe } from '@fuse/pipes/unique-pipe/unique.pipe';
 import { CustomFilterPipe } from '@fuse/pipes/customFilter/customFilter.pipe';
 import { CustomFilterPipe2 } from '@fuse/pipes/filter-pipe/filter-pipe';
 import { BoldPipe } from '@fuse/pipes/bold/bold.pipe';
-import { MonthToWordPipe } from '@fuse/pipes/month-convert/month-convert.pipe';
 import {FilterPipe} from '@fuse/pipes/filter/filter';
 import {OrderByPipe} from '@fuse/pipes/oderBy/orderBy';
+import { MonthToWordPipe } from '@fuse/pipes/month-pipe/month-convert.pipe';
 @NgModule({
     declarations:[
         TableLimitPipe,
