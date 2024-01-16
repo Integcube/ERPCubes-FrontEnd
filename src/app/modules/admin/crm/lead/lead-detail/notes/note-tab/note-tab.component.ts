@@ -17,18 +17,7 @@ export class NoteTabComponent implements OnInit {
   notes$ = this._leadService.notes$;
   users$ = this._leadService.users$;
   private _matDialogRef: MatDialogRef<NoteTabComponent>
-  notesWithUser$ = combineLatest([
-    this.notes$,
-    this.users$
-  ]).pipe(
-    map(([notes, users]) =>
-    notes.map(note => ({
-        ...note,
-        userName : users.find(a=>a.id === note.createdBy).name
-      } as Note))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
-  );
+  notesWithUser$ = this.notes$;
   filteredData$ = combineLatest([
     this._leadService.searchQuery$,
     this.notesWithUser$,

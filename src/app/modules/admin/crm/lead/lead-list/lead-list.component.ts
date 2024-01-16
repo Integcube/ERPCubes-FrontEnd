@@ -41,7 +41,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
-  displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'leadStatus','sourceTitle','industryTitle','country','companyTitle', 'createdDate'];
+  //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
+  displayedColumns: string[] = ['select', 'name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
   dateRangesFilter:any[];

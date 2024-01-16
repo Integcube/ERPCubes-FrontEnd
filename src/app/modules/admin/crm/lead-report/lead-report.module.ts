@@ -27,6 +27,10 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import {CdkTableModule} from '@angular/cdk/table';
 import {MatNativeDateModule} from '@angular/material/core';
+import {FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import moment from 'moment';
 
 @NgModule({
   declarations: [
@@ -57,7 +61,25 @@ import {MatNativeDateModule} from '@angular/material/core';
     CdkTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule
+    SharedModule,
+    FuseScrollbarModule ,
+
+  ],
+  providers: [
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: moment.ISO_8601
+        },
+        display: {
+          dateInput: 'DD-MMM-YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+        }
+      }
+    }
   ]
 })
 export class LeadReportModule { }

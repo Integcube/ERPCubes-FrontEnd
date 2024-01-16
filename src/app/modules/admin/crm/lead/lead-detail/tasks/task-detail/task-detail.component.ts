@@ -21,7 +21,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   taskForm: UntypedFormGroup;
   tags: Tag[];
   user: User;
-
+  eventTypes$ = this._leadService.eventTypes$
   users$ = this._leadService.users$;
   selectedLead: Lead;
   filteredLabels: Tag[];
@@ -56,7 +56,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       description: [''],
       tags: [[]],
       dueDate: [null],
-      taskOwner: [this.user.id, Validators.required]
+      taskOwner: [this.user.id, Validators.required],
+      tasktypeId: [''],
     });
 
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.selectedLead = { ...data })

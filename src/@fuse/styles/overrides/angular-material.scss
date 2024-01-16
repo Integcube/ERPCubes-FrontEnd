@@ -1273,7 +1273,9 @@ table {
 .mat-row {
     height: 10 !important;
 }
-
+tr.mat-row, tr.mat-footer-row {
+    height: 34px!important;
+}
 .mat-cell,
 .mat-header-cell {
     padding: 1px 10px !important;

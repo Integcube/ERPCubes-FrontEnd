@@ -28,9 +28,11 @@ export class LeadReportResolver implements Resolve<any>{
   constructor(
     private _leadReportService: LeadReportService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    var today : Date = new Date();
-    const startOfMonth: Date = new Date(today.getFullYear(), today.getMonth(), 11);
-    return this._leadReportService.getLeadReport(startOfMonth.toISOString(), today.toISOString(), -1);
+   
+    const startDate = new Date();
+    const endDate=new Date();
+
+    return this._leadReportService.getLeadReport(startDate.toISOString(), endDate.toISOString(), -1);
   }
 }
 @Injectable({

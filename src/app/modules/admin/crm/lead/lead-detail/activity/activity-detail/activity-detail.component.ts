@@ -17,16 +17,7 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     counter = 1;
     lead: Lead;
-    activitiesz$: Observable<Activity[]> = combineLatest(this._leadService.activities$, this._leadService.users$)
-        .pipe(map(([activities, users]) => {
-            if (activities) {
-                return activities.map(activity => ({
-                    ...activity,
-                    userName: users.find(u => u.id == activity.userId)?.name 
-                } as Activity))
-            }
-        }
-        ));
+    activitiesz$: Observable<Activity[]> = this._leadService.activities$;
     @HostListener('window:scroll', ['$event'])
     onScroll(): void {
         debugger

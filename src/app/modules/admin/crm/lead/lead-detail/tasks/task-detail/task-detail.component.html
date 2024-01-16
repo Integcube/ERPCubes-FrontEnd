@@ -1,3 +1,4 @@
+
 <ng-container *ngIf="taskWithTag$|async as task">
     <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 " fuseScrollbar >
         <!-- Header -->
@@ -25,7 +26,10 @@
                     [cdkAutosizeMinRows]="1" class="resize-none h-16">
                     </textarea>
             </mat-form-field>
-                <mat-form-field class="w-full">
+            <div class="flex flex-row justify-space-between flex-wrap md:gap-5 sm:gap-2 lg:gap-5 xs:gap-2 mt-2">
+
+           
+                <mat-form-field class="md:w-60  sm:w-100 xs:w-100" >
                     <mat-label>Lead Owner</mat-label>
                     <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #leadOwner>
                         <mat-option value="-1"></mat-option>
@@ -37,7 +41,18 @@
                         Task Owner is required
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field class="fuse-mat-dense md:w-60 sm:w-100 xs:w-100">
+                    <mat-label>Type</mat-label>
+                    <mat-select [formControlName]="'tasktypeId'" #type>
+                       
+                        <ng-container *ngIf="eventTypes$|async as events">
+                            <mat-option *ngFor="let event of events" [value]="event.typeId">{{event.typeTitle}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                
+                </mat-form-field>
 
+            </div>
             <!-- Due date -->
             <div>
                 <div class="font-semibold">Due Date</div>

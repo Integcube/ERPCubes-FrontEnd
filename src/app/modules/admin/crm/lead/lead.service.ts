@@ -4,7 +4,8 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType } from './lead.type';
+import { ContactEnum } from 'app/core/enum/crmEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,7 @@ export class LeadService {
   private readonly deleteCustomListUrl = `${environment.url}/CustomList/delete`
   private readonly changeLeadStatus = `${environment.url}/Lead/ChangeLeadStatus`
   private readonly saveBulkLeadUrl = `${environment.url}/Lead/bulkSave`
+  private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -69,7 +71,9 @@ export class LeadService {
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
   private _meetings: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _callreasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+  private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
 
+  private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -77,7 +81,9 @@ export class LeadService {
     this._userService.user$.subscribe(user => {
       this.user = user;
     })
+    this.contactEnumInstance = new ContactEnum();
   }
+
   filteredLeads$ = combineLatest(
     this.leads$,
     this.filter$
@@ -206,7 +212,10 @@ export class LeadService {
     return this._product.asObservable();
   }
 
-  
+  get eventTypes$(): Observable<EventType[]> {
+    return this._eventType.asObservable();
+  }
+
   get CallReason$(): Observable<any[]> {
     return this._callreasons.asObservable();
   }
@@ -235,9 +244,8 @@ export class LeadService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<TaskModel[]>(this.getLeadTaskUrl, data).pipe(
       tap((tasks) => {
@@ -251,9 +259,8 @@ export class LeadService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<Note[]>(this.getNotesUrl, data).pipe(
       tap((notes) => {
@@ -370,9 +377,8 @@ export class LeadService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
      
@@ -387,7 +393,8 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      lead
+      lead,
+      
     }
     return this._httpClient.post<Lead[]>(this.saveLeadURL, data).pipe(
       tap((lead) => {
@@ -471,6 +478,7 @@ export class LeadService {
           return task
         }
         else {
+          debugger
           const task = tasks.find(value => value.taskId === id) || null;
           this._task.next(task);
           return task;
@@ -617,9 +625,8 @@ export class LeadService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       type: 'task',
-      companyId: -1,
-      opportunityId: -1,
-      leadId: leadId,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
       task: {
         ...taskForm.value,
         priorityId: -1,
@@ -651,9 +658,8 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId: leadId,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
       note: {
         noteId: note.noteId,
         noteTitle: note.noteTitle,
@@ -676,12 +682,11 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId: leadId,
       emailId: email.emailId,
       subject: email.subject,
-      description: email.description
+      description: email.description,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<Email[]>(this.saveEmailsUrl, data).pipe(
       tap((email) => {
@@ -694,9 +699,8 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId: leadId,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
       meetingId: meeting.meetingId,
       subject: meeting.subject,
       note: meeting.note,
@@ -714,9 +718,8 @@ export class LeadService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId
     }
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
       tap((emails) => {
@@ -729,9 +732,6 @@ export class LeadService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId: leadId,
       callId: call.callId,
       subject: call.subject,
       response: call.response,
@@ -741,6 +741,8 @@ export class LeadService {
       dueDate:call.dueDate,
       isTask:call.isTask,
       taskId:call.taskId,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
@@ -753,9 +755,8 @@ export class LeadService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      companyId: -1,
-      opportunityId: -1,
-      leadId
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId
     }
     return this._httpClient.post<Call[]>(this.getCallsUrl, data).pipe(
       tap((calls) => {
@@ -773,7 +774,18 @@ export class LeadService {
       catchError(error => { alert(error); return EMPTY })
     );
   }
- 
+   getEventType(): Observable<EventType[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<EventType[]>(this.getEventTypeUrl, data).pipe(
+      tap((type) => {
+        this._eventType.next(type);
+      })
+    );
+  }
+
   
   updateTaskPriority(taskId: number, taskTitle, priority, leadId){
     let data = {
@@ -791,13 +803,13 @@ export class LeadService {
     );
   }
   getActivities(count: number, leadId: number): Observable<any> {
+
     let data = {
-      tenantId: this.user.tenantId,
-      id: this.user.id,
+      tenantId:this.user.tenantId,
+      id:"-1", //this.user.id, 
       count,
-      leadId,
-      companyId: -1,
-      opportunityId: -1,
+      contactTypeId:this.contactEnumInstance.Lead,
+      contactId:leadId,
     }
     return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
       tap((response: Activity[]) => {
@@ -824,7 +836,7 @@ export class LeadService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       callId: callId,
-
+      typeId:1,
     }
     return this._httpClient.post<Call>(this.deleteCallsUrl, data).pipe(
       tap((customList) => {

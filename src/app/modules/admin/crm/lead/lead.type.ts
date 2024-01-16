@@ -137,8 +137,10 @@ export class Note {
     createdDate: Date;
     createdBy: string;
     userName: string;
+    createdByName: string;
     tags: Tag[];
     tasks: Tasks[];
+   
     constructor(reg) {
         this.noteId = reg.noteId ? reg.noteId : -1
     }
@@ -180,8 +182,11 @@ export class TaskModel {
     createdDate: Date;
     taskType: string;
     tags: Tag[];
+    tasktypeId:number
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
+        this.tasktypeId = reg.tasktypeId ? reg.tasktypeId : 5
+
     }
 }
 
@@ -228,4 +233,8 @@ export class LeadImportList {
         this.status = reg.status ? reg.status : 0;
         this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
     }
+}
+export interface EventType {
+    typeId: number,
+    typeTitle: string
 }

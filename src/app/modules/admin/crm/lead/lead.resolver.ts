@@ -181,3 +181,13 @@ export class TaskResolver implements Resolve<any>
       return this._leadService.getTasks(+route.paramMap.get('id'));
   }
 }
+
+@Injectable({
+  providedIn: "root"
+})
+export class EventTypeResolver implements Resolve<any>{
+  constructor(private _leadService: LeadService) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      return this._leadService.getEventType();
+  }
+}

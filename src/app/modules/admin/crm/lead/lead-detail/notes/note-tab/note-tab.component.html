@@ -1,3 +1,9 @@
+
+<style>
+    .text-sm {
+    font-size: 0.65rem !important;
+}
+</style>
 <div class="flex flex-col w-full">
     <div class="flex items-center mb-2 sm:mt-0 ">
         <div class="flex-auto">
@@ -29,7 +35,7 @@
                                   (click)="updateNote(note)">
     
                                     <!-- Item content -->
-                                    <div class="flex flex-col items-start justify-start w-full py-6 pr-4 pl-5 border-l-4 border-transparent" >
+                                    <div class="flex flex-col items-start justify-start w-full py-3 pr-4 pl-5 border-l-4 border-transparent" >
     
                                         <!-- Info -->
                                         <div class="flex items-center w-full">
@@ -45,8 +51,12 @@
                                         
                                             <!-- Date -->
                                            
-                                            <div class="ml-auto text-md text-right whitespace-nowrap text-hint">
-                                                 {{note.createdDate | date:'dd-MMM-yyyy hh:mm a'}}
+                                            <div class="ml-auto text-md text-right whitespace-nowrap text-hint text-sm">
+                                                <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:clock'"></mat-icon>
+                                                  {{note.createdDate | date:'dd-MMM-yyyy hh:mm a'}}
+                                                  <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:user'"></mat-icon>
+                                                  {{note.createdByName}}
+                                                 
                                             </div>
                                         </div>
                                         <!-- Expert -->

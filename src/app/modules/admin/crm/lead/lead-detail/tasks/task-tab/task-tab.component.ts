@@ -86,6 +86,7 @@ export class TaskTabComponent implements OnInit, OnDestroy {
     });
   }
   updateTask(task: TaskModel): void {
+    debugger
     this._matDialog.open(TaskDetailComponent, {
       autoFocus: false,
       data: {

@@ -1,6 +1,6 @@
-<div class="absolute inset-0 flex flex-col min-w-0 bg-default ">
+<div class="absolute inset-0 flex flex-col min-w-0 bg-default" >
     <div class="flex-auto bg-gray-200">
-        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-6 px-6 md:px-8">
+        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-2 px-2 md:px-6">
             <div>
                 <div class="text-3xl font-bold tracking-tight leading-none">Lead Reports</div>
                 <div class="ml-0.5 font-medium text-secondary">
@@ -14,10 +14,10 @@
                     } }}
                 </div>
             </div>
-            <div class="flex justify-start pt-4 pb-4 gap-6">
+            <div class="flex justify-start pt-1 pb-1 gap-6">
                 <div class = "w-full max-w-sm">
                     <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                        <mat-label>Enter a Date Range</mat-label>                       
+                        <mat-label>Select a Date Range</mat-label>                       
                         <mat-date-range-input class="w-128" [rangePicker]="picker">
                             <input matStartDate placeholder="Start date" [(ngModel)]="startDate" [spellcheck]="false">
                             <input matEndDate placeholder="End date" [(ngModel)]="endDate" [spellcheck]="false">
@@ -30,7 +30,7 @@
                     <mat-form-field class="fuse-mat-dense flex-auto w-full">
                         <mat-label>Products</mat-label>
                         <mat-select [(ngModel)]="prodId" [spellcheck]="false">
-                            <mat-option value="-1"> All Products</mat-option>
+                            <mat-option [value]="-1"> All Products</mat-option>
                             <mat-option *ngFor="let product of products"
                                 [value]="product.productId">{{product.productName}}</mat-option>
                         </mat-select>
@@ -44,37 +44,66 @@
                 </div>
             </div>
         </div>
-        <div class="m-2" *ngFor="let dx of userList  | unique:'prodId'">
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
-                <div class="flex-auto p-6 bg-default min-h-3/4">
-                    <h2 class="font-bold p-4 mx-4">{{dx.prodName}}</h2>
-                    <div class="flex-auto border-white py-1 bg-card overflow-x-auto mx-8">
-                        <table>
+      <div>
+      
+      </div>
+    
+      <div class="mt-2 ">
+       
+        <div class="flex-auto border-white py-1 bg-card mx-5 relative shadow-md sm:rounded-lg overflow-x-auto max-h-100"  fuseScrollbar>
+            <ng-container *ngIf="leadReportWithUser$ | async as status ">
+                <ng-container *ngIf="status.length; else noReports">
+                    <table  class="w-full">
+                        <thead class="sticky top-0 bg-white">
+                          <tr>
+                            <th class="border-b-2 p-2 text-left font-semibold"> Product / Owner </th>
+                            <th *ngFor="let dx of status | unique: 'leadStatusId' | orderBy: 'leadStatusId'"
+                                class="border-l-2 p-2 border-b-2 text-center font-semibold">
+                              {{ dx.leadStatusTitle }}
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngFor="let pro of status | unique: 'productId'">
                             <tr>
-                                <th class="border-b-2 text-left font-semibold">Lead Owner</th>
-                                <th class="border-l-2 border-b-2 text-center font-semibold" *ngFor="let s of status">
-                                    {{s.statusTitle}}
-                                </th>
+                              <td [attr.colspan]="(status | unique: 'leadStatusId').length + 1" class="border-b-2 p-2 text-left font-bold text-2xl">
+                                {{ pro.productName }}
+                              </td>
                             </tr>
-                            <tr *ngFor="let d of userList | filterx:dx.prodId | unique:'leadOwner'">
-                                <td class="border-top-2 text-left">{{d.leadOwnerName}}</td>
-                                <ng-container *ngFor="let sq of status">
-                                    <ng-container *ngFor="let dq of userList | filterxy:sq.sId">
-                                        <td class="border-l-2 text-center"
-                                            *ngIf="dq.sId === sq.statusId &&  dq.leadOwnerId === d.leadOwnerId && dq.prodId === dx.prodId">
-                                            {{dq.count}}
-                                        </td>
-                                    </ng-container>
-                                </ng-container>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <ng-template #noReports>
-                    <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no
-                        Reports!</div>
-                </ng-template>
+                            <ng-container *ngFor="let ow of status | filter: { productId: pro.productId }: true | unique: 'leadOwner'">
+                              <tr>
+                                <td class="border-2 p-2 pl-4 text-left">
+                                  {{ ow.firstName }}
+                                </td>
+                                <td *ngFor="let s of status | filter: { leadOwner: ow.leadOwner, productId: pro.productId }: true | unique: 'leadStatusId' | orderBy: 'leadStatusId'"
+                                    class="border-2 p-2  text-center">
+                                  {{ s.count }}
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
+                        </tbody>
+                      
+                      </table>
+                </ng-container>
+  
+          
+        </ng-container>
+          <ng-template #noReports>
+            <div class="p-8 sm:p-16  text-center">
+             <div class="text-3xl font-semibold tracking-tight">
+                Record Not Found !
+             </div>
+               
+              <div class="text-xs ">
+                Kindly specify a date range and click 'Get Reports' to view the data.
+              </div>
             </div>
+          
+        
+          </ng-template>
         </div>
+      </div>
+      
     </div>
 </div>

@@ -16,17 +16,6 @@ export class LeadPipelineComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<LeadReport>;
   displayedColumns: string[] = [ 'statusTitle', 'totalLeads', 'totalLeadValue', 'averageDealValue', 'winLeads', 'winRate', 'convertedLeads','conversionRate','expectedRevenue'];
 
-
-  // status: number
-  // statusTitle:string  
-  // totalLeads: number
-  // totalLeadValue: number
-  // averageDealValue: number
-  // winLeads: number
-  // winRate: number
-  // convertedLeads: number
-  // conversionRate: number
-  // expectedRevenue: number
   constructor(
     private _leadPipelineService: leadPipelineService,
     private _changeDetectorRef: ChangeDetectorRef
