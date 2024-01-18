@@ -1,4 +1,4 @@
-<div class="absolute inset-0 flex flex-col min-w-0 bg-default overflow-auto">
+<div class="absolute inset-0 flex flex-col min-w-0 bg-default overflow-hidden h-full">
     <!-- Main -->
     <div class="flex-auto">
         <!-- Header -->
@@ -60,7 +60,7 @@
         </div>
         <!-- Team list -->
         <div class="flex-auto py-5 bg-default min-h-3/4 pb-10">
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-5 ">
                     <div class="flex-auto  py-1 bg-card overflow-x-auto">
                         <table mat-table [dataSource]="dataSource" matSort>
                             <!-- Username Column -->
@@ -70,7 +70,7 @@
                             </ng-container>
                             <!-- Leads Column -->
                             <ng-container matColumnDef="totalLeads">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Total Leads </th>
+                                <th mat-header-cell class ="text-center" *matHeaderCellDef mat-header-sort> Total Leads </th>
                                 <td mat-cell class = "text-right" *matCellDef="let row"> {{row.totalLeads}} </td>
                             </ng-container>
                             <!-- Notes Column -->
