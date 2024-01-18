@@ -17,7 +17,7 @@ export class ActivityReportComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<ActivityReport>;
-  displayedColumns: string[] = [ 'leadownerName', 'lead', 'note', 'call', 'email', 'task', 'meeting']; 
+  displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting']; 
   selection = new SelectionModel<ActivityReport>(true, []);
   activityReportCount: number = 0;
 
