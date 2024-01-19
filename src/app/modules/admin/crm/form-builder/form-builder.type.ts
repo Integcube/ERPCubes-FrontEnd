@@ -1,8 +1,8 @@
 export interface FormField{
-    formId:number
     fieldId:number;
-    fieldType:number;
+    formId:number
     fieldLabel:string;
+    fieldType:number;
     placeholder:string;
     values:string;
     isFixed:boolean;
@@ -13,13 +13,14 @@ export interface FormField{
 export interface FormFieldType{
     typeId:number;
     typeName:string;
+    icon: string;
 }
 export class Form {
     formId: number;
-    formName: string;
-    formCode: string;
-    formDescription:string;
-    createdOn: Date;
+    name: string;
+    code: string;
+    description:string;
+    //createdOn: Date;
     constructor(reg) {
         this.formId = reg.formId ? reg.formId : -1
     }

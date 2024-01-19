@@ -1,27 +1,40 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormFieldType } from '../../form-builder.type';
+import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
+import { FormBuilderService } from '../../form-builder.service';
 
 @Component({
   selector: 'app-field-menu',
   templateUrl: './field-menu.component.html',
-  styleUrls: ['./field-menu.component.scss']
 })
 export class FieldMenuComponent implements OnInit {
 
   @Output() dataEvent: EventEmitter<FormFieldType> = new EventEmitter<FormFieldType>();
-  fieldArray:FormFieldType[]=[]
-  constructor() { }
-  fieldSelect(fieldType:FormFieldType){
-  this.dataEvent.emit(fieldType);
+  fieldTypes$: Observable<FormFieldType[]> 
+  fieldTypesArray:FormFieldType[]
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  constructor(
+    private _formBuilderService: FormBuilderService,)
+  { }
+  onFieldSelected(fieldType:FormFieldType){
+    console.log('Selected Field:', fieldType);
+    this.dataEvent.emit(fieldType);
   }
   ngOnInit(): void {
-    const field:FormFieldType = {
-      typeId: 0,
-      typeName: 'field'
-    }
-    for(let i = 0; i<10; i++){
-      this.fieldArray.push({...field})
-    }
+    this.fieldTypes$ = this._formBuilderService.fieldTypes$
+    this._formBuilderService.fieldTypes$
+    .pipe(
+      takeUntil(this._unsubscribeAll),
+      catchError(err => {
+        this.errorMessageSubject.next(err);
+        return EMPTY;
+      })
+    )
+    .subscribe((types: FormFieldType[]) => {
+      this.fieldTypesArray = types
+    })
   }
 
 }
