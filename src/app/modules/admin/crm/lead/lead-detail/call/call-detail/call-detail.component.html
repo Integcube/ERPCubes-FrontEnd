@@ -18,9 +18,9 @@
                 [formControlName]="'subject'">
         </mat-form-field>
         <mat-form-field class="w-full">
-            <mat-label>Call Scenario</mat-label>
+            <mat-label>Call Response</mat-label>
             <mat-select [formControlName]="'reasonId'" [spellcheck]="false" #leadOwner (selectionChange)="onScenarioSelectionChange($event.value)">
-                <mat-option [value]="-1">--Select Call Scenario--</mat-option>
+                <mat-option [value]="-1">--Select Call Response--</mat-option>
                 <ng-container *ngIf="scenarioslist$|async as scenarios">
                     <mat-option *ngFor="let user of scenarios" [value]="user.reasonId">{{user.title}}</mat-option>
                 </ng-container>

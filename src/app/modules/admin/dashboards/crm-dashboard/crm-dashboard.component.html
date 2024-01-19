@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-auto min-w-0 overflow-auto min-h-screen pb-4">
+<div class="absolute flex flex-col flex-auto pb-4 overflow-hidden h-full w-full" >
     <!-- Header -->
     <div class="bg-card">
         <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
@@ -19,7 +19,7 @@
                     <div class="flex flex-col min-w-0 ml-4">
                         <ng-container *transloco="let t">
                             <div
-                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
+                                class="text-lg md:text-lg font-semibold tracking-tight leading-5 md:leading-snug truncate">
                                 {{t('welcome-back')}}, {{user.name}}!</div>
                         </ng-container>
                         <div class="flex items-center">
@@ -32,163 +32,166 @@
             </div>
         </div>
     </div>
-    <div class="flex border-t  py-4 sm:py-6 px-4">
+    <div class="flex  py-2  px-4 ">
         <div class="w-full max-w-screen-xl mx-auto">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 w-full min-w-0">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 w-full min-w-0 ">
                 <!-- Total -->
-                <div class="flex flex-col  items-center flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                    <div class="flex">
-                        <div class="text-lg font-medium truncate">Total Leads</div>
-                    </div>
-                    <div class="flex flex-col items-center mt-2">
-                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-blue-500">
+                <div class="flex flex-col  items-center flex-auto p-2 mt-1 bg-card shadow rounded-2xl overflow-hidden">
+                    <!-- <div class="flex">
+                        <div class="text-md font-medium truncate">Total</div>
+                    </div> -->
+                    <div class="flex flex-col items-center ">
+                        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-blue-500">
                             {{leads?.length??0}}</div>
-                        <div class="text-lg font-medium text-blue-600 dark:text-blue-500">Leads</div>
+                        <div class="text-md font-medium text-blue-600 dark:text-blue-500">Total Leads</div>
                     </div>
                 </div>
                 <!-- New -->
-                <div class="flex flex-col items-center flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                    <div class="flex justify-between">
-                        <div class="text-lg font-medium tracking-tight leading-6 truncate">New Leads</div>
-                    </div>
-                    <div class="flex flex-col items-center mt-2">
-                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-amber-500">
+                <div class="flex flex-col items-center flex-auto p-2  bg-card shadow rounded-2xl overflow-hidden">
+                    <!-- <div class="flex justify-between">
+                        <div class="text-md font-medium tracking-tight leading-6 truncate">New Leads</div>
+                    </div> -->
+                    <div class="flex flex-col items-center mt-1">
+                        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-amber-500">
                             {{calculateLeadNumber(1)}}</div>
-                        <div class="text-lg font-medium text-amber-600 dark:text-amber-500">New</div>
+                        <div class="text-md font-medium text-amber-600 dark:text-amber-500">Total New</div>
                     </div>
                 </div>
                 <!-- Qualified -->
-                <div class="flex flex-col items-center flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                    <div class="flex justify-between">
-                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Qualified Leads</div>
-                    </div>
+                <div class="flex flex-col items-center flex-auto p-2 bg-card shadow rounded-2xl overflow-hidden">
+                    <!-- <div class="flex justify-between">
+                        <div class="text-md font-medium tracking-tight leading-6 truncate">Qualified Leads</div>
+                    </div> -->
                     <div class="flex flex-col items-center mt-2">
-                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-purple-500">
+                        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-purple-500">
                             {{calculateLeadNumber(4)}}</div>
-                        <div class="text-lg font-medium text-purple-600 dark:text-purple-500">Qualified</div>
+                        <div class="text-md font-medium text-purple-600 dark:text-purple-500">Total Qualified</div>
                     </div>
                 </div>
                 <!-- Won -->
-                <div class="flex flex-col items-center flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                    <div class="flex justify-between">
+                <div class="flex flex-col items-center flex-auto p-2  bg-card shadow rounded-2xl overflow-hidden">
+                    <!-- <div class="flex justify-between">
                         <div class="text-lg font-medium tracking-tight leading-6 truncate">Won Leads</div>
-                    </div>
-                    <div class="flex flex-col items-center mt-2">
-                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-green-500">
+                    </div> -->
+                    <div class="flex flex-col items-center mt-1">
+                        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-green-500">
                             {{calculateLeadNumber(6)}}</div>
-                        <div class="text-lg font-medium text-green-600 dark:text-green-500">Won</div>
+                        <div class="text-md font-medium text-green-600 dark:text-green-500">Total Won</div>
                     </div>
                 </div>
                 <!-- Lost -->
-                <div class="flex flex-col items-center flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-                    <div class="flex justify-between">
-                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Lost Leads</div>
-                    </div>
-                    <div class="flex flex-col items-center mt-2">
-                        <div class="text-7xl sm:text-8xl font-bold tracking-tight leading-none text-red-500">
+                <div class="flex flex-col items-center flex-auto p-2  bg-card shadow rounded-2xl overflow-hidden">
+                    <!-- <div class="flex justify-between">
+                        <div class="text-lg font-medium tracking-tight leading-6 truncate">Total Lost </div>
+                    </div> -->
+                    <div class="flex flex-col items-center mt-1">
+                        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-red-500">
                             {{calculateLeadNumber(5)}}</div>
-                        <div class="text-lg font-medium text-red-600 dark:text-red-500">Lost</div>
+                        <div class="text-md font-medium text-red-600 dark:text-red-500">Total Lost</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="flex flex-row gap-4 px-4 ">
-        <div class="flex-1 bg-card p-6  shadow rounded-2xl overflow-hidden">
-            <ng-container *ngIf="barChartOptions">
-                <apx-chart [series]="barChartOptions.series" [chart]="barChartOptions.chart"
-                    [plotOptions]="barChartOptions.plotOptions" [xaxis]="barChartOptions.xaxis"></apx-chart>
-            </ng-container>
+    <div fuseScrollbar>
+        <div class="flex flex-row gap-4 px-4  ">
+            <div class="flex-1 bg-card p-6  shadow rounded-2xl overflow-hidden">
+                <ng-container *ngIf="barChartOptions">
+                    <apx-chart [series]="barChartOptions.series" [chart]="barChartOptions.chart"
+                        [plotOptions]="barChartOptions.plotOptions" [xaxis]="barChartOptions.xaxis"></apx-chart>
+                </ng-container>
+            </div>
+            <div class="flex-2 bg-card p-6 flex items-center justify-center shadow rounded-2xl overflow-hidden">
+                <ng-container *ngIf="pieChartOptions">
+                    <apx-chart class="flex justify-between self-center items-center" [series]="pieChartOptions.series"
+                        [chart]="pieChartOptions.chart" [labels]="pieChartOptions.labels"
+                        [colors]="pieChartOptions.colors"></apx-chart>
+                </ng-container>
+            </div>
         </div>
-        <div class="flex-2 bg-card p-6 flex items-center justify-center shadow rounded-2xl overflow-hidden">
-            <ng-container *ngIf="pieChartOptions">
-                <apx-chart class="flex justify-between self-center items-center" [series]="pieChartOptions.series"
-                    [chart]="pieChartOptions.chart" [labels]="pieChartOptions.labels"
-                    [colors]="pieChartOptions.colors"></apx-chart>
-            </ng-container>
-        </div>
-    </div>
-    <div class="flex gap-4 px-4 mt-6">
-        <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
-            <div class="flex justify-between">
-                <div class="text-lg font-medium tracking-tight leading-6 truncate">Lead Monthly Progress</div>
-                <div class="ml-2">
-                    <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
-                        [matMenuTriggerFor]="accountBalanceMenu">
-                        <span class="font-medium text-sm text-secondary">{{selectedFilter.title}}</span>
-                    </button>
-                    <mat-menu #accountBalanceMenu="matMenu">
-                        <button mat-menu-item *ngFor="let f of filterMonth"
-                            (click)="setFilter(f)">{{f.title}}</button>
-                    </mat-menu>
+        <div class="flex gap-4 px-4 mt-2" fuseScrollbar>
+            <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                <div class="flex justify-between">
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Lead Monthly Progress</div>
+                    <div class="ml-2">
+                        <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
+                            [matMenuTriggerFor]="accountBalanceMenu">
+                            <span class="font-medium text-sm text-secondary">{{selectedFilter.title}}</span>
+                        </button>
+                        <mat-menu #accountBalanceMenu="matMenu">
+                            <button mat-menu-item *ngFor="let f of filterMonth"
+                                (click)="setFilter(f)">{{f.title}}</button>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-auto mt-2 " > 
+                    <table class="min-w-240 " mat-table [dataSource]="filterLeads">
+                        <!-- Name -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef sticky>
+                                Name
+                            </th>
+                            <td mat-cell *matCellDef="let budget">
+                                <span class="flex items-center">
+                                    <span
+                                        class="flex flex-0 items-center justify-center w-5 h-5 rounded-full overflow-hidden">
+                                        <ng-container *ngIf="budget.avatar">
+                                            <img class="object-cover w-full h-full" [src]="selectedLead.avatar"
+                                                alt="Contact avatar" />
+                                        </ng-container>
+                                        <ng-container *ngIf="!budget.avatar">
+                                            <div
+                                                class="flex items-center justify-center w-full h-full rounded-full text-sm uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                {{budget.firstName.charAt(0)}}
+                                            </div>
+                                        </ng-container>
+                                    </span>
+                                    <span class="ml-3 leading-4">{{budget.firstName + " " + budget.lastName}}</span>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <!-- Email -->
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Email
+                            </th>
+                            <td mat-cell *matCellDef="let budget">
+                                <span class="ml-3 leading-4">{{budget.email}}</span>
+                            </td>
+                        </ng-container>
+                        <!-- Phone -->
+                        <ng-container matColumnDef="phone">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Phone
+                            </th>
+                            <td mat-cell *matCellDef="let budget">
+                                <span class="ml-3 leading-4">{{budget.mobile}}</span>
+                            </td>
+                        </ng-container>
+                        <!-- Status -->
+                        <ng-container matColumnDef="leadStatus">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Status
+                            </th>
+                            <td mat-cell *matCellDef="let budget">
+                                <span class="ml-3 leading-4">{{budget.statusTitle}}</span>
+                            </td>
+                        </ng-container>
+                        <!-- createdDate -->
+                        <ng-container matColumnDef="createdDate">
+                            <th mat-header-cell *matHeaderCellDef>
+                                Date
+                            </th>
+                            <td mat-cell *matCellDef="let budget">
+                                <span class="ml-3 leading-4">{{budget.createdDate | date}}</span>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
                 </div>
             </div>
-            <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
-                <table class="min-w-240 overflow-y-visible" mat-table [dataSource]="filterLeads">
-                    <!-- Name -->
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef sticky>
-                            Name
-                        </th>
-                        <td mat-cell *matCellDef="let budget">
-                            <span class="flex items-center">
-                                <span
-                                    class="flex flex-0 items-center justify-center w-5 h-5 rounded-full overflow-hidden">
-                                    <ng-container *ngIf="budget.avatar">
-                                        <img class="object-cover w-full h-full" [src]="selectedLead.avatar"
-                                            alt="Contact avatar" />
-                                    </ng-container>
-                                    <ng-container *ngIf="!budget.avatar">
-                                        <div
-                                            class="flex items-center justify-center w-full h-full rounded-full text-sm uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                            {{budget.firstName.charAt(0)}}
-                                        </div>
-                                    </ng-container>
-                                </span>
-                                <span class="ml-3 leading-4">{{budget.firstName + " " + budget.lastName}}</span>
-                            </span>
-                        </td>
-                    </ng-container>
-                    <!-- Email -->
-                    <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Email
-                        </th>
-                        <td mat-cell *matCellDef="let budget">
-                            <span class="ml-3 leading-4">{{budget.email}}</span>
-                        </td>
-                    </ng-container>
-                    <!-- Phone -->
-                    <ng-container matColumnDef="phone">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Phone
-                        </th>
-                        <td mat-cell *matCellDef="let budget">
-                            <span class="ml-3 leading-4">{{budget.mobile}}</span>
-                        </td>
-                    </ng-container>
-                    <!-- Status -->
-                    <ng-container matColumnDef="leadStatus">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Status
-                        </th>
-                        <td mat-cell *matCellDef="let budget">
-                            <span class="ml-3 leading-4">{{budget.statusTitle}}</span>
-                        </td>
-                    </ng-container>
-                    <!-- createdDate -->
-                    <ng-container matColumnDef="createdDate">
-                        <th mat-header-cell *matHeaderCellDef>
-                            Date
-                        </th>
-                        <td mat-cell *matCellDef="let budget">
-                            <span class="ml-3 leading-4">{{budget.createdDate | date}}</span>
-                        </td>
-                    </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-            </div>
         </div>
     </div>
+  
 </div>

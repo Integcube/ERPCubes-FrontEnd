@@ -17,7 +17,7 @@ export class ActivityReportComponent {
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<ActivityReport>;
-  displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting'];
+  displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting']; 
   selection = new SelectionModel<ActivityReport>(true, []);
   activityReportCount: number = 0;
 
@@ -31,18 +31,12 @@ export class ActivityReportComponent {
   ) { }
   usernames$ = this._activityReportService.users$
   reports$ = this._activityReportService.activityReport$
-  activityReportWithUser$ = combineLatest(
-    this.usernames$,
-    this.reports$,
-  ).pipe(
-    map(([users, reports]) => reports.map(r => ({
-      ...r,
-      leadOwnerName: users.find(a => a.id === r.leadOwner)?.name
-    } as ActivityReport)))
-  )
+  activityReportWithUser$ = this.reports$;
+  
   ngOnInit(): void {
     this.activityReportWithUser$.subscribe((report) => {
         this.activityReportCount = report.length;
+        debugger
         this.dataSource = new MatTableDataSource(report);
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();

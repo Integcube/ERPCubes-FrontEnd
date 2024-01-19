@@ -137,8 +137,10 @@ export class Note {
     createdDate: Date;
     createdBy: string;
     userName: string;
+    createdByName: string;
     tags: Tag[];
     tasks: Tasks[];
+   
     constructor(reg) {
         this.noteId = reg.noteId ? reg.noteId : -1
     }
@@ -180,7 +182,59 @@ export class TaskModel {
     createdDate: Date;
     taskType: string;
     tags: Tag[];
+    tasktypeId:number
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
+        this.tasktypeId = reg.tasktypeId ? reg.tasktypeId : 5
+
     }
+}
+
+export class LeadList{
+    ad_id:string;
+    ad_name:string;
+    created_time:Date;
+    form_id:string;
+    id:string;
+    firstName:string;
+    lastName:string;
+    city:string;
+    email:string
+    leadId:number = -1
+    sourceId:number = 4;
+    productId:number = 15;
+}
+export class LeadImportList {
+    leadId: number;
+    firstName: string = "";
+    lastName: string = "";
+    email: string = "";
+    status: number;
+    statusTitle: string = "";
+    leadOwner: string = "";
+    mobile: string = "";
+    work: string = "";
+    address: string = "";
+    street: string = "";
+    city: string = "";
+    zip: string = "";
+    state: string = "";
+    country: string = "";
+    companyTitle:string="";
+    sourceTitle: string = "";
+    industryTitle: string = "";
+    productTitle: string = "";
+    createdDate: Date;
+    modifiedDate: Date;
+    isHovered: boolean;
+    avatar: any;
+    constructor(reg) {
+        this.leadId = reg.leadId ? reg.leadId : -1;
+        this.status = reg.status ? reg.status : 0;
+        this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
+    }
+}
+export interface EventType {
+    typeId: number,
+    typeTitle: string
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Injectable({
     providedIn: 'root'
@@ -9,13 +10,37 @@ import { Notification } from 'app/layout/common/notifications/notifications.type
 export class NotificationsService
 {
     private _notifications: ReplaySubject<Notification[]> = new ReplaySubject<Notification[]>(1);
+    private _connection: HubConnection;
 
     /**
      * Constructor
      */
     constructor(private _httpClient: HttpClient)
     {
+        this.startConnection();
+
     }
+    private startConnection = () => {
+        this._connection = new HubConnectionBuilder()
+          .withUrl('https://localhost:7020/ticketHub') // Change this URL to your SignalR hub URL
+          .build();
+    
+        this._connection
+          .start()
+          .then(() => {
+            console.log('Connection started');
+          })
+          .catch((err) => {
+            console.error('Error while starting connection: ' + err);
+          });
+      };
+    
+      public addTransferChartDataListener = () => {
+        this._connection.on('ReceiveNewTicket', (data) => {
+          console.log('New Ticket Received:', data);
+          // Handle the received data as needed in your Angular application
+        });
+      };
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors

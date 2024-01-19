@@ -64,6 +64,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             createdDate: data.createdDate,
             tags: data.tags,
             tasks: data.tasks,
+            createdByName: "",
           };
           this._changeDetectorRef.markForCheck();
         },

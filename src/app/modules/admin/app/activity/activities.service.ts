@@ -37,9 +37,8 @@ export class ActivitiesService
             id: this.user.id,
             tenantId: this.user.tenantId,
             count,
-            leadId : -1,
-            companyId: -1,
-            opportunityId: -1,
+            contactTypeId:-1,
+            contactId:-1,
         }
         return this._httpClient.post<Activity[]>(this.getUserActivityURL, data).pipe(
             tap((response: Activity[]) => {

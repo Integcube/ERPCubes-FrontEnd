@@ -1,4 +1,9 @@
 
+<style>
+    .text-sm {
+    font-size: 0.65rem !important;
+}
+</style>
 <div class="flex flex-col w-full" >
     <div class="flex items-center mb-2 sm:mt-0 ">
         <div class="flex-auto">
@@ -39,11 +44,12 @@
                                             {{meeting.subject}}
                                         </div>
                                         <div class="ml-auto  text-left whitespace-nowrap text-hint text-sm text-secondary">
-                                            Created On {{ meeting.createdDate | date:'dd-MMM-yyyy hh:mm a' }}
-                                            <div>
-                                                
-                                              Created By {{ meeting.createdByName }}
-                                            </div>
+                                            <span>
+                                                <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:clock'"></mat-icon>
+                                                {{ meeting.createdDate | date:'dd-MMM-yyyy hh:mm a' }}
+                                                <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:user'"></mat-icon> 
+                                                {{ meeting.createdByName }}
+                                            </span>
                                         </div>
                                     </div>
                                     <!-- Expert -->

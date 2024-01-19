@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
+import { ContactEnum } from 'app/core/enum/crmEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,7 @@ export class CompanyService {
   private readonly allTagsUrl = `${environment.url}/Tags/all`
   private readonly deleteCallsUrl = `${environment.url}/Call/delete`
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
+  private contactEnumInstance: ContactEnum;
 
   
   user: User;
@@ -75,6 +77,7 @@ export class CompanyService {
     this._userService.user$.subscribe(user => {
       this.user = user;
     })
+    this.contactEnumInstance = new ContactEnum();
   }
   get filter$(): Observable<CompanyFilter> {
     return this._filter.asObservable();
@@ -348,11 +351,10 @@ export class CompanyService {
   getActivities(count: number, companyId: number): Observable<any> {
     let data = {
       tenantId: this.user.tenantId,
-      id: this.user.id,
+      id: "-1",//this.user.id,
       count,
-      companyId,
-      leadId: -1,
-      opportunityId: -1,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
     }
     return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
       tap((response: Activity[]) => {
@@ -367,9 +369,8 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
     }
     return this._httpClient.post<Note[]>(this.getNotesUrl, data).pipe(
       tap((notes) => {
@@ -383,9 +384,8 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId
     }
     return this._httpClient.post<Call[]>(this.getCallsUrl, data).pipe(
       tap((calls) => {
@@ -399,9 +399,8 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
     }
     return this._httpClient.post<TaskModel[]>(this.getCompanyTaskUrl, data).pipe(
       tap((tasks) => {
@@ -415,9 +414,8 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId
     }
     return this._httpClient.post<Email[]>(this.getEmailsUrl, data).pipe(
       tap((emails) => {
@@ -430,9 +428,8 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId
     }
     return this._httpClient.post<Meeting[]>(this.getMeetingsUrl, data).pipe(
       tap((meetings) => {
@@ -446,14 +443,13 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId: companyId,
       callId: call.callId,
       subject: call.subject,
       response: call.response,
       startTime: call.startTime,
-      endTime: call.endTime
+      endTime: call.endTime,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
@@ -466,12 +462,11 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId: companyId,
       emailId: email.emailId,
       subject: email.subject,
-      description: email.description
+      description: email.description,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId
     }
     return this._httpClient.post<Email[]>(this.saveEmailsUrl, data).pipe(
       tap((email) => {
@@ -484,9 +479,8 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId: companyId,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
       meetingId: meeting.meetingId,
       subject: meeting.subject,
       note: meeting.note,
@@ -527,9 +521,8 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      leadId: -1,
-      opportunityId: -1,
-      companyId: companyId,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
       note: {
         noteId: note.noteId,
         noteTitle: note.noteTitle,
@@ -640,9 +633,8 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       type: 'task',
-      leadId: -1,
-      opportunityId: -1,
-      companyId: companyId,
+      contactTypeId:this.contactEnumInstance.Company,
+      contactId:companyId,
       task: {
         ...taskForm.value,
 
@@ -756,7 +748,6 @@ export class CompanyService {
       id: this.user.id,
       tenantId: this.user.tenantId,
       callId: callId,
-
     }
     return this._httpClient.post<Call>(this.deleteCallsUrl, data).pipe(
       tap((customList) => {

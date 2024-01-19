@@ -5,6 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { Subject, takeUntil } from 'rxjs';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
 import { NotificationsService } from 'app/layout/common/notifications/notifications.service';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Component({
     selector       : 'notifications',
@@ -15,6 +16,8 @@ import { NotificationsService } from 'app/layout/common/notifications/notificati
 })
 export class NotificationsComponent implements OnInit, OnDestroy
 {
+    private connection: HubConnection;
+
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;
 
@@ -30,9 +33,10 @@ export class NotificationsComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _notificationsService: NotificationsService,
         private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
+        private _viewContainerRef: ViewContainerRef,
     )
     {
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -44,6 +48,7 @@ export class NotificationsComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        this.webSocket();
         // Subscribe to notification changes
         this._notificationsService.notifications$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -58,6 +63,10 @@ export class NotificationsComponent implements OnInit, OnDestroy
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+    }
+
+    webSocket(){
+        this._notificationsService.addTransferChartDataListener();
     }
 
     /**

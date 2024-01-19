@@ -17,6 +17,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { CrmDashboardRouting } from './crm-dashboard.routing';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 
@@ -40,6 +41,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     NgApexchartsModule,
     TranslocoModule,
     MatTooltipModule,
-    SharedModule]
+    SharedModule,
+    FuseScrollbarModule
+  ]
 })
 export class CrmDashboardModule { }

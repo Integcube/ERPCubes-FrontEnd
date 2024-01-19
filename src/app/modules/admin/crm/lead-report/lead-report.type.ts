@@ -8,6 +8,8 @@ export interface LeadReport {
     count: number
 }
 
+
+
 export interface LeadStatus {
     statusId: number;
     statusTitle: string;

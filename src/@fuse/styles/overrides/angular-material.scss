@@ -1251,7 +1251,7 @@ table {
 .mat-cell {
     border-right: 1px solid rgb(232, 232, 232);
     border-top: 1px solid rgb(232, 232, 232);
-    min-width: 13rem;
+    // min-width: 13rem;
   }
   .mat-row:last-child .mat-cell {
     border-bottom: none; /* Remove the bottom border from the last cell in the last row */
@@ -1269,16 +1269,25 @@ table {
     border-right: none; /* Remove the border on the last header cell */
   }
 
-
+  tr.mat-header-row {
+    height: 32px!important;
+}
 .mat-row {
     height: 10 !important;
 }
-
+tr.mat-row, tr.mat-footer-row {
+    height: 34px!important;
+}
 .mat-cell,
 .mat-header-cell {
     padding: 1px 10px !important;
 }
 
+th.mat-header-cell {
+   
+    background-color: #f1f5f9!important;
+  
+}
 // @media only screen and (max-width: 768px) {
 
 //     td,

@@ -16,6 +16,8 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { User } from 'app/core/user/user.types';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail.component';
+import { LeadImportComponent } from '../lead-import/lead-import.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-lead-list',
@@ -27,6 +29,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('exporter') public exporter;
   @ViewChild('usersPanel') private _usersPanel: TemplateRef<any>;
   @ViewChild('usersPanelOrigin') private _usersPanelOrigin: ElementRef;
   @ViewChild('createdDatePanel') private _createdDatePanel: TemplateRef<any>;
@@ -35,9 +38,11 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
   @ViewChild('leadStatusPanel') private _leadStatusPanel: TemplateRef<any>;
   @ViewChild('leadStatusPanelOrigin') private _leadStatusPanelOrigin: ElementRef;
+  @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
-  displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'leadStatus','sourceTitle','industryTitle','country','companyTitle', 'createdDate'];
+  //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
+  displayedColumns: string[] = ['select', 'name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
   dateRangesFilter:any[];
@@ -82,7 +87,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     private _renderer2: Renderer2,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    public dialog: MatDialog
   ) { }
   onDateRangeChange(selectedValue: string,type: string) {
     let startDate: Date = new Date();
@@ -403,6 +409,9 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
+  importFile(){
+
+  }
   updateLead(selectedLead: Lead) {
     this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
@@ -501,4 +510,21 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
+
+  
+  openConnectorDialog() {
+    const dialogRef = this.dialog.open(LeadImportComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%"
+      }
+    );
+  }
+
+  // exportToExcel() {
+  //   this.exporter.exportTable('xls', { fileName: 'Lead-list' });
+  // }
+
 }
