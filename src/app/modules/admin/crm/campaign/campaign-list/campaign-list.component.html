@@ -8,7 +8,7 @@
             <!-- Main -->
             <div class="flex-auto">
                 <!-- Header -->
-                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-12 px-6 md:px-8">
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-3 px-6 md:px-8">
                     <!-- Title -->
                     <div>
                         <div class="text-3xl font-bold tracking-tight leading-none">Campaigns</div>
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <!-- Campaign list -->
-                <div class="flex-auto pt-12 bg-default min-h-3/4 pb-10">
+                <div class="flex-auto pt-2 bg-default min-h-3/4 pb-10">
                     <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
                         <ng-container *ngIf="campaigns$ | async as campaigns">
                             <ng-container *ngIf="campaigns.length; else noCampaign">
