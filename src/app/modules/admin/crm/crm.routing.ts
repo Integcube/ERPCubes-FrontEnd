@@ -30,7 +30,7 @@ export const crmRoutes: Routes = [
         { path: 'campaign',loadChildren:()=> import('app/modules/admin/crm/campaign/campaign.module').then(m=>m.CampaignModule)},
         { path: 'project',loadChildren:()=> import('app/modules/admin/crm/project/project.module').then(m=>m.ProjectModule)},
         { path: 'forms',loadChildren:()=> import('app/modules/admin/crm/form-builder/form-builder.module').then(m=>m.FormBuilderModule)},
-
+        { path: 'custom-form',loadChildren:()=> import('app/modules/landing/custom-form/custom-form.module').then(m=>m.CustomFormModule)},
     ]
 },
 ]
