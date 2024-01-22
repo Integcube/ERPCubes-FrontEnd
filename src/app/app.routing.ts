@@ -77,8 +77,8 @@ export const appRoutes: Route[] = [
             {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
             {path: 'crm-dashboard', loadChildren: () => import('app/modules/admin/dashboards/crm-dashboard/crm-dashboard.module').then(m => m.CrmDashboardModule)},
 
-           //CRM Routes
-           {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)},
+            //CRM Routes
+            {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)},
             //App Routes
             {path: 'app', children: [
                 {path: 'calendar', loadChildren: () => import('app/modules/admin/app/calendar/calendar.module').then(m => m.CalendarModule)},
@@ -88,8 +88,7 @@ export const appRoutes: Route[] = [
                 {path: 'file-manager', loadChildren: () => import('app/modules/admin/app/file-manager/file-manager.module').then(m => m.FileManagerModule)},
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/app/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
                 {path: 'chat', loadChildren: () => import('app/modules/admin/app/chat/chat.module').then(m => m.ChatModule)},
-
-            ]},
+                {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},            ]},
            //Marketing
            {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)},
 
