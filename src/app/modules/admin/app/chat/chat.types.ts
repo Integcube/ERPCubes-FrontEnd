@@ -1,55 +1,40 @@
-export interface Profile
-{
-    id?: string;
-    name?: string;
-    email?: string;
-    avatar?: string;
-    about?: string;
+export interface Ticket {
+    ticketId: number;
+    socialMediaPlatform: string;
+    customerId: string;
+    timestamp: Date;
+    status: string;
+    assigneeId: string;
+    priority: string;
+    category: string;
+    resolutionStatus: string;
+    dueDate: Date;
+    recentlyActive: Date;
+    notes: string;
+    latestConversation: Conversation;
+    tenantId: number;
 }
 
-export interface Contact
-{
-    id?: string;
-    avatar?: string;
-    name?: string;
-    about?: string;
-    details?: {
-        emails?: {
-            email?: string;
-            label?: string;
-        }[];
-        phoneNumbers?: {
-            country?: string;
-            phoneNumber?: string;
-            label?: string;
-        }[];
-        title?: string;
-        company?: string;
-        birthday?: string;
-        address?: string;
-    };
-    attachments?: {
-        media?: any[];
-        docs?: any[];
-        links?: any[];
-    };
-}
-
-export interface Chat
-{
-    id?: string;
-    contactId?: string;
-    contact?: Contact;
-    unreadCount?: number;
-    muted?: boolean;
-    lastMessage?: string;
-    lastMessageAt?: string;
-    messages?: {
-        id?: string;
-        chatId?: string;
-        contactId?: string;
-        isMine?: boolean;
-        value?: string;
-        createdAt?: string;
-    }[];
+export class Conversation {
+    conversationId: number;
+    ticketId: number;
+    fromId: string;
+    toId: string;
+    timestamp: Date;
+    isMine:boolean;
+    messageType: string;
+    messageBody: string;
+    mediaType: string;
+    readStatus: boolean;
+    reaction: string;
+    forwardedStatus: boolean;
+    location: string;
+    messageStatus: string;
+    createdDate: Date;
+    eventType: string;
+    customerFeedback: string;
+    tenantId: number;
+    constructor(reg) {
+        this.conversationId = reg.conversationId ? reg.conversationId : -1;
+    }
 }

@@ -16,7 +16,6 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 })
 export class NotificationsComponent implements OnInit, OnDestroy
 {
-    private connection: HubConnection;
 
     @ViewChild('notificationsOrigin') private _notificationsOrigin: MatButton;
     @ViewChild('notificationsPanel') private _notificationsPanel: TemplateRef<any>;

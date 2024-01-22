@@ -3,32 +3,31 @@ import { ChatComponent } from './chat.component';
 import { ChatsComponent } from './chats/chats.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { EmptyConversationComponent } from './empty-conversation/empty-conversation.component';
-import { ChatChatsResolver, ChatContactsResolver, ChatProfileResolver, ChatChatResolver } from './chat.resolvers';
+import { ConversationsResolver, TicketsResolver, UsersResolver } from './chat.resolvers';
 
 export const chatRoutes: Route[] = [
     {
-        path     : '',
+        path: '',
         component: ChatComponent,
-        resolve  : {
-            chats   : ChatChatsResolver,
-            contacts: ChatContactsResolver,
-            profile : ChatProfileResolver
+        resolve: {
+            tickets: TicketsResolver,
+            users: UsersResolver,
         },
-        children : [
+        children: [
             {
-                path     : '',
+                path: '',
                 component: ChatsComponent,
-                children : [
+                children: [
                     {
-                        path     : '',
+                        path: '',
                         pathMatch: 'full',
                         component: EmptyConversationComponent
                     },
                     {
-                        path     : ':id',
+                        path: ':id',
                         component: ConversationComponent,
-                        resolve  : {
-                            conversation: ChatChatResolver
+                        resolve: {
+                            conversation: ConversationsResolver
                         }
                     }
                 ]

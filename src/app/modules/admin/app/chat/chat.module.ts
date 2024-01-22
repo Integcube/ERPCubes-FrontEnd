@@ -14,8 +14,7 @@ import { ChatsComponent } from './chats/chats.component';
 import { ContactInfoComponent } from './contact-info/contact-info.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { EmptyConversationComponent } from './empty-conversation/empty-conversation.component';
-import { NewChatComponent } from './new-chat/new-chat.component';
-import { ProfileComponent } from './profile/profile.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
@@ -24,8 +23,6 @@ import { ProfileComponent } from './profile/profile.component';
         ContactInfoComponent,
         ConversationComponent,
         EmptyConversationComponent,
-        NewChatComponent,
-        ProfileComponent
     ],
     imports     : [
         RouterModule.forChild(chatRoutes),
@@ -34,6 +31,7 @@ import { ProfileComponent } from './profile/profile.component';
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatSelectModule,
         MatMenuModule,
         MatSidenavModule,
         SharedModule

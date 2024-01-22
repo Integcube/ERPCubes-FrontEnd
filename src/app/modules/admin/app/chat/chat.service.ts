@@ -1,201 +1,164 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Chat, Contact, Profile } from './chat.types';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment';
+import { Conversation, Ticket } from './chat.types';
+import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChatService
-{
-    private _chat: BehaviorSubject<Chat> = new BehaviorSubject(null);
-    private _chats: BehaviorSubject<Chat[]> = new BehaviorSubject(null);
-    private _contact: BehaviorSubject<Contact> = new BehaviorSubject(null);
-    private _contacts: BehaviorSubject<Contact[]> = new BehaviorSubject(null);
-    private _profile: BehaviorSubject<Profile> = new BehaviorSubject(null);
+export class ChatService {
+    private readonly getTicketsUrl = `${environment.url}/Ticket/allTickets`
+    private readonly getUsersUrl = `${environment.url}/Users/all`
+    private readonly getConversationsUrl = `${environment.url}/Ticket/allConversation`
+    private readonly setReadStatusUrl = `${environment.url}/Ticket/setReadStatus`
+    private readonly sendMessageUrl = `${environment.url}/Ticket/sendMessage`
 
-    /**
-     * Constructor
-     */
-    constructor(private _httpClient: HttpClient)
-    {
+    user: User;
+
+    private _tickets: BehaviorSubject<Ticket[]> = new BehaviorSubject(null);
+    private _ticket: BehaviorSubject<Ticket> = new BehaviorSubject(null);
+    private _conversations: BehaviorSubject<Conversation[]> = new BehaviorSubject(null);
+    private _conversation: BehaviorSubject<Conversation> = new BehaviorSubject(null);
+    private _appUsers: BehaviorSubject<User[]> = new BehaviorSubject(null);
+
+    private _ticketConnection: HubConnection;
+
+    constructor(
+        private _userService: UserService,
+        private _httpClient: HttpClient,
+    ) {
+        this.startConnection();
+        this._userService.user$.subscribe(user => {
+            this.user = user;
+        })
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Getter for chat
-     */
-    get chat$(): Observable<Chat>
-    {
-        return this._chat.asObservable();
-    }
-
-    /**
-     * Getter for chats
-     */
-    get chats$(): Observable<Chat[]>
-    {
-        return this._chats.asObservable();
-    }
-
-    /**
-     * Getter for contact
-     */
-    get contact$(): Observable<Contact>
-    {
-        return this._contact.asObservable();
-    }
-
-    /**
-     * Getter for contacts
-     */
-    get contacts$(): Observable<Contact[]>
-    {
-        return this._contacts.asObservable();
-    }
-
-    /**
-     * Getter for profile
-     */
-    get profile$(): Observable<Profile>
-    {
-        return this._profile.asObservable();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get chats
-     */
-    getChats(): Observable<any>
-    {
-        return this._httpClient.get<Chat[]>('api/apps/chat/chats').pipe(
-            tap((response: Chat[]) => {
-                this._chats.next(response);
+    private startConnection = () => {
+        this._ticketConnection = new HubConnectionBuilder()
+            .withUrl('https://localhost:7020/ticketHub', {
+                transport: HttpTransportType.WebSockets,
+                skipNegotiation: true
             })
-        );
-    }
+            .build();
 
-    /**
-     * Get contact
-     *
-     * @param id
-     */
-    getContact(id: string): Observable<any>
-    {
-        return this._httpClient.get<Contact>('api/apps/chat/contacts', {params: {id}}).pipe(
-            tap((response: Contact) => {
-                this._contact.next(response);
+        this._ticketConnection
+            .start()
+            .then(() => {
+                console.log('Connection started');
             })
-        );
+            .catch((err) => {
+                console.error('Error while starting connection: ' + err);
+            });
+    };
+
+    public ticketListner = () => {
+        this._ticketConnection.on('ReceiveNewTicket', (data) => {
+            const currentTickets = this._tickets.getValue();
+            let indexToRemove = currentTickets.findIndex(a => a.ticketId == data.ticketId);
+            if (indexToRemove != -1) {
+                currentTickets.splice(indexToRemove, 1);
+            }
+            const updatedTickets = [data, ...currentTickets];
+            this._tickets.next(updatedTickets);
+            const selectedTicket = this._ticket.getValue();
+            if (selectedTicket.ticketId == data.ticketId) {
+                const currentConversations = this._conversations.getValue();
+                const updatedConversation = [...currentConversations, data.latestConversation];
+                this._conversations.next(updatedConversation);
+            }
+        });
+    };
+
+
+    get ticket$(): Observable<Ticket> {
+        return this._ticket.asObservable();
+    }
+    get tickets$(): Observable<Ticket[]> {
+        return this._tickets.asObservable();
+    }
+    get conversations$(): Observable<Conversation[]> {
+        return this._conversations.asObservable();
+    }
+    get conversation$(): Observable<Conversation> {
+        return this._conversation.asObservable();
     }
 
-    /**
-     * Get contacts
-     */
-    getContacts(): Observable<any>
-    {
-        return this._httpClient.get<Contact[]>('api/apps/chat/contacts').pipe(
-            tap((response: Contact[]) => {
-                this._contacts.next(response);
+    selectTicket(ticket: Ticket) {
+        this._ticket.next(ticket);
+    }
+
+    getTickets(): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<Ticket[]>(this.getTicketsUrl, data).pipe(
+            tap((tickets) => {
+                this._tickets.next(tickets);
             })
-        );
+        )
     }
 
-    /**
-     * Get profile
-     */
-    getProfile(): Observable<any>
-    {
-        return this._httpClient.get<Profile>('api/apps/chat/profile').pipe(
-            tap((response: Profile) => {
-                this._profile.next(response);
+    getUsers(): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
+            tap((users) => {
+                this._appUsers.next(users);
             })
-        );
+        )
     }
-
-    /**
-     * Get chat
-     *
-     * @param id
-     */
-    getChatById(id: string): Observable<any>
-    {
-        return this._httpClient.get<Chat>('api/apps/chat/chat', {params: {id}}).pipe(
-            map((chat) => {
-
-                // Update the chat
-                this._chat.next(chat);
-
-                // Return the chat
-                return chat;
+    setReadStatus(ticketId: number, status: boolean): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            ticketId: ticketId
+        }
+        return this._httpClient.post<Conversation[]>(this.setReadStatusUrl, data).pipe(
+            tap((data) => {
+                const currentTickets = this._tickets.getValue();
+                let index = currentTickets.findIndex(a => a.ticketId == ticketId);
+                currentTickets[index].latestConversation.readStatus = status;
+                this._tickets.next(currentTickets);
+            })
+        )
+    }
+    getConversations(id: number): Observable<Conversation[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            ticketId: id
+        }
+        this.tickets$.pipe(
+            map((tickets) => {
+                const ticket = tickets.find(item => item.ticketId === id) || null;
+                this._ticket.next(ticket);
+            })
+        ).subscribe();
+        this.setReadStatus(id, true).subscribe();
+        return this._httpClient.post<Conversation[]>(this.getConversationsUrl, data).pipe(
+            map((conversations) => {
+                this._conversations.next(conversations);
+                return conversations;
             }),
-            switchMap((chat) => {
-
-                if ( !chat )
-                {
+            switchMap((conversations) => {
+                if (!conversations) {
                     return throwError('Could not found chat with id of ' + id + '!');
                 }
-
-                return of(chat);
+                return of(conversations);
             })
         );
     }
-
-    /**
-     * Update chat
-     *
-     * @param id
-     * @param chat
-     */
-    updateChat(id: string, chat: Chat): Observable<Chat>
-    {
-        return this.chats$.pipe(
-            take(1),
-            switchMap(chats => this._httpClient.patch<Chat>('api/apps/chat/chat', {
-                id,
-                chat
-            }).pipe(
-                map((updatedChat) => {
-
-                    // Find the index of the updated chat
-                    const index = chats.findIndex(item => item.id === id);
-
-                    // Update the chat
-                    chats[index] = updatedChat;
-
-                    // Update the chats
-                    this._chats.next(chats);
-
-                    // Return the updated contact
-                    return updatedChat;
-                }),
-                switchMap(updatedChat => this.chat$.pipe(
-                    take(1),
-                    filter(item => item && item.id === id),
-                    tap(() => {
-
-                        // Update the chat if it's selected
-                        this._chat.next(updatedChat);
-
-                        // Return the updated chat
-                        return updatedChat;
-                    })
-                ))
-            ))
-        );
-    }
-
-    /**
-     * Reset the selected chat
-     */
-    resetChat(): void
-    {
-        this._chat.next(null);
+    sendMessage(ticket: Ticket): Observable<any> {
+        let data = {
+            id: this.user.id,
+            ...ticket,
+        }
+        return this._httpClient.post<any>(this.sendMessageUrl, data)
     }
 }

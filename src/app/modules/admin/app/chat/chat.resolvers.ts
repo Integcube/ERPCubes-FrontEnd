@@ -1,48 +1,57 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { ChatService } from './chat.service';
-import { Chat, Contact, Profile } from './chat.types';
+import { Conversation, Ticket } from './chat.types';
+import { User } from 'app/core/user/user.types';
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChatChatsResolver implements Resolve<any>
+export class TicketsResolver implements Resolve<any>
 {
-    /**
-     * Constructor
-     */
     constructor(
         private _chatService: ChatService,
         private _router: Router
-    )
-    {
+    ) {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Chat[]> | any
-    {
-        return this._chatService.getChats();
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Ticket[]> | any {
+        return this._chatService.getTickets();
+    }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class UsersResolver implements Resolve<any>
+{
+    constructor(
+        private _chatService: ChatService,
+        private _router: Router
+    ) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User[]> | any {
+        return this._chatService.getUsers();
     }
 }
 
 @Injectable({
     providedIn: 'root'
 })
-export class ChatChatResolver implements Resolve<any>
+export class UserResolver implements Resolve<any>{
+    constructor(        private _chatService: ChatService,
+        ) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this._chatService.getUsers();
+    }
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ConversationsResolver implements Resolve<any>
 {
-    /**
-     * Constructor
-     */
+
     constructor(
         private _chatService: ChatService,
         private _router: Router
@@ -50,97 +59,19 @@ export class ChatChatResolver implements Resolve<any>
     {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Chat>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Conversation[]>
     {
-        return this._chatService.getChatById(route.paramMap.get('id'))
+        return this._chatService.getConversations(+route.paramMap.get('id'))
                    .pipe(
-                       // Error here means the requested chat is not available
                        catchError((error) => {
-
-                           // Log the error
                            console.error(error);
-
-                           // Get the parent url
                            const parentUrl = state.url.split('/').slice(0, -1).join('/');
-
-                           // Navigate to there
                            this._router.navigateByUrl(parentUrl);
-
-                           // Throw an error
                            return throwError(error);
                        })
                    );
     }
 }
 
-@Injectable({
-    providedIn: 'root'
-})
-export class ChatContactsResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(
-        private _chatService: ChatService,
-        private _router: Router
-    )
-    {
-    }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Contact[]> | any
-    {
-        return this._chatService.getContacts();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class ChatProfileResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(
-        private _chatService: ChatService,
-        private _router: Router
-    )
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Profile> | any
-    {
-        return this._chatService.getProfile();
-    }
-}

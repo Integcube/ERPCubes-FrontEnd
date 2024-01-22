@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ChatService } from '../chat.service';
-import { Chat } from '../chat.types';
+import { Conversation, Ticket } from '../chat.types';
 
 
 @Component({
@@ -12,11 +12,12 @@ import { Chat } from '../chat.types';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConversationComponent implements OnInit, OnDestroy
-{
+ {
     @ViewChild('messageInput') messageInput: ElementRef;
-    chat: Chat;
+    coversations: Conversation[];
+    ticket:Ticket;
     drawerMode: 'over' | 'side' = 'side';
-    drawerOpened: boolean = false;
+    drawerOpened: boolean = true;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -31,25 +32,14 @@ export class ConversationComponent implements OnInit, OnDestroy
     {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Decorated methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resize on 'input' and 'ngModelChange' events
-     *
-     * @private
-     */
     @HostListener('input')
     @HostListener('ngModelChange')
     private _resizeMessageInput(): void
     {
-        // This doesn't need to trigger Angular's change detection by itself
         this._ngZone.runOutsideAngular(() => {
 
             setTimeout(() => {
 
-                // Set the height to 'auto' so we can correctly read the scrollHeight
                 this.messageInput.nativeElement.style.height = 'auto';
 
                 // Detect the changes so the height is applied
@@ -64,31 +54,24 @@ export class ConversationComponent implements OnInit, OnDestroy
         });
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
-        // Chat
-        this._chatService.chat$
+        this._chatService.conversations$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((chat: Chat) => {
-                this.chat = chat;
-
-                // Mark for check
+            .subscribe((chat: Conversation[]) => {
+                this.coversations = chat;
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Subscribe to media changes
+            this._chatService.ticket$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((ticket: Ticket) => {
+                this.ticket = ticket;
+                this._changeDetectorRef.markForCheck();
+            });
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({matchingAliases}) => {
-
-                // Set the drawerMode if the given breakpoint is active
                 if ( matchingAliases.includes('lg') )
                 {
                     this.drawerMode = 'side';
@@ -97,8 +80,6 @@ export class ConversationComponent implements OnInit, OnDestroy
                 {
                     this.drawerMode = 'over';
                 }
-
-                // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
     }
@@ -112,7 +93,23 @@ export class ConversationComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-
+    sendMessage(){
+      let message =  this.messageInput.nativeElement.value;
+      let conversation:Conversation = new Conversation({});
+      conversation.ticketId =this.ticket.ticketId;
+      conversation.messageBody= message;
+      conversation.isMine = true;
+      conversation.readStatus = true;
+      conversation.tenantId = this.ticket.tenantId;
+      this.ticket.latestConversation = {...conversation}
+      this._chatService.sendMessage(this.ticket).pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(
+        data=>{
+            this.messageInput.nativeElement.value = '';
+            this._changeDetectorRef.markForCheck();
+        }
+      );
+  }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -134,13 +131,13 @@ export class ConversationComponent implements OnInit, OnDestroy
      */
     resetChat(): void
     {
-        this._chatService.resetChat();
+        // this._chatService.resetChat();
 
-        // Close the contact info in case it's opened
-        this.drawerOpened = false;
+        // // Close the contact info in case it's opened
+        // this.drawerOpened = false;
 
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
+        // // Mark for check
+        // this._changeDetectorRef.markForCheck();
     }
 
     /**
@@ -148,11 +145,11 @@ export class ConversationComponent implements OnInit, OnDestroy
      */
     toggleMuteNotifications(): void
     {
-        // Toggle the muted
-        this.chat.muted = !this.chat.muted;
+        // // Toggle the muted
+        // this.chat.muted = !this.chat.muted;
 
-        // Update the chat on the server
-        this._chatService.updateChat(this.chat.id, this.chat).subscribe();
+        // // Update the chat on the server
+        // this._chatService.updateChat(this.chat.id, this.chat).subscribe();
     }
 
     /**
