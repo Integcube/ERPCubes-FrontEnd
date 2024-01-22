@@ -3,28 +3,25 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap, catchError, EMPTY, take, map, switchMap, throwError, of } from 'rxjs';
-import { FormField, Form } from './custom-form.type';
+import { FormField, Form } from './web-form.type';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomFormService {
+export class WebFormService {
+
   private readonly getFormFieldsURL = `${environment.url}/Forms/allFields`
   private readonly getFormsURL = `${environment.url}/Forms/all`
   private readonly saveFormResultURL = `${environment.url}/Forms/saveResult`
   //user:User
-  constructor(
-    private _httpClient: HttpClient,
-    private _userService: UserService,
-    ) 
-  { //this._userService.user$.subscribe(user => {
-      //this.user = user;
-    //} 
-//  )
-}
   private _fields: BehaviorSubject < FormField[] | null > = new BehaviorSubject(null);
   private _forms: BehaviorSubject <Form[]| null> = new BehaviorSubject(null);
   private _form: BehaviorSubject <Form | null> = new BehaviorSubject(null);
+  constructor(
+    private _httpClient: HttpClient,
+    private _userService: UserService,   ) 
+  { }
+
   get fields$(): Observable<FormField[]> {
     return this._fields.asObservable();
   }
