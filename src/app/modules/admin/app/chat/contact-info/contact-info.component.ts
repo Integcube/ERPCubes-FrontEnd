@@ -3,7 +3,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Chat } from 'app/layout/common/quick-chat/quick-chat.types';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
-import { Ticket } from '../chat.types';
+import { Ticket, TicketInfo } from '../chat.types';
 
 @Component({
     selector: 'chat-contact-info',
@@ -15,7 +15,10 @@ export class ContactInfoComponent implements OnInit, OnDestroy {
     ticket: Ticket;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Input() drawer: MatDrawer;
-
+    statuses$ = this._chatService.statuses$;
+    priorities$ = this._chatService.priorities$;
+    types$ = this._chatService.types$;
+    users$ = this._chatService.users$;
     constructor(private _chatService: ChatService,
         private _changeDetectorRef: ChangeDetectorRef,
 
@@ -29,7 +32,22 @@ export class ContactInfoComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
     }
+    
     ngOnDestroy(): void {
-        throw new Error('Method not implemented.');
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
+    }
+    submit(statusId:number){
+        this.ticket.status = statusId;
+        debugger;
+        let info :TicketInfo={
+            priority: this.ticket.priority,
+            assigneeId: this.ticket.assigneeId,
+            type: this.ticket.type,
+            status: this.ticket.status,
+            notes: this.ticket.notes,
+            ticketId: this.ticket.ticketId
+        }
+        this._chatService.saveTicketinfo(info).subscribe();
     }
 }

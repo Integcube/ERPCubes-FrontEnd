@@ -33,38 +33,38 @@
             </div>
         </div>
         <div class="py-5 border-t">
-            <form class="flex flex-col">
+            <form class="flex flex-col" #FormName = "ngForm">
                 <mat-form-field
                 class="fuse-mat-dense">
                 <mat-label>Assignee</mat-label>
-                <mat-select>
-                    <mat-option value="select2-1">Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1</mat-option>
-                    <mat-option value="select2-2">Select 2-2</mat-option>
-                    <mat-option value="select2-3">Select 2-3</mat-option>
+                <mat-select [ngModel]="ticket.assigneeId" name="assignee">
+                    <mat-option [value]="-1">-</mat-option>
+                    <mat-option *ngFor="let user of users$|async" [value]="user.id">{{user.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field
             class="fuse-mat-dense">
             <mat-label>Type</mat-label>
-            <mat-select>
-                <mat-option value="select2-1">Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1</mat-option>
-                <mat-option value="select2-2">Select 2-2</mat-option>
-                <mat-option value="select2-3">Select 2-3</mat-option>
+            <mat-select [ngModel]="ticket.type" name="type">
+                <mat-option [value]=-1>-</mat-option>
+                <mat-option *ngFor="let type of types$|async" [value]="type.ticketTypeId">{{type.typeName}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field
         class="fuse-mat-dense">
         <mat-label>Priority</mat-label>
-        <mat-select>
-            <mat-option value="select2-1">Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1 Select 2-1</mat-option>
-            <mat-option value="select2-2">Select 2-2</mat-option>
-            <mat-option value="select2-3">Select 2-3</mat-option>
+        <mat-select [ngModel]="ticket.priority" name="priority">
+            <mat-option [value]=-1>-</mat-option>
+            <mat-option *ngFor="let priority of priorities$|async" [value]="priority.ticketPriorityId">{{priority.priorityName}}</mat-option>
         </mat-select>
     </mat-form-field>
     <mat-form-field
     class="fuse-mat-dense">
     <mat-label>Notes</mat-label>
     <textarea
+    name="notes"
+    #notes
+    [ngModel]="ticket.notes"
     matInput
     [rows]="3"
     matTextareaAutosize></textarea>
@@ -77,23 +77,17 @@
         class="sticky bottom-0 flex flex-0 items-center h-18 px-4 border-t justify-end  bg-gray-50 dark:bg-transparent">
         <div class="flex gap-1 ">
             <button class="ml-4 h-10 border-r-0  rounded-r-none" mat-flat-button [color]="'primary'">
-                <span class="ml-2 mr-1 text-sm">Submit as Open</span>
+                <span class="ml-2 mr-1 text-sm" (click)="submit(1)">Submit as Open</span>
             </button>
             <button class="h-10 min-w-4 w-4 rounded-l-none p-0 m-0 px-4" mat-flat-button [color]="'primary'" matRipple
                 [matMenuTriggerFor]="dropdownMenu">
                 <mat-icon class="icon-size-3" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
                 <mat-menu #dropdownMenu="matMenu">
-                    <button mat-menu-item>
-                        <span class="w-3 h-3 rounded-full bg-red-800 mr-1"></span><span></span> Submit as Open
-                    </button>
-                    <button mat-menu-item>
-                        <span class="w-3 h-3 rounded-full bg-green-800 mr-1"></span><span></span> Submit as Closed
-                    </button>
-                    <button mat-menu-item>
-                        <span class="w-3 h-3 rounded-full bg-blue-800 mr-1"></span><span></span> Submit as Progress
+                    <button mat-menu-item *ngFor="let status of statuses$|async" (click)="submit(status.ticketStatusId)">
+                        <span [ngClass]="status.class"></span><span>{{status.statusName}}</span> 
                     </button>
                 </mat-menu>
             </button>
         </div>
     </div>
-</div>
+</div> 
