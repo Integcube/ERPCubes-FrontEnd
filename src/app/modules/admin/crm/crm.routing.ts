@@ -31,6 +31,7 @@ export const crmRoutes: Routes = [
         { path: 'project',loadChildren:()=> import('app/modules/admin/crm/project/project.module').then(m=>m.ProjectModule)},
         { path: 'forms',loadChildren:()=> import('app/modules/admin/crm/form-builder/form-builder.module').then(m=>m.FormBuilderModule)},
         { path: 'web-form',loadChildren:()=> import('app/modules/landing/web-form/web-form.module').then(m=>m.WebFormModule)},
+        { path: 'terms-policy',loadChildren:()=> import('app/modules/admin/crm/terms-policy/terms-policy.module').then(m=>m.TermsPolicyModule)},
     ]
 },
 ]

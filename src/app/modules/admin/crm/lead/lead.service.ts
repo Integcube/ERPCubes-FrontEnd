@@ -4,7 +4,7 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 
 @Injectable({
@@ -49,6 +49,7 @@ export class LeadService {
   private readonly changeLeadStatus = `${environment.url}/Lead/ChangeLeadStatus`
   private readonly saveBulkLeadUrl = `${environment.url}/Lead/bulkSave`
   private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
+  private readonly getAllCampaignsURL = `${environment.url}/Campaign/all`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -72,7 +73,7 @@ export class LeadService {
   private _meetings: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _callreasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
-
+  private _campaigns: BehaviorSubject<Campaign[] | null> = new BehaviorSubject(null);
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -227,6 +228,21 @@ export class LeadService {
   }
   get emails$(): Observable<Email[]> {
     return this._emails.asObservable();
+  }
+  get campaigns$(): Observable<Campaign[]> {
+    return this._campaigns.asObservable();
+  }
+  getCampaigns(): Observable<Campaign[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Campaign[]>(this.getAllCampaignsURL, data).pipe(
+      tap((campaigns) => {
+        this._campaigns.next(campaigns);
+      }),
+      catchError(error => { alert(error); return EMPTY })
+    );
   }
   getTags(): Observable<Tag[]> {
     let data = {

@@ -22,17 +22,21 @@ export class Lead {
     industryTitle: string = "";
     productId: number;
     productTitle: string = "";
+    campaignId: string = "";
+    campaignTitle: string = "";
     createdDate: Date;
     modifiedDate: Date;
     isHovered: boolean;
     avatar: any;
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;
-        this.status = reg.status ? reg.status : 0;
-        this.sourceId = reg.sourceId ? reg.sourceId : 0;
-        this.industryId = reg.industryId ? reg.industryId : 0;
-        this.productId = reg.productId ? reg.productId : 0;
+        this.status = reg.status ? reg.status : -1;
+        this.leadOwner = reg.leadOwner ? reg.leadOwner : -1;
+        this.sourceId = reg.sourceId ? reg.sourceId : -1;
+        this.industryId = reg.industryId ? reg.industryId : -1;
+        this.productId = reg.productId ? reg.productId : -1;
         this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
+        this.campaignId=reg.campaignId ? reg.campaignId : "-1";
     }
 }
 export interface LeadSource {
@@ -237,4 +241,14 @@ export class LeadImportList {
 export interface EventType {
     typeId: number,
     typeTitle: string
+}
+
+export interface Campaign {
+    campaignId: string
+    adAccountId: string
+    title: string
+    productId: number
+    sourceId: number
+    budget: number
+    isHovered: boolean
 }
