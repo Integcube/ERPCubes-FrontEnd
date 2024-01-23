@@ -3,9 +3,10 @@ export interface Ticket {
     socialMediaPlatform: string;
     customerId: string;
     timestamp: Date;
-    status: string;
+    status: number;
     assigneeId: string;
-    priority: string;
+    priority: number;
+    type:number;
     category: string;
     resolutionStatus: string;
     dueDate: Date;
@@ -37,4 +38,25 @@ export class Conversation {
     constructor(reg) {
         this.conversationId = reg.conversationId ? reg.conversationId : -1;
     }
+}
+export interface TicketInfo{
+    priority: number;
+    assigneeId: string;
+    type: number;
+    status: number;
+    notes: string;
+    ticketId: number;
+}
+export interface TicketPriority{
+    ticketPriorityId: number;
+    priorityName: string;
+}
+export interface TicketStatus{
+    ticketStatusId: number;
+    statusName: string;
+    class:string
+}
+export interface TicketType{
+    ticketTypeId: number;
+    typeName: string;
 }

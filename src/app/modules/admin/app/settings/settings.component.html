@@ -1,12 +1,124 @@
-<div class="relative flex flex-col flex-auto min-w-0 overflow-auto h-screen">
-    <div class="flex flex-col flex-auto px-6 py-10 sm:px-16 sm:pt-3 sm:pb-3">
-        <div class="w-full">
-            <div class="text-3xl font-bold tracking-tight leading-none">
-                Admin Settings
+<div class="flex flex-col flex-auto min-w-0 ">
+    <!-- Header overflow-auto h-screen-->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-4 sm:py-6 sm:px-6 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+                <h2 class="text-3xl font-bold tracking-tight leading-none">
+                    Admin Settings
+                </h2>
+        </div>
+    </div>
+    <div class="flex-auto sm:p-10 p-2 justify-center gap-4 bg-gray-300 h-full pb-10 sm:flex-col md:flex-row">
+        <div class="flex flex-wrap items-center justify-center gap-4 w-full max-w-400 -m-4">
+            <!-- Card #1 -->
+            <div class="flex flex-col shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
+                <div class="flex flex-col p-6">
+                    <!-- title & description -->
+                    <div class="flex flex-col items-start mt-2 gap-4">
+                        <img class="h-8 w-8" src="assets/images/logo/facebook.svg" alt="">
+                        <div class="text-2xl font-semibold leading-tight">Messenger</div>
+                    </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary">description</div>
+                    <div class="w-12 h-1 my-2 border-t-2"></div>
+                    <!-- URL -->
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="messengerForm">
+                            <div>
+                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="flex flex-col w-full mt-auto">
+                </div>
             </div>
-            <div class="mt-1.5 text-lg text-secondary">
-                Your App wide activities are listed here as individual items, starting with the most recent.
+            <!-- Card #2 -->
+            <div class="flex flex-col shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
+                <div class="flex flex-col p-6">
+                    <!-- title & description -->
+                    <div class="flex flex-col items-start mt-2 gap-4">
+                        <img class="h-8 w-8" src="assets/images/logo/whatsapp.svg" alt="">
+                        <div class="text-2xl font-semibold leading-tight">WhatsApp</div>
+                    </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary">description</div>
+                    <div class="w-12 h-1 my-2 border-t-2"></div>
+                    <!-- URL -->
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="whatsappForm">
+                            <div>
+                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="flex flex-col w-full mt-auto">
+                </div>
+            </div>
+            <!-- Card #3 -->
+            <div class="flex flex-col  shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
+                <div class="flex flex-col p-6">
+                    <!-- title & description -->
+                    <div class="flex flex-col items-start mt-2 gap-4">
+                        <img class="h-8 w-8" src="assets/images/logo/instagram.svg" alt="">
+                        <div class="text-2xl font-semibold leading-tight">Instagram</div>
+                    </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary">description</div>
+                    <div class="w-12 h-1 my-2 border-t-2"></div>
+                    <!-- URL -->
+                    <div class="w-full max-w-3xl">
+                        <form [formGroup]="instagramForm">
+                            <div>
+                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="flex flex-col w-full mt-auto">
+                </div>
             </div>
         </div>
+        
     </div>
 </div>

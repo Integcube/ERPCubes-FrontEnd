@@ -4,7 +4,7 @@ import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, thr
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Conversation, Ticket } from './chat.types';
+import { Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
 @Injectable({
@@ -16,7 +16,12 @@ export class ChatService {
     private readonly getConversationsUrl = `${environment.url}/Ticket/allConversation`
     private readonly setReadStatusUrl = `${environment.url}/Ticket/setReadStatus`
     private readonly sendMessageUrl = `${environment.url}/Ticket/sendMessage`
+    private readonly getTypeUrl = `${environment.url}/Ticket/getType`
+    private readonly getPriorityUrl = `${environment.url}/Ticket/getPriority`
+    private readonly getStatusUrl = `${environment.url}/Ticket/getStatus`
+    private readonly saveInfoUrl = `${environment.url}/Ticket/saveInfo`
 
+    private _ticketConnection: HubConnection;
     user: User;
 
     private _tickets: BehaviorSubject<Ticket[]> = new BehaviorSubject(null);
@@ -24,8 +29,9 @@ export class ChatService {
     private _conversations: BehaviorSubject<Conversation[]> = new BehaviorSubject(null);
     private _conversation: BehaviorSubject<Conversation> = new BehaviorSubject(null);
     private _appUsers: BehaviorSubject<User[]> = new BehaviorSubject(null);
-
-    private _ticketConnection: HubConnection;
+    private _type: BehaviorSubject<TicketType[]> = new BehaviorSubject(null);
+    private _priority: BehaviorSubject<TicketPriority[]> = new BehaviorSubject(null);
+    private _status: BehaviorSubject<TicketStatus[]> = new BehaviorSubject(null);
 
     constructor(
         private _userService: UserService,
@@ -53,7 +59,6 @@ export class ChatService {
                 console.error('Error while starting connection: ' + err);
             });
     };
-
     public ticketListner = () => {
         this._ticketConnection.on('ReceiveNewTicket', (data) => {
             const currentTickets = this._tickets.getValue();
@@ -71,8 +76,22 @@ export class ChatService {
             }
         });
     };
+    get users$():Observable<User[]>{
+        return this._appUsers.asObservable();
 
+    }
+    get types$():Observable<TicketType[]>{
+        return this._type.asObservable();
 
+    }
+    get priorities$():Observable<TicketPriority[]>{
+        return this._priority.asObservable();
+
+    }
+    get statuses$():Observable<TicketStatus[]>{
+        return this._status.asObservable();
+
+    }
     get ticket$(): Observable<Ticket> {
         return this._ticket.asObservable();
     }
@@ -85,11 +104,9 @@ export class ChatService {
     get conversation$(): Observable<Conversation> {
         return this._conversation.asObservable();
     }
-
     selectTicket(ticket: Ticket) {
         this._ticket.next(ticket);
     }
-
     getTickets(): Observable<any> {
         let data = {
             id: this.user.id,
@@ -101,7 +118,6 @@ export class ChatService {
             })
         )
     }
-
     getUsers(): Observable<any> {
         let data = {
             id: this.user.id,
@@ -160,5 +176,43 @@ export class ChatService {
             ...ticket,
         }
         return this._httpClient.post<any>(this.sendMessageUrl, data)
+    }
+    getStatus():Observable<TicketStatus[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TicketStatus[]>(this.getStatusUrl, data).pipe(
+            tap(a=>this._status.next(a))
+        )
+    }
+    getPriority():Observable<TicketPriority[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TicketPriority[]>(this.getPriorityUrl, data).pipe(
+            tap(a=>this._priority.next(a))
+        )
+
+    }
+    getTypes():Observable<TicketType[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TicketType[]>(this.getTypeUrl, data).pipe(
+           tap(a=>this._type.next(a)) 
+        )
+    }
+    saveTicketinfo(info: TicketInfo): Observable<TicketType[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            ...info
+        }
+        return this._httpClient.post<TicketType[]>(this.saveInfoUrl, data).pipe(
+            tap(a => this.getTickets())
+        )
     }
 }

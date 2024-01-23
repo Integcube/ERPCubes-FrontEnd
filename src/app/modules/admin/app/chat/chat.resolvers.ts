@@ -19,25 +19,11 @@ export class TicketsResolver implements Resolve<any>
         return this._chatService.getTickets();
     }
 }
-@Injectable({
-    providedIn: 'root'
-})
-export class UsersResolver implements Resolve<any>
-{
-    constructor(
-        private _chatService: ChatService,
-        private _router: Router
-    ) {
-    }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User[]> | any {
-        return this._chatService.getUsers();
-    }
-}
 
 @Injectable({
     providedIn: 'root'
 })
-export class UserResolver implements Resolve<any>{
+export class UsersResolver implements Resolve<any>{
     constructor(        private _chatService: ChatService,
         ) {
     }
@@ -45,7 +31,39 @@ export class UserResolver implements Resolve<any>{
         return this._chatService.getUsers();
     }
 }
-
+@Injectable({
+    providedIn: 'root'
+})
+export class TicketTypeResolver implements Resolve<any>{
+    constructor(        private _chatService: ChatService,
+        ) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this._chatService.getTypes();
+    }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class TicketStatusResolver implements Resolve<any>{
+    constructor(        private _chatService: ChatService,
+        ) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this._chatService.getStatus();
+    }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class TicketPriorityResolver implements Resolve<any>{
+    constructor(        private _chatService: ChatService,
+        ) {
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        return this._chatService.getPriority();
+    }
+}
 @Injectable({
     providedIn: 'root'
 })
