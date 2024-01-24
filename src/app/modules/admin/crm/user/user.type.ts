@@ -9,6 +9,7 @@ export class UserForm{
     passwordHash: String;
     tenantId: number;
     isHovered: boolean;
+    password:String;
     constructor(reg){
         this.id = reg.userId?reg.id:-1;
     }

@@ -44,6 +44,7 @@ export class UserFormService {
           id: this.user.id,
           tenantId: this.user.tenantId,
         }
+        debugger
         return this._httpClient.post<UserForm[]>(this.getuserListURL, data).pipe(
           tap((users) => {
             this._users.next(users);
@@ -88,8 +89,8 @@ export class UserFormService {
           
         return this._httpClient.post<UserForm[]>(this.adduserListURL, data).pipe(
           tap((users) => {
-            
-            this.getUsers();
+            debugger
+            // this.getUsers().subscribe();
           })
         );
       }
@@ -103,11 +104,13 @@ export class UserFormService {
           userName: user.value.userName,
           email: user.value.email,
           phoneNumber: user.value.phoneNumber,
+          password: user.value.password,
+          id :userId
         }
         return this._httpClient.post<UserForm[]>(this.updateUserURL, data).pipe(
           tap((users) => {
             
-            this.getUsers();
+            this.getUsers().subscribe();
           })
         );
       }
@@ -119,7 +122,7 @@ export class UserFormService {
         }
         return this._httpClient.post<UserForm[]>(this.updateUserURL, data).pipe(
           tap((companies) => {
-            this.getUsers();
+            this.getUsers().subscribe();
           })
         );
       }
