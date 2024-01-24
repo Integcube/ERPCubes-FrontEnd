@@ -20,8 +20,7 @@
             <div class="flex items-center mt-4 mb-2 sm:mt-0 md:mt-4">
                 <!-- Search -->
                 <div class="flex-auto">
-                    <mat-form-field
-                        class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                    <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
                         <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
                         <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
                             [autocomplete]="'off'" [placeholder]="'Search Forms'">
@@ -39,34 +38,32 @@
                 <div *ngFor="let f of formList; let i = index"
                     class="flex flex-col p-4 border-r-2 min-h-30 bg-white hover:border-2 border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between relative">
                     <div (mouseenter)="updateHoverState(i, true)" (mouseleave)="updateHoverState(i, false)">
-                        <div class="flex flex-col justify-start gap-2 py-2">
+                        <div class="flex flex-col justify-start gap-2 pb-2">
                             <div class="flex gap-2">
                                 <span class="items-center text-xl font-semibold">{{f.name}}</span>
-                                <mat-icon
-                                    class="icon-size-4 self-center top-2 right-2 cursor-pointer text-accent2"
+                                <mat-icon class="icon-size-4 self-center top-2 right-2 cursor-pointer text-accent2"
                                     [svgIcon]="'heroicons_outline:pencil'" *ngIf="isHovered[i]"
                                     (click)="editForm(f)"></mat-icon>
                             </div>
-                            <span class="items-center text-lg hover:underline text-accent2 cursor-pointer"
+                            <span class="items-center text-base hover:underline text-accent2 cursor-pointer"
                                 (click)="viewConfigurator(f)">View Form</span>
                         </div>
                         <div class="flex w-full border-t-2 justify-between pt-2">
                             <span class="flex gap-1 cursor-pointer" (click)="linkForm(f)">
                                 <mat-icon class="icon-size-4 text-black self-center" matPrefix
                                     svgIcon="heroicons_outline:link"></mat-icon>
-                                <span class="text-lg font-semibold self-center">
+                                <span class="text-base font-semibold self-center">
                                     Copy Link
                                 </span>
                             </span>
-                            <span>
+                            <!-- <span>
                                 <button mat-stroked-button color="primary" class="h-8">
                                     <span class="text-xs">Share</span>
                                 </button>
-                            </span>
+                            </span> -->
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
