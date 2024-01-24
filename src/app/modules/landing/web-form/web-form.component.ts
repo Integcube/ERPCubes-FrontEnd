@@ -44,13 +44,11 @@ export class WebFormComponent implements OnInit {
   }
 
   onMultipleSelect(event: MatSelectChange, fieldLabel: string) {
-    debugger;
     let options:string = event.value.join(',')
     this.fieldArray.find(field => field.fieldLabel === fieldLabel).result = options
   }
 
   onCheckBoxChange(event: MatCheckboxChange, fieldLabel: string) {
-    debugger;
     const field = this.fieldArray.find(field => field.fieldLabel === fieldLabel);
     if (field) {
       if (field.result != "true") {
@@ -62,7 +60,6 @@ export class WebFormComponent implements OnInit {
   }
 
   onDatePicked(event: MatDatepickerInputEvent<Date>, fieldLabel: string) {
-    debugger;
     const field = this.fieldArray.find(field => field.fieldLabel === fieldLabel);
     if(field) {
       field.result = event.value.toString()

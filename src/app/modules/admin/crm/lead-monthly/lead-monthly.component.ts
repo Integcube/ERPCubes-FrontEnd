@@ -36,6 +36,7 @@ originalData: LeadMonthly[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   selectedYear: number; // Add this variable to store the selected year
   years: number[] = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, index) => new Date().getFullYear() - index);
+  currentYear: number = new Date().getFullYear()
 
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
@@ -95,7 +96,7 @@ originalData: LeadMonthly[];
       this.dataSource.sort = this.sort;
       this._changeDetectorRef.markForCheck();
     });
-    this.filterByYear(2023);
+    this.filterByYear(this.currentYear);
     this.leadStatusTypes = this.getUniqueLeadStatusTypes();
   }
 getUniqueLeadStatusTypes(): string[] {

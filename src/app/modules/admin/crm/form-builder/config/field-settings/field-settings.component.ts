@@ -20,7 +20,6 @@ export class FieldSettingsComponent implements OnInit {
   constructor(private fb: FormBuilder) 
   {  }
   ngOnInit(): void {
-    debugger;
     if((this.selectedField.fieldType == 5 || this.selectedField.fieldType == 6 || this.selectedField.fieldType == 7) && this.selectedField.values){
       this.options = this.selectedField.values.split(',')
     }
@@ -36,7 +35,6 @@ export class FieldSettingsComponent implements OnInit {
  
   onFieldPropertyChange(changedField:FormField): void {
     // Emit the updated selectedField object
-    debugger;
     this.selectedField.values = this.options.join(',');
     this.dataEvent.emit(this.selectedField);
   }
@@ -45,7 +43,6 @@ export class FieldSettingsComponent implements OnInit {
   }
 
   removeOption(option: string) {
-    debugger;
     const optionIndex = this.options.indexOf(option);
     if (optionIndex !== -1) {
       this.options.splice(optionIndex, 1);

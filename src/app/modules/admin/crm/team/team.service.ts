@@ -68,7 +68,6 @@ export class TeamService {
       teamLeader: team.teamLeaderId,
       teamMembersId: team.teamMembersId.join(','),
     }
-    debugger;
     return this._httpClient.post<Team[]>(this.saveTeamURL, data).pipe(
       tap((teams) => {
         this.getTeams().subscribe();

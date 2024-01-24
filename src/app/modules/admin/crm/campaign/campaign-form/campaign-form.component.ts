@@ -140,13 +140,11 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     });
   }
   onCampaignSourceSelected(event: MatAutocompleteSelectedEvent): void {
-    debugger;
     const selectedCampaignSource = event.option.value ;
     this.campaignForm.get('sourceId').patchValue(selectedCampaignSource);
     this._changeDetectorRef.markForCheck();
   }
   // filterCampaignSource(val: any): Source[] {
-  //   debugger;
   //   let v: string;
   //   if (val.name)
   //     v = val.name
@@ -157,13 +155,11 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   // }
   onCampaignProductSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCampaignProduct = event.option.value;
-    debugger;
 
     this.campaignForm.get('productId').patchValue(selectedCampaignProduct);
     this._changeDetectorRef.markForCheck();
   }
   filterCampaignProduct(val: any): Product[] {
-    debugger;
     let v: string;
     if (val.name)
       v = val.name

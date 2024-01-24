@@ -7,6 +7,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { EventType } from './calendar.type';
+import { ContactEnum } from 'app/core/enum/crmEnum';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class CalendarService {
   private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
 
   user: User;
-
+enum = new ContactEnum();
   private _calenders: BehaviorSubject<Calendar[] | null> = new BehaviorSubject(null);
   private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
   constructor(
@@ -73,11 +74,12 @@ export class CalendarService {
     );
   }
   saveCalendar(event: any): Observable<any> {
+ 
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      companyId: -1,
-      leadId: -1,
+      contactTypeId: this.enum.All,
+      activityId: this.enum.All,
       event
     }
     return this._httpClient.post<any>(this.saveCalenderListURL, data).pipe(

@@ -1,3 +1,5 @@
+import { formatDate } from "@angular/common";
+
 export class Lead {
     leadId: number;
     firstName: string = "";
@@ -30,7 +32,7 @@ export class Lead {
     avatar: any;
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;
-        this.status = reg.status ? reg.status : -1;
+        this.status = reg.status ? reg.status : 1;
         this.leadOwner = reg.leadOwner ? reg.leadOwner : -1;
         this.sourceId = reg.sourceId ? reg.sourceId : -1;
         this.industryId = reg.industryId ? reg.industryId : -1;
@@ -175,7 +177,7 @@ export class Tasks {
 export class TaskModel {
     taskId: number;
     taskTitle: string;
-    dueDate: Date | null;
+    dueDate: Date;
     priority: number;
     status: number;
     description: string | null;
@@ -190,7 +192,7 @@ export class TaskModel {
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
         this.tasktypeId = reg.tasktypeId ? reg.tasktypeId : 5
-
+        this.dueDate = new Date()
     }
 }
 

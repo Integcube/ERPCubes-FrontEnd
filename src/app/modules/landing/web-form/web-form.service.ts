@@ -31,6 +31,7 @@ export class WebFormService {
   get form$(): Observable<Form> {
     return this._form.asObservable();
   }
+  
   getForms(queryParam01: any) {
     let data = {
       //id: this.user.id,
@@ -44,6 +45,7 @@ export class WebFormService {
       catchError(error => { alert(error); return EMPTY })
     )
   }
+
   getFormById(id:number):Observable<Form> {
     return this._forms.pipe(
       take(1),
@@ -60,6 +62,7 @@ export class WebFormService {
       })
     )
   }
+
   getFormFields(queryParam01: any, queryParam02: any) {
     let data = {
       //id: this.user.id,
@@ -74,13 +77,13 @@ export class WebFormService {
       catchError(error => { alert(error); return EMPTY })
     )
   }
+
   saveFormResults(result: FormField[]) {
     let data = {
       //id: this.user.id,
       tenantId: 1,
       formResult: [...result]
     }
-    debugger;
     console.log('Form Fields Save Request: Service', data)
     return this._httpClient.post<any[]>(this.saveFormResultURL, data)
     .pipe( 

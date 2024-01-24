@@ -39,7 +39,6 @@ export class ContactInfoComponent implements OnInit, OnDestroy {
     }
     submit(statusId:number){
         this.ticket.status = statusId;
-        debugger;
         let info :TicketInfo={
             priority: this.ticket.priority,
             assigneeId: this.ticket.assigneeId,

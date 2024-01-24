@@ -126,13 +126,11 @@ export class ProjectFormComponent implements OnInit {
     });
   }
   onProjectCompanySelected(event: MatAutocompleteSelectedEvent): void {
-    debugger;
     const selectedProjectCompany = event.option.value ;
     this.projectForm.get('companyId').patchValue(selectedProjectCompany);
     this._changeDetectorRef.markForCheck();
   }
   filterProjectCompany(val: any): Company[] {
-    debugger;
     let v: string;
     if (val.name)
       v = val.name

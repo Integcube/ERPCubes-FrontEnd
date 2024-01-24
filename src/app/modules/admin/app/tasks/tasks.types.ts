@@ -10,7 +10,7 @@ export class Task
     taskId: number;
     taskTitle: string;
     taskType: 'task' | 'section';
-    dueDate: Date | null;
+    dueDate: Date;
     priority:number;
     order: number;
     status:number;
@@ -19,4 +19,7 @@ export class Task
     taskOwner:string;
     createdBy:string;
     createdDate:Date;
+    constructor() {
+        this.dueDate = new Date();
+    }
 }

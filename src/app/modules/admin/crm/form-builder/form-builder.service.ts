@@ -129,7 +129,6 @@ export class FormBuilderService {
             tenantId: this.user.tenantId,
             formFields: [...fields]
         }
-        debugger;
         console.log('Form Fields Save Request: Service', data)
         return this._httpClient.post<FormField[]>(this.saveFormFieldsURL, data)
         .pipe( 

@@ -26,10 +26,11 @@
                         #titleField></textarea>
                 </mat-form-field>
             </div>
+            <!-- Task Owner -->
             <div>
                 <mat-form-field class="fuse-mat-textarea w-full">
                     <mat-label>Task owner</mat-label>
-                    <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #leadOwner>
+                    <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #taskOwner>
                         <mat-option value="-1"></mat-option>
                         <ng-container *ngIf="users$|async as users">
                             <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
@@ -135,7 +136,6 @@
             </div>
             <!-- Priority and Due date -->
             <div class="flex flex-wrap items-center mt-8">
-
                 <!-- Priority -->
                 <div>
                     <div class="font-medium">Priority</div>
@@ -200,7 +200,7 @@
                 </div>
                 <!-- Due date -->
                 <div class="ml-6">
-                    <div class="font-medium">Due date</div>
+                    <div class="font-medium text-base">Due Date</div>
                     <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                         [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !taskForm.value.dueDate,
                                 'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': taskForm.value.dueDate && !isOverdue(),
@@ -226,7 +226,14 @@
                         </mat-form-field>
                     </div>
                 </div>
+                <!-- Time -->
+                <mat-form-field class="mx-4 mt-4">
+                    <mat-label class="font-medium text-base">End Time</mat-label>
+                    <input matInput type="time" [formControlName]="'dueTime'">
+                </mat-form-field>
             </div>
+            {{taskForm.value.dueDate|json}}
+            {{taskForm.value.dueTime|json}}
             <!-- Notes -->
             <div class="mt-8">
                 <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">

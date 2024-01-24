@@ -45,7 +45,6 @@ export class ProjectService {
     return this._httpClient.post<Project[]>(this.getProjectURL, data).pipe(
       tap((projects) => {
         this._projects.next(projects);
-        debugger;
       }),
       catchError(err => this.handleError(err))
     )
@@ -58,7 +57,6 @@ export class ProjectService {
     return this._httpClient.post<Company[]>(this.getCompanyURL, data).pipe(
       tap((companies) => {
         this._companies.next(companies);
-        debugger;
       }),
       catchError(err => this.handleError(err))
     )
@@ -74,10 +72,8 @@ export class ProjectService {
       tenantId: this.user.tenantId,
       id: this.user.id,
     }
-    debugger;
     return this._httpClient.post<Project[]>(this.saveProjectURL, data).pipe(
       tap((projects) => {
-        debugger;
         this.getProject().subscribe()
       }),
       catchError(err => this.handleError(err))
@@ -100,7 +96,6 @@ export class ProjectService {
     this._project.next(selectedProject);
   }
   getProjectById(id: number): Observable<Project> {
-    debugger;
     return this._projects.pipe(
       take(1),
       map((projects) => {

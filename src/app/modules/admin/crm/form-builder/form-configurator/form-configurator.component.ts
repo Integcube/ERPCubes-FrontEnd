@@ -57,7 +57,6 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     this.fieldSettingsView = true
   }
   fieldSaved(field: FormField) {
-    debugger;
     const FieldArrayIndex = this.FieldArray.findIndex(id => id.fieldId == field.fieldId)
     if(FieldArrayIndex === -1) {
       this.FieldArray.push(field)
@@ -76,7 +75,6 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     }
   }
   fieldClicked(field: FormField) {
-    debugger;
     this.fieldSettingsView = true
     this.selectedField = field
   }

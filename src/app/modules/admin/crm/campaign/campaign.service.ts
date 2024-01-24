@@ -64,10 +64,8 @@ export class CampaignService {
       tenantId: this.user.tenantId,
       id: this.user.id,
     }
-    debugger;
     return this._httpClient.post<Campaign[]>(this.saveCampaignURL, data).pipe(
       tap((campaigns) => {
-        debugger;
         this.getCampaign().subscribe()
       }),
       catchError(err => this.handleError(err))

@@ -148,7 +148,7 @@ export class AdsService {
   }
     return this._httpClient.post<any>(`${environment.url}/ConnectGoogle/Connect`,data).pipe(
       tap(a=>window.open(a.googleAuthUrl)),
-      catchError(error=>{debugger; return EMPTY})
+      catchError(error=>{return EMPTY})
     );
   }
   saveBulkAdAccount(ads:AdAccountList[]): Observable<any> {

@@ -72,7 +72,6 @@ export class ConnectAdAccountComponent implements OnInit {
     this.signOut()
   }
   refreshToken(): void {
-    debugger;
     this.adService.getGoogleAdAccount(this.user.idToken).subscribe({next:data=>{debugger}, error:err=>{debugger}});
     // this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }

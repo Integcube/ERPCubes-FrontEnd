@@ -12,6 +12,7 @@ import { TasksListComponent } from '../list/list.component';
 import { TasksService } from '../tasks.service';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
+import { formatDate } from '@angular/common';
 
 
 @Component({
@@ -48,13 +49,21 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         private _overlay: Overlay,
         private _viewContainerRef: ViewContainerRef,
         private _taskListComponent: TasksListComponent
-    ) {
-    }
+    ) { }
 
     setPriority(id: number) {
         this.taskForm.get('priority').patchValue(id);
     }
+
     save() {
+
+        const dueTime = this.taskForm.get('dueTime').value
+        const dueDate = this.taskForm.get('dueDate').value
+
+        const formattedDateTime = `${formatDate(dueDate, "yyyy-MM-dd", "en")}T${dueTime}`
+        
+        this.taskForm.get('dueDate').patchValue(formattedDateTime);
+
         let selectedIds: any[] = [];
         this.tags.map(a => {
             if (a.isSelected == true) {
@@ -86,6 +95,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             taskOwner: [this.user.id, Validators.required],
             status: [],
             dueDate: [null],
+            dueTime: [this.formatTime(new Date())],
             priority: [0],
             tags: [[]],
             order: [0]
@@ -146,6 +156,13 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this._tagsPanelOverlayRef) {
             this._tagsPanelOverlayRef.dispose();
         }
+    }
+
+    formatTime(time: string|Date): string {
+        const date = new Date(time);
+        const hours = ('0' + date.getHours()).slice(-2);
+        const minutes = ('0' + date.getMinutes()).slice(-2);
+        return `${hours}:${minutes}`;
     }
 
     closeDrawer(): Promise<MatDrawerToggleResult> {
@@ -240,14 +257,17 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
     }
+
     toggleProductTag(label: Tag): void {
         const foundLabelIndex = this.tags.findIndex(a => a.tagId === label.tagId);
         this.tags[foundLabelIndex].isSelected = !this.tags[foundLabelIndex].isSelected;
         this._changeDetectorRef.markForCheck();
     }
+
     toggleTagsEditMode(): void {
         this.tagsEditMode = !this.tagsEditMode;
     }
+
     filterTags(event): void {
         const value = event.target.value.toLowerCase();
         this.filteredTags = this.tags.filter(tag => tag.tagTitle.toLowerCase().includes(value));
@@ -287,11 +307,6 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    /**
-     * Create a new tag
-     *
-     * @param title
-     */
     createTag(title: string): void {
         this._tasksService.saveTags(title,-1)
             .subscribe((response) => {
@@ -315,21 +330,26 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         );
     }
+
     addTagToTask(tag: Tag): void {
         this.tags.unshift(tag);
         this.filteredTags = this.tags;
         this._changeDetectorRef.markForCheck();
     }
+
     deleteTagFromTask(tag: Tag): void {
         this.tags.splice(this.tags.findIndex(t => t.tagId === tag.tagId), 1);
         this._changeDetectorRef.markForCheck();
     }
+
     shouldShowCreateTagButton(inputValue: string): boolean {
         return !!!(inputValue === '' || this.tags.findIndex(tag => tag.tagTitle.toLowerCase() === inputValue.toLowerCase()) > -1);
     }
+
     isOverdue(): boolean {
         return moment(this.taskForm.value.dueDate, moment.ISO_8601).isBefore(moment(), 'days');
     }
+
     deleteTask(): void {
         const confirmation = this._fuseConfirmationService.open({
             title: 'Delete task',
@@ -352,6 +372,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
     }
+
     trackByFn(index: number, item: any): any {
         return item.tagId || index;
     }

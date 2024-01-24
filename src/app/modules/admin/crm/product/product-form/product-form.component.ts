@@ -55,7 +55,6 @@ export class ProductFormComponent implements OnInit {
     .subscribe((product: Product) => {
       this._productListComponent.matDrawer.open();
       this.selectedProduct = { ...product };
-      debugger;
       // Move the creation of productForm inside the subscription
       this.productForm = this._formBuilder.group({
         productId: [this.selectedProduct.productId, Validators.required],

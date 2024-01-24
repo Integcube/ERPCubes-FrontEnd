@@ -141,8 +141,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
   handleDateSelect(selectInfo: DateSelectArg) {
     let event = new CalendarEvent({});
-    event.start= selectInfo.startStr;
-    event.end = selectInfo.endStr;
+    event.start= selectInfo.start;
+    event.end = selectInfo.end;
     event.allDay = selectInfo.allDay;
     this._matDialog.open(CalendarDetailComponent, {
       autoFocus: false,
@@ -152,7 +152,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     });
   }
   handleEventClick(clickInfo: EventClickArg) {
-    
     const eventDataWithCustomType = {
       start:clickInfo.event.start,
       end:clickInfo.event.end,

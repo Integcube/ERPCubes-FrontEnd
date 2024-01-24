@@ -15,15 +15,19 @@ export class CalendarEvent{
     userId: string;
     title: string;
     type: number;
-    start: string;
-    end: string;
+    start: Date;
+    end: Date;
+    // startTime: string;
+    // endTime: string;
     createdBy: number;
     createdDate: string;
     tenantId: number;
     allDay:boolean;
     constructor(reg){
         this.id = reg.eventId?reg.eventId:-1;
-        this.start = formatDate(new Date(), "yyyy-MM-dd", "en") || "";
-        this.end = formatDate(new Date(), "yyyy-MM-dd", "en") || "";
+        this.start = new Date();//formatDate(new Date(), "yyyy-MM-ddTHH:mm:ss", "en") || "";
+        this.end = new Date();//formatDate(new Date(), "yyyy-MM-ddTHH:mm:ss", "en") || "";
+        // this.startTime = reg.startTime || new Date(); 
+        // this.endTime = reg.endTime || new Date(); 
     }
 }

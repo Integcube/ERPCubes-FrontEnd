@@ -78,6 +78,19 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                            <mat-label>Product</mat-label>
+                            <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
+                                <mat-option [value]=-1>Select Product...</mat-option>
+                                <ng-container *ngIf="product$|async as products">
+                                    <mat-option *ngFor="let product of products"
+                                        [value]="product.productId">{{product.productName}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+
+                    </div>
+                    <div>
+                        <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Status</mat-label>
                             <mat-select [formControlName]="'status'" [spellcheck]="false" #leadStatus>
                                 <mat-option [value]="-1">Select Lead Status...</mat-option>
@@ -102,19 +115,7 @@
                         </mat-form-field>
 
                     </div>
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Product</mat-label>
-                            <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
-                                <mat-option [value]=-1>Select Product...</mat-option>
-                                <ng-container *ngIf="product$|async as products">
-                                    <mat-option *ngFor="let product of products"
-                                        [value]="product.productId">{{product.productName}}</mat-option>
-                                </ng-container>
-                            </mat-select>
-                        </mat-form-field>
 
-                    </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
                             <mat-label>Campaign</mat-label>

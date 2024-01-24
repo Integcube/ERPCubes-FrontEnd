@@ -6,6 +6,7 @@ import { environment } from 'environments/environment';
 import { Tag, Task } from './tasks.types';
 import { UserService } from 'app/core/user/user.service';
 import { FormGroup } from '@angular/forms';
+import { ContactEnum } from 'app/core/enum/crmEnum';
 
 @Injectable({
     providedIn: 'root'
@@ -24,6 +25,7 @@ export class TasksService
     private readonly updateTaskOrderURL = `${environment.url}/Task/updateTaskOrder`
     user: User;
     currentDate: Date = new Date();
+    private contactEnumInstance: ContactEnum;
     private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
     private _task: BehaviorSubject<Task | null> = new BehaviorSubject(null);
     private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
@@ -35,7 +37,8 @@ export class TasksService
     {
         this._userService.user$.subscribe(user => {
             this.user = user;
-        })
+        });
+        this.contactEnumInstance = new ContactEnum();
     }
 
     get tags$(): Observable<Tag[]> {
@@ -88,8 +91,8 @@ export class TasksService
         let data = {
             tenantId : this.user.tenantId,
             id: this.user.id,
-            leadId: -1,
-            companyId: -1
+            contactTypeId: this.contactEnumInstance.All,
+            contactId: this.contactEnumInstance.All,
         }
         return this._httpClient.post<Task[]>(this.getTasksURL, data).pipe(
             tap((tasks) => {
@@ -100,10 +103,7 @@ export class TasksService
     saveTasks(task: FormGroup<any>): Observable<Task[]> {
         let data: any = { 
             id: this.user.id,
-            companyId: -1,
-            leadId: -1,
             tenantId:this.user.tenantId,
-            type:task.value.taskType,
             task : {
                 taskId:task.value.taskId,
                 taskTitle:task.value.taskTitle,
@@ -113,7 +113,11 @@ export class TasksService
                 taskOwner:task.value.taskOwner,
                 tags:task.value.tags.join(','),
                 dueDate:task.value.dueDate,
-               }
+                type:task.value.taskType,
+                taskTypeId: 4,
+                contactTypeId: this.contactEnumInstance.All,
+                contactId: this.contactEnumInstance.All,
+            }
         }
         return this._httpClient.post<Task[]>(this.saveTasksURL, data).pipe(
             tap((tasks) => {
@@ -121,6 +125,7 @@ export class TasksService
             })
         );
     }
+
     updateTaskStatus(task: Task): Observable<Task[]> {
         let data = {
             tenantId: this.user.tenantId,
@@ -135,6 +140,7 @@ export class TasksService
             })
         );
     }
+
     deleteTasks(id: number): Observable<Task[]> {
         let data = {
             tenantId: this.user.tenantId,
@@ -146,9 +152,11 @@ export class TasksService
             })
         );
     }
+
     selectedTask(selectedTask: Task){
         this._task.next(selectedTask);
     }
+
     updateTaskOrders(tasks: Task[]): Observable<Task[]> {
         let data = {
             tasks
@@ -159,6 +167,7 @@ export class TasksService
             })
         );
     }
+
     getTaskById(id: number): Observable<Task> {
         return this._tasks.pipe(
             take(1),
@@ -211,6 +220,7 @@ export class TasksService
             })
         );
     }
+
     getUsers(): Observable<User[]> {
         let data = {
             tenantId: this.user.tenantId,

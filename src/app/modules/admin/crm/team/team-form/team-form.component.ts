@@ -101,7 +101,6 @@ export class TeamFormComponent implements OnInit {
   }
 
   saveTeam() {
-    debugger;
     this._teamService.saveTeam(this.teamForm.value).pipe(takeUntil(this._unsubscribeAll),
       catchError(err => {
         this.errorMessageSubject.next(err);

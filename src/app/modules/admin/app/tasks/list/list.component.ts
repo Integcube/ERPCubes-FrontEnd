@@ -99,16 +99,19 @@ export class TasksListComponent implements OnInit, OnDestroy
                 }
             });
     }
+
     ngOnDestroy(): void
     {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
+
     onBackdropClicked(): void
     {
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
         this._changeDetectorRef.markForCheck();
     }
+
     createTask(type: 'task' | 'section'): void
     {
         let newTask: Task = new Task();
@@ -122,6 +125,7 @@ export class TasksListComponent implements OnInit, OnDestroy
         this._router.navigate(['./', newTask.taskId], { relativeTo: this._activatedRoute});
         this._changeDetectorRef.markForCheck();
     }
+
     toggleStatus(task: Task): void {
         let date = new Date;
         let dueDate = new Date(task.dueDate);
@@ -150,6 +154,7 @@ export class TasksListComponent implements OnInit, OnDestroy
         }         this._tasksService.updateTaskStatus(task).pipe(takeUntil(this._unsubscribeAll)).subscribe()
         this._changeDetectorRef.markForCheck();
     }
+
     dropped(event: CdkDragDrop<Task[]>): void
     {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -157,6 +162,7 @@ export class TasksListComponent implements OnInit, OnDestroy
         this._tasksService.updateTaskOrders(event.container.data).subscribe();
         this._changeDetectorRef.markForCheck();
     }
+    
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
