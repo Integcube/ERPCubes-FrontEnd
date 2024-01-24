@@ -26,6 +26,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
   product$ = this._leadService.product$;
+  campaigns$ = this._leadService.campaigns$;
   leadForm: FormGroup;
   editMode: boolean = false;
   selectedlead: Lead;
@@ -65,6 +66,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       sourceId: [],
       industryId: [],
       productId: [],
+      campaignId: [],
       createdDate: ['']
     });
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll),

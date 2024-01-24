@@ -52,7 +52,7 @@
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
                             <mat-label>Lead Owner</mat-label>
                             <mat-select [formControlName]="'leadOwner'" [spellcheck]="false" #leadOwner>
-                                <mat-option value="-1"></mat-option>
+                                <mat-option [value]="-1">Select Lead Owner...</mat-option>
                                 <ng-container *ngIf="users$|async as users">
                                     <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                                 </ng-container>
@@ -67,7 +67,7 @@
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Industry</mat-label>
                             <mat-select [formControlName]="'industryId'" [spellcheck]="false" #leadIndustryId>
-                                <mat-option value="-1"></mat-option>
+                                <mat-option [value]="-1">Select Industries...</mat-option>
                                 <ng-container *ngIf="industries$|async as industries">
                                     <mat-option *ngFor="let industry of industries"
                                         [value]="industry.industryId">{{industry.industryTitle}}</mat-option>
@@ -80,7 +80,7 @@
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Status</mat-label>
                             <mat-select [formControlName]="'status'" [spellcheck]="false" #leadStatus>
-                                <mat-option value="-1"></mat-option>
+                                <mat-option [value]="-1">Select Lead Status...</mat-option>
                                 <ng-container *ngIf="leadStatus$|async as status">
                                     <mat-option *ngFor="let s of status"
                                         [value]="s.statusId">{{s.statusTitle}}</mat-option>
@@ -93,7 +93,7 @@
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Source</mat-label>
                             <mat-select [formControlName]="'sourceId'" [spellcheck]="false" #leadsource>
-                                <mat-option value="-1"></mat-option>
+                                <mat-option [value]=-1>Select Lead Source...</mat-option>
                                 <ng-container *ngIf="leadSource$|async as source">
                                     <mat-option *ngFor="let s of source"
                                         [value]="s.sourceId">{{s.sourceTitle}}</mat-option>
@@ -106,7 +106,7 @@
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
                             <mat-label>Product</mat-label>
                             <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
-                                <mat-option value="-1"></mat-option>
+                                <mat-option [value]=-1>Select Product...</mat-option>
                                 <ng-container *ngIf="product$|async as products">
                                     <mat-option *ngFor="let product of products"
                                         [value]="product.productId">{{product.productName}}</mat-option>
@@ -114,6 +114,20 @@
                             </mat-select>
                         </mat-form-field>
 
+                    </div>
+                    <div>
+                        <mat-form-field class="fuse-mat-dense flex-auto w-full">
+                            <mat-label>Campaign</mat-label>
+                            <mat-select [formControlName]="'campaignId'" [spellcheck]="false" #campaign>
+                                <mat-option value="-1">Select Campaign...</mat-option>
+                                <ng-container *ngIf="campaigns$|async as campaigns">
+                                    <mat-option *ngFor="let campaign of campaigns" [value]="campaign.campaignId">{{campaign.title}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error *ngIf="leadForm.get('campaignId').hasError('required')">
+                                Campaign is required
+                            </mat-error>
+                        </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense w-full">

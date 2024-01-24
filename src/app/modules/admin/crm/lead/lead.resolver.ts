@@ -104,6 +104,16 @@ export class ProductResolver implements Resolve<any>{
 @Injectable({
   providedIn:'root'
 })
+export class CampaignsResolver implements Resolve<any>{
+  constructor(private _leadService:LeadService){
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadService.getCampaigns();
+  }
+}
+@Injectable({
+  providedIn:'root'
+})
 export class LeadSourceResolver implements Resolve<any>{
   constructor(private _leadService:LeadService){
   }
