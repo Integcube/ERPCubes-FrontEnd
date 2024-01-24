@@ -9,14 +9,16 @@
                     </ng-container>
                 </div>
             </div>
-            <div class="flex flex-col  sm:flex-row justify-start  gap-6"> 
+            <div class="flex flex-col  sm:flex-row justify-start  gap-6">
                 <!-- pt-4 pb-4 -->
                 <div class="w-full max-w-sm">
                     <mat-form-field class="fuse-mat-dense flex-auto w-full">
                         <mat-label>Date Range</mat-label>
                         <mat-date-range-input class="w-128" [rangePicker]="picker">
-                            <input matStartDate placeholder="Start date" [(ngModel)]="leadPipelineFilter.startDate" [spellcheck]="false">
-                            <input matEndDate placeholder="End date" [(ngModel)]="leadPipelineFilter.endDate" [spellcheck]="false">
+                            <input matStartDate placeholder="Start date" [(ngModel)]="leadPipelineFilter.startDate"
+                                [spellcheck]="false">
+                            <input matEndDate placeholder="End date" [(ngModel)]="leadPipelineFilter.endDate"
+                                [spellcheck]="false">
                         </mat-date-range-input>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-date-range-picker #picker></mat-date-range-picker>
@@ -58,76 +60,127 @@
                 </div>
 
 
+
+
+                <div class="flex mt-6">
+                    <button class="h-10 border-r-0 rounded-r-none" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
+                        <mat-icon class="icon-size-3"></mat-icon>
+                        <span class="ml-2 mr-1 text-sm">Get Reports</span>
+                    </button>
+
+                    <button class="h-10 min-w-0 rounded-l-none p-0 m-0 " mat-stroked-button matRipple
+                        [matMenuTriggerFor]="dropdownMenu">
+                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
+                        <mat-menu #dropdownMenu="matMenu">
+                            <button mat-menu-item (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })"
+                                class="flex text-sm">
+                                <span class="px-5 rounded text-xs items-center leading-5 text-white bg-green-600">Export XLS </span>
+
+                            </button>
+                        </mat-menu>
+                    </button>
+
+
+
+                </div>
+
+                <!-- <div class="flex flex-row gap-0">
                 <div class="mt-6">
+                    
                     <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
                         <span class="ml-2 mr-1">Get Reports</span>
                     </button> 
+                    
                 </div>
+                <div class="mt-6">
+                
+                    <button class="ml-4 h-9" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Pipeline-Report' })">
+                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_solid:arrow-up'"></mat-icon>
+                        <span class="ml-2 mr-1 text-sm">Export</span>
+                    </button>
+                </div>
+            </div> -->
             </div>
 
-            
+
         </div>
         <!-- Team list -->
-        <div class="flex-auto py-2 bg-default min-h-3/4 ">
-            <div class="flex flex-col flex-auto bg-card shadow  mx-5 overflow-hidden">
-                    <div class="flex-auto  bg-card overflow-x-auto">
-                        <table mat-table [dataSource]="dataSource" matSort>
-                           
-                            <!-- Username Column -->
-                            <ng-container matColumnDef="statusTitle">
-                                <th mat-header-cell *matHeaderCellDef mat-header-sort>Status</th>
-                                <td mat-cell *matCellDef="let row"> {{row.statusTitle}} </td>
-                            </ng-container>
-                            <!-- Leads Column -->
-                            <ng-container matColumnDef="totalLeads" >
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort style="background-color: #f0f2f5;">No. Leads </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row" style="background-color: #f0f2f5;"> {{row.totalLeads !== 0 ? row.totalLeads : '-' }} </td>
-                            </ng-container>
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="totalLeadValue">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Total Lead Value</th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.totalLeadValue !== 0 ? row.totalLeadValue : '-' }} </td>
-                            </ng-container>
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="averageDealValue">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Average Deal Value </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.averageDealValue !== 0 ? row.averageDealValue : '-' }} </td>
-                            </ng-container>
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="winLeads">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Win Leads </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.winLeads !== 0 ? row.winLeads : '-' }} </td>
-                            </ng-container>
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="winRate">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort style="background-color: #f0f2f5;"> Win Rate % </th>
-                                <td mat-cell class = "text-center" *matCellDef="let row" style="background-color: #f0f2f5;">  {{ row.winRate !== 0 ? row.winRate + '%' : '-' }} </td>
-                            </ng-container>
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="convertedLeads">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Converted Leads </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.convertedLeads !== 0 ? row.convertedLeads : '-' }} </td>
-                            </ng-container>
-                            
-                              <ng-container matColumnDef="conversionRate">
-                               <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Conversion Rate %</th>
-                               <td mat-cell class = "text-center" *matCellDef="let row"> {{row.conversionRate !== 0 ? row.conversionRate + '%': '-' }} </td>
-                              </ng-container>
-                             <!-- Notes Column -->
-                             <ng-container matColumnDef="expectedRevenue">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Expected Revenue </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.expectedRevenue !== 0 ? row.expectedRevenue : '-' }} </td>
-                               </ng-container>
-                               <!-- Notes Column -->
+        <div class="flex-auto py-5 bg-default min-h-3/4 ">
+            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+                <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                    <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
 
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                            <tr class="mat-row" *matNoDataRow>
-                                <td class="mat-cell text-center" colspan="9">Data Not Found</td>
-                            </tr>
-                        </table>
-                        <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of reports"></mat-paginator>
-                    </div>
+                        <!-- Username Column -->
+                        <ng-container matColumnDef="statusTitle">
+                            <th mat-header-cell *matHeaderCellDef mat-header-sort>Status</th>
+                            <td mat-cell *matCellDef="let row"> {{row.statusTitle}} </td>
+                        </ng-container>
+                        <!-- Leads Column -->
+                        <ng-container matColumnDef="totalLeads">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort
+                                style="background-color: #f0f2f5;">No. Leads </th>
+                            <td mat-cell class="text-right" *matCellDef="let row" style="background-color: #f0f2f5;">
+                                {{row.totalLeads !== 0 ? row.totalLeads : '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="totalLeadValue">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Total Lead Value
+                            </th>
+                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.totalLeadValue !== 0 ?
+                                row.totalLeadValue : '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="averageDealValue">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Average Deal
+                                Value </th>
+                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.averageDealValue !== 0 ?
+                                row.averageDealValue : '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="winLeads">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Win Leads </th>
+                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.winLeads !== 0 ? row.winLeads :
+                                '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="winRate">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort
+                                style="background-color: #f0f2f5;"> Win Rate % </th>
+                            <td mat-cell class="text-center" *matCellDef="let row" style="background-color: #f0f2f5;">
+                                {{ row.winRate !== 0 ? row.winRate + '%' : '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="convertedLeads">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Converted Leads
+                            </th>
+                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.convertedLeads !== 0 ?
+                                row.convertedLeads : '-' }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="conversionRate">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Conversion Rate %
+                            </th>
+                            <td mat-cell class="text-center" *matCellDef="let row"> {{row.conversionRate !== 0 ?
+                                row.conversionRate + '%': '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        <ng-container matColumnDef="expectedRevenue">
+                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort> Expected Revenue
+                            </th>
+                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.expectedRevenue !== 0 ?
+                                row.expectedRevenue : '-' }} </td>
+                        </ng-container>
+                        <!-- Notes Column -->
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center" colspan="9">Data Not Found</td>
+                        </tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[10, 25, 100]"
+                        aria-label="Select page of reports"></mat-paginator>
+                </div>
                 <!-- No Reports -->
                 <ng-template #noReports>
                     <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no

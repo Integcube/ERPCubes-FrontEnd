@@ -25,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { MatTableExporterModule } from 'mat-table-exporter';
 @NgModule({
   declarations: [
     ActivityReportComponent
@@ -53,7 +54,9 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
     MatTooltipModule,
     FuseFindByKeyPipeModule,
     SharedModule,
-    FuseScrollbarModule
+    FuseScrollbarModule,
+    MatTableExporterModule
+
   ]
 })
 export class ActivityReportModule { }

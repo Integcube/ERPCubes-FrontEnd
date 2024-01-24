@@ -1,36 +1,65 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, debounceTime, EMPTY, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { cloneDeep } from 'lodash-es';
-import { Label, Note } from './notes.types';
+import {  Note, Tag, Tasks } from './notes.types';
+import { environment } from 'environments/environment';
+import { User } from 'app/core/user/user.types';
+import { ContactEnum } from 'app/core/enum/crmEnum';
+import { UserService } from 'app/core/user/user.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NotesService
 {
+
+    private readonly getNotesUrl = `${environment.url}/Notes/NoteTask`
+    private readonly getLeadTaskUrl = `${environment.url}/Task/all`
+    private readonly allTagsUrl = `${environment.url}/Tags/all`
+    private readonly getUsersUrl = `${environment.url}/Users/all`
+    private readonly saveNotesUrl = `${environment.url}/Notes/save`
+    private readonly getTaskUrl = `${environment.url}/Notes/tasks`
+    private readonly getTagsUrl = `${environment.url}/Notes/tags`
+    private readonly saveTagsURL = `${environment.url}/Tags/save`
+    private readonly deleteNotesURL = `${environment.url}/Notes/delete`
+    private readonly deleteTagsURL = `${environment.url}/Tags/delete`
+
+    user: User;
     // Private
-    private _labels: BehaviorSubject<Label[] | null> = new BehaviorSubject(null);
+    private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
     private _note: BehaviorSubject<Note | null> = new BehaviorSubject(null);
     private _notes: BehaviorSubject<Note[] | null> = new BehaviorSubject(null);
+    private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
 
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient)
-    {
-    }
 
+    private contactEnumInstance: ContactEnum;
+
+    constructor(
+        private _httpClient: HttpClient,
+        private _userService: UserService,
+        )
+    {
+        this._userService.user$.subscribe(user => {
+            this.user = user;
+          })
+          this.contactEnumInstance = new ContactEnum();
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
-
+    get users$(): Observable<User[]> {
+        return this._users.asObservable();
+      }
     /**
      * Getter for labels
      */
-    get labels$(): Observable<Label[]>
+    get tags$(): Observable<Tag[]>
     {
-        return this._labels.asObservable();
+        return this._tags.asObservable();
     }
 
     /**
@@ -48,7 +77,41 @@ export class NotesService
     {
         return this._note.asObservable();
     }
-
+    selectedNoteTask$ = this.note$.pipe(
+        switchMap((note) => {
+          if (note.noteId != -1) {
+            return this._httpClient.post<Tasks[]>(this.getTaskUrl, {
+              id: this.user.id,
+              tenantId: this.user.tenantId,
+              noteId: note.noteId
+            }).pipe(
+              debounceTime(300),
+            )
+          }
+          else {
+            return of([]);
+          }
+        }),
+        catchError(error => { alert(error); return EMPTY })
+      )
+      selectedNoteTag$ = this.note$.pipe(
+        switchMap((note) => {
+          if (note.noteId != -1) {
+            return this._httpClient.post<Tag[]>(this.getTagsUrl, {
+              id: this.user.id,
+              tenantId: this.user.tenantId, noteId: note.noteId
+            }).pipe(
+              debounceTime(300),
+            )
+          }
+          else {
+            return of([]);
+          }
+        })
+        ,
+        catchError(error => { alert(error); return EMPTY })
+      )
+      
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -56,65 +119,92 @@ export class NotesService
     /**
      * Get labels
      */
-    getLabels(): Observable<Label[]>
-    {
-        return this._httpClient.get<Label[]>('api/apps/notes/labels').pipe(
-            tap((response: Label[]) => {
-                this._labels.next(response);
-            })
+
+    getTags(): Observable<Tag[]> {
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<Tag[]>(this.allTagsUrl, data).pipe(
+          tap((tags) => {
+            this._tags.next(tags);
+          }),
+          catchError(error => { alert(error); return EMPTY })
         );
-    }
+      }
+
+      getUsers(): Observable<User[]> {
+        let data = {
+          id: "-1",
+          tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
+          tap((users) => {
+            this._users.next(users);
+          }),
+          catchError(error => { alert(error); return EMPTY })
+    
+        );
+      }
 
     /**
      * Add label
      *
      * @param title
      */
-    addLabel(title: string): Observable<Label[]>
-    {
-        return this._httpClient.post<Label[]>('api/apps/notes/labels', {title}).pipe(
-            tap((labels) => {
+    // addTags(title: string): Observable<Tag[]>
+    // {
+    //     return this._httpClient.post<Tag[]>('api/apps/notes/tags', {title}).pipe(
+    //         tap((tags) => {
 
-                // Update the labels
-                this._labels.next(labels);
-            })
-        );
-    }
+    //             // Update the labels
+    //             this._tags.next(tags);
+    //         })
+    //     );
+    // }
 
     /**
      * Update label
      *
      * @param label
      */
-    updateLabel(label: Label): Observable<Label[]>
-    {
-        return this._httpClient.patch<Label[]>('api/apps/notes/labels', {label}).pipe(
-            tap((labels) => {
+    // updateLabel(label: Tag): Observable<Tag[]>
+    // {
+    //     return this._httpClient.patch<Tag[]>('api/apps/notes/labels', {label}).pipe(
+    //         tap((tags) => {
 
-                // Update the notes
-                this.getNotes().subscribe();
+    //             // Update the notes
+    //             this.getNotes().subscribe();
 
-                // Update the labels
-                this._labels.next(labels);
-            })
-        );
-    }
+    //             // Update the labels
+    //             this._tags.next(tags);
+    //         })
+    //     );
+    // }
+    // addLabel(title: string): Observable<Tag[]>
+    // {
+    //     return this._httpClient.post<Tag[]>('api/apps/notes/labels', {title}).pipe(
+    //         tap((tags) => {
 
+    //             // Update the labels
+    //             this._tags.next(tags);
+    //         })
+    //     );
+    // }
     /**
      * Delete a label
      *
      * @param id
      */
-    deleteLabel(id: string): Observable<Label[]>
-    {
-        return this._httpClient.delete<Label[]>('api/apps/notes/labels', {params: {id}}).pipe(
-            tap((labels) => {
-
-                // Update the notes
-                this.getNotes().subscribe();
-
-                // Update the labels
-                this._labels.next(labels);
+    deleteTags(id: number): Observable<Tag[]> {
+        let data = {
+            tenantId: this.user.tenantId,
+            tagId: id,
+            lastModifiedBy: this.user.id,
+        }
+        return this._httpClient.post<Tag[]>(this.deleteTagsURL, data).pipe(
+            tap(() => {
+                this.getTags().subscribe();
             })
         );
     }
@@ -122,44 +212,63 @@ export class NotesService
     /**
      * Get notes
      */
-    getNotes(): Observable<Note[]>
-    {
-        return this._httpClient.get<Note[]>('api/apps/notes/all').pipe(
-            tap((response: Note[]) => {
-                this._notes.next(response);
-            })
+    getNotes(): Observable<Note[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            
+        }
+        return this._httpClient.post<Note[]>(this.getNotesUrl, data).pipe(
+          tap((notes) => {
+            this._notes.next(notes);
+          }),
+          catchError(error => { alert(error); return EMPTY })
+    
         );
-    }
+      }
+      getNotesTag(): Observable<Tag[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<Tag[]>(this.getTagsUrl, data).pipe(
+          tap((notes) => {
+            this._tags.next(notes);
+          }),
+          catchError(error => { alert(error); return EMPTY })
+    
+        );
+      }
+
 
     /**
      * Get note by id
      */
-    getNoteById(id: string): Observable<Note>
-    {
+
+    getNoteById(id: number): Observable<Note> {
         return this._notes.pipe(
-            take(1),
-            map((notes) => {
-
-                // Find within the folders and files
-                const note = notes.find(value => value.id === id) || null;
-
-                // Update the note
-                this._note.next(note);
-
-                // Return the note
-                return note;
-            }),
-            switchMap((note) => {
-
-                if ( !note )
-                {
-                    return throwError('Could not found the note with id of ' + id + '!');
-                }
-
-                return of(note);
-            })
+          take(1),
+          map((notes) => {
+            if (id == -1) {
+              const note = new Note({});
+              this._note.next(note);
+              return note
+            }
+            else {
+              const note = notes.find(value => value.noteId === id) || null;
+              this._note.next(note);
+              return note;
+            }
+          }),
+          switchMap((note) => {
+            if (!note) {
+              return throwError('Could not found the note with id of ' + id + '!');
+            }
+            return of(note);
+          })
         );
-    }
+      }
+
 
     /**
      * Add task to the given note
@@ -167,72 +276,64 @@ export class NotesService
      * @param note
      * @param task
      */
-    addTask(note: Note, task: string): Observable<Note>
-    {
-        return this._httpClient.post<Note>('api/apps/notes/tasks', {
-            note,
-            task
-        }).pipe(switchMap(() => this.getNotes().pipe(
-            switchMap(() => this.getNoteById(note.id))
-        )));
-    }
+    // addTask(note: Note, task: string): Observable<Note>
+    // {
+    //     return this._httpClient.post<Note>('api/apps/notes/tasks', {
+    //         note,
+    //         task
+    //     }).pipe(switchMap(() => this.getNotes().pipe(
+    //         switchMap(() => this.getNoteById(note.noteId))
+    //     )));
+    // }
 
-    /**
-     * Create note
-     *
-     * @param note
-     */
-    createNote(note: Note): Observable<Note>
-    {
-        return this._httpClient.post<Note>('api/apps/notes', {note}).pipe(
-            switchMap(response => this.getNotes().pipe(
-                switchMap(() => this.getNoteById(response.id).pipe(
-                    map(() => response)
-                ))
-            )));
-    }
 
-    /**
-     * Update the note
-     *
-     * @param note
-     */
-    updateNote(note: Note): Observable<Note>
-    {
-        // Clone the note to prevent accidental reference based updates
-        const updatedNote = cloneDeep(note) as any;
+    saveNote(note: Note): Observable<any> {
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+          contactTypeId:this.contactEnumInstance.All,
+          note: {
+            noteId: note.noteId,
+            noteTitle: note.noteTitle,
+            content: note.content,
+            tags: note.tags ? note.tags.map(tag => tag.tagId).join(',') : '',
+            tasks:note.tasks, 
+          }
+        };
+        return this._httpClient.post<Note[]>(this.saveNotesUrl, data).pipe(
+          tap(() => {
+            this.getNotes().subscribe();
+          }),
+          catchError(error => {
+            alert(error);
+            return EMPTY;
+          })
+        );
+      }
 
-        // Before sending the note to the server, handle the labels
-        if ( updatedNote.labels.length )
-        {
-            updatedNote.labels = updatedNote.labels.map(label => label.id);
+    deleteNote(noteId: number): Observable<Note> {
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+          noteId: noteId
         }
-
-        return this._httpClient.patch<Note>('api/apps/notes', {updatedNote}).pipe(
-            tap((response) => {
-
-                // Update the notes
-                this.getNotes().subscribe();
-            })
+        return this._httpClient.post<Note>(this.deleteNotesURL, data).pipe(
+          tap((note) => {
+            this.getNotes().subscribe();
+          }),
+          catchError(error => { alert(error); return EMPTY })
         );
-    }
-
-    /**
-     * Delete the note
-     *
-     * @param note
-     */
-    deleteNote(note: Note): Observable<boolean>
-    {
-        return this._httpClient.delete<boolean>('api/apps/notes', {params: {id: note.id}}).pipe(
-            map((isDeleted: boolean) => {
-
-                // Update the notes
-                this.getNotes().subscribe();
-
-                // Return the deleted status
-                return isDeleted;
-            })
-        );
+      }
+    saveTags(tag: string, tagId:number): Observable<Tag> {
+        const data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            createdBy: this.user.id,
+            tagId: tagId,
+            tagTitle: tag
+        };
+        return this._httpClient.post<Tag>(this.saveTagsURL, data).pipe(
+            catchError(err => { alert(err.message); return EMPTY })
+        )
     }
 }

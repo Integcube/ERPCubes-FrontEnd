@@ -25,6 +25,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { leadOwnerReportRoutes } from './leadowner-report.routing';
 import { LeadOwnerReportComponent } from './leadowner-report.component';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatTableExporterModule } from 'mat-table-exporter';
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -63,7 +64,8 @@ export const MY_DATE_FORMATS = {
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule
+    SharedModule,
+    MatTableExporterModule
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }

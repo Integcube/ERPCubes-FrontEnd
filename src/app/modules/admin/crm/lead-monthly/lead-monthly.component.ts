@@ -17,6 +17,7 @@ import { LeadMonthlyService } from './lead-monthly.service';
 export class LeadMonthlyComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('exporter') public exporter;
 originalData: LeadMonthly[];
   dataSource: MatTableDataSource<LeadMonthly>;
   displayedColumns: string[] = [

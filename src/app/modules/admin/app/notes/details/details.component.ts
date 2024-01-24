@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { debounceTime, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, combineLatest, forkJoin } from 'rxjs';
+import { takeUntil, tap, map, catchError, take } from 'rxjs/operators';
+import { Note, Tag, Tasks } from '../notes.types';
 import { NotesService } from '../notes.service';
-import { Note, Label,Task } from '../notes.types';
 
 
 @Component({
@@ -11,336 +12,144 @@ import { Note, Label,Task } from '../notes.types';
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotesDetailsComponent implements OnInit, OnDestroy
-{
-    note$: Observable<Note>;
-    labels$: Observable<Label[]>;
+export class NotesDetailsComponent implements OnInit, OnDestroy {
 
-    noteChanged: Subject<Note> = new Subject<Note>();
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  note: Note; 
+  tags: Tag[];
+  task: Tasks[];
+  tags$ = this._notesService.tags$;
+  
+  noteChanged: Subject<Note> = new Subject<Note>();
 
-    /**
-     * Constructor
-     */
-    constructor(
-        private _changeDetectorRef: ChangeDetectorRef,
-        @Inject(MAT_DIALOG_DATA) private _data: { note: Note },
-        private _notesService: NotesService,
-        private _matDialogRef: MatDialogRef<NotesDetailsComponent>
-    )
-    {
-    }
+  noteWithData$ = combineLatest([
+    this._notesService.note$,
+    this._notesService.selectedNoteTask$,
+    this._notesService.selectedNoteTag$
+  ]).pipe(
+    map(([note, tasks, tags]) => ({
+      ...note,
+      tags: tags,
+      tasks: tasks
+    })),
+  );
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        // Edit
-        if ( this._data.note.id )
-        {
-            // Request the data from the server
-            this._notesService.getNoteById(this._data.note.id).subscribe();
-
-            // Get the note
-            this.note$ = this._notesService.note$;
+  constructor(
+    public matDialogRef: MatDialogRef<NotesDetailsComponent>,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Inject(MAT_DIALOG_DATA) private _data: { note: Note },
+    private _notesService: NotesService,
+    private _matDialogRef: MatDialogRef<NotesDetailsComponent>
+  ) { }
+  ngOnInit(): void {
+        if (this._data.note.noteId) {
+      this._notesService.getNoteById(this._data.note.noteId).pipe(
+        takeUntil(this._unsubscribeAll),
+      ).subscribe(
+        (data) => {
+          this._changeDetectorRef.markForCheck();
+        },
+        error => {
+          console.error("Error fetching data: ", error);
         }
-        // Add
-        else
-        {
-            // Create an empty note
-            const note = {
-                id       : null,
-                title    : '',
-                content  : '',
-                tasks    : null,
-                image    : null,
-                reminder : null,
-                labels   : [],
-                archived : false,
-                createdAt: null,
-                updatedAt: null
-            };
-
-            this.note$ = of(note);
+      );
+      this.noteWithData$.pipe(
+        takeUntil(this._unsubscribeAll),
+      ).subscribe(
+        (data) => {
+          this.note = {
+            noteId: data.noteId,
+            noteTitle: data.noteTitle,
+            content: data.content,
+            createdBy: data.createdBy,
+            userName: data.userName,
+            id: data.id,
+            createdDate: data.createdDate,
+            tags: data.tags,
+            tasks: data.tasks,
+            createdByName: "",
+          };
+          this._changeDetectorRef.markForCheck();
+        },
+        error => {
+          console.error("Error fetching data: ", error);
         }
-
-        // Get the labels
-        this.labels$ = this._notesService.labels$;
-
-        // Subscribe to note updates
-        this.noteChanged
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                debounceTime(500),
-                switchMap(note => this._notesService.updateNote(note)))
-            .subscribe(() => {
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+      );
+    }
+    this.tags$ = this._notesService.tags$;
+    this._notesService.getTags().subscribe();
+    
+  }
+  updateNoteDetails(note: Note): void
+  {
+      this.noteChanged.next(note);
+  }
+    isNoteHasLabel(note: Note, tag: Tag): boolean {
+    return !!note.tags.find(item => item.tagId === tag.tagId);
+  }
+  toggleLabelOnNote(tag: Tag): void {
+    // If the note already has the label
+    if (this.isNoteHasLabel(this.note, tag)) {
+      this.note.tags = this.note.tags.filter(item => item.tagId !== tag.tagId)    
+    } 
+    else {
+      this.note.tags.push(tag);
     }
 
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
+    // Update the note 
+    this.noteChanged.next(this.note);
+  }
+  
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+  closeDialog(): void {
+    this._matDialogRef.close();
+  }
+  addTasksToNote(): void {
+    if (!this.note.tasks) {
+      this.note.tasks = [];
+    }
+  }
+
+  addTaskToNote(taskText: string): void {
+    if (taskText.trim() === '') {
+      return;
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+    const newTask: Tasks = {
+      taskId: -1,
+      task: taskText,
+      isCompleted: false,
+      noteId: this.note.noteId,
+    };
 
-    /**
-     * Create a new note
-     *
-     * @param note
-     */
-    createNote(note: Note): void
-    {
-        this._notesService.createNote(note).pipe(
-            map(() => {
-                // Get the note
-                this.note$ = this._notesService.note$;
-            })).subscribe();
+    this.note.tasks.push(newTask);
+  }
+
+  updateTaskOnNote(task: Tasks): void {
+    // If the task is already available on the item
+    if (task.taskId) {
+      // Update the note
+      this.noteChanged.next(this.note);
     }
+  }
+  removeTaskFromNote(task: Tasks): void {
+    // Remove the task
+    this.note.tasks = this.note.tasks.filter(item => item.task !== task.task);
 
-    /**
-     * Upload image to given note
-     *
-     * @param note
-     * @param fileList
-     */
-    uploadImage(note: Note, fileList: FileList): void
-    {
-        // Return if canceled
-        if ( !fileList.length )
-        {
-            return;
-        }
-
-        const allowedTypes = ['image/jpeg', 'image/png'];
-        const file = fileList[0];
-
-        // Return if the file is not allowed
-        if ( !allowedTypes.includes(file.type) )
-        {
-            return;
-        }
-
-        this._readAsDataURL(file).then((data) => {
-
-            // Update the image
-            note.image = data;
-
-            // Update the note
-            this.noteChanged.next(note);
-        });
-    }
-
-    /**
-     * Remove the image on the given note
-     *
-     * @param note
-     */
-    removeImage(note: Note): void
-    {
-        note.image = null;
-
-        // Update the note
-        this.noteChanged.next(note);
-    }
-
-    /**
-     * Add an empty tasks array to note
-     *
-     * @param note
-     */
-    addTasksToNote(note): void
-    {
-        if ( !note.tasks )
-        {
-            note.tasks = [];
-        }
-    }
-
-    /**
-     * Add task to the given note
-     *
-     * @param note
-     * @param task
-     */
-    addTaskToNote(note: Note, task: string): void
-    {
-        if ( task.trim() === '' )
-        {
-            return;
-        }
-
-        // Add the task
-        this._notesService.addTask(note, task).subscribe();
-    }
-
-    /**
-     * Remove the given task from given note
-     *
-     * @param note
-     * @param task
-     */
-    removeTaskFromNote(note: Note, task: Task): void
-    {
-        // Remove the task
-        note.tasks = note.tasks.filter(item => item.id !== task.id);
-
-        // Update the note
-        this.noteChanged.next(note);
-    }
-
-    /**
-     * Update the given task on the given note
-     *
-     * @param note
-     * @param task
-     */
-    updateTaskOnNote(note: Note, task: Task): void
-    {
-        // If the task is already available on the item
-        if ( task.id )
-        {
-            // Update the note
-            this.noteChanged.next(note);
-        }
-    }
-
-    /**
-     * Is the given note has the given label
-     *
-     * @param note
-     * @param label
-     */
-    isNoteHasLabel(note: Note, label: Label): boolean
-    {
-        return !!note.labels.find(item => item.id === label.id);
-    }
-
-    /**
-     * Toggle the given label on the given note
-     *
-     * @param note
-     * @param label
-     */
-    toggleLabelOnNote(note: Note, label: Label): void
-    {
-        // If the note already has the label
-        if ( this.isNoteHasLabel(note, label) )
-        {
-            note.labels = note.labels.filter(item => item.id !== label.id);
-        }
-        // Otherwise
-        else
-        {
-            note.labels.push(label);
-        }
-
-        // Update the note
-        this.noteChanged.next(note);
-    }
-
-    /**
-     * Toggle archived status on the given note
-     *
-     * @param note
-     */
-    toggleArchiveOnNote(note: Note): void
-    {
-        note.archived = !note.archived;
-
-        // Update the note
-        this.noteChanged.next(note);
-
-        // Close the dialog
-        this._matDialogRef.close();
-    }
-
-    /**
-     * Update the note details
-     *
-     * @param note
-     */
-    updateNoteDetails(note: Note): void
-    {
-        this.noteChanged.next(note);
-    }
-
-    /**
-     * Delete the given note
-     *
-     * @param note
-     */
-    deleteNote(note: Note): void
-    {
-        this._notesService.deleteNote(note)
-            .subscribe((isDeleted) => {
-
-                // Return if the note wasn't deleted...
-                if ( !isDeleted )
-                {
-                    return;
-                }
-
-                // Close the dialog
-                this._matDialogRef.close();
-            });
-    }
-
-    /**
-     * Track by function for ngFor loops
-     *
-     * @param index
-     * @param item
-     */
-    trackByFn(index: number, item: any): any
-    {
-        return item.id || index;
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Private methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Read the given file for demonstration purposes
-     *
-     * @param file
-     */
-    private _readAsDataURL(file: File): Promise<any>
-    {
-        // Return a new promise
-        return new Promise((resolve, reject) => {
-
-            // Create a new reader
-            const reader = new FileReader();
-
-            // Resolve the promise on success
-            reader.onload = (): void => {
-                resolve(reader.result);
-            };
-
-            // Reject the promise on error
-            reader.onerror = (e): void => {
-                reject(e);
-            };
-
-            // Read the file as the
-            reader.readAsDataURL(file);
-        });
-    }
+    // Update the note
+    this.noteChanged.next(this.note);
+  }
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
+  }
+  save(){
+    this._notesService.saveNote(this.note).subscribe(data=>this.closeDialog());
+   }
+   delete(){
+    this._notesService.deleteNote(this.note.noteId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+   }
 }
+

@@ -18,7 +18,7 @@ import { LeadSourceReportService } from './leadsource-report.service';
 export class LeadSourceReportComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+  @ViewChild('exporter') public exporter;
   sourceId:number
   startDate: Date
   endDate: Date
@@ -103,7 +103,6 @@ export class LeadSourceReportComponent {
   //     return item.id || index;
   // }
   getLeadSourceReports(){
-    debugger;
     this._leadSourceReportService.getLeadSourceReport(this.startDate.toISOString(), this.endDate.toISOString(), this.sourceId).subscribe();
   }
 }

@@ -4,10 +4,10 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, 
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 
 import { cloneDeep } from 'lodash-es';
-import { NotesDetailsComponent } from '../details/details.component';
 import { NotesLabelsComponent } from '../labels/labels.component';
 import { NotesService } from '../notes.service';
-import { Label, Note } from '../notes.types';
+import {  Note, Tag } from '../notes.types';
+import { NotesDetailsComponent} from '../details/details.component';
 
 @Component({
     selector       : 'notes-list',
@@ -17,14 +17,14 @@ import { Label, Note } from '../notes.types';
 })
 export class NotesListComponent implements OnInit, OnDestroy
 {
-    labels$: Observable<Label[]>;
+    tags: Tag[];
     notes$: Observable<Note[]>;
-
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
     filter$: BehaviorSubject<string> = new BehaviorSubject('notes');
     searchQuery$: BehaviorSubject<string> = new BehaviorSubject(null);
     masonryColumns: number = 4;
+    tags$ = this._notesService.tags$;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -62,12 +62,11 @@ export class NotesListComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         // Request the data from the server
-        this._notesService.getLabels().subscribe();
+        // this._notesService.getLabels().subscribe();
         this._notesService.getNotes().subscribe();
-
-        // Get labels
-        this.labels$ = this._notesService.labels$;
-
+        this._notesService.getTags().subscribe();
+       
+        
         // Get notes
         this.notes$ = combineLatest([this._notesService.notes$, this.filter$, this.searchQuery$]).pipe(
             distinctUntilChanged(),
@@ -85,7 +84,7 @@ export class NotesListComponent implements OnInit, OnDestroy
                 if ( searchQuery )
                 {
                     searchQuery = searchQuery.trim().toLowerCase();
-                    filteredNotes = filteredNotes.filter(note => note.title.toLowerCase().includes(searchQuery) || note.content.toLowerCase().includes(searchQuery));
+                    filteredNotes = filteredNotes.filter(note => note.noteTitle.toLowerCase().includes(searchQuery) || note.content.toLowerCase().includes(searchQuery));
                 }
 
                 // Show all
@@ -96,14 +95,14 @@ export class NotesListComponent implements OnInit, OnDestroy
 
                 // Show archive
                 const isArchive = filter === 'archived';
-                filteredNotes = filteredNotes.filter(note => note.archived === isArchive);
+                // filteredNotes = filteredNotes.filter(note => note.archived === isArchive);
 
                 // Filter by label
-                if ( filter.startsWith('label:') )
-                {
-                    const labelId = filter.split(':')[1];
-                    filteredNotes = filteredNotes.filter(note => !!note.labels.find(item => item.id === labelId));
+                if (filter.startsWith('label:')) {
+                    const labelId: number = +filter.split(':')[1]; // Convert to number
+                    filteredNotes = filteredNotes.filter(note => !!note.tags.find(item => item.tagId === +labelId));
                 }
+                
 
                 return filteredNotes;
             })
@@ -174,15 +173,16 @@ export class NotesListComponent implements OnInit, OnDestroy
     /**
      * Add a new note
      */
-    addNewNote(): void
-    {
+    addNote(){
+        let note = new Note({})
+        // this._changeDetectorRef.markForCheck();
         this._matDialog.open(NotesDetailsComponent, {
-            autoFocus: false,
-            data     : {
-                note: {}
-            }
-        });
-    }
+          autoFocus: false,
+          data     : {
+              note: cloneDeep(note)
+          }
+      });
+      }
 
     /**
      * Open the edit labels dialog

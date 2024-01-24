@@ -56,7 +56,6 @@ export class LeadOwnerReportService {
       status:statusId,
       leadOwner:leadOwner
     }
-    debugger;
     return this._httpClient.post<LeadOwnerReport[]>(this.getLeadOwnerReportUrl, data).pipe(
       tap((ownerreport) => {
           this._leadownerReport.next(ownerreport);

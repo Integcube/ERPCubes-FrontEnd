@@ -20,6 +20,7 @@ import { LeadOwnerReportService } from './leadowner-report.service';
 export class LeadOwnerReportComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('exporter') public exporter;
   leadOwner:string
   statusId:number
   sourceId:number
@@ -116,7 +117,6 @@ export class LeadOwnerReportComponent {
   // }
 
   getLeadOwnerReports(){
-    debugger;
     this._leadOwnerReportService.getLeadOwnerReport(this.startDate.toISOString(), this.endDate.toISOString(), this.sourceId, this.statusId, this.leadOwner).subscribe();
   }
 }

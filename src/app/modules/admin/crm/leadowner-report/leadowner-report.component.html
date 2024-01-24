@@ -61,11 +61,32 @@
                     </mat-form-field>
 
                 </div>
-                <div class = "mt-6">
+                <div class="flex mt-6">
+                    <button class="h-10 border-r-0 rounded-r-none" mat-flat-button [color]="'primary'" (click)="getLeadOwnerReports()">
+                        <mat-icon class="icon-size-3"></mat-icon>
+                        <span class="ml-2 mr-1 text-sm">Get Reports</span>
+                    </button>
+
+                    <button class="h-10 min-w-0 rounded-l-none p-0 m-0 " mat-stroked-button matRipple
+                        [matMenuTriggerFor]="dropdownMenu">
+                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
+                        <mat-menu #dropdownMenu="matMenu">
+                            <button mat-menu-item (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })"
+                                class="flex text-sm">
+                                <span class="px-5 rounded text-xs items-center leading-5 text-white bg-green-600">Export XLS </span>
+
+                            </button>
+                        </mat-menu>
+                    </button>
+
+
+
+                </div>
+                <!-- <div class = "mt-6">
                     <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="getLeadOwnerReports()">
                         <span class="ml-2 mr-1">Get Reports</span>
                     </button>
-                </div>
+                </div> -->
             </div>
             <!-- Main actions -->
             <!-- <div class="flex items-center mt-4 sm:mt-0 md:mt-4"> -->
@@ -81,10 +102,11 @@
             </div> -->
         </div>
         <!-- Team list -->
-        <div class="flex-auto py-2 bg-default min-h-3/4 pb-10">
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-5 ">
-                    <div class="flex-auto  py-1 bg-card overflow-auto">
-                        <table mat-table [dataSource]="dataSource" matSort>
+        <div class="flex-auto py-5 bg-default min-h-3/4 pb-10">
+            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+                    <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                        <table mat-table [dataSource]="dataSource" matSort
+                        matTableExporter #exporter="matTableExporter">
                             <!-- Username Column -->
                             <ng-container matColumnDef="leadOwnerName">
                                 <th mat-header-cell *matHeaderCellDef mat-header-sort> Lead Owner </th>

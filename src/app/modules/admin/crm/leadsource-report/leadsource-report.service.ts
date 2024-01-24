@@ -45,7 +45,6 @@ export class LeadSourceReportService {
       endDate: endDate,
       sourceId:+sourceId
     }
-    debugger;
     return this._httpClient.post<LeadSourceReport[]>(this.getLeadSourceReportUrl, data).pipe(
       tap((activityreport) => {
           this._leadSourceReport.next(activityreport);

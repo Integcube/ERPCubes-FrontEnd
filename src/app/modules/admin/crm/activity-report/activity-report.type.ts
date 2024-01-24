@@ -7,4 +7,5 @@ export class ActivityReport {
     email?: number;
     task?: number;
     meeting?: number;
+    total?: number;
 }

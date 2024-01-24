@@ -38,19 +38,19 @@
                         <div class="ml-3 leading-5 select-none text-default">Archive</div>
                     </div>
                     <!-- Labels -->
-                    <ng-container *ngIf="(labels$ | async) as labels">
-                        <ng-container *ngFor="let label of labels; trackBy: trackByFn">
+                    <ng-container *ngIf="(tags$ | async) as tags">
+                        <ng-container *ngFor="let label of tags; trackBy: trackByFn">
                             <div
                                 class="relative flex items-center py-2 px-4 font-medium rounded-full cursor-pointer"
-                                [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': 'label:' + label.id === filterStatus,
-                                    'text-hint hover:bg-hover': 'label:' + label.id !== filterStatus}"
-                                (click)="filterByLabel(label.id)"
+                                [ngClass]="{'bg-gray-200 dark:bg-gray-700 text-primary dark:text-primary-400': 'label:' + label.tagId === filterStatus,
+                                    'text-hint hover:bg-hover': 'label:' + label.tagId !== filterStatus}"
+                                (click)="filterByLabel(label.tagId)"
                                 matRipple
-                                [matRippleDisabled]="'label:' + label.id === filterStatus">
+                                [matRippleDisabled]="'label:' + label.tagId === filterStatus">
                                 <mat-icon
                                     class="text-current"
                                     [svgIcon]="'heroicons_outline:tag'"></mat-icon>
-                                <div class="ml-3 leading-5 select-none text-default">{{label.title}}</div>
+                                <div class="ml-3 leading-5 select-none text-default">{{label.tagTitle}}</div>
                             </div>
                         </ng-container>
                     </ng-container>
@@ -100,7 +100,7 @@
                         class="ml-4 px-1 sm:px-4 min-w-10"
                         mat-flat-button
                         [color]="'primary'"
-                        (click)="addNewNote()">
+                        (click)="addNote()">
                         <mat-icon
                             class="icon-size-5"
                             [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
@@ -139,9 +139,9 @@
                                                 </ng-container>
                                                 <div class="flex flex-auto flex-col p-6 space-y-4">
                                                     <!-- Title -->
-                                                    <ng-container *ngIf="note.title">
+                                                    <ng-container *ngIf="note.noteTitle">
                                                         <div class="font-semibold line-clamp-3">
-                                                            {{note.title}}
+                                                            {{note.noteTitle}}
                                                         </div>
                                                     </ng-container>
                                                     <!-- Content -->
@@ -153,37 +153,40 @@
                                                     <!-- Tasks -->
                                                     <ng-container *ngIf="note.tasks">
                                                         <div class="space-y-1.5">
-                                                            <ng-container *ngFor="let task of note.tasks; trackBy: trackByFn">
+                                                            <ng-container *ngFor="let obj of note.tasks; trackBy: trackByFn">
                                                                 <div class="flex items-center">
-                                                                    <ng-container *ngIf="!task.completed">
+                                                                    <ng-container *ngIf="!obj.isCompleted">
                                                                         <div class="flex items-center justify-center w-5 h-5">
                                                                             <div class="w-4 h-4 rounded-full border-2"></div>
                                                                         </div>
                                                                     </ng-container>
-                                                                    <ng-container *ngIf="task.completed">
+                                                                    <ng-container *ngIf="obj.isCompleted">
                                                                         <mat-icon
                                                                             class="text-hint icon-size-5"
                                                                             [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
                                                                     </ng-container>
                                                                     <div
                                                                         class="ml-1.5 leading-5"
-                                                                        [ngClass]="{'text-secondary line-through': task.completed}">
-                                                                        {{task.content}}
+                                                                        [ngClass]="{'text-secondary line-through': obj.isCompleted}">
+                                                                        {{obj.taskTitle}}
                                                                     </div>
                                                                 </div>
                                                             </ng-container>
                                                         </div>
                                                     </ng-container>
                                                     <!-- Labels -->
-                                                    <ng-container *ngIf="note.labels">
-                                                        <div class="flex flex-wrap items-center -m-1">
-                                                            <ng-container *ngFor="let label of note.labels; trackBy: trackByFn">
-                                                                <div class="m-1 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                                                    {{label.title}}
-                                                                </div>
-                                                            </ng-container>
+                                                    <ng-container *ngIf="note.tags">
+                                                        <div class="flex flex-wrap items-center mx-1 mt-6">
+                                                          <ng-container *ngFor="let label of note.tags; trackBy: trackByFn">
+                                                            <div class="flex items-center m-1 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
+                                                              <div>
+                                                                {{label.tagTitle}}
+                                                              </div>
+            
+                                                            </div>
+                                                          </ng-container>
                                                         </div>
-                                                    </ng-container>
+                                                      </ng-container>
                                                 </div>
                                             </div>
                                         </ng-container>

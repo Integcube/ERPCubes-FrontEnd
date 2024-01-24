@@ -8,11 +8,11 @@ import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-lead-Pipeline',
   templateUrl: './lead-pipeline.component.html',
-  styleUrls: ['./lead-pipeline.component.scss'],
+  // styleUrls: ['./lead-pipeline.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeadPipelineComponent implements OnInit, OnDestroy {
-
+  @ViewChild('exporter') public exporter;
   dataSource: MatTableDataSource<LeadReport>;
   displayedColumns: string[] = [ 'statusTitle', 'totalLeads', 'totalLeadValue', 'averageDealValue', 'winLeads', 'winRate', 'convertedLeads','conversionRate','expectedRevenue'];
 

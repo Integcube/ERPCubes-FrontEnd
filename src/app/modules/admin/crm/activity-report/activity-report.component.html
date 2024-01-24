@@ -2,7 +2,7 @@
     <!-- Main -->
     <div class="flex-auto">
         <!-- Header -->
-        <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between pt-3 pb-3 px-6 md:px-8">
+        <div class="flex flex-col bg-card sm:flex-row items-start sm:items-center sm:justify-between py-3 px-6 md:px-8 pb-12">
             <!-- Title -->
             <div>
                 <div class="text-3xl font-bold tracking-tight leading-none">Activity Reports</div>
@@ -17,24 +17,38 @@
                     } }}
                 </div>
             </div>
-            <!-- Main actions -->
-            <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                <!-- Search -->
-                <div class="flex-auto">
-                    <mat-form-field
-                        class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
-                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                        <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
-                            [autocomplete]="'off'" [placeholder]="'Search Activity Reports'">
-                    </mat-form-field>
-                </div>
+
+            <div class="mt-4 sm:mt-0">
+          
+          
+                <div class="flex gap-0">
+                    <button class="ml-4 h-9" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Activity-Report' })">
+                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_solid:arrow-up'"></mat-icon>
+                        <span class="ml-2 mr-1 text-sm">Export</span>
+                    </button>
             </div>
+    
+    
+            </div>
+
         </div>
         <!-- Team list -->
         <div class="flex-auto pt-2 bg-default min-h-3/4 pb-10">
             <div class="flex flex-col flex-auto bg-card shadow  mx-5 overflow-hidden">
+                <div class="flex  flex-wrap justify-between px-2 py-2">
+                    <div class="flex-auto self-center">
+                        <mat-form-field
+                            class="fuse-mat-dense fuse-mat-no-subscript w-1/3 h-10" >
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                                [autocomplete]="'off'" [placeholder]="'Search Leads'">
+                        </mat-form-field>
+                    </div>
+                    
+                </div>
                     <div class="flex-auto   bg-card " fuseScrollbar>
-                        <table mat-table [dataSource]="dataSource" matSort>
+                        <table mat-table [dataSource]="dataSource" matSort
+                        matTableExporter #exporter="matTableExporter">
                             <!-- Username Column -->
                             <ng-container matColumnDef="leadOwnerName">
                                 <th mat-header-cell *matHeaderCellDef mat-header-sort> User Name </th>
@@ -70,6 +84,11 @@
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort> Meetings </th>
                                 <td mat-cell class = "text-right" *matCellDef="let row"> {{row.meeting}} </td>
                             </ng-container>
+                            <!-- Total Column -->
+                            <ng-container matColumnDef="total">
+                                <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort>Total Activites</th>
+                                <td mat-cell class="text-right" *matCellDef="let row"> {{row.total}} </td>
+                              </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             <tr class="mat-row" *matNoDataRow>

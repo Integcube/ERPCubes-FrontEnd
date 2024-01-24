@@ -1,7 +1,9 @@
 import { LeadReportService } from './lead-report.service';
 import { LeadReport, LeadStatus, Product } from "./lead-report.type";
-import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
+import { ExcelService } from 'app/shared/shared.service';
 import { Subject} from 'rxjs';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-lead-report',
@@ -10,9 +12,11 @@ import { Subject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeadReportComponent implements OnInit, OnDestroy {
+  
   constructor(
     private _leadReportService: LeadReportService,
-    private _changeDetectorRef: ChangeDetectorRef
+    private _changeDetectorRef: ChangeDetectorRef,
+    private ExcelServe: ExcelService
   ) { }
   prodId:number
   startDate: Date
@@ -27,7 +31,7 @@ export class LeadReportComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   status: LeadStatus[] = [];
   userList: LeadReport[] = [];
- 
+  HeaderConfig: { key: string; label: string }[] = [];
   ngOnInit(): void {
    
     this.startDate = new Date();
@@ -36,7 +40,7 @@ export class LeadReportComponent implements OnInit, OnDestroy {
     this.leadReportWithUser$.subscribe((report) => {
       this.leadReportCount = report.length;
       this.userList = [...report];
-   
+
       this._changeDetectorRef.markForCheck();
     });
     this.leadStatus$.subscribe(
@@ -58,4 +62,29 @@ export class LeadReportComponent implements OnInit, OnDestroy {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
+
+  exportToExcel(): void {
+    const dataToExport = this.userList; // Or any other data you want to export
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'LeadReports');
+
+    // Trigger the download
+    XLSX.writeFile(wb, 'lead_reports.xlsx', { bookType: 'xlsx' });
+  }
+  Export(){
+
+    this.HeaderConfig=[
+      
+      {key:'firstName',label:"Name"},
+      {key:'leadStatusTitle',label:"Lead Status"},
+      {key:'productName',label:"Product Name"},
+      {key:'productId',label:"Product"},
+      {key:'count',label:"Count"},
+    ]
+
+
+    
+    this.ExcelServe.exportToExcel(this.userList, this.HeaderConfig, 'Lead-Report.xlsx');
+      }
 }

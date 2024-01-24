@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadService } from '../lead.service';
 import { HttpEventType, HttpResponse } from '@angular/common/http'; // Import necessary modules
 import * as XLSX from 'xlsx';
-import { Industry, Lead, LeadImportList, LeadSource } from '../lead.type';
+import { Industry, Lead, LeadImportList, LeadSource, Product } from '../lead.type';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 @Component({
@@ -85,53 +85,59 @@ export class LeadImportComponent implements OnInit {
   }
 
   applyColumnMapping() {
-    // Apply column mapping to leads
-    const mappedLeads: LeadImportList[] = this.jsonData.map((row) => {
-      const leadData: LeadImportList = new LeadImportList({});
+    // Fetch Product and Industry data
+    this.leadService.getProduct().subscribe((products: Product[]) => {
+      this.leadService.getIndustries().subscribe((industries: Industry[]) => {
+        // Apply column mapping to leads
+        const mappedLeads: LeadImportList[] = this.jsonData.map((row) => {
+          const leadData: LeadImportList = new LeadImportList({});
   
-      // Handle specific mapping for firstName and lastName
-      leadData.firstName = row['First Name'] || '';
-      leadData.lastName = row['Last Name'] || '';
+          // Handle specific mapping for firstName and lastName
+          leadData.firstName = row['First Name'] || '';
+          leadData.lastName = row['Last Name'] || '';
   
-      // Generic column mapping
-      Object.keys(this.columnMappings).forEach((excelColumn) => {
-        const leadColumn = this.columnMappings[excelColumn];
+          // Generic column mapping
+          Object.keys(this.columnMappings).forEach((excelColumn) => {
+            const leadColumn = this.columnMappings[excelColumn];
   
-        if (excelColumn !== 'First Name' && excelColumn !== 'Last Name') {
-          // Set the value to an empty string if the column is not present in the current row
-          if (leadColumn.toLowerCase() === 'lastname') {
-            leadData.lastName = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';
-          } else {
-            leadData[leadColumn.toLowerCase()] = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';          }
-        }
+            if (excelColumn !== 'First Name' && excelColumn !== 'Last Name') {
+              if (leadColumn.toLowerCase() === 'producttitle' || leadColumn.toLowerCase() === 'industrytitle') {
+                // Map Product and Industry Titles to their respective IDs
+                const titleToSearch = row[excelColumn];
+                const idField = leadColumn.toLowerCase() === 'producttitle' ? 'productId' : 'industryId';
+                const matchingItem = leadColumn.toLowerCase() === 'producttitle'
+                  ? products.find((product) => product.productName === titleToSearch)
+                  : industries.find((industry) => industry.industryTitle === titleToSearch);
+  
+                leadData[idField] = matchingItem ? matchingItem[idField] : null;
+              } else {
+                // Set the value to an empty string if the column is not present in the current row
+                leadData[leadColumn.toLowerCase()] = row.hasOwnProperty(excelColumn) ? row[excelColumn] : '';
+              }
+            }
+          });
+  
+          return leadData;
+        });
+        const c = mappedLeads.map((lead) => {
+          const c: any = { ...lead };
+      
+          // Apply transformation for all fields
+          Object.keys(c).forEach((field) => {
+            c[field] = c[field].toString();
+          });
+      
+          return c;
+        });  
+        // Save the leads
+        this.leadService.saveBulkImportLeads(mappedLeads).subscribe(() => {
+          this.closeDialog();
+          this.getAllLeads();
+        });
       });
-  
-      return leadData;
-    });
-  
-    
-    const c = mappedLeads.map((lead) => {
-      const c: any = { ...lead };
-  
-      // Apply transformation for all fields
-      Object.keys(c).forEach((field) => {
-        c[field] = c[field].toString();
-      });
-  
-      return c;
-    });
-  
-    console.log('Mapped Leads:', c);
-  
-    this.mappedLeads = c;
-  
-    this.showColumnMapping = false;
-    debugger;
-    this.leadService.saveBulkImportLeads(this.mappedLeads).subscribe(() => {
-      this.closeDialog();
-      this.getAllLeads();
     });
   }
+
   
   
 

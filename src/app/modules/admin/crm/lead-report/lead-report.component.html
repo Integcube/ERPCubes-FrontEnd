@@ -37,11 +37,49 @@
                     </mat-form-field>
 
                 </div>
-                <div class = "mt-6">
+
+                <div class="flex mt-6">
+                  <button class="h-10 border-r-0 rounded-r-none" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
+                      <mat-icon class="icon-size-3"></mat-icon>
+                      <span class="ml-2 mr-1 text-sm">Get Reports</span>
+                  </button>
+
+                  <button class="h-10 min-w-0 rounded-l-none p-0 m-0 " mat-stroked-button matRipple
+                        [matMenuTriggerFor]="dropdownMenu">
+                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
+                        <mat-menu #dropdownMenu="matMenu">
+                            <button mat-menu-item (click)="Export()"
+                                class="flex text-sm">
+                                <span class="px-5 rounded text-xs items-center leading-5 text-white bg-green-600">Export XLS </span>
+
+                            </button>
+                        </mat-menu>
+                    </button>
+
+
+
+              <!-- </div>
+                <div class="flex flex-row gap-0">
+                  <div class="mt-6">
+                      
+                      <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
+                          <span class="ml-2 mr-1">Get Reports</span>
+                      </button> 
+                      
+                  </div>
+                  <div class="mt-6">
+                  
+                      <button class="ml-4 h-9" mat-stroked-button (click)="exportToExcel()">
+                          <mat-icon class="icon-size-3" [svgIcon]="'heroicons_solid:arrow-up'"></mat-icon>
+                          <span class="ml-2 mr-1 text-sm">Export</span>
+                      </button>
+                  </div>
+              </div> -->
+                <!-- <div class = "mt-6">
                     <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="getLeadReports()">
                         <span class="ml-2 mr-1">Get Reports</span>
                     </button>
-                </div>
+                </div> -->
             </div>
         </div>
       <div>
@@ -53,7 +91,7 @@
         <div class="flex-auto border-white py-1 bg-card mx-5 relative shadow-md sm:rounded-lg overflow-x-auto max-h-100"  fuseScrollbar>
             <ng-container *ngIf="leadReportWithUser$ | async as status ">
                 <ng-container *ngIf="status.length; else noReports">
-                    <table  class="w-full">
+                    <table  class="w-full" >
                         <thead class="sticky top-0 bg-white">
                           <tr>
                             <th class="border-b-2 p-2 text-left font-semibold"> Product / Owner </th>

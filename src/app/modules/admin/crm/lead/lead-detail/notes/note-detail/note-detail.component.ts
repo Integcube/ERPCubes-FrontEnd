@@ -80,7 +80,7 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
   {
       this.noteChanged.next(note);
   }
-   isNoteHasLabel(note: Note, tag: Tag): boolean {
+    isNoteHasLabel(note: Note, tag: Tag): boolean {
     return !!note.tags.find(item => item.tagId === tag.tagId);
   }
   toggleLabelOnNote(tag: Tag): void {

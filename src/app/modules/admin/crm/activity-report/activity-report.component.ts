@@ -15,12 +15,13 @@ import { UntypedFormControl } from '@angular/forms';
 export class ActivityReportComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('exporter') public exporter;
 
   dataSource: MatTableDataSource<ActivityReport>;
   displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting']; 
   selection = new SelectionModel<ActivityReport>(true, []);
   activityReportCount: number = 0;
-
+  totalActivities: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();

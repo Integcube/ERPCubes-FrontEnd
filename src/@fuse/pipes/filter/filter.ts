@@ -10,7 +10,6 @@ export class FilterPipe implements PipeTransform {
     if (!items || !filter) {
       return items;
     }
-debugger
     return items.filter((item) => {
       for (const key in filter) {
         if (filter.hasOwnProperty(key)) {

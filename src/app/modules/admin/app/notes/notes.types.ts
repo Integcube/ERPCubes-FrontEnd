@@ -1,25 +1,34 @@
-export interface Task
-{
-    id?: string;
-    content?: string;
-    completed?: string;
+export class Note {
+    noteId: number;
+    noteTitle: string;
+    content: string;
+    id: number;
+    createdDate: Date;
+    createdBy: string;
+    userName: string;
+    createdByName: string;
+    tags: Tag[];
+    tasks: Tasks[];
+    constructor(reg) {
+        this.noteId = reg.noteId ? reg.noteId : -1
+    }
 }
 
-export interface Label
-{
-    id?: string;
-    title?: string;
+export class Tasks {
+    taskId: number;
+    task: string;
+    isCompleted: boolean;
+    noteId: number
+    constructor(reg) {
+        this.taskId = reg.taskId ? reg.taskId : -1
+    }
 }
 
-export interface Note
-{
-    id?: string;
-    title?: string;
-    content?: string;
-    tasks?: Task[];
-    image?: string | null;
-    labels?: Label[];
-    archived?: boolean;
-    createdAt?: string;
-    updatedAt?: string | null;
+export class Tag {
+    tagId: number;
+    tagTitle: string;
+    isSelected: boolean
+    constructor(reg) {
+        this.tagId = reg.tagId ? reg.tagId : -1
+    }
 }

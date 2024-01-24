@@ -14,7 +14,9 @@ export class AdsService {
   private apiUrl = 'https://graph.facebook.com/v18.0';
   private googleUrl = 'https://www.googleapis.com/oauth2/v15'
   private readonly getProductUrl = `${environment.url}/Product/all`
-  private readonly saveLeadUrl = `${environment.url}/Lead/bulkSave`
+  private readonly saveLeadUrl = `$oo{environment.url}/Lead/bulkSave`
+  private readonly saveAdAccount = `$oo{environment.url}/AdAccount/bulkAdSave`
+  private readonly saveCampaignBulk = `$oo{environment.url}/Campaign/saveBulk`
 
   private readonly loginFacebookUrl = `${environment.url}/FacebookLogin/facebook-login`
   user: User;
@@ -148,5 +150,28 @@ export class AdsService {
       tap(a=>window.open(a.googleAuthUrl)),
       catchError(error=>{debugger; return EMPTY})
     );
+  }
+  saveBulkAdAccount(ads:AdAccountList[]): Observable<any> {
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      ads: ads
+    };
+    return this._httpClient.post<any>(this.saveAdAccount, data).pipe(
+      tap(data => {
+      })
+    );
+  }
+  saveBulkCampaign(campaign:AdList[]): Observable<any>{
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      campaign: campaign
+    };
+    return this._httpClient.post<any>(this.saveCampaignBulk, data).pipe(
+      tap(data => {
+      })
+    );
+
   }
 }

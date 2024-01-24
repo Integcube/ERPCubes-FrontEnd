@@ -24,6 +24,7 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { LeadMonthlyComponent } from './lead-monthly.component';
 import { leadMonthlyRoutes } from './lead-monthly.routing';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 
 
@@ -54,7 +55,8 @@ import { leadMonthlyRoutes } from './lead-monthly.routing';
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule
+    SharedModule,
+    MatTableExporterModule
   ]
 })
 export class LeadMonthlyModule { }

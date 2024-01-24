@@ -231,6 +231,8 @@ export class LeadImportList {
     createdDate: Date;
     modifiedDate: Date;
     isHovered: boolean;
+    product: Product;
+    industry: Industry;
     avatar: any;
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;

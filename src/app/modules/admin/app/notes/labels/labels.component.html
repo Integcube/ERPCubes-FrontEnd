@@ -30,20 +30,20 @@
     </mat-form-field>
     <!-- Labels -->
     <div class="flex flex-col mt-4">
-        <ng-container *ngIf="(labels$ | async) as labels">
-            <ng-container *ngFor="let label of labels; trackBy: trackByFn">
+        <ng-container *ngIf="(tags$ | async) as tags">
+            <ng-container *ngFor="let label of tags; trackBy: trackByFn">
                 <mat-form-field class="fuse-mat-dense w-full">
                     <button
                         mat-icon-button
                         matPrefix
-                        (click)="deleteLabel(label.id)">
+                        (click)="deleteLabel(label.tagId)">
                         <mat-icon
                             class="icon-size-5"
                             [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                     </button>
                     <input
                         [autocomplete]="'off'"
-                        [(ngModel)]="label.title"
+                        [(ngModel)]="label.tagTitle"
                         (input)="updateLabel(label)"
                         required
                         matInput>

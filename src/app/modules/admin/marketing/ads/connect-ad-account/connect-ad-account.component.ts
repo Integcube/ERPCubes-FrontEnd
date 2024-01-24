@@ -58,8 +58,11 @@ export class ConnectAdAccountComponent implements OnInit {
     })
   }
 
-  saveLeads() {
-    this.adService.saveLeads(this.allLeads).subscribe();
+  saveLeads(){
+  debugger;
+  this.adService.saveLeads(this.allLeads).subscribe();
+  this.adService.saveBulkAdAccount(this.adAccounts).subscribe();
+  this.adService.saveBulkCampaign(this.ads).subscribe();
     this.closeDialog()
   }
   displayedColumns: string[] = ['name', 'id', 'product'];
@@ -181,6 +184,15 @@ export class ConnectAdAccountComponent implements OnInit {
       }
     );
   }
+  // saveBulkAdAccount(){
+  //   this.adService.saveBulkAdAccount(this.adAccounts).subscribe(
+  //     {
+  //       next: a => { this.ads = a.flatMap(a => a.data) },
+  //       error: err => { }
+  //     }
+  //   );
+
+  // }
   signOut(): void {
     this.authService.signOut();
     this.user = new SocialUser
