@@ -4,6 +4,12 @@ import { TermsAndConditionsComponent } from "./terms-and-conditions/terms-and-co
 
 export const termsPolicyRoutes: Routes = [
     {
+        path:'',
+        redirectTo:'terms',
+        pathMatch:"full",
+        
+    },
+    {
         path:'terms',
         component: TermsAndConditionsComponent,
         
