@@ -89,9 +89,6 @@ export class UserFormComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
   save() {
-   
-
-
     if (this.selectedUser.id === -1) {
       if(!this.userForm.invalid && this.userForm.get('password').value){
         this._userFormService.saveUser(this.selectedUser.id, this.userForm).subscribe(

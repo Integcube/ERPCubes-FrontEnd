@@ -40,6 +40,8 @@
               "src/favicon-16x16.png",
               "src/favicon-32x32.png",
               "src/assets",
+              "src/favicon.ico",
+              "src/Quantas.png",
               {
                 "glob": "_redirects",
                 "input": "src",
@@ -123,7 +125,9 @@
             "assets": [
               "src/favicon-16x16.png",
               "src/favicon-32x32.png",
-              "src/assets"
+              "src/assets",
+              "src/favicon.ico",
+              "src/Quantas.png"
             ],
             "styles": [
               "src/styles/styles.scss"

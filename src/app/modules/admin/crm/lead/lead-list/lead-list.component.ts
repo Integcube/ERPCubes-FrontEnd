@@ -42,7 +42,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
-  displayedColumns: string[] = ['select', 'name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
+  displayedColumns: string[] = ['name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
   dateRangesFilter:any[];
@@ -90,6 +90,13 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     private _viewContainerRef: ViewContainerRef,
     public dialog: MatDialog
   ) { }
+
+  activeItem= new LeadCustomList({});
+  activeItemforAll=null;
+
+
+
+
   onDateRangeChange(selectedValue: string,type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -131,10 +138,14 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._usersPanelOverlayRef.detach();
   }
   getLeads(list: LeadCustomList, name: string): void {
+    debugger
     if (list === null) {
       list = new LeadCustomList({});
       list.listTitle = name;
+      this.activeItemforAll = null;
     }
+    
+    this.activeItem = list;
     this.filter = list.filterParsed;
     this._leadService.setCustomList(list);
     this._leadService.setFilter(list.filterParsed);
@@ -412,6 +423,19 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   importFile(){
 
   }
+
+  isActiveItem(item:LeadCustomList): boolean {
+debugger
+    if(item==null)
+    {
+      item = new LeadCustomList({});
+      item.listTitle = "All Leads";
+     
+    }
+    return this.activeItem === item;
+  }
+
+
   updateLead(selectedLead: Lead) {
     this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();

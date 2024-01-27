@@ -25,7 +25,11 @@ const themes = {
         },
         accent2  : {
             ...colors.indigo,
-            DEFAULT: '#00bda5'
+            DEFAULT: '#12344D'
+        },
+        'accent3'  : {
+            ...colors.indigo,
+            DEFAULT: '#E85038'
         },
         accent   : {
             ...colors.slate,

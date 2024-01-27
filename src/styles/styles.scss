@@ -8,3 +8,12 @@
 .h-main-section {
     height: calc(100vh - 4rem); /* Subtracting h-16 (4rem) from h-screen */
   }
+  .primary-2:not(:disabled) {
+    background-color: #E85038!important;
+    color: white!important;
+}
+
+.primary-2-Icon:not(:disabled) {
+
+  color:#12344D!important
+}
