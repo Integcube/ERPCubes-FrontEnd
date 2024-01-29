@@ -9,7 +9,13 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "fuse": {
+    "fuse": { 
+      "i18n": {
+        "sourceLocale":"en-US",
+        "locales": {
+          "ur":"src/locale/messages.ur.json"
+        }
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,6 +29,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize":true,
             "outputPath": "dist/fuse",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -86,12 +93,16 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize":false,
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "ur": {
+              "localize": ["ur"]
             }
           },
           "defaultConfiguration": "production"
@@ -104,6 +115,9 @@
             },
             "development": {
               "browserTarget": "fuse:build:development"
+            },
+            "ur":{
+              "browserTarget": "fuse:build:development,ur"
             }
           },
           "defaultConfiguration": "development"
@@ -111,7 +125,8 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fuse:build"
+            "browserTarget": "fuse:build",
+            "outputPath": "src/locale"
           }
         },
         "test": {

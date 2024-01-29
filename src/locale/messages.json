@@ -1,0 +1,22 @@
+{
+  "locale": "en-US",
+  "translations": {
+    "5207635742003539443": "Sign in",
+    "5260011782858214729": "User Name or Email Address",
+    "7466648988302940210": " User Name or Email address is required ",
+    "4925922031422916108": " Please enter a valid username or email address ",
+    "1431416938026210429": "Password",
+    "9132547751630599796": " Password is required ",
+    "2623524733987339825": " Remember me ",
+    "7762160899276656731": "Forgot password? ",
+    "6663783128602596673": " Sign in ",
+    "3045523018766859841": "Welcome to",
+    "3498706905853896697": "ERP Cubes",
+    "4681650581654563381": " Revolutionize your business operations with our comprehensive ERP software solution, streamlining processes and enhancing efficiency. Join us and be part of our community today. ",
+    "4528730451850190827": "Logo image",
+    "3724135337139291305": "Landing Module",
+    "8225177353008189657": " This can be the landing or the welcome page of your application. If you have an SSR (Server Side Rendering) setup, or if you don't need to have Search engine visibility and optimizations, you can even use this page as your primary landing page. ",
+    "7918708623502277378": " This is a separate \"module\", it has its own directory and routing setup and also it's completely separated from the actual application. This is also a simple example of a multiple applications setup that uses the same codebase. You can have different entry points and essentially have different applications within the same codebase. ",
+    "377242825389897831": "Launch the App"
+  }
+}

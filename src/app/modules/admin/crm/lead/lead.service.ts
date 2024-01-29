@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -51,6 +51,7 @@ export class LeadService {
   private readonly saveBulkLeadUrl = `${environment.url}/Lead/bulkSave`
   private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
   private readonly getAllCampaignsURL = `${environment.url}/Campaign/all`
+  private readonly getStatusWiseLeadsUrl = `${environment.url}/Lead/getStatusWiseLeads`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -75,6 +76,8 @@ export class LeadService {
   private _callreasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
   private _campaigns: BehaviorSubject<Campaign[] | null> = new BehaviorSubject(null);
+  private _statusWiseLeads: BehaviorSubject<StatusWiseLeads[] | null> = new BehaviorSubject(null);
+
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -166,6 +169,10 @@ export class LeadService {
       ,
       catchError(err => this.handleError(err))
     )
+
+    get statusWiseLeads$():Observable<StatusWiseLeads[]>{
+      return this._statusWiseLeads.asObservable();
+    }
 
   get activities$(): Observable<any> {
     return this._activities.asObservable();
@@ -284,7 +291,18 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
+  getStausWiseLeads(): Observable<StatusWiseLeads[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<StatusWiseLeads[]>(this.getStatusWiseLeadsUrl, data).pipe(
+      tap((statusWiseLeads) => {
+        this._statusWiseLeads.next(statusWiseLeads);
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
   getTasks(leadId: number): Observable<TaskModel[]> {
     let data = {
       id: "-1",

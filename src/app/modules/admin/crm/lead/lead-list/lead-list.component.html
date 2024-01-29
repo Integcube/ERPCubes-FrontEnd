@@ -1,7 +1,7 @@
-<div class="absolute inset-0 flex flex-col  bg-default overflow-hidden"  >
+<div class="absolute inset-0 flex flex-col  bg-default overflow-hidden">
     <mat-drawer-container class="flex-auto bg-card dark:bg-transparent" (backdropClick)="onBackdropClicked()">
         <mat-drawer class="w-full md:w-160 dark:bg-gray-900" [mode]="drawerMode" [opened]="false" [position]="'end'"
-            [disableClose]="false" #matDrawer >
+            [disableClose]="false" #matDrawer>
             <router-outlet></router-outlet>
         </mat-drawer>
         <mat-drawer-content class="flex grow flex-col md:overflow-hidden lg:overflow-hidden h-screen" fuseScrollbar >
@@ -217,8 +217,8 @@
     </ng-container> -->
                 <div class="flex-grow  bg-default  justify-between overflow-hidden" >
                     <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-1 shadow mb-2">
-                        <!-- <div class="flex px-6  gap-2">
-                            <button class="ml-4" mat-flat-button class="h-8 border-2"  (click)="toggleView()">
+                        <div class="flex px-6  gap-2">
+                            <button class="ml-4" mat-flat-button class="h-8 border-2"  (click)="setView()">
                                 <mat-icon svgIcon="mat_outline:backup_table"></mat-icon>
                                 <span class="ml-2 mr-1" *ngIf="!isTable">Table</span>
                                 <span class="ml-2 mr-1" *ngIf="isTable">Status</span>
@@ -227,8 +227,8 @@
                                 <mat-icon svgIcon="mat_outline:layers"></mat-icon>
                                 <span class="ml-2 mr-1">Bulk Actions</span>
 
-                            </button>
-                        </div> -->
+                        </button>
+                    </div>
 
                         <div class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                             <div class="flex flex-row gap-2">
@@ -287,11 +287,10 @@
                                 <div class="flex gap-1 items-center p-2 rounded h-5"
                                     [ngStyle]="{'background-color': filter.createdDate ? '#E85038':'transparent'}">
 
-                                    <span class="font-bold hover:underline cursor-pointer text-xs "
-                                        #createdDatePanelOrigin (click)="openCreatedDatePanel()"
-                                        [matTooltip]="'Filter by Created Date'"
-                                        [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'">
-                                        Created Date
+                                <span class="font-bold hover:underline cursor-pointer text-xs " #createdDatePanelOrigin
+                                    (click)="openCreatedDatePanel()" [matTooltip]="'Filter by Created Date'"
+                                    [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'">
+                                    Created Date
 
                                     </span>
                                     <ng-template #createdDatePanel>
@@ -513,74 +512,74 @@
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Company </th>
                                                 <td mat-cell *matCellDef="let row" class="text-sm"> {{row.companyTitle}} </td>
                                             </ng-container> -->
-    
-                                            <!-- <ng-container matColumnDef="sourceTitle">
+
+                                        <!-- <ng-container matColumnDef="sourceTitle">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Source </th>
                                                 <td mat-cell *matCellDef="let row" class="text-sm"> {{row.sourceTitle}} </td>
                                             </ng-container> -->
-                                            <ng-container matColumnDef="industryTitle" class="">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Industry </th>
-                                                <td mat-cell *matCellDef="let row" class=""> {{row.industryTitle}} </td>
-                                            </ng-container>
-                                            <!-- <ng-container matColumnDef="country">
+                                        <ng-container matColumnDef="industryTitle" class="">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Industry </th>
+                                            <td mat-cell *matCellDef="let row" class=""> {{row.industryTitle}} </td>
+                                        </ng-container>
+                                        <!-- <ng-container matColumnDef="country">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Country </th>
                                                 <td mat-cell *matCellDef="let row" class="text-sm"> {{row.country}} </td>
                                             </ng-container> -->
-                                            <ng-container matColumnDef="phone">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
-                                                <td mat-cell *matCellDef="let row" class=" text-clip"> {{row.mobile}} </td>
-                                            </ng-container>
-                                            
-                                            <ng-container matColumnDef="productTitle">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
-                                                <td mat-cell *matCellDef="let row" class=""> {{row.productTitle}} </td>
-                                            </ng-container>
-    
-                                            <!-- <ng-container matColumnDef="email">
+                                        <ng-container matColumnDef="phone">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+                                            <td mat-cell *matCellDef="let row" class=" text-clip"> {{row.mobile}} </td>
+                                        </ng-container>
+
+                                        <ng-container matColumnDef="productTitle">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
+                                            <td mat-cell *matCellDef="let row" class=""> {{row.productTitle}} </td>
+                                        </ng-container>
+
+                                        <!-- <ng-container matColumnDef="email">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
                                                 <td mat-cell *matCellDef="let row" class="text-sm"> {{row.email}} </td>
                                             </ng-container> -->
-                                            
-                                            <ng-container matColumnDef="leadOwnerName">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Lead Owner </th>
-                                                <td mat-cell *matCellDef="let row" class="">
-                                                  
-                                                    {{row.leadOwnerName| tblimit}} 
-                                                    
-                                                    </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="leadStatus">
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                                                <td mat-cell *matCellDef="let row" class=""> {{row.statusTitle}} </td>
-                                            </ng-container>
-                                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                            <!-- Row shown when there is no matching data. -->
-                                            <tr class="mat-row" *matNoDataRow>
-                                                <td class="mat-cell" colspan="4" >No data matching the filter</td>
-                                            </tr>
-    
-    
-                                        </table>
-    
-    
-                                    </div>
-    
-                                </ng-container>
-                            </ng-container>
-                            <ng-template #noLead>
-                                <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">There
-                                    are no
-                                    Leads!</div>
-                            </ng-template>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!isTable">
-                        <app-status-view></app-status-view>
-                    </ng-container>
 
-                </div>
-           
+                                        <ng-container matColumnDef="leadOwnerName">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Lead Owner </th>
+                                            <td mat-cell *matCellDef="let row" class="">
+
+                                                {{row.leadOwnerName| tblimit}}
+
+                                            </td>
+                                        </ng-container>
+                                        <ng-container matColumnDef="leadStatus">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                                            <td mat-cell *matCellDef="let row" class=""> {{row.statusTitle}} </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                        <!-- Row shown when there is no matching data. -->
+                                        <tr class="mat-row" *matNoDataRow>
+                                            <td class="mat-cell" colspan="4">No data matching the filter</td>
+                                        </tr>
+
+
+                                    </table>
+
+
+                                </div>
+
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #noLead>
+                            <div class="p-8 sm:p-16 border-t text-2xl font-semibold tracking-tight text-center">There
+                                are no
+                                Leads!</div>
+                        </ng-template>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!isTable">
+                    <app-lead-status></app-lead-status>
+                </ng-container>
+
+            </div>
+
         </mat-drawer-content>
     </mat-drawer-container>
 </div>

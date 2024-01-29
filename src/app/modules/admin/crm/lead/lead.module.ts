@@ -56,6 +56,7 @@ import { SearchBarComponent } from './lead-detail/search-bar/search';
 import { MatStepperModule } from '@angular/material/stepper';
 import { LeadImportComponent } from './lead-import/lead-import.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
+import { LeadStatusComponent } from './lead-status/lead-status.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,7 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     MeetingTabComponent,
     SearchBarComponent,
     LeadImportComponent,
+    LeadStatusComponent,
      
   ],
   imports: [
@@ -126,7 +128,7 @@ import { MatTableExporterModule } from 'mat-table-exporter';
       provide: MAT_DATE_FORMATS,
       useValue: {
         parse: {
-          dateInput: moment.ISO_8601
+          dateInput: moment.utc
         },
         display: {
           dateInput: 'll',

@@ -322,6 +322,9 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     });
   }
+  setView(){
+    this.isTable = !this.isTable
+  }
   updateView(view: LeadCustomList): void {
     this._matDialog.open(ViewDetailComponent, {
       autoFocus: false,

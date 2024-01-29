@@ -256,3 +256,20 @@ export interface Campaign {
     budget: number
     isHovered: boolean
 }
+
+export interface StatusWiseLeads {
+    statusId: number;
+    statusTitle: string;
+    order: number;
+    leads: StatusLeads[];
+}
+
+export interface StatusLeads {
+    leadId: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    status: number;
+    leadOwner: string;
+    mobile: string;
+}

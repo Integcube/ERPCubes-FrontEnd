@@ -4,7 +4,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <img src="assets/images/logo/Quantance.svg" class="w-15">
-                <h2 class="ml-4 text-4xl font-extrabold tracking-tight leading-tight">Sign in</h2>
+                <h2 i18n class="ml-4 text-4xl font-extrabold tracking-tight leading-tight">Sign in</h2>
             </div>
             
             <!-- Title -->
@@ -36,22 +36,22 @@
 
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>User Name or Email Address</mat-label>
+                    <mat-label i18n>User Name or Email Address</mat-label>
                     <input
                         id="email"
                         matInput
                         [formControlName]="'email'">
-                    <mat-error *ngIf="signInForm.get('email').hasError('required')">
+                    <mat-error *ngIf="signInForm.get('email').hasError('required')" i18n>
                         User Name or Email address is required
                     </mat-error>
-                    <mat-error *ngIf="signInForm.get('email').hasError('email')">
+                    <mat-error *ngIf="signInForm.get('email').hasError('email')" i18n>
                         Please enter a valid username or email address
                     </mat-error>
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label i18n>Password</mat-label>
                     <input
                         id="password"
                         matInput
@@ -73,7 +73,7 @@
                             *ngIf="passwordField.type === 'text'"
                             [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                     </button>
-                    <mat-error>
+                    <mat-error i18n>
                         Password is required
                     </mat-error>
                 </mat-form-field>
@@ -82,12 +82,12 @@
                 <div class="inline-flex items-end justify-between w-full mt-1.5">
                     <mat-checkbox
                         [color]="'primary'"
-                        [formControlName]="'rememberMe'">
+                        [formControlName]="'rememberMe'" i18n>
                         Remember me
                     </mat-checkbox>
                     <a
                         class="text-md font-medium text-primary-500 hover:underline"
-                        [routerLink]="['/forgot-password']">Forgot password?
+                        [routerLink]="['/forgot-password']" i18n>Forgot password?
                     </a>
                 </div>
 
@@ -98,7 +98,7 @@
                     [color]="'primary'"
                     [disabled]="signInForm.disabled"
                     (click)="signIn()">
-                    <span *ngIf="!signInForm.disabled">
+                    <span *ngIf="!signInForm.disabled" i18n>
                         Sign in
                     </span>
                     <mat-progress-spinner
@@ -168,10 +168,10 @@
         <!-- Content -->
         <div class="z-10 relative w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
-                <div>Welcome to Quantus</div>
+                <div i18n>Welcome to Quantus</div>
                
             </div>
-            <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
+            <div i18n class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
                 Revolutionize your business operations with our comprehensive Quantus software solution, streamlining processes and enhancing efficiency.
                 Join us and be part of our community today.
             </div>
