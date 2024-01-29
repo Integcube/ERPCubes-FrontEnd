@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, catchError, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Activity, Call, Company, CompanyCustomList, CompanyFilter, Email, Industry, Meeting, Note, Tag, TaskModel, Tasks } from './company.type';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { ContactEnum } from 'app/core/enum/crmEnum';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +73,7 @@ export class CompanyService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
+    private snackBar: MatSnackBar,
   ) 
   {
     this._userService.user$.subscribe(user => {
@@ -169,7 +171,8 @@ export class CompanyService {
     return this._httpClient.post<Industry[]>(this.getIndustriesURL, data).pipe(
       tap((industries) => {
         this._industries.next(industries);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   getUsers(): Observable<User[]> {
@@ -180,7 +183,8 @@ export class CompanyService {
     return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
       tap((users) => {
         this._users.next(users);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   getCustomList(): Observable<CompanyCustomList[]> {
@@ -212,7 +216,7 @@ export class CompanyService {
       tap((customList) => {
         this._customLists.next(customList);
       }),
-      catchError(error => { alert(error); return EMPTY; })
+      catchError(err => this.handleError(err))
     );
   }
   deleteCustomList(companyList: CompanyCustomList): Observable<CompanyCustomList> {
@@ -229,7 +233,7 @@ export class CompanyService {
         this.setCustomList(list);
         this.getCustomList().subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   setCustomList(list: CompanyCustomList){
@@ -267,7 +271,7 @@ export class CompanyService {
         this.setCustomList(customList)
         this.getCustomList().subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   setFilter(filter: CompanyFilter){
@@ -282,7 +286,7 @@ export class CompanyService {
       filter
     }
     return this._httpClient.post<any>(this.saveCustomListFilterUrl, data).pipe(
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getCompanies(): Observable<Company[]> {
@@ -294,7 +298,8 @@ export class CompanyService {
       tap((companies) => {
         this._companies.next(companies);
       
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   saveCompany(company:Company){
@@ -306,7 +311,8 @@ export class CompanyService {
     return this._httpClient.post<Company[]>(this.saveCompanyURL, data).pipe(
       tap((companies) => {
         this.getCompanies().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   deleteCompany(company:Company){
@@ -319,7 +325,8 @@ export class CompanyService {
     return this._httpClient.post<Company[]>(this.deleteCompanyURL, data).pipe(
       tap((company) => {
         this.getCompanies().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   selectedCompany(selectedCompany: Company) {
@@ -359,7 +366,8 @@ export class CompanyService {
     return this._httpClient.post<Activity[]>(this.getUserActivityListURL, data).pipe(
       tap((response: Activity[]) => {
         this._activities.next(response);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   updateSearchQuery(value: any) {
@@ -376,7 +384,7 @@ export class CompanyService {
       tap((notes) => {
         this._notes.next(notes);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
 
     );
   }
@@ -391,7 +399,7 @@ export class CompanyService {
       tap((calls) => {
         this._calls.next(calls);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
 
     );
   }
@@ -406,7 +414,7 @@ export class CompanyService {
       tap((tasks) => {
         this._tasks.next(tasks);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
 
     );
   }
@@ -421,7 +429,7 @@ export class CompanyService {
       tap((emails) => {
         this._emails.next(emails);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getMeetings(companyId: number): Observable<Meeting[]> {
@@ -435,7 +443,7 @@ export class CompanyService {
       tap((meetings) => {
         this._meetings.next(meetings);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
 
     );
   }
@@ -455,7 +463,7 @@ export class CompanyService {
       tap((call) => {
         this.getCalls(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   saveEmail(email: any, companyId: number): Observable<any> {
@@ -472,7 +480,7 @@ export class CompanyService {
       tap((email) => {
         this.getEmails(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   saveMeeting(meeting: any, companyId: number): Observable<any> {
@@ -491,7 +499,7 @@ export class CompanyService {
       tap((meeting) => {
         this.getMeetings(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getMeetingById(id: number): Observable<Meeting> {
@@ -535,10 +543,7 @@ export class CompanyService {
       tap(() => {
         this.getNotes(companyId).subscribe();
       }),
-      catchError(error => {
-        alert(error);
-        return EMPTY;
-      })
+      catchError(err => this.handleError(err))
     );
   }  
   deleteNote(noteId: number, companyId: number): Observable<Note> {
@@ -551,7 +556,7 @@ export class CompanyService {
       tap((note) => {
         this.getNotes(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getNoteById(id: number): Observable<Note> {
@@ -592,7 +597,7 @@ export class CompanyService {
         return of([]);
       }
     }),
-    catchError(error => { alert(error); return EMPTY })
+    catchError(err => this.handleError(err))
   )
   selectedNoteTag$ = this.note$.pipe(
     switchMap((note) => {
@@ -609,7 +614,7 @@ export class CompanyService {
       }
     })
     ,
-    catchError(error => { alert(error); return EMPTY })
+    catchError(err => this.handleError(err))
   )
   selectedTaskTag$ = this.task$.pipe(
     switchMap((task) => {
@@ -626,7 +631,7 @@ export class CompanyService {
       }
     })
     ,
-    catchError(error => { alert(error); return EMPTY })
+    catchError(err => this.handleError(err))
   )
   saveTask(taskForm, companyId: number): Observable<TaskModel> {
     let data = {
@@ -647,7 +652,7 @@ export class CompanyService {
       tap((customList) => {
         this.getTasks(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   deleteTask(taskId: number, taskTitle: string, companyId: number): Observable<TaskModel> {
@@ -661,7 +666,7 @@ export class CompanyService {
       tap((customList) => {
         this.getTasks(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getTaskById(id: number): Observable<TaskModel> {
@@ -699,7 +704,7 @@ export class CompanyService {
       tap((customList) => {
         this.getTasks(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   updateTaskPriority(taskId: number, taskTitle, priority, companyId){
@@ -714,7 +719,7 @@ export class CompanyService {
       tap((customList) => {
         this.getTasks(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   deleteEmail(emailId: number, companyId: number): Observable<Email> {
@@ -728,7 +733,7 @@ export class CompanyService {
       tap((customList) => {
         this.getEmails(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   getTags(): Observable<Tag[]> {
@@ -740,7 +745,7 @@ export class CompanyService {
       tap((tags) => {
         this._tags.next(tags);
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
   deleteCall(callId: number, companyId: number): Observable<Call> {
@@ -753,9 +758,10 @@ export class CompanyService {
       tap((customList) => {
         this.getCalls(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
   }
+
   deleteMeeting(meetingId: number, companyId: number): Observable<Meeting> {
     let data = {
       id: this.user.id,
@@ -767,7 +773,26 @@ export class CompanyService {
       tap((customList) => {
         this.getMeetings(companyId).subscribe();
       }),
-      catchError(error => { alert(error); return EMPTY })
+      catchError(err => this.handleError(err))
     );
+  }
+
+  private handleError(err: HttpErrorResponse): Observable<never> {
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+    }
+    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+    return throwError(() => errorMessage);
+  }
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
   }
 }

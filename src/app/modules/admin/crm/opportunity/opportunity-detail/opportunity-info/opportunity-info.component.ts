@@ -30,9 +30,9 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
   opportunityStatus$ = this._opportunityService.opportunityStatus$;
   opportunitySource$ = this._opportunityService.opportunitySource$;
   product$ = this._opportunityService.product$;
-  private errorMessageSubject = new Subject<string>();
+  
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+
   save() {
     this.selectedOpportunity = { ...this.opportunityForm.value }
     this._opportunityService.saveOpportunity(this.selectedOpportunity).subscribe(
@@ -41,9 +41,7 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
           this._changeDetectorRef.markForCheck();
 
         },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
-        }
+        
       }
     );
   }
@@ -68,16 +66,13 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       productId: [''],
       createdDate: ['']
     });
-    this._opportunityService.opportunity$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((company: Opportunity) => {
-        this.selectedOpportunity = { ...company };
-        this.opportunityForm.patchValue(company, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._opportunityService.opportunity$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((company: Opportunity) => {
+      this.selectedOpportunity = { ...company };
+      this.opportunityForm.patchValue(company, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions

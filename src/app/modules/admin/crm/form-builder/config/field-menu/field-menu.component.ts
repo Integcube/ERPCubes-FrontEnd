@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormFieldType } from '../../form-builder.type';
-import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, takeUntil } from 'rxjs';
 import { FormBuilderService } from '../../form-builder.service';
 
 @Component({
@@ -12,8 +12,8 @@ export class FieldMenuComponent implements OnInit {
   @Output() dataEvent: EventEmitter<FormFieldType> = new EventEmitter<FormFieldType>();
   fieldTypes$: Observable<FormFieldType[]> 
   fieldTypesArray:FormFieldType[]
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _formBuilderService: FormBuilderService,)
@@ -25,13 +25,7 @@ export class FieldMenuComponent implements OnInit {
   ngOnInit(): void {
     this.fieldTypes$ = this._formBuilderService.fieldTypes$
     this._formBuilderService.fieldTypes$
-    .pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-    )
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((types: FormFieldType[]) => {
       this.fieldTypesArray = types
     })

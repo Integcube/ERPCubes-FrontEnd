@@ -99,23 +99,25 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     MatProgressBarModule,
     MatRadioModule,
     MatRippleModule,
-    QuillModule,
     MatSelectModule,
     MatSidenavModule,
     MatTableModule,
     MatTooltipModule,
-    FuseFindByKeyPipeModule,
-    FormsModule,
     MatExpansionModule,
     MatTabsModule,
-    FuseCardModule,
-    DragDropModule,
     MatDialogModule,
-    SharedModule,
+    MatStepperModule,
+    MatTableExporterModule,
+    FuseFindByKeyPipeModule,
+    FormsModule,
+    FuseCardModule,
     FuseScrollbarModule ,
     FuseDrawerModule,
-    MatStepperModule,
-    MatTableExporterModule
+    DragDropModule,
+    SharedModule,
+    QuillModule,
+
+    
   ],schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],

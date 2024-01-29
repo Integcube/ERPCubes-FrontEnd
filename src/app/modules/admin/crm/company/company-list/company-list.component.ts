@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, Renderer2, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { CompanyService } from '../company.service';
 import { Company, CompanyCustomList, CompanyFilter, Industry } from '../company.type';
-import { EMPTY, Observable, Subject, catchError, debounceTime, distinctUntilChanged, filter, fromEvent, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, debounceTime, distinctUntilChanged, filter, fromEvent, takeUntil } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -37,9 +37,9 @@ export class CompanyListComponent implements OnInit {
   @ViewChild('industryPanel') private _industryPanel: TemplateRef<any>;
   @ViewChild('industryPanelOrigin') private _industryPanelOrigin: ElementRef;
   private _panelsOverlayRef: OverlayRef;
-  private errorMessageSubject = new Subject<string>();
+  
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+
   dataSource: MatTableDataSource<Company>;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   drawerMode: 'side' | 'over';
@@ -92,12 +92,7 @@ export class CompanyListComponent implements OnInit {
     this._companyService.setCustomList(selectedList);
     this.companies$ = this._companyService.filteredCompanies$;
     this._companyService.filteredCompanies$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        })
-      )
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((comapnies: Company[]) => {
         this.companies = [...comapnies];
         this.companyCount = comapnies.length;
@@ -108,12 +103,7 @@ export class CompanyListComponent implements OnInit {
       });
 
     this._companyService.company$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        })
-      )
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((company: Company) => {
         this.selectedCompany = company;
         this._changeDetectorRef.markForCheck();

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EMPTY, Observable, Subject, combineLatest, forkJoin } from 'rxjs';
-import { takeUntil, tap, map, catchError, take } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
+import { takeUntil, map} from 'rxjs/operators';
 import { Company, Note, Tag, Tasks } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
 
@@ -40,20 +40,22 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     private _matDialogRef: MatDialogRef<NoteDetailComponent>
   ) { }
   ngOnInit(): void {
-        if (this._data.note.noteId) {
-      this._companyService.getNoteById(this._data.note.noteId).pipe(
+    if (this._data.note.noteId) {
+      this._companyService.getNoteById(this._data.note.noteId)
+      .pipe(
         takeUntil(this._unsubscribeAll),
-      ).subscribe(
+      )
+      .subscribe(
         (data) => {
           this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
         }
       );
-      this.noteWithData$.pipe(
+
+      this.noteWithData$
+      .pipe(
         takeUntil(this._unsubscribeAll),
-      ).subscribe(
+      )
+      .subscribe(
         (data)=>{
           this.note = {
             noteId: data.noteId,
@@ -66,14 +68,13 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             tasks: data.tasks,
           };
           this._changeDetectorRef.markForCheck();
-        },
-        error=> {
-          console.error("Error fetching data: ", error);
         }
       )
-      this._companyService.company$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.company = { ...data };})
+
+      this._companyService.company$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(data =>{ this.company = { ...data };})
     }
-    
   }
   updateNoteDetails(note: Note): void
   {
@@ -141,10 +142,13 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return item.id || index;
   }
   save(){
-    this._companyService.saveNote(this.note, this.company.companyId).subscribe(data=>this.closeDialog());
+    this._companyService.saveNote(this.note, this.company.companyId)
+    .subscribe(data=>this.closeDialog());
    }
    delete(){
-    this._companyService.deleteNote(this.note.noteId,this.company.companyId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+    this._companyService.deleteNote(this.note.noteId,this.company.companyId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.closeDialog())
    }
 }
 

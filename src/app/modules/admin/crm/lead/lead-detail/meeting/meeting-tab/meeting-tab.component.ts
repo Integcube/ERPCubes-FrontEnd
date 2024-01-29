@@ -1,5 +1,5 @@
-import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef, ViewChild} from '@angular/core';
-import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
+import { Component, OnInit ,ChangeDetectionStrategy, ViewChild} from '@angular/core';
+import { combineLatest, map } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
@@ -19,22 +19,22 @@ export class MeetingTabComponent implements OnInit {
   meetingWithUser$ = combineLatest([
     this.meetings$,
     this.users$
-  ]).pipe(
+  ])
+  .pipe(
     map(([meetings, users]) =>
     meetings.map(meeting => ({
         ...meeting,
         createdByTitle:  users?.find(a=>a.id === meeting.createdBy)?.name,
       } as Meeting))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
+    )
   );
   constructor(
     private _leadService:LeadService,
     private _matDialog: MatDialog,
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
+  
   addMeeting(){
     let meeting = new Meeting({})
     // this._changeDetectorRef.markForCheck();
@@ -43,7 +43,7 @@ export class MeetingTabComponent implements OnInit {
       data     : {
           meeting: cloneDeep(meeting)
       }
-  });
+    });
   }
 
   updateMeeting(meeting:Meeting):void{
@@ -53,6 +53,6 @@ export class MeetingTabComponent implements OnInit {
       data     : {
           meeting: cloneDeep(meeting)
       }
-  });
+    });
   }
 }

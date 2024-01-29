@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnIn
 import { Product, Project } from '../product.type';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { Subject, takeUntil, catchError, EMPTY, filter } from 'rxjs';
+import { Subject, takeUntil, filter } from 'rxjs';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { ProductService } from '../product.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -24,8 +24,8 @@ export class ProductFormComponent implements OnInit {
   projects$ = this._productService.projects$;
   projects: Project[]
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   showDeleteConfirmationDialog: boolean = false;
   private deleteConfirmationDialogRef: MatDialogRef<any>;
@@ -45,13 +45,8 @@ export class ProductFormComponent implements OnInit {
   ngOnInit(): void {
     this._productListComponent.matDrawer.open();
     this.product$ = this._productService.product$;
-    this._productService.product$.pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-    )
+    this._productService.product$
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((product: Product) => {
       this._productListComponent.matDrawer.open();
       this.selectedProduct = { ...product };
@@ -63,16 +58,11 @@ export class ProductFormComponent implements OnInit {
         price: [this.selectedProduct.price],
         projectId: [this.selectedProduct.projectId],
       });
-
       this._changeDetectorRef.markForCheck();
     });
     
-    this._productService.projects$.pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+    this._productService.projects$
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((projects: Project[]) => {
       this.projects = projects
       this._changeDetectorRef.markForCheck();
@@ -127,9 +117,6 @@ export class ProductFormComponent implements OnInit {
               this._productListComponent.onBackdropClicked();
               this.closeDrawer();
               this._changeDetectorRef.markForCheck();
-            },
-            error: err => {
-              alert(`Daniyal:${JSON.stringify(err)}`)
             }
           }
         );

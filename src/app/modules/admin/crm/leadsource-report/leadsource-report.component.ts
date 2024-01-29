@@ -28,8 +28,8 @@ export class LeadSourceReportComponent {
   leadSourceReportCount: number = 0;
   totalLeadSource: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _leadSourceReportService: LeadSourceReportService,

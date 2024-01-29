@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit,Inject, ChangeDetectionStrategy } from '@angular/core';
-import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Subject, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Call, Company } from '../../../company.type';
@@ -95,13 +95,7 @@ export class CallDetailComponent implements OnInit , OnDestroy {
 
     this._companyService
       .saveCall(this.composeForm.value, this.company.companyId)
-      .pipe(
-        takeUntil(this._unsubscribeAll),
-        catchError((err) => {
-          alert(err);
-          return EMPTY;
-        })
-      )
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((data) => this.matDialogRef.close());
   }
   discard(): void {

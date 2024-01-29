@@ -23,21 +23,23 @@ export class CrmDashboardService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    private snackBar: MatSnackBar
-  ) {
-    this._userService.user$.subscribe(user => {
-      this.user = user;
-    })
+    private snackBar: MatSnackBar) 
+  {
+    this._userService.user$.subscribe(user => {this.user = user;})
   }
+
   get users$():Observable<User[]>{
     return this._users.asObservable();
   }
+
   get leads$():Observable<Lead[]>{
     return this._leads.asObservable();
   }
+
   get tasks$():Observable<Task[]>{
     return this._tasks.asObservable();
   }
+
   getLeads(): Observable<Lead[]> {
     let data = {
       id: this.user.id,
@@ -50,6 +52,7 @@ export class CrmDashboardService {
       catchError(err => this.handleError(err))
     );
   }
+
   getTasks(): Observable<Task[]> {
     let data = {
       tenantId: this.user.tenantId,
@@ -64,6 +67,7 @@ export class CrmDashboardService {
       catchError(err => this.handleError(err))
     );
   }
+
   getUsers(): Observable<User[]> {
     let data = {
       tenantId: this.user.tenantId,
@@ -77,6 +81,7 @@ export class CrmDashboardService {
       catchError(err => this.handleError(err))
     );
   }
+
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {
@@ -87,6 +92,7 @@ export class CrmDashboardService {
     this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
     return throwError(() => errorMessage);
   }
+  
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {
       duration: 2000,

@@ -33,7 +33,6 @@ export const leadRoutes: Routes = [
                             selectedLead: SelectedLeadResolver
                         },
                         canDeactivate: [LeadGuard]
-
                     },
 
                 ]

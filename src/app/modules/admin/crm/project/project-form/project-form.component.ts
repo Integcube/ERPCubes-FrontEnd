@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Subject, takeUntil, catchError, EMPTY, filter } from 'rxjs';
+import { Subject, takeUntil, filter } from 'rxjs';
 import { ProjectListComponent } from '../project-list/project-list.component';
 import { ProjectService } from '../project.service';
 import { Project, Company } from '../project.type';
@@ -21,8 +21,8 @@ export class ProjectFormComponent implements OnInit {
   selectedProject: Project;
   companiesz: Company[]
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   constructor(
     private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: FormBuilder,
@@ -40,28 +40,21 @@ export class ProjectFormComponent implements OnInit {
       budget: ['', Validators.required],
       description: ['']
     });
-    this._projectService.companies$.pipe(takeUntil(this._unsubscribeAll),
-    catchError(err => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    })).subscribe((companies) => {
+    this._projectService.companies$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((companies) => {
       this.companiesz = [...companies];
       this._changeDetectorRef.markForCheck();
     })
-    this._projectService.project$.pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-      )
-      .subscribe(
-        (project: Project) => {
-          this._projectListComponent.matDrawer.open();
-          this.selectedProject = { ...project };
-          this.projectForm.patchValue(project, { emitEvent: false });
-          this._changeDetectorRef.markForCheck();
-      });
+    this._projectService.project$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
+      (project: Project) => {
+        this._projectListComponent.matDrawer.open();
+        this.selectedProject = { ...project };
+        this.projectForm.patchValue(project, { emitEvent: false });
+        this._changeDetectorRef.markForCheck();
+    });
   }
   ngAfterViewInit(): void {
     this._projectListComponent.matDrawer.openedChange
@@ -81,20 +74,14 @@ export class ProjectFormComponent implements OnInit {
   }
   saveProject() {
     this._projectService.saveProject(this.projectForm)
-    .pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    }))
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) =>
-        {
-          this._changeDetectorRef.markForCheck();
-          this.closeDrawer();
-          this._projectListComponent.onBackdropClicked();
-        }
-      );
-      
+      {
+        this._changeDetectorRef.markForCheck();
+        this.closeDrawer();
+        this._projectListComponent.onBackdropClicked();
+      }
+    );
   }
   deleteProjectCall() {
     this.closeDrawer();
@@ -110,10 +97,7 @@ export class ProjectFormComponent implements OnInit {
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
         this._projectService.deleteProject(this.selectedProject.projectId).pipe(takeUntil(this._unsubscribeAll),
-          catchError(err => {
-            this.errorMessageSubject.next(err);
-            return EMPTY;
-          })
+          
         )
           .subscribe((isDeleted) => {
             if (!isDeleted) {

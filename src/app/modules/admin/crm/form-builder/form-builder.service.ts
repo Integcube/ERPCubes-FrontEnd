@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Form, FormField, FormFieldType } from "./form-builder.type";
 import { BehaviorSubject, EMPTY, Observable, catchError, map, of, switchMap, take, tap, throwError } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { UserService } from "app/core/user/user.service";
 import { User } from "app/core/user/user.types";
 import { environment } from "environments/environment";
 import { ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
     providedIn: 'root'
@@ -26,9 +27,10 @@ export class FormBuilderService {
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
-        private _route: ActivatedRoute,) {
-        this._userService.user$
-            .subscribe(user => this.user = user)
+        private _route: ActivatedRoute,
+        private snackBar: MatSnackBar)
+    {
+        this._userService.user$.subscribe(user => this.user = user)
     }
     get fieldTypes$(): Observable<FormFieldType[]> {
         return this._fieldTypes.asObservable();
@@ -56,7 +58,7 @@ export class FormBuilderService {
                 this._forms.next(forms)
                 
             }),
-            catchError(error => { alert(error); return EMPTY })
+            catchError(err => this.handleError(err))
         )
     }
     saveForm(form: Form): Observable<any> {
@@ -72,7 +74,7 @@ export class FormBuilderService {
                 this.getForms().subscribe()
                 
             }),
-            catchError(error => { alert(error); return EMPTY })
+            catchError(err => this.handleError(err))
 
         )
     }
@@ -120,7 +122,7 @@ export class FormBuilderService {
                     this._fields.next(fields)
                     
                 }),
-                catchError(error => { alert(error); return EMPTY })
+                catchError(err => this.handleError(err))
             )
     }
     saveFormFields(fields: FormField[]): Observable<FormField[]> { 
@@ -132,7 +134,7 @@ export class FormBuilderService {
         console.log('Form Fields Save Request: Service', data)
         return this._httpClient.post<FormField[]>(this.saveFormFieldsURL, data)
         .pipe( 
-            catchError(error => { alert(error); return EMPTY })
+            catchError(err => this.handleError(err))
         )        
     } 
     // getSelectedField(field: FormField) {
@@ -147,7 +149,27 @@ export class FormBuilderService {
             tap(types => {
                 this._fieldTypes.next(types)
             }),
-            catchError(error => { alert(error); return EMPTY })
+            catchError(err => this.handleError(err))
         )
+    }
+
+    private handleError(err: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+        if (err.error instanceof ErrorEvent) {
+          errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+        }
+        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+        return throwError(() => errorMessage);
+    }
+    
+    showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+        duration: 2000,
+        verticalPosition: placementFrom,
+        horizontalPosition: placementAlign,
+        panelClass: colorName,
+    });
     }
 }

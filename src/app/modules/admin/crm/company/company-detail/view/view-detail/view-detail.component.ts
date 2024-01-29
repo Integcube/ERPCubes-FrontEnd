@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CompanyCustomList } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-view-detail',
@@ -29,8 +29,9 @@ export class ViewDetailComponent implements OnInit, OnDestroy {
     });
   }
   delete(){
-    this._companyService.deleteCustomList(this.viewForm.value).pipe(takeUntil(this._unsubscribeAll),
-    catchError(err=>{alert(err);return EMPTY})).subscribe(
+    this._companyService.deleteCustomList(this.viewForm.value)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
       data=>{this.closeDialog()}
     )
   }
@@ -39,8 +40,9 @@ export class ViewDetailComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
   save(){
-    this._companyService.saveCustomList(this.viewForm.value).pipe(takeUntil(this._unsubscribeAll),
-    catchError(err=>{alert(err);return EMPTY})).subscribe(
+    this._companyService.saveCustomList(this.viewForm.value)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
       data=>{this.closeDialog()}
     )
   }

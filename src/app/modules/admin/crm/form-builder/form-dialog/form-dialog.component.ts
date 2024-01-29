@@ -20,8 +20,8 @@ export class FormDialogComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _formBuilder: FormBuilder,)
   { }
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   customForm: FormGroup
   selectedForm: Form

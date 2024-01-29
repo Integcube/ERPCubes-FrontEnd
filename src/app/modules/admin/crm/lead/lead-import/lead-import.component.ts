@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { EMPTY, Subject, catchError } from 'rxjs';
-import { filter } from 'lodash';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LeadService } from '../lead.service';
-import { HttpEventType, HttpResponse } from '@angular/common/http'; // Import necessary modules
 import * as XLSX from 'xlsx';
 import { Industry, Lead, LeadImportList, LeadSource, Product } from '../lead.type';
 import { UserService } from 'app/core/user/user.service';
@@ -287,7 +283,4 @@ export class LeadImportComponent implements OnInit {
   
     fileReader.readAsArrayBuffer(this.file);
   }
-  
-  
-
 }

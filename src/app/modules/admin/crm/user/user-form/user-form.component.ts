@@ -21,8 +21,8 @@ export class UserFormComponent implements OnInit {
   editMode: boolean = false;
   selectedUser: UserForm;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   constructor(
     private _formBuilder: FormBuilder,
     private _userListComponent: UserListComponent,
@@ -36,14 +36,8 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this._userListComponent.matDrawer.open();
 
-  this._userFormService.user$
-    .pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-    )
+    this._userFormService.user$
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((user: UserForm) => {
       this._userListComponent.matDrawer.open();
       this.selectedUser = { ...user };
@@ -103,7 +97,6 @@ export class UserFormComponent implements OnInit {
           }
         );
       }
-     
     } else {
       this._userFormService.updateUser(this.selectedUser.id, this.userForm).subscribe(
         () => {
@@ -144,6 +137,4 @@ export class UserFormComponent implements OnInit {
       this._Renderer2.selectRootElement(this.firstNameInput.nativeElement).focus();
     }
   }
-
-
 }

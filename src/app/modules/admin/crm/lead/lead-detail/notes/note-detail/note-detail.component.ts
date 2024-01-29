@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EMPTY, Observable, Subject, combineLatest, forkJoin } from 'rxjs';
-import { takeUntil, tap, map, catchError, take } from 'rxjs/operators';
+import { Subject, combineLatest } from 'rxjs';
+import { takeUntil, map, } from 'rxjs/operators';
 import { Lead, Note, Tag, Tasks } from '../../../lead.type';
 import { LeadService } from '../../../lead.service';
 
@@ -24,7 +24,8 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     this._leadService.note$,
     this._leadService.selectedNoteTask$,
     this._leadService.selectedNoteTag$
-  ]).pipe(
+  ])
+  .pipe(
     map(([note, tasks, tags]) => ({
       ...note,
       tags: tags,
@@ -39,21 +40,16 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     private _leadService: LeadService,
     private _matDialogRef: MatDialogRef<NoteDetailComponent>
   ) { }
+
   ngOnInit(): void {
         if (this._data.note.noteId) {
-      this._leadService.getNoteById(this._data.note.noteId).pipe(
-        takeUntil(this._unsubscribeAll),
-      ).subscribe(
-        (data) => {
-          this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
-        }
-      );
-      this.noteWithData$.pipe(
-        takeUntil(this._unsubscribeAll),
-      ).subscribe(
+      this._leadService.getNoteById(this._data.note.noteId)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((data) => { this._changeDetectorRef.markForCheck(); });
+
+      this.noteWithData$
+      .pipe( takeUntil(this._unsubscribeAll), )
+      .subscribe(
         (data)=>{
           this.note = {
             noteId: data.noteId,
@@ -67,12 +63,11 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
             createdByName: "",
           };
           this._changeDetectorRef.markForCheck();
-        },
-        error=> {
-          console.error("Error fetching data: ", error);
         }
       )
-      this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data };})
+      this._leadService.lead$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(data =>{ this.lead = { ...data };})
     }
     
   }
@@ -142,10 +137,13 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     return item.id || index;
   }
   save(){
-    this._leadService.saveNote(this.note, this.lead.leadId).subscribe(data=>this.closeDialog());
+    this._leadService.saveNote(this.note, this.lead.leadId)
+    .subscribe(data=>this.closeDialog());
    }
    delete(){
-    this._leadService.deleteNote(this.note.noteId,this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+    this._leadService.deleteNote(this.note.noteId,this.lead.leadId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.closeDialog())
    }
 }
 

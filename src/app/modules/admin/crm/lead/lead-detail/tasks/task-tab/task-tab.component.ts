@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRe
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
-import { combineLatest, map, catchError, EMPTY, takeUntil, Subject } from 'rxjs';
+import { combineLatest, map, EMPTY, takeUntil, Subject } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { TaskModel, Lead } from '../../../lead.type';
 
@@ -19,20 +19,21 @@ export class TaskTabComponent implements OnInit, OnDestroy {
   taskWithUser$ = combineLatest([
     this.tasks$,
     this.users$
-  ]).pipe(
+  ])
+  .pipe(
     map(([tasks, users]) =>
       tasks.map(task => ({
         ...task,
         taskOwnerTitle: users?.find(a => a.id === task.taskOwner)?.name,
         createdByTitle: users?.find(a => a.id === task.createdBy)?.name,
       } as TaskModel))
-    ),
-    catchError(error => { alert(error); return EMPTY })
+    )
   );
   filteredData$ = combineLatest([
     this._leadService.searchQuery$,
     this.taskWithUser$
-  ]).pipe(
+  ])
+  .pipe(
     map(([search, tasks]) => !search || !search.trim() ? tasks :
       tasks.filter(task =>
         task.taskTitle.toLowerCase().includes(search.trim().toLowerCase())
@@ -46,7 +47,9 @@ export class TaskTabComponent implements OnInit, OnDestroy {
 
   ) { }
   ngOnInit(): void {
-    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
+    this._leadService.lead$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => {
       this.lead = { ...data }; this._changeDetectorRef.markForCheck();
     })
     this.getTask();
@@ -97,5 +100,5 @@ export class TaskTabComponent implements OnInit, OnDestroy {
     this._leadService.getTasks(this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe((newEntries) => {
         this._changeDetectorRef.markForCheck();
     });
-}
+  }
 }

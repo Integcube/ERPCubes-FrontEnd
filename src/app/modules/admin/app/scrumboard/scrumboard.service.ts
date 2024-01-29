@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Board, Card, List, Label } from './scrumboard.models';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root'
@@ -17,8 +18,8 @@ export class ScrumboardService
      * Constructor
      */
     constructor(
-        private _httpClient: HttpClient
-    )
+        private _httpClient: HttpClient,
+        private snackBar: MatSnackBar)
     {
         // Set the private defaults
         this._board = new BehaviorSubject(null);
@@ -65,7 +66,8 @@ export class ScrumboardService
     {
         return this._httpClient.get<Board[]>('api/apps/scrumboard/boards').pipe(
             map(response => response.map(item => new Board(item))),
-            tap(boards => this._boards.next(boards))
+            tap(boards => this._boards.next(boards)),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -78,7 +80,8 @@ export class ScrumboardService
     {
         return this._httpClient.get<Board>('api/apps/scrumboard/board', {params: {id}}).pipe(
             map(response => new Board(response)),
-            tap(board => this._board.next(board))
+            tap(board => this._board.next(board)),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -99,7 +102,8 @@ export class ScrumboardService
 
                     // Return new board from observable
                     return newBoard;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -131,8 +135,9 @@ export class ScrumboardService
 
                     // Return the updated board
                     return updatedBoard;
-                })
-            ))
+                }),
+                catchError(err => this.handleError(err))
+            )),
         );
     }
 
@@ -165,7 +170,8 @@ export class ScrumboardService
 
                     // Return the deleted status
                     return isDeleted;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -192,7 +198,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -221,7 +228,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -254,7 +262,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -282,7 +291,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -344,7 +354,8 @@ export class ScrumboardService
 
                 // Return the new card
                 return newCard;
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -382,7 +393,8 @@ export class ScrumboardService
 
                     // Return the updated card
                     return updatedCard;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -419,7 +431,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
@@ -453,7 +466,8 @@ export class ScrumboardService
 
                     // Return the deleted status
                     return isDeleted;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -490,7 +504,8 @@ export class ScrumboardService
 
                 // Update the board
                 this._board.next(board);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );*/
     }
 
@@ -514,7 +529,8 @@ export class ScrumboardService
 
                     // Return new label from observable
                     return newLabel;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -546,7 +562,8 @@ export class ScrumboardService
 
                     // Return the updated label
                     return updatedLabel;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -589,7 +606,8 @@ export class ScrumboardService
 
                     // Return the deleted status
                     return isDeleted;
-                })
+                }),
+                catchError(err => this.handleError(err))
             ))
         );
     }
@@ -602,6 +620,28 @@ export class ScrumboardService
     search(query: string): Observable<Card[] | null>
     {
         // @TODO: Update the board cards based on the search results
-        return this._httpClient.get<Card[] | null>('api/apps/scrumboard/board/search', {params: {query}});
+        return this._httpClient.get<Card[] | null>('api/apps/scrumboard/board/search', {
+            params: {query}
+        }).pipe(catchError(err => this.handleError(err)));
+    }
+    
+    private handleError(err: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+        if (err.error instanceof ErrorEvent) {
+          errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+        }
+        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+        return throwError(() => errorMessage);
+    }
+    
+    showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+        duration: 2000,
+        verticalPosition: placementFrom,
+        horizontalPosition: placementAlign,
+        panelClass: colorName,
+    });
     }
 }

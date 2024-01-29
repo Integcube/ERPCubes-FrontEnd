@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { EMPTY, Observable, Subject, catchError, filter, map, startWith, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, filter, map, startWith, takeUntil } from 'rxjs';
 import { CampaignListComponent } from '../campaign-list/campaign-list.component';
 import { Campaign, Source, Product } from '../campaign.type';
 import { CampaignService } from '../campaign.service';
@@ -24,8 +24,8 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   products: Product[]
   sourcesz: Source[]
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   // private _productsPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseConfirmationService: FuseConfirmationService,
@@ -46,29 +46,20 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
       sourceId: [, Validators.required],
       budget: ['', Validators.required],
     });
-    this._campaignService.products$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })).subscribe((products) => {
+    this._campaignService.products$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((products) => {
         this.products = products;
         this._changeDetectorRef.markForCheck();
       });
-    this._campaignService.sources$.pipe(takeUntil(this._unsubscribeAll),
-    catchError(err => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    })).subscribe((sources) => {
+    this._campaignService.sources$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((sources) => {
       this.sourcesz = [...sources];
       this._changeDetectorRef.markForCheck();
     })
     this._campaignService.campaign$.pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-      )
+      takeUntil(this._unsubscribeAll))
       .subscribe(
         (campaign: Campaign) => {
           this._campaignListComponent.matDrawer.open();
@@ -95,12 +86,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   }
   saveCampaign() {
     this._campaignService.saveCampaign(this.campaignForm)
-    .pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-      this.errorMessageSubject.next(err);
-      return EMPTY;
-    }))
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe((data) =>
         {
           this._changeDetectorRef.markForCheck();
@@ -123,17 +109,14 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     });
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this._campaignService.deleteCampaign(this.selectedCampaign.campaignId).pipe(takeUntil(this._unsubscribeAll),
-          catchError(err => {
-            this.errorMessageSubject.next(err);
-            return EMPTY;
-          })
+        this._campaignService.deleteCampaign(this.selectedCampaign.campaignId).pipe(
+          takeUntil(this._unsubscribeAll),
         )
-          .subscribe((isDeleted) => {
-            if (!isDeleted) {
-              return;
-            }
-          });
+        .subscribe((isDeleted) => {
+          if (!isDeleted) {
+            return;
+          }
+        });
 
         this._changeDetectorRef.markForCheck();
       }

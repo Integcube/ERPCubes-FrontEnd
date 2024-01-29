@@ -4,7 +4,7 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
-import { Subject, takeUntil, catchError, EMPTY, filter } from 'rxjs';
+import { Subject, takeUntil, filter } from 'rxjs';
 import { Opportunity } from '../opportunity.types';
 import { OpportunityListComponent } from '../opportunity-list/opportunity-list.component';
 import { OpportunityService } from '../opportunity.service';
@@ -37,8 +37,8 @@ export class OpportunityFormComponent implements OnInit {
   editMode: boolean = false;
   selectedOpportunity: Opportunity;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   ngOnInit(): void {
     this._opportunityListComponent.matDrawer.open();
     this._userService.user$.subscribe(user => {
@@ -66,17 +66,14 @@ export class OpportunityFormComponent implements OnInit {
       productId: [],
       createdDate: ['']
     });
-    this._opportunityService.opportunity$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((opportunity: Opportunity) => {
-        this._opportunityListComponent.matDrawer.open();
-        this.selectedOpportunity = { ...opportunity };
-        this.opportunityForm.patchValue(opportunity, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._opportunityService.opportunity$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((opportunity: Opportunity) => {
+      this._opportunityListComponent.matDrawer.open();
+      this.selectedOpportunity = { ...opportunity };
+      this.opportunityForm.patchValue(opportunity, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._opportunityListComponent.matDrawer.close();
@@ -105,9 +102,7 @@ export class OpportunityFormComponent implements OnInit {
           this.closeDrawer();
           this._changeDetectorRef.markForCheck();
         },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
-        }
+        
       }
     );
   }
@@ -130,9 +125,6 @@ export class OpportunityFormComponent implements OnInit {
               this._opportunityListComponent.onBackdropClicked();
               this.closeDrawer();
               this._changeDetectorRef.markForCheck();
-            },
-            error: err => {
-              alert(`Daniyal:${JSON.stringify(err)}`)
             }
           }
         );

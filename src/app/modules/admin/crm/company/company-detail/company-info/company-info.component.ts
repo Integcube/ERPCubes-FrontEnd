@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { takeUntil, catchError, EMPTY, Subject } from 'rxjs';
+import { takeUntil, Subject } from 'rxjs';
 import { CompanyService } from '../../company.service';
 import { Call, Company, Email, Meeting, Note, TaskModel } from '../../company.type';
 import { NoteDetailComponent } from '../notes/note-detail/note-detail.component';
@@ -23,31 +23,18 @@ export class CompanyInfoComponent implements OnInit, OnDestroy {
   companyForm: FormGroup;
   users$ = this._companyService.users$;
   industries$ = this._companyService.industries$;
-  private errorMessageSubject = new Subject<string>();
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   private companySubject = new Subject<Company>();
   company$ = this.companySubject.asObservable();
-  errorMessage$ = this.errorMessageSubject.asObservable();
   constructor(private _formBuilder: FormBuilder,
     private _companyService: CompanyService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _matDialog: MatDialog,
-
-    ) {
-  }
+    private _matDialog: MatDialog,)
+  {  }
   save() {
     this.selectedCompany = { ...this.companyForm.value }
-    this._companyService.saveCompany(this.selectedCompany).subscribe(
-      {
-        next: () => {
-          this._changeDetectorRef.markForCheck();
-
-        },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
-        }
-      }
-    );
+    this._companyService.saveCompany(this.selectedCompany)
+    .subscribe({ next: () => { this._changeDetectorRef.markForCheck(); }});
   }
   ngOnInit(): void {
     this.company$ = this._companyService.company$;
@@ -74,16 +61,13 @@ export class CompanyInfoComponent implements OnInit, OnDestroy {
       industryTitle: [''],
       createdDate: ['']
     });
-    this._companyService.company$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((company: Company) => {
-        this.selectedCompany = { ...company };
-        this.companyForm.patchValue(company, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._companyService.company$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((company: Company) => {
+      this.selectedCompany = { ...company };
+      this.companyForm.patchValue(company, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions

@@ -34,8 +34,8 @@ export class TeamListComponent implements OnInit  {
 
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -51,11 +51,7 @@ export class TeamListComponent implements OnInit  {
     //Get team List
     this.teams$ = this._teamService.teams$;
     this._teamService.teams$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((team: Team[]) => {
         this.teams = [...team];
         
@@ -65,11 +61,7 @@ export class TeamListComponent implements OnInit  {
       });
     // Get selected team
     this._teamService.team$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((team: Team) => {
         this.selectedTeam = team;
         this._changeDetectorRef.markForCheck();

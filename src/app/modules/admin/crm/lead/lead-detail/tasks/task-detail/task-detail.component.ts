@@ -31,7 +31,8 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   taskWithTag$ = combineLatest([
     this._leadService.task$,
     this._leadService.selectedTaskTag$,
-  ]).pipe(
+  ])
+  .pipe(
     map(([task, tags]) => ({
       ...task,
       tags: tags,
@@ -39,7 +40,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   );
   constructor(
     private _userService: UserService,
-
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) private _data: { task: TaskModel },
     private _leadService: LeadService,
@@ -64,19 +64,20 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     });
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.selectedLead = { ...data })
     if (this._data.task.taskId) {
-      this._leadService.getTaskById(this._data.task.taskId).pipe(
+      this._leadService.getTaskById(this._data.task.taskId)
+      .pipe(
         takeUntil(this._unsubscribeAll),
-      ).subscribe(
+      )
+      .subscribe(
         (data) => {
           this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
         }
       );
-      this.taskWithTag$.pipe(
+      this.taskWithTag$
+      .pipe(
         takeUntil(this._unsubscribeAll),
-      ).subscribe(
+      )
+      .subscribe(
         (data) => {
           this.taskForm.patchValue(data, { emitEvent: false });
           this.tags = cloneDeep(data.tags);
@@ -87,9 +88,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
           console.error("Error fetching data: ", error);
         }
       )
-    }
-
-  
+    }  
   }
 
   formatTime(time: string|Date): string {
@@ -140,7 +139,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     const dueDate = this.taskForm.get('dueDate').value
     const dueTime = this.taskForm.get('dueTime').value
 
-
     const formattedDateTime = `${formatDate(dueDate, "yyyy-MM-dd", "en")}T${dueTime}`
 
     this.taskForm.patchValue({
@@ -160,7 +158,4 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   delete() {
     this._leadService.deleteTask(+this.taskForm.value.taskId, this.taskForm.value.taskTitle, this.selectedLead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
   }
-
-
-
 }

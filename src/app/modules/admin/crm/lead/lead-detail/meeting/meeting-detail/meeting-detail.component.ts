@@ -1,13 +1,10 @@
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EMPTY, Subject, catchError, combineLatest, map, takeUntil } from 'rxjs';
+import { EMPTY, Subject, takeUntil } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import moment from 'moment';
-import { cloneDeep, filter } from 'lodash';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDrawer, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { Lead, Meeting } from '../../../lead.type';
 
 
@@ -84,17 +81,17 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
       endTime: formattedEndTime,
     });
     
-    this._leadService.saveMeeting(this.composeForm.value, this.lead.leadId).pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err=>{alert(err);
-      return EMPTY})).subscribe(data=>this.matDialogRef.close())
+    this._leadService.saveMeeting(this.composeForm.value, this.lead.leadId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data=>this.matDialogRef.close())
   }
   close(){
     this.matDialogRef.close();
   }
   delete(){
     this._leadService.deleteMeeting(this.composeForm.value.meetingId, this.lead.leadId)
-    .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.close())
   }
 }
 

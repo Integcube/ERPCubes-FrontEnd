@@ -4,7 +4,7 @@ import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
-import { Subject, takeUntil, catchError, EMPTY, filter } from 'rxjs';
+import { Subject, takeUntil, filter } from 'rxjs';
 import { LeadListComponent } from '../lead-list/lead-list.component';
 import { LeadService } from '../lead.service';
 import { Lead } from '../lead.type';
@@ -31,8 +31,8 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
   editMode: boolean = false;
   selectedlead: Lead;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   constructor(
     private _formBuilder: FormBuilder,
     private _leadListComponent: LeadListComponent,
@@ -69,17 +69,14 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       campaignId: [],
       createdDate: ['']
     });
-    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((lead: Lead) => {
-        this._leadListComponent.matDrawer.open();
-        this.selectedlead = { ...lead };
-        this.leadForm.patchValue(lead, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._leadService.lead$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((lead: Lead) => {
+      this._leadListComponent.matDrawer.open();
+      this.selectedlead = { ...lead };
+      this.leadForm.patchValue(lead, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._leadListComponent.matDrawer.close();
@@ -107,9 +104,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
           this.closeDrawer();
           this._changeDetectorRef.markForCheck();
         },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
-        }
+        
       }
     );
   }
@@ -134,9 +129,6 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
               this._leadListComponent.onBackdropClicked();
               this.closeDrawer();
               this._changeDetectorRef.markForCheck();
-            },
-            error: err => {
-              alert(`Daniyal:${JSON.stringify(err)}`)
             }
           }
         );

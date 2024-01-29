@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CampaignService } from '../campaign.service';
-import { EMPTY, Observable, Subject, catchError, combineLatest, filter, fromEvent, map, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, combineLatest, filter, fromEvent, map, takeUntil } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,8 +33,8 @@ export class CampaignListComponent implements OnInit {
 
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -62,11 +62,7 @@ export class CampaignListComponent implements OnInit {
   ngOnInit(): void {
     //Get campaign List
     this.campaignWithProductsSources$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((campaign: Campaign[]) => {
         this.campaigns = [...campaign];
         this.campaignCount = this.campaigns.length;
@@ -75,11 +71,7 @@ export class CampaignListComponent implements OnInit {
       });
     // Get selected campaign
     this._campaignService.campaign$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((campaign: Campaign) => {
         this.selectedCampaign = campaign;
         this._changeDetectorRef.markForCheck();

@@ -1,63 +1,42 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, catchError, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Item, Items } from './file-manager.types';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FileManagerService
 {
-    // Private
     private _item: BehaviorSubject<Item | null> = new BehaviorSubject(null);
     private _items: BehaviorSubject<Items | null> = new BehaviorSubject(null);
 
-    /**
-     * Constructor
-     */
-    constructor(private _httpClient: HttpClient)
-    {
-    }
+    constructor(
+        private _httpClient: HttpClient,
+        private snackBar: MatSnackBar)
+    {  }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Getter for items
-     */
     get items$(): Observable<Items>
     {
         return this._items.asObservable();
     }
 
-    /**
-     * Getter for item
-     */
     get item$(): Observable<Item>
     {
         return this._item.asObservable();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get items
-     */
     getItems(folderId: string | null = null): Observable<Item[]>
     {
         return this._httpClient.get<Items>('api/apps/file-manager', {params: {folderId}}).pipe(
             tap((response: any) => {
                 this._items.next(response);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
 
-    /**
-     * Get item by id
-     */
     getItemById(id: string): Observable<Item>
     {
         return this._items.pipe(
@@ -83,5 +62,25 @@ export class FileManagerService
                 return of(item);
             })
         );
+    }
+
+    private handleError(err: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+        if (err.error instanceof ErrorEvent) {
+          errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+        }
+        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+        return throwError(() => errorMessage);
+    }
+
+    showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+        duration: 2000,
+        verticalPosition: placementFrom,
+        horizontalPosition: placementAlign,
+        panelClass: colorName,
+    });
     }
 }

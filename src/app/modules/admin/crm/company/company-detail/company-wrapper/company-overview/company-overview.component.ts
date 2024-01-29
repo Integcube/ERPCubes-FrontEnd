@@ -1,4 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, 
+  ChangeDetectionStrategy, 
+  Component, 
+  ElementRef, 
+  QueryList, 
+  ViewChildren } from '@angular/core';
 
 @Component({
   selector: 'app-company-overview',

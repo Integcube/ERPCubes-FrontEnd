@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -9,11 +9,12 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CompanyWrapperComponent {
   private _tab : BehaviorSubject<"overview"|"activity"> = new BehaviorSubject("overview");
+  
   tab$ = this._tab.asObservable();
+  
   constructor() { }
+
   updateTab(tab:"overview"|"activity"){
     this._tab.next(tab);
   }
-
-
 }

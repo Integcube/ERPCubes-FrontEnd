@@ -1,5 +1,5 @@
 import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
+import { EMPTY, combineLatest, filter, map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { Note } from '../../../company.type';
@@ -18,15 +18,16 @@ export class NoteTabComponent implements OnInit {
   notesWithUser$ = combineLatest([
     this.notes$,
     this.users$
-  ]).pipe(
+  ])
+  .pipe(
     map(([notes, users]) =>
     notes.map(note => ({
         ...note,
         userName : users.find(a=>a.id === note.createdBy).name
       } as Note))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
+    )
   );
+  
   filteredData$ = combineLatest([
     this._companyService.searchQuery$,
     this.notesWithUser$,

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
     providedIn: 'root'
@@ -36,11 +37,10 @@ export class ChatService {
     constructor(
         private _userService: UserService,
         private _httpClient: HttpClient,
-    ) {
+        private snackBar: MatSnackBar) 
+    {
         this.startConnection();
-        this._userService.user$.subscribe(user => {
-            this.user = user;
-        })
+        this._userService.user$.subscribe(user => { this.user = user; })
     }
     private startConnection = () => {
         this._ticketConnection = new HubConnectionBuilder()
@@ -115,7 +115,8 @@ export class ChatService {
         return this._httpClient.post<Ticket[]>(this.getTicketsUrl, data).pipe(
             tap((tickets) => {
                 this._tickets.next(tickets);
-            })
+            }),
+            catchError(err => this.handleError(err))
         )
     }
     getUsers(): Observable<any> {
@@ -126,7 +127,8 @@ export class ChatService {
         return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
             tap((users) => {
                 this._appUsers.next(users);
-            })
+            }),
+            catchError(err => this.handleError(err))
         )
     }
     setReadStatus(ticketId: number, status: boolean): Observable<any> {
@@ -141,7 +143,8 @@ export class ChatService {
                 let index = currentTickets.findIndex(a => a.ticketId == ticketId);
                 currentTickets[index].latestConversation.readStatus = status;
                 this._tickets.next(currentTickets);
-            })
+            }),
+            catchError(err => this.handleError(err))
         )
     }
     getConversations(id: number): Observable<Conversation[]> {
@@ -167,7 +170,8 @@ export class ChatService {
                     return throwError('Could not found chat with id of ' + id + '!');
                 }
                 return of(conversations);
-            })
+            }),
+            catchError(err => this.handleError(err))
         );
     }
     sendMessage(ticket: Ticket): Observable<any> {
@@ -183,7 +187,8 @@ export class ChatService {
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketStatus[]>(this.getStatusUrl, data).pipe(
-            tap(a=>this._status.next(a))
+            tap(a=>this._status.next(a)),
+            catchError(err => this.handleError(err))
         )
     }
     getPriority():Observable<TicketPriority[]>{
@@ -192,7 +197,8 @@ export class ChatService {
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketPriority[]>(this.getPriorityUrl, data).pipe(
-            tap(a=>this._priority.next(a))
+            tap(a=>this._priority.next(a)),
+            catchError(err => this.handleError(err))
         )
 
     }
@@ -202,7 +208,8 @@ export class ChatService {
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketType[]>(this.getTypeUrl, data).pipe(
-           tap(a=>this._type.next(a)) 
+           tap(a=>this._type.next(a)),
+           catchError(err => this.handleError(err))
         )
     }
     saveTicketinfo(info: TicketInfo): Observable<TicketType[]> {
@@ -212,7 +219,27 @@ export class ChatService {
             ...info
         }
         return this._httpClient.post<TicketType[]>(this.saveInfoUrl, data).pipe(
-            tap(a => this.getTickets())
+            tap(a => this.getTickets()),
+            catchError(err => this.handleError(err))
         )
+    }
+    private handleError(err: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+        if (err.error instanceof ErrorEvent) {
+          errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+        }
+        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+        return throwError(() => errorMessage);
+    }
+    
+    showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+        duration: 2000,
+        verticalPosition: placementFrom,
+        horizontalPosition: placementAlign,
+        panelClass: colorName,
+    });
     }
 }

@@ -27,9 +27,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
   product$ = this._leadService.product$;
-  private errorMessageSubject = new Subject<string>();
+  
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+
   constructor(private _formBuilder: FormBuilder,
     private _leadService: LeadService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -47,9 +47,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
           this._changeDetectorRef.markForCheck();
 
         },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
-        }
+        
       }
     );
   }
@@ -74,16 +72,13 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       productId: [''],
       createdDate: ['']
     });
-    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((company: Lead) => {
-        this.selectedLead = { ...company };
-        this.leadForm.patchValue(company, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._leadService.lead$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((company: Lead) => {
+      this.selectedLead = { ...company };
+      this.leadForm.patchValue(company, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions

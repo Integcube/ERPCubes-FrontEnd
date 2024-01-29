@@ -1,11 +1,11 @@
 import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
-import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { LeadService } from '../../../lead.service';
 import { Note } from '../../../lead.type';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { NoteDetailComponent } from '../note-detail/note-detail.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-note-tab',
@@ -21,13 +21,15 @@ export class NoteTabComponent implements OnInit {
   filteredData$ = combineLatest([
     this._leadService.searchQuery$,
     this.notesWithUser$,
-  ]).pipe(
+  ])
+  .pipe(
     map(([search, notes]) => !search || !search.trim() ? notes :
       notes.filter(note => 
         note.noteTitle.toLowerCase().includes(search.trim().toLowerCase())
       )
     ),
   );
+
   constructor(
     private _leadService:LeadService,
     private _matDialog: MatDialog,
@@ -35,8 +37,8 @@ export class NoteTabComponent implements OnInit {
 
   ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
+
   addNote(){
     let note = new Note({})
     // this._changeDetectorRef.markForCheck();
@@ -45,7 +47,7 @@ export class NoteTabComponent implements OnInit {
       data     : {
           note: cloneDeep(note)
       }
-  });
+    });
   }
 
   close(): void {

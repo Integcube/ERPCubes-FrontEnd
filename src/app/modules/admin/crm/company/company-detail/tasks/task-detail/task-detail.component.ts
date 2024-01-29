@@ -67,9 +67,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         (data) => {
           this._changeDetectorRef.markForCheck();
         },
-        error => {
-          console.error("Error fetching data: ", error);
-        }
       );
       this.taskWithTag$.pipe(
         takeUntil(this._unsubscribeAll),
@@ -79,9 +76,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
           this.tags = cloneDeep(data.tags);
           this.filteredLabels = this.tags;
           this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
         }
       )
     }
@@ -120,9 +114,17 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       }
     })
     this.taskForm.get('tags').patchValue(selectedIds);
-    this._companyService.saveTask(this.taskForm, this.selectedCompany.companyId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog());
+    this._companyService.saveTask(this.taskForm, this.selectedCompany.companyId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.closeDialog());
   }
   delete() {
-    this._companyService.deleteTask(+this.taskForm.value.taskId, this.taskForm.value.taskTitle, this.selectedCompany.companyId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog())
+    this._companyService.deleteTask(
+      +this.taskForm.value.taskId, 
+      this.taskForm.value.taskTitle, 
+      this.selectedCompany.companyId
+    )
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.closeDialog())
   }
 }

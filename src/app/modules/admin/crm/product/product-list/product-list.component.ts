@@ -35,8 +35,8 @@ export class ProductListComponent implements OnInit {
   selectedProduct: Product;
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -52,11 +52,7 @@ export class ProductListComponent implements OnInit {
     //Get company List
     this.products$ = this._productService.products$;
     this._productService.products$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((products: Product[]) => {
         this.products = [...products];
         this.productCount = products.length;
@@ -67,15 +63,11 @@ export class ProductListComponent implements OnInit {
       });
     // Get selected company
     this._productService.product$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((product: Product) => {
-        this.selectedProduct = product;
-        this._changeDetectorRef.markForCheck();
-      });
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((product: Product) => {
+      this.selectedProduct = product;
+      this._changeDetectorRef.markForCheck();
+    });
     // Subscribe to MatDrawer opened change
     this.matDrawer.openedChange.subscribe((opened) => {
       if (!opened) {

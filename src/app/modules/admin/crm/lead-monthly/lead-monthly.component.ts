@@ -38,8 +38,8 @@ originalData: LeadMonthly[];
   years: number[] = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, index) => new Date().getFullYear() - index);
   currentYear: number = new Date().getFullYear()
 
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(

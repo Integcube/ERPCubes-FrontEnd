@@ -8,7 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Subject, combineLatest, map, takeUntil, catchError, EMPTY, fromEvent, filter } from 'rxjs';
+import { Subject, combineLatest, map, takeUntil, fromEvent, filter } from 'rxjs';
 import { ProjectService } from '../project.service';
 import { Project } from '../project.type';
 
@@ -33,8 +33,8 @@ export class ProjectListComponent implements OnInit {
 
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -59,11 +59,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit(): void {
     //Get project List
     this.projectWithCompanies$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((projects: Project[]) => {
         this.projects = [...projects];
         this.projectCount = this.projects.length;
@@ -73,11 +69,7 @@ export class ProjectListComponent implements OnInit {
       });
     // Get selected project
     this._projectService.project$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((project: Project) => {
         this.selectedProject = project;
         this._changeDetectorRef.markForCheck();

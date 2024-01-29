@@ -11,7 +11,6 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { User } from 'app/core/user/user.types';
 
-
 @Component({
   selector: 'app-team-form',
   templateUrl: './team-form.component.html',
@@ -27,8 +26,7 @@ export class TeamFormComponent implements OnInit {
   employees: User[];
   teamLeaders$: Observable<User[]>;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+
   private _teamMembersPanelOverlayRef: OverlayRef;
   constructor(
     private _fuseConfirmationService: FuseConfirmationService,
@@ -50,45 +48,41 @@ export class TeamFormComponent implements OnInit {
       teamMembersId: [[]],
       teamMembersName: [[]],
     });
-    this._teamService.employees$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })).subscribe((employees) => {
+    
+    this._teamService.employees$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((employees) => {
         this.employees = employees;
         this._changeDetectorRef.markForCheck();
-      })
-    this._teamService.team$.pipe
-      (
-        takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        })
-      ).subscribe(
-        (team: Team) => {
-          this._teamListComponent.matDrawer.open();
-          this.selectedTeam = { ...team };
-          const teamMembersId = team.teamMembersId ? team.teamMembersId.split(',') : [];
-          const teamMembersName = team.teamMembersName ? team.teamMembersName.split(',') : [];
-          this.teamForm.patchValue({ ...team, teamMembersId, teamMembersName }, { emitEvent: true });
-          this._changeDetectorRef.markForCheck();
-        });
-    this.teamLeaders$ = this.teamForm.get("teamLeaderName").valueChanges.pipe(
+    })
+    
+    this._teamService.team$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
+      (team: Team) => {
+        this._teamListComponent.matDrawer.open();
+        this.selectedTeam = { ...team };
+        const teamMembersId = team.teamMembersId ? team.teamMembersId.split(',') : [];
+        const teamMembersName = team.teamMembersName ? team.teamMembersName.split(',') : [];
+        this.teamForm.patchValue({ ...team, teamMembersId, teamMembersName }, { emitEvent: true });
+        this._changeDetectorRef.markForCheck();
+    });
+    this.teamLeaders$ = this.teamForm.get("teamLeaderName").valueChanges
+    .pipe(
       startWith(''),
       map(val => this.filterTeamLeader(val))
-    );
+    )
   }
 
   ngAfterViewInit(): void {
     this._teamListComponent.matDrawer.openedChange
-      .pipe(
-        takeUntil(this._unsubscribeAll),
-        filter(opened => opened)
-      )
-      .subscribe(() => {
-        this._titleField.nativeElement.focus();
-      });
+    .pipe(
+      takeUntil(this._unsubscribeAll),
+      filter(opened => opened)
+    )
+    .subscribe(() => {
+      this._titleField.nativeElement.focus();
+    });
   }
 
   ngOnDestroy(): void {
@@ -101,16 +95,13 @@ export class TeamFormComponent implements OnInit {
   }
 
   saveTeam() {
-    this._teamService.saveTeam(this.teamForm.value).pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })).subscribe(data => {
-        this.closeDrawer();
-        this._teamListComponent.onBackdropClicked();
-        this._changeDetectorRef.markForCheck();
-      }
-      );
+    this._teamService.saveTeam(this.teamForm.value)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => {
+      this.closeDrawer();
+      this._teamListComponent.onBackdropClicked();
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
   deleteTeamCall() {
@@ -127,10 +118,7 @@ export class TeamFormComponent implements OnInit {
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
         this._teamService.deleteTeam(this.selectedTeam).pipe(takeUntil(this._unsubscribeAll),
-          catchError(err => {
-            this.errorMessageSubject.next(err);
-            return EMPTY;
-          })
+          
         )
           .subscribe((isDeleted) => {
             if (!isDeleted) {

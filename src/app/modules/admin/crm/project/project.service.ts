@@ -118,6 +118,7 @@ export class ProjectService {
       })
     )
   }
+  
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {

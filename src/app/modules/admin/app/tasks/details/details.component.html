@@ -228,12 +228,10 @@
                 </div>
                 <!-- Time -->
                 <mat-form-field class="mx-4 mt-4">
-                    <mat-label class="font-medium text-base">End Time</mat-label>
+                    <mat-label class="font-medium text-base">Task Time</mat-label>
                     <input matInput type="time" [formControlName]="'dueTime'">
                 </mat-form-field>
             </div>
-            {{taskForm.value.dueDate|json}}
-            {{taskForm.value.dueTime|json}}
             <!-- Notes -->
             <div class="mt-8">
                 <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">

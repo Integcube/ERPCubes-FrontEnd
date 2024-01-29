@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { cloneDeep } from 'lodash';
-import { combineLatest, map, catchError, EMPTY } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { CallDetailComponent } from '../call-detail/call-detail.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CompanyService } from '../../../company.service';
@@ -19,15 +19,16 @@ export class CallTabComponent implements OnInit {
   callWithUser$ = combineLatest([
     this.calls$,
     this.users$
-  ]).pipe(
+  ])
+  .pipe(
     map(([calls, users]) =>
     calls.map(call => ({
         ...call,
         createdByTitle:  users?.find(a=>a.id === call.createdBy)?.name,
       } as Call))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
+    )
   );
+  
   filteredData$ = combineLatest([
     this._companyService.searchQuery$,
     this.callWithUser$

@@ -8,7 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil, catchError, EMPTY, fromEvent, filter, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, Subject, takeUntil, fromEvent, filter, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Opportunity, OpportunityCustomList, OpportunityFilter, OpportunityStatus } from '../opportunity.types';
 import { OpportunityService } from '../opportunity.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -40,9 +40,9 @@ export class OpportunityListComponent implements OnInit {
   displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'status', 'createdDate'];
   selection = new SelectionModel<Opportunity>(true, []);
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
+  
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+
   dateRangesFilter: any[];
   dateRanges: { label: string, value: string }[] = [
     { label: 'Today', value: 'today' },
@@ -89,11 +89,7 @@ export class OpportunityListComponent implements OnInit {
     this._opportunityService.setCustomList(selectedList);
     this.opportunityList$ = this._opportunityService.filteredOpportunityList$;
     this._opportunityService.filteredOpportunityList$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((opportunity: Opportunity[]) => {
         this.opportunityList = [...opportunity];
         this.opportunityListCount = opportunity.length;
@@ -102,32 +98,20 @@ export class OpportunityListComponent implements OnInit {
         this._changeDetectorRef.markForCheck();
       });
     this._opportunityService.opportunity$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((opportunity: Opportunity) => {
         this.selectedOpportunity = opportunity;
         this._changeDetectorRef.markForCheck();
       });
     this._opportunityService.users$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((users: User[]) => {
         this.users = users;
         this.filteredUsers = this.users;
         this._changeDetectorRef.markForCheck();
       })
     this._opportunityService.opportunityStatus$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((status: OpportunityStatus[]) => {
         this.status = status;
         this.filteredStatus = this.status;

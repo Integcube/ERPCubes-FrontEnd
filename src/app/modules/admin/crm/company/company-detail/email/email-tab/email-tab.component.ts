@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { cloneDeep } from 'lodash';
-import { EMPTY, catchError, combineLatest, map } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { EmailDetailComponent } from '../email-detail/email-detail.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CompanyService } from '../../../company.service';

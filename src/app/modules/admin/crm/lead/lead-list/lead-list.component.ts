@@ -9,7 +9,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil, catchError, EMPTY, fromEvent, filter, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, Subject, takeUntil, fromEvent, filter, debounceTime, distinctUntilChanged } from 'rxjs';
 import { LeadService } from '../lead.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -42,7 +42,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
-  displayedColumns: string[] = ['name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
+  displayedColumns: string[] = ['select', 'name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
+  isTable: boolean = true
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
   dateRangesFilter:any[];
@@ -73,8 +74,8 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   drawerMode: 'side' | 'over';
   leadStatus:LeadStatus[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   customLists$ = this._leadService.customLists$;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -187,6 +188,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     }); 
   }
+
   openUsersPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -328,6 +330,9 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     });
   }
+  toggleView(){
+    this.isTable = !this.isTable
+  }
   onMouseEnter(row: Lead) {
     row.isHovered = true;
   }
@@ -344,11 +349,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._leadService.setCustomList(selectedList);
     this.leads$ = this._leadService.filteredLeads$;
     this._leadService.filteredLeads$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((comapnies: Lead[]) => {
         this.leads = [...comapnies];
         this.leadCount = comapnies.length;
@@ -358,11 +359,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       });
 
     this._leadService.lead$
-      .pipe(takeUntil(this._unsubscribeAll),
-        catchError(err => {
-          this.errorMessageSubject.next(err);
-          return EMPTY;
-        }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((Lead: Lead) => {
         this.selectedLead = Lead;
         this._changeDetectorRef.markForCheck();

@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRe
 import { TaskDetailComponent } from '../task-detail/task-detail.component';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
-import { combineLatest, map, catchError, EMPTY, takeUntil, Subject } from 'rxjs';
+import { combineLatest, map, takeUntil, Subject } from 'rxjs';
 import { Company, TaskModel } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
 
@@ -26,8 +26,7 @@ export class TaskTabComponent implements OnInit, OnDestroy {
         taskOwnerTitle: users?.find(a => a.id === task.taskOwner)?.name,
         createdByTitle: users?.find(a => a.id === task.createdBy)?.name,
       } as TaskModel))
-    ),
-    catchError(error => { alert(error); return EMPTY })
+    )
   );
   filteredData$ = combineLatest([
     this._companyService.searchQuery$,

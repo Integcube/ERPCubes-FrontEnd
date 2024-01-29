@@ -86,25 +86,8 @@ export class LeadOwnerReportService {
         }),
         catchError(err=>this.handleError(err))
     );
-}
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-        errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-        errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
   }
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
+  
   getSources(): Observable<LeadSource[]> {
     let data = {
       id: this.user.id,
@@ -128,5 +111,23 @@ export class LeadOwnerReportService {
       }),
       catchError(err => this.handleError(err))
     );
+  }
+  private handleError(err: HttpErrorResponse): Observable<never> {
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+        errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+        errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+    }
+    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+    return throwError(() => errorMessage);
+  }
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
   }
 }

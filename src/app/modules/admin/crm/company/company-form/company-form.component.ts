@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { EMPTY, Subject, catchError, filter, takeUntil } from 'rxjs';
+import { EMPTY, Subject, filter, takeUntil } from 'rxjs';
 import { CompanyListComponent } from '../company-list/company-list.component';
 import { Company } from '../company.type';
 import { CompanyService } from '../company.service';
@@ -26,8 +26,8 @@ export class CompanyFormComponent implements OnInit {
   editMode: boolean = false;
   selectedCompany: Company;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   constructor(
     private _formBuilder: FormBuilder,
     private _companyListComponent: CompanyListComponent,
@@ -67,17 +67,14 @@ export class CompanyFormComponent implements OnInit {
       industryTitle: [''],
       createdDate: ['']
     });
-    this._companyService.company$.pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
-      .subscribe((company: Company) => {
-        this._companyListComponent.matDrawer.open();
-        this.selectedCompany = { ...company };
-        this.companyForm.patchValue(company, { emitEvent: false });
-        this._changeDetectorRef.markForCheck();
-      });
+    this._companyService.company$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((company: Company) => {
+      this._companyListComponent.matDrawer.open();
+      this.selectedCompany = { ...company };
+      this.companyForm.patchValue(company, { emitEvent: false });
+      this._changeDetectorRef.markForCheck();
+    });
   }
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._companyListComponent.matDrawer.close();
@@ -106,9 +103,6 @@ export class CompanyFormComponent implements OnInit {
           this.closeDrawer();
           this._changeDetectorRef.markForCheck();
 
-        },
-        error: err => {
-          alert(`Daniyal:${JSON.stringify(err)}`)
         }
       }
     );
@@ -135,9 +129,6 @@ export class CompanyFormComponent implements OnInit {
               this._companyListComponent.onBackdropClicked();
               this.closeDrawer();
               this._changeDetectorRef.markForCheck();
-            },
-            error: err => {
-              alert(`Daniyal:${JSON.stringify(err)}`)
             }
           }
         );

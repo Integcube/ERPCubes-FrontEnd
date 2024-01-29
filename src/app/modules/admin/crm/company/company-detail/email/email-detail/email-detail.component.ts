@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Subject, takeUntil } from 'rxjs';
 import { Company, Email } from '../../../company.type';
 import { CompanyService } from '../../../company.service';
 
@@ -38,7 +38,9 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
     ngOnInit(): void {
-        this._companyService.company$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.company = { ...data }; this.createForm()})
+        this._companyService.company$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(data =>{ this.company = { ...data }; this.createForm()})
 
     }
     createForm() {
@@ -62,10 +64,9 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
     // }
 
     saveAndClose(): void {
-        this._companyService.saveEmail(this.composeForm.value, this.company.companyId).pipe(
-            takeUntil(this._unsubscribeAll),
-            catchError(err=>{alert(err);
-            return EMPTY})).subscribe(data=>this.matDialogRef.close())
+        this._companyService.saveEmail(this.composeForm.value, this.company.companyId)
+        .pipe( takeUntil(this._unsubscribeAll) )
+        .subscribe( data=>this.matDialogRef.close() )
     }
     discard(): void {
         this.matDialogRef.close();
@@ -78,7 +79,8 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
     }
     delete(){
         this._companyService.deleteEmail(this.composeForm.value.emailId, this.company.companyId)
-        .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
+        .pipe( takeUntil(this._unsubscribeAll) )
+        .subscribe( data => this.close() )
     }
     close(): void {
         this.matDialogRef.close();

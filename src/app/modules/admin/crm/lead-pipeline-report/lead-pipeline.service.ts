@@ -29,9 +29,7 @@ export class leadPipelineService {
         private _httpClient: HttpClient,
         private snackBar: MatSnackBar
     ) {
-        this._userService.user$.subscribe(user => {
-            this.user = user;
-        })
+        this._userService.user$.subscribe(user => {this.user = user;})
     }
     get prodcts$(): Observable<Product[]> {
         return this._products.asObservable()
@@ -86,7 +84,7 @@ export class leadPipelineService {
           tap((leadSource) => {
             this._leadSource.next(leadSource);
           }),
-          catchError(error => { alert(error); return EMPTY })
+          catchError(err => this.handleError(err))
     
         );
         

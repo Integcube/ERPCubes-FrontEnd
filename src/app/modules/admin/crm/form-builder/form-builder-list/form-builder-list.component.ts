@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormDialogComponent } from '../form-dialog/form-dialog.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilderService } from '../form-builder.service';
-import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, takeUntil } from 'rxjs';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,8 +29,8 @@ export class FormBuilderListComponent implements OnInit {
   }
   dataSource: MatTableDataSource<Form>;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   formList:Form[]=[];
   forms$: Observable<Form[]>
@@ -40,13 +40,7 @@ export class FormBuilderListComponent implements OnInit {
   ngOnInit(): void {
     this.forms$ = this._formBuilderService.forms$
     this._formBuilderService.forms$
-    .pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      })
-    )
+    .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(forms => {this.formList = forms;  this.dataSource = new MatTableDataSource(forms);})
     this.isHovered = new Array(this.formList.length).fill(false);
   }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Team, TeamMembers } from './team.type';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -25,10 +26,10 @@ export class TeamService {
 
   constructor(
     private _userService: UserService,
-    private _httpClient: HttpClient,) {
-    this._userService.user$.subscribe(user => {
-      this.user = user;
-    })
+    private _httpClient: HttpClient,
+    private snackBar: MatSnackBar)
+  {
+    this._userService.user$.subscribe(user => { this.user = user; })
   }
   get team$(): Observable<Team> {
     return this._team.asObservable();
@@ -46,7 +47,8 @@ export class TeamService {
     return this._httpClient.post<Team[]>(this.getTeamListURL, data).pipe(
       tap((teams) => {
         this._teams.next(teams);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   getEmployeeList(): Observable<User[]> {
@@ -56,7 +58,8 @@ export class TeamService {
     return this._httpClient.post<User[]>(this.getEmployeeListURL, data).pipe(
       tap((employees) => {
         this._employees.next(employees);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   saveTeam(team: any): Observable<Team[]> {
@@ -71,7 +74,8 @@ export class TeamService {
     return this._httpClient.post<Team[]>(this.saveTeamURL, data).pipe(
       tap((teams) => {
         this.getTeams().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   deleteTeam(team: Team): Observable<Team[]> {
@@ -82,7 +86,8 @@ export class TeamService {
     return this._httpClient.post<Team[]>(this.deleteTeamURL, data).pipe(
       tap(() => {
         this.getTeams().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   selectedTeam(selectedteam: Team) {
@@ -112,5 +117,25 @@ export class TeamService {
         return of(team);
       })
     );
+  }
+
+  private handleError(err: HttpErrorResponse): Observable<never> {
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+    }
+    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+    return throwError(() => errorMessage);
+  }
+
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
   }
 }

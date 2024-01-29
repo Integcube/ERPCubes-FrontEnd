@@ -86,7 +86,7 @@ export class CampaigEffectivenessService {
           tap((leadSource) => {
             this._leadSource.next(leadSource);
           }),
-          catchError(error => { alert(error); return EMPTY })
+          catchError(err => this.handleError(err))
     
         );
         

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Product, Project } from './product.type';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Injectable({
@@ -24,10 +25,9 @@ export class ProductService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-  ) {
-    this._userService.user$.subscribe(user => {
-      this.user = user;
-    })
+    private snackBar: MatSnackBar) 
+  {
+    this._userService.user$.subscribe(user => {this.user = user;})
   }
   get product$(): Observable<Product> {
     return this._product.asObservable();
@@ -47,7 +47,8 @@ export class ProductService {
     return this._httpClient.post<Product[]>(this.getproductListURL, data).pipe(
       tap((products) => {
         this._products.next(products);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   getProjects(): Observable<Project[]> {
@@ -59,7 +60,8 @@ export class ProductService {
     return this._httpClient.post<Project[]>(this.getProjectURL, data).pipe(
       tap((projects) => {
         this._projects.next(projects);
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   saveProduct(product:FormGroup){
@@ -72,7 +74,8 @@ export class ProductService {
     return this._httpClient.post<Product[]>(this.saveProductURL, data).pipe(
       tap((products) => {
         this.getProducts().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   deleteProduct(product:Product){
@@ -85,7 +88,8 @@ export class ProductService {
     return this._httpClient.post<Product[]>(this.deleteProductURL, data).pipe(
       tap((products) => {
         this.getProducts().subscribe();
-      })
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   selectedProduct(selectedProduct: Product) {
@@ -117,4 +121,24 @@ export class ProductService {
       })
     );
   }
+
+  private handleError(err: HttpErrorResponse): Observable<never> {
+    let errorMessage: string;
+    if (err.error instanceof ErrorEvent) {
+      errorMessage = `An error occurred: ${err.error.message}`;
+    } else {
+      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+    }
+    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
+    return throwError(() => errorMessage);
+  }
+
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
+  }  
 }

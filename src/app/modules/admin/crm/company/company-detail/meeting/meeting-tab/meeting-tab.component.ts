@@ -1,5 +1,5 @@
 import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef, ViewChild} from '@angular/core';
-import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -19,14 +19,14 @@ export class MeetingTabComponent implements OnInit {
   meetingWithUser$ = combineLatest([
     this.meetings$,
     this.users$
-  ]).pipe(
+  ])
+  .pipe(
     map(([meetings, users]) =>
     meetings.map(meeting => ({
         ...meeting,
         createdByTitle:  users?.find(a=>a.id === meeting.createdBy)?.name,
       } as Meeting))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
+    )
   );
   constructor(
     private _companyService:CompanyService,

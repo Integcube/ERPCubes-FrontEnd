@@ -8,7 +8,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil, catchError, EMPTY, fromEvent, filter } from 'rxjs';
+import { Observable, Subject, takeUntil, fromEvent, filter } from 'rxjs';
 import { UserForm } from '../user.type';
 import { UserFormService } from '../user.service';
 
@@ -34,8 +34,8 @@ export class UserListComponent implements OnInit {
   selectedUser: UserForm;
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  private errorMessageSubject = new Subject<string>();
-  errorMessage$ = this.errorMessageSubject.asObservable();
+  
+
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -51,11 +51,7 @@ export class UserListComponent implements OnInit {
     //Get user List
     this.users$ = this._userFormService.users$;
     this._userFormService.users$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((users: UserForm[]) => {
         this.users = [...users];
         this.userCount = users.length;
@@ -65,11 +61,7 @@ export class UserListComponent implements OnInit {
       });
     // Get selected company
     this._userFormService.user$
-      .pipe(takeUntil(this._unsubscribeAll),
-      catchError(err => {
-        this.errorMessageSubject.next(err);
-        return EMPTY;
-      }))
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((user: UserForm) => {
         this.selectedUser = user;
         this._changeDetectorRef.markForCheck();

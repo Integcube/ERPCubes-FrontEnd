@@ -64,6 +64,20 @@ export class LeadSourceReportService {
         catchError(err=>this.handleError(err))
     );
   }
+  
+  getSources(): Observable<LeadSource[]> {
+    let data = {
+        id: this.user.id,
+        tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<LeadSource[]>(this.getSourceUrl, data).pipe(
+        tap((source) => {
+            this._sources.next(source);
+        }),
+        catchError(err=>this.handleError(err))
+    );
+  }
+
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {
@@ -82,16 +96,4 @@ export class LeadSourceReportService {
       panelClass: colorName,
     });
   }
-  getSources(): Observable<LeadSource[]> {
-    let data = {
-        id: this.user.id,
-        tenantId: this.user.tenantId,
-    }
-    return this._httpClient.post<LeadSource[]>(this.getSourceUrl, data).pipe(
-        tap((source) => {
-            this._sources.next(source);
-        }),
-        catchError(err=>this.handleError(err))
-    );
-}
 }
