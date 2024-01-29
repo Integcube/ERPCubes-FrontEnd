@@ -30,13 +30,11 @@
                                 <input
                                     class="w-full font-medium leading-5 bg-transparent"
                                     [spellcheck]="'false'"
-                                    [value]="list.title"
-                                    (focusout)="updateListTitle($event, list)"
-                                    (keydown.enter)="listTitleInput.blur()"
+                                    [value]="list.statusTitle"
                                     #listTitleInput>
                             </div>
                             <div class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
-                                {{list.cards.length}}
+                                {{list.leads.length}}
                             </div>
                         </div>
 
@@ -50,7 +48,7 @@
                                 (cdkDropListDropped)="cardDropped($event)">
 
                                 <!-- Card -->
-                                <ng-container *ngFor="let card of list.cards; trackBy: trackByFn">
+                                <ng-container *ngFor="let card of list.leads; trackBy: trackByFn">
                                     <a
                                         class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
                                         [routerLink]="['card', card.id]"

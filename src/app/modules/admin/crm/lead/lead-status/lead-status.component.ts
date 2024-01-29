@@ -10,7 +10,6 @@ import { LeadService } from '../lead.service';
   templateUrl: './lead-status.component.html',
   styleUrls: ['./lead-status.component.scss'],
   encapsulation  : ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeadStatusComponent implements OnInit, OnDestroy {
 
@@ -34,7 +33,7 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
   ngOnInit(): void
   {
     this._leadService.getStausWiseLeads().subscribe(
-      data=>{this.statusWiseLeads = [...data]}
+      data=>{this.statusWiseLeads = [...data]; }
     )
   }
 
