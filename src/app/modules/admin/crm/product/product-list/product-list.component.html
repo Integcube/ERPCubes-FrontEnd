@@ -48,32 +48,24 @@
                                     [placeholder]="'Search products'">
                             </mat-form-field>
                         </div>
-                        <!-- Import -->
-                        <button class="ml-4 h-7 border-r-0 rounded-r-none" mat-stroked-button (click)="openConnectorDialog()">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-6 h-6">
-                                <path fill-rule="evenodd"
-                                    d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                    
-                            <span class="ml-2 mr-1 text-sm">Import</span>
+                        <button class="ml-2 h-7 w-20" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
+                              </svg>
+                              
+                            <span class="ml-1 mr-1 text-sm">Export</span>
                         </button>
-                        <!-- Export -->
-                        <button class="h-7 min-w-10 rounded-l-none p-0 m-0 " mat-stroked-button matRipple
-                            [matMenuTriggerFor]="dropdownMenu">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-6 h-6">
-                                <path fill-rule="evenodd"
-                                    d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            
-                            <mat-menu #dropdownMenu="matMenu">
-                                <button mat-menu-item (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })" class="flex text-sm">
-                                    <span class="px-5 rounded text-xs items-center leading-5 text-white bg-green-600">Export XLS </span>
-                    
-                                </button>
-                            </mat-menu>
+                      
+                        <!--border-r-0 rounded-r-none-->
+                        <button class="ml-2 h-7 w-20" mat-stroked-button (click)="openConnectorDialog()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
+                              </svg>
+                              
+                            <span class="ml-1 mr-1 text-sm">Import</span>
                         </button>
+                    
+                    
                         <!-- Add contact button -->
                         <button
                             class="ml-4 h-7 primary-2"
