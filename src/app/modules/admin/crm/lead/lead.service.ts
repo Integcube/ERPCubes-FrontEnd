@@ -950,19 +950,21 @@ export class LeadService {
   }
 
   saveTask(taskForm, leadId: number): Observable<TaskModel> {
+    debugger
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      type: 'task',
-      contactTypeId: this.contactEnumInstance.Lead,
-      contactId: leadId,
       task: {
         ...taskForm.value,
         priorityId: -1,
         statusId: -1,
-        tags: taskForm.value.tags.join(',')
+        tags: taskForm.value.tags.join(','),
+        type: 'task',
+        contactTypeId: this.contactEnumInstance.Lead,
+        contactId: leadId,
       }
     }
+   
     return this._httpClient.post<TaskModel>(this.saveTaskUrl, data).pipe(
       tap((customList) => {
         this.getTasks(leadId).subscribe();
