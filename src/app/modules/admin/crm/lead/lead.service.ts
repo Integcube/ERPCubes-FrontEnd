@@ -892,14 +892,17 @@ export class LeadService {
     }
     return this._httpClient.post<LeadCustomList>(this.saveCustomListUrl, data).pipe(
       map(customList => {
+    
         let filter = new LeadFilter();
         if (customList.filter) {
+          debugger
           const jsonObject = JSON.parse(customList.filter);
           filter = {
-            leadOwner: jsonObject.leadOwner && jsonObject.leadOwner.length ? jsonObject.leadOwner.split(', ') : [],
+            
+            leadOwner: jsonObject.leadOwner,
             createdDate: jsonObject?.createdDate,
             modifiedDate: jsonObject?.modifiedDate,
-            leadStatus: jsonObject.leadStatus && jsonObject.leadStatus.length ? jsonObject.leadStatus.split(', ').map(Number) : [],
+            leadStatus: jsonObject.leadStatus ,
           };
         }
         return {

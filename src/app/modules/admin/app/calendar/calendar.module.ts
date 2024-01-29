@@ -28,6 +28,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { CalendarResolver, EventTypeResolver } from './calendar.resolver';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+
 export const routes: Route[] = [
   {
       path     : '',
@@ -72,6 +74,7 @@ export const routes: Route[] = [
     FuseCardModule,
     DragDropModule,
     MatDialogModule,
+    FuseScrollbarModule ,
   ]
 })
 export class CalendarModule { }

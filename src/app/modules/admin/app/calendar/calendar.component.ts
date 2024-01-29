@@ -48,6 +48,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
+    buttonText: {
+      today: 'Today',
+      month: 'Month',
+      week: 'Week',
+      day: 'Day',
+      list: 'List'
+    },
     eventDidMount: this.setEventColor.bind(this),
     initialView: 'dayGridMonth',
     weekends: true,
