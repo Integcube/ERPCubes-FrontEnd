@@ -26,19 +26,26 @@
       
       
             <div class="flex gap-0">
-                <button class="ml-4 h-7 border-r-0 rounded-r-none" mat-stroked-button (click)="openConnectorDialog()">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-6 h-6">
+                <button class="ml-2 h-7 w-20" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
+                      </svg>
+                      
+                    <span class="ml-1 mr-1 text-sm">Export</span>
+                </button>
+              
+                <!--border-r-0 rounded-r-none-->
+                <button class="ml-2 h-7 w-20" mat-stroked-button (click)="openConnectorDialog()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
                         <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
                       </svg>
                       
-                    <span class="ml-2 mr-1 text-sm">Import</span>
+                    <span class="ml-1 mr-1 text-sm">Import</span>
                 </button>
                 
-                <button class="h-7 min-w-10 rounded-l-none p-0 m-0 " mat-stroked-button  matRipple
+                <!-- <button class="h-7 min-w-10 rounded-l-none p-0 m-0 " mat-stroked-button  matRipple
                 [matMenuTriggerFor]="dropdownMenu">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-6 h-6">
-                        <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
-                      </svg>
+
                       
                     <mat-menu #dropdownMenu="matMenu">
                         <button mat-menu-item (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })" class="flex text-sm">
@@ -46,12 +53,12 @@
                 
                         </button>
                     </mat-menu>
-                </button>
-           
+                </button> -->
+            
 
             <button class="ml-4 h-7 primary-2" mat-flat-button   (click)="createLead()"
                 [matTooltip]="'Add New Lead '">
-                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-3"></mat-icon>
+                <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
                 <span class="ml-2 text-xs">Add Lead</span>
             </button>
         </div>
@@ -71,15 +78,14 @@
             <button
             class="px-2 mr-1 cursor-pointer h-8" *ngIf="lists.length > 0" matTooltip="{{lists[0].listTitle}}"  [ngClass]="{ 'active': isActiveItem(lists[0]) }" (click)="getLeads(lists[0], lists[0].listTitle)"
             mat-button>
-            <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:eye'" *ngIf="isActiveItem(lists[0])"></mat-icon>
             <span class="text-sm truncate w-28"   >{{lists[0].listTitle}}</span>
-            <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:pencil'"  *ngIf="isActiveItem(lists[0])"></mat-icon>
+            <mat-icon class="icon-size-4 mr-1 primary-2-Icon" [svgIcon]="'heroicons_solid:dots-vertical'"  *ngIf="isActiveItem(lists[0])"></mat-icon>
         </button>
          <!-- Buttons for the remaining items (2nd to 4th) -->
                <button *ngFor="let list of lists.slice(1, 4)"  matTooltip="{{list.listTitle}}" [ngClass]="{ 'active': isActiveItem(list) }" (click)="getLeads(list, list.listTitle)" class="px-2 mr-1 hidden sm:inline-flex h-8" mat-button>
-                <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:eye'" *ngIf="isActiveItem(list)"></mat-icon>
+            
                   <span class="text-sm truncate w-28">{{list.listTitle}}</span>
-                  <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:pencil'" *ngIf="isActiveItem(list)"></mat-icon>
+                  <mat-icon class="icon-size-4 mr-1 primary-2-Icon" [svgIcon]="'heroicons_solid:dots-vertical'" *ngIf="isActiveItem(list)"></mat-icon>
                  </button>
           <!-- Menu button if there are more than 4 items -->
           <button *ngIf="lists.length > 4" matTooltip="See More" class="px-2 cursor-pointer h-8" mat-button [matMenuTriggerFor]="postCardMenu01">
@@ -93,14 +99,15 @@
             class="sm:hidden "  *ngFor="let list of lists.slice(1, 4)" (click)="getLeads(list, list.listTitle)" [ngClass]="{ 'active': isActiveItem(list) }"
             mat-menu-item>
             <span class="flex items-center">
-                <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:eye'" *ngIf="isActiveItem(list)"></mat-icon>
+      
                 <span class="text-sm truncate w-28">{{lists[1].listTitle}}</span>
+                <mat-icon class="icon-size-4 mr-1" [svgIcon]="'heroicons_solid:dots-vertical'" *ngIf="isActiveItem(list)"></mat-icon>
             </span>
         </button>
             <button *ngFor="let list of lists.slice(4); let i = index" (click)="getLeads(list, list.listTitle)"  [ngClass]="{ 'active': isActiveItem(list) }" mat-menu-item>
               <span class="flex items-center">
-                <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:eye'" *ngIf="isActiveItem(list)"></mat-icon>
                 <span class="text-sm truncate w-28">{{list.listTitle}}</span>
+                <mat-icon class="icon-size-4 mr-1" [svgIcon]="'heroicons_solid:dots-vertical'" *ngIf="isActiveItem(list)"></mat-icon>
               </span>
             </button>
           </mat-menu>
@@ -108,7 +115,7 @@
           <!-- Create View button -->
           <button class="px-2 h-8" mat-button (click)="addView()">
             <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
-            <span class="text-sm text-green-800 underline">Create View</span>
+            <span class="text-sm underline" style="color:#E85038 !important">Create View</span>
           </button>
         </div>
       </ng-container>
@@ -210,7 +217,7 @@
     </ng-container> -->
                 <div class="flex-grow  bg-default  justify-between overflow-hidden" >
                     <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-1 shadow mb-2">
-                        <div class="flex px-6  gap-2">
+                        <!-- <div class="flex px-6  gap-2">
                             <button class="ml-4" mat-flat-button class="h-8 border-2"  (click)="toggleView()">
                                 <mat-icon svgIcon="mat_outline:backup_table"></mat-icon>
                                 <span class="ml-2 mr-1" *ngIf="!isTable">Table</span>
@@ -221,13 +228,13 @@
                                 <span class="ml-2 mr-1">Bulk Actions</span>
 
                             </button>
-                        </div>
+                        </div> -->
 
                         <div class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                             <div class="flex flex-row gap-2">
                                 <!-- Owner -->
-                                <div class="flex gap-1 items-center p-2 rounded"
-                                    [ngStyle]="{'background-color': filter.leadOwner.length ? '#1e293b':'transparent'}">
+                                <div class="flex gap-1 items-center p-2 rounded h-5"
+                                    [ngStyle]="{'background-color': filter.leadOwner.length ? '#E85038':'transparent'}">
                                     <span *ngIf="filter.leadOwner.length" [matTooltip]="'Filter by Contact Owner'"
                                         class="font-bold hover:underline cursor-pointer text-xs" #usersPanelOrigin
                                         (click)="openUsersPanel()"
@@ -277,8 +284,8 @@
                                         (click)="cancelFilters(1)"></mat-icon>
                                 </div>
                                 <!-- Create -->
-                                <div class="flex gap-1 items-center p-2 rounded"
-                                    [ngStyle]="{'background-color': filter.createdDate ? '#1e293b':'transparent'}">
+                                <div class="flex gap-1 items-center p-2 rounded h-5"
+                                    [ngStyle]="{'background-color': filter.createdDate ? '#E85038':'transparent'}">
 
                                     <span class="font-bold hover:underline cursor-pointer text-xs "
                                         #createdDatePanelOrigin (click)="openCreatedDatePanel()"
@@ -319,8 +326,8 @@
                                         (click)="cancelFilters(2)"></mat-icon>
                                 </div>
                                 <!-- Modified -->
-                                <div class="flex gap-1 items-center p-2 rounded"
-                                    [ngStyle]="{'background-color': filter.modifiedDate ? '#1e293b':'transparent'}">
+                                <div class="flex gap-1 items-center p-2 rounded h-5"
+                                    [ngStyle]="{'background-color': filter.modifiedDate ? '#E85038':'transparent'}">
 
                                     <span class="font-bold hover:underline cursor-pointer text-xs" [matTooltip]="'Filter by Modified Date'"
                                         #modifiedDatePanelOrigin (click)="openModifiedDatePanel()"
@@ -360,8 +367,8 @@
                                         (click)="cancelFilters(3)"></mat-icon>
                                 </div>
                                 <!-- Status -->
-                                <div class="flex gap-1 items-center p-2 rounded"
-                                    [ngStyle]="{'background-color': filter.leadStatus.length ? '#1e293b':'transparent'}">
+                                <div class="flex gap-1 items-center p-2 rounded h-5"
+                                    [ngStyle]="{'background-color': filter.leadStatus.length ? '#E85038':'transparent'}">
                                     <span *ngIf="filter.leadStatus.length"
                                         class="font-bold hover:underline cursor-pointer text-xs"  #usersPanelOrigin
                                         (click)="openUsersPanel()" c
@@ -411,10 +418,10 @@
                             </div>
                             <div class="flex flex-row gap-2 align items-center">
                                 <ng-container *ngIf="customList$|async as customList">
-                                    <button mat-stroked-button class="w-5 min-w-5 max-w-5 h-8"
+                                    <button mat-stroked-button class="w-5 min-w-5 max-w-5 h-5"
                                        *ngIf="customList.listId != -1" [matTooltip]="'save filter'"
                                         (click)="saveFilter(customList)"><mat-icon>save</mat-icon></button>
-                                    <button mat-stroked-button class="w-5! min-w-5 max-w-5 h-8"
+                                    <button mat-stroked-button class="w-5! min-w-5 max-w-5 h-5"
                                         *ngIf="customList.listId != -1" [matTooltip]="'edit view'"
                                         (click)="updateView(customList)"><mat-icon>edit</mat-icon></button>
                                 </ng-container>
@@ -442,30 +449,33 @@
                                         <table mat-table [dataSource]="dataSource" matSort
                                           matTableExporter #exporter="matTableExporter">
                                             <!-- Select -->
-                                            <ng-container matColumnDef="select"  class="shadow-sm">
+                                            <!-- <ng-container matColumnDef="select"  class="shadow-sm">
                                                 <th mat-header-cell *matHeaderCellDef  class="min-w-1 border-r-0">
-                                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                                                        [checked]="selection.hasValue() && isAllSelected()" color="accent"
-                                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                        [aria-label]="checkboxLabel()">
-                                                    </mat-checkbox>
+                                                    
                                                 </th>
                                                 <td mat-cell *matCellDef="let row" class="min-w-1 border-r-0" >
-                                                    <mat-checkbox (click)="$event.stopPropagation()"
-                                                        (change)="$event ? selection.toggle(row) : null" color="accent"
-                                                        [checked]="selection.isSelected(row)"
-                                                        [aria-label]="checkboxLabel(row)">
-                                                    </mat-checkbox>
+                                                  
                                                 </td>
-                                            </ng-container>
+                                            </ng-container> -->
                                             <ng-container matColumnDef="name" >
-                                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-60 min-w-60 max-w-60" >
-                                                    Name </th>
+                                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-80 min-w-80 max-w-80" >
+                                                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                                    [checked]="selection.hasValue() && isAllSelected()" color="accent"
+                                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                    [aria-label]="checkboxLabel()">
+                                                </mat-checkbox>  Name </th>
                                                 <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"
                                                     class="group w-60 min-w-60 max-w-60 relative overflow-hidden " (mouseenter)="onMouseEnter(row)"
                                                     (mouseleave)="onMouseLeave(row)" >
+
                                                     <div class="flex items-center justify-between">
+                                                   
                                                         <div class="flex gap-2">
+                                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                            (change)="$event ? selection.toggle(row) : null" color="accent"
+                                                            [checked]="selection.isSelected(row)"
+                                                            [aria-label]="checkboxLabel(row)">
+                                                        </mat-checkbox>
                                                             <span
                                                                 class="flex flex-0 items-center justify-center w-6 h-6  rounded-full overflow-hidden">
                                                                 <ng-container *ngIf="row.avatar">

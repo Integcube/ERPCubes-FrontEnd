@@ -24,6 +24,7 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
 import { userRoutes } from './user.routing';
 import moment from 'moment';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 
@@ -53,7 +54,8 @@ import moment from 'moment';
     MatSidenavModule,
     MatTableModule,
     MatTooltipModule,
-    SharedModule
+    SharedModule,
+    FuseScrollbarModule
   ],
   providers   : [
     {

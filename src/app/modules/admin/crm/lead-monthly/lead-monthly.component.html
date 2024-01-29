@@ -23,16 +23,14 @@
             </div>
        
             <div class="mt-4 sm:mt-0">
-          
-          
-                <div class="flex gap-0">
-                    <button class="ml-4 h-9" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Montly-Report' })">
-                        <mat-icon class="icon-size-3" [svgIcon]="'heroicons_solid:arrow-up'"></mat-icon>
-                        <span class="ml-2 mr-1 text-sm">Export</span>
-                    </button>
-            </div>
-    
-    
+                <button class="ml-2 h-10 w-24" mat-stroked-button  [matTooltip]="'Click to export in excel'"   (click)="exporter.exportTable('xls', { fileName: 'Montly-Report' })">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
+                      </svg>
+                      
+                    <span class="ml-1 mr-1 text-sm">Export</span>
+                </button>
+            
             </div>
         </div>
 
@@ -80,7 +78,7 @@
         </div>
         <!-- Team list -->
         <div class="flex-auto pt-2 bg-default min-h-3/4 pb-2">
-            <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+            <div class="flex flex-col flex-auto bg-card shadow  mx-5 overflow-hidden">
                 <div class="flex  flex-wrap justify-between px-2 py-2">
                     <div class="flex-auto self-center">
                         <mat-form-field
@@ -92,7 +90,7 @@
                     </div>
                     
                 </div>
-                <div class="flex-auto  py-1 bg-card overflow-x-auto">
+                <div class="flex-auto  bg-card overflow-x-auto">
                     <!-- <div class="max-height: 300px; overflow-y: auto;"> -->
                     <table mat-table [dataSource]="dataSource" matSort
                      matTableExporter #exporter="matTableExporter">

@@ -92,14 +92,24 @@
        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
        <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
         <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
-            Delete
+            <mat-icon
+            class="icon-size-5"
+               [svgIcon]="'heroicons_outline:trash'"></mat-icon> 
+               <span class="ml-1 mr-1 text-sm">Delete</span>  
         </button>
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()">
-            Cancel
+        <button class="ml-auto " mat-button [matTooltip]="'Cancel'" (click)="close()">
+            <mat-icon
+            class="icon-size-5 mr-2"
+               [svgIcon]="'heroicons_outline:x-circle'" class=""></mat-icon>   
+               <span class="ml-1 mr-1 text-sm">Cancel</span>  
         </button>
-        <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()">
-            Save
+        <button class="ml-2  primary-2"  [matTooltip]="'Click to Save Cal Info'" mat-stroked-button  (click)="saveAndClose()">
+            <mat-icon
+            class="icon-size-5 mr-2 text-white"
+               [svgIcon]="'heroicons_outline:document'"></mat-icon>
+            <span class="ml-1 mr-1 text-sm">Save</span>
         </button>
+      
        </div>
       </div>
     </form>

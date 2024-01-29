@@ -25,6 +25,7 @@ import { TeamFormComponent } from "./team-form/team-form.component";
 import { TeamListComponent } from "./team-list/team-list.component";
 import { TeamComponent } from "./team.component";
 import { teamRoutes } from "./team.routing";
+import { FuseScrollbarModule } from "@fuse/directives/scrollbar";
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { teamRoutes } from "./team.routing";
     MatTableModule,
     MatTooltipModule,
     FuseFindByKeyPipeModule,
-    SharedModule
+    SharedModule,
+    FuseScrollbarModule
 
   ],
   providers   : [

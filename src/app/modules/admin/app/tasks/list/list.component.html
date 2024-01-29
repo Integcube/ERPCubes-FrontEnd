@@ -26,13 +26,19 @@
                     <!-- Actions -->
                     <div class="mt-4 sm:mt-0">
                         <!-- Add section button -->
-                        <button class="ml-4 h-9" mat-flat-button [color]="'accent'" (click)="createTask('section')"
-                            [matTooltip]="'Shortcut: Ctrl + .'">
+                        <button class="ml-4 h-7 primary-2" mat-flat-button  (click)="createTask('section')"
+                            [matTooltip]="'Create Section '">
+                            <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add Section</span>
                         </button>
                         <!-- Add task button -->
-                        <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="createTask('task')"
-                            [matTooltip]="'Shortcut: Ctrl + /'">
+                        <button class="ml-4 h-7 primary-2" mat-flat-button [color]="'primary'" (click)="createTask('task')"
+                            [matTooltip]="'Create Task'">
+                            <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add Task</span>
                         </button>
                     </div>

@@ -26,6 +26,7 @@ import { RouterModule } from '@angular/router';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import moment from 'moment';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 @NgModule({
   declarations: [
     CampaignComponent,
@@ -57,7 +58,8 @@ import moment from 'moment';
     MatButtonModule, 
     MatIconModule,
     FuseFindByKeyPipeModule,
-    SharedModule
+    SharedModule,
+    FuseScrollbarModule
   ],
   providers   : [
     {

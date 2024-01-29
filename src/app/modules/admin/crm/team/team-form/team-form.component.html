@@ -1,7 +1,7 @@
 <div class="flex flex-col w-full">
     <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
         <div class="flex justify-start items-center w-full">
-            <a class="text-2xl text-white font-bold">Create Team</a>
+            <a class="text-2xl text-white font-bold">Team Information</a>
         </div>
         <div class="flex items-center justify-end">
             <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
@@ -104,8 +104,8 @@
                             (click)="closeDrawer(); $event.preventDefault()" [routerLink]="['../']">
                             Cancel
                         </button>
-                        <div class="m-4">
-                            <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="!teamForm.valid" (click)="saveTeam()"
+                        <div class="m-4 ">
+                            <button class="ml-2 primary-2" mat-flat-button  [disabled]="!teamForm.valid" (click)="saveTeam()"
                                 [matTooltip]="'Save'" type="submit">
                                 Save
                             </button>
