@@ -10,8 +10,9 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-
 import { ProductService } from '../product.service';
+import { ProductImportComponent } from '../product-import/product-import.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-list',
@@ -24,7 +25,7 @@ export class ProductListComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  @ViewChild('exporter') public exporter;
   dataSource: MatTableDataSource<Product>;
   displayedColumns: string[] = ['select', 'productName', 'description', 'price'];
   selection = new SelectionModel<Product>(true, []);
@@ -44,6 +45,7 @@ export class ProductListComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(DOCUMENT) private _document: any,
     private _router: Router,
+    private _dialog: MatDialog,
     private _productService: ProductService,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
   ) { }
@@ -163,5 +165,20 @@ export class ProductListComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  openConnectorDialog() {
+    const dialogRef = this._dialog.open(ProductImportComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%"
+      }
+    );
+  }
+
+  exportToExcel() {
+    this.exporter.exportTable('xls', { fileName: 'Lead-list' });
   }
 }

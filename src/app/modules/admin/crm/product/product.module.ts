@@ -27,6 +27,18 @@ import { companyRoutes } from '../company/company.routing';
 import moment from 'moment';
 import { productRoutes } from './product.routing';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ProductImportComponent } from './product-import/product-import.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FuseCardModule } from '@fuse/components/card';
+import { FuseDrawerModule } from '@fuse/components/drawer';
+import { QuillModule } from 'ngx-quill';
 
 
 
@@ -35,7 +47,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
   declarations: [
     ProductComponent,
     ProductListComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    ProductImportComponent
   ],
   imports: [
     CommonModule,
@@ -54,12 +67,24 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatRadioModule,
     MatRippleModule,
     MatSelectModule,
+    MatStepperModule,
     MatSidenavModule,
     MatTableModule,
+    MatTableExporterModule,
     MatTooltipModule,
-    FuseFindByKeyPipeModule,
     MatAutocompleteModule,
-    SharedModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatDialogModule,
+    MatStepperModule,
+    FormsModule,
+    FuseCardModule,
+    FuseDrawerModule,
+    FuseFindByKeyPipeModule,
+    FuseScrollbarModule,
+    DragDropModule,
+    QuillModule,
+    SharedModule,
   ],
   providers   : [
     {

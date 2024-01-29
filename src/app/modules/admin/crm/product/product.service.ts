@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Product, Project } from './product.type';
+import { Product, ProductImportList, Project } from './product.type';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -18,6 +18,7 @@ export class ProductService {
   private readonly saveProductURL = `${environment.url}/Product/save`
   private readonly deleteProductURL = `${environment.url}/Product/delete`
   private readonly getProjectURL = `${environment.url}/Project/all`
+  private readonly saveBulkProductsURL = `${environment.url}/Product/bulkSave`
   user: User;
   private _product: BehaviorSubject<Product | null> = new BehaviorSubject(null);
   private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
@@ -38,6 +39,7 @@ export class ProductService {
   get projects$(): Observable<Project[]> {
     return this._projects.asObservable();
   }
+
   getProducts(): Observable<Product[]> {
     
     let data = {
@@ -51,6 +53,7 @@ export class ProductService {
       catchError(err => this.handleError(err))
     );
   }
+
   getProjects(): Observable<Project[]> {
     
     let data = {
@@ -64,6 +67,7 @@ export class ProductService {
       catchError(err => this.handleError(err))
     );
   }
+
   saveProduct(product:FormGroup){
     
     let data : Product= {
@@ -78,6 +82,20 @@ export class ProductService {
       catchError(err => this.handleError(err))
     );
   }
+
+  saveBulkImportProducts(products: ProductImportList[]){
+    const data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      products: products
+    };
+    debugger;
+    return this._httpClient.post<any>(this.saveBulkProductsURL, data).pipe(
+      tap(data => {
+      })
+    );
+  }
+  
   deleteProduct(product:Product){
     
     let data = {
@@ -92,9 +110,11 @@ export class ProductService {
       catchError(err => this.handleError(err))
     );
   }
+
   selectedProduct(selectedProduct: Product) {
     this._product.next(selectedProduct);
   }
+
   getProductById(id: number): Observable<Product> {
     
     return this._products.pipe(
@@ -141,4 +161,5 @@ export class ProductService {
       panelClass: colorName,
     });
   }  
+
 }
