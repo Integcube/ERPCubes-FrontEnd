@@ -587,6 +587,17 @@ mat-expansion-panel-header {
     }
 
     /* Default style tweaks and enhancements */
+
+    .mat-icon-button {
+        padding: 0;
+        min-width: 0;
+        width: 37px;
+        height: 37px;
+        flex-shrink: 0;
+        line-height: 40px;
+        border-radius: 50%;
+    }
+
     .mat-form-field-wrapper {
         margin-bottom: 16px;
         padding-bottom: 0;
@@ -595,8 +606,8 @@ mat-expansion-panel-header {
             position: relative;
             display: flex;
             align-items: stretch;
-            min-height: 40px;
-            border-radius: 4px;
+            min-height: 37px;
+            border-radius: 22px;
             padding: 0 16px;
             border-width: 1px;
             @apply shadow-sm bg-white border-gray-300 dark:bg-black dark:bg-opacity-5 dark:border-gray-500 #{'!important'};
@@ -653,8 +664,8 @@ mat-expansion-panel-header {
                 .mat-icon-button {
                     width: 40px;
                     min-width: 40px;
-                    height: 40px;
-                    min-height: 40px;
+                    height: 37px;
+                    min-height: 37px;
                 }
 
                 .mat-icon,

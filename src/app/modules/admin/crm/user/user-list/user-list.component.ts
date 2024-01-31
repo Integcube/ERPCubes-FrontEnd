@@ -139,6 +139,7 @@ export class UserListComponent implements OnInit {
     
     this._changeDetectorRef.markForCheck();
   }
+  
   onBackdropClicked(): void {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });
     this._changeDetectorRef .markForCheck();

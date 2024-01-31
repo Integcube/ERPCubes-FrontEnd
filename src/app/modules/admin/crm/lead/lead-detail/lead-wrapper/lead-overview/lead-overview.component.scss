@@ -89,7 +89,7 @@
 
 .arrow-steps .step.current {
 	color: #fff;
-	background-color:#287443;
+	background-color:#4caf50 !important
 }
 
 .arrow-steps .step.current a {
@@ -98,12 +98,12 @@
 }
 
 .arrow-steps .step.current:after {
-	border-left: 19px solid #287443
+	border-left: 19px solid #4caf50 !important
 }
 
 .arrow-steps .step.lastcurrent {
 	color: #fff;
-	background-color:#287443
+	background-color:#4caf50 !important
 }
 
 .arrow-steps .step.lastcurrent a {
@@ -113,8 +113,8 @@
 
 
 .arrow-steps .step.done {
-	color: #287443;
-	background-color:#287443;
+	color: #4caf50 !important;
+	background-color:#4caf50 !important
 }
 
 .arrow-steps .step.done a {
@@ -123,6 +123,6 @@
 }
 
 .arrow-steps .step.done:after {
-	border-left: 19px solid #287443
+	border-left: 19px solid #4caf50 !important
 }
 

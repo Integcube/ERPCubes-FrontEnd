@@ -849,7 +849,8 @@ export class LeadService {
       subject: meeting.subject,
       note: meeting.note,
       startTime: meeting.startTime,
-      endTime: meeting.endTime
+      endTime: meeting.endTime,
+      meetingDate: meeting.meetingDate,
     }
     return this._httpClient.post<Meeting[]>(this.saveMeetingsUrl, data).pipe(
       tap((meeting) => {
@@ -890,6 +891,7 @@ export class LeadService {
       taskId: call.taskId,
       contactTypeId: this.contactEnumInstance.Lead,
       contactId: leadId,
+      callDate:call.callDate,
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {

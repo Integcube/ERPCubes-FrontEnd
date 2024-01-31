@@ -3,7 +3,10 @@
     <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 " fuseScrollbar >
         <!-- Header -->
         <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-            <div class="text-lg font-medium">Task</div>
+           
+            <div class=" text-lg font-medium">  
+                 Schedule your Task 
+               </div>
             <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
                 <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
@@ -23,13 +26,13 @@
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
                 <mat-label>Description</mat-label>
                 <textarea matInput [formControlName]="'description'" [rows]="1" cdkTextareaAutosize
-                    [cdkAutosizeMinRows]="1" class="resize-none h-16">
+                    [cdkAutosizeMinRows]="1" class="resize-none h-10">
                     </textarea>
             </mat-form-field>
-            <div class="flex flex-row justify-space-between flex-wrap md:gap-5 sm:gap-2 lg:gap-5 xs:gap-2 mt-2">
+            <div class="flex flex-row justify-between w-full gap-5">
 
-           
-                <mat-form-field class="md:w-60  sm:w-100 xs:w-100" >
+                <div class="w-1/2">
+                <mat-form-field class="fuse-mat-dense w-full" >
                     <mat-label>Lead Owner</mat-label>
                     <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #leadOwner>
                         <mat-option value="-1"></mat-option>
@@ -41,7 +44,9 @@
                         Task Owner is required
                     </mat-error>
                 </mat-form-field>
-                <mat-form-field class="fuse-mat-dense md:w-60 sm:w-100 xs:w-100">
+            </div>
+            <div class="w-1/2">
+                <mat-form-field class="fuse-mat-dense w-full">
                     <mat-label>Type</mat-label>
                     <mat-select [formControlName]="'tasktypeId'" #type>
                        
@@ -51,10 +56,12 @@
                     </mat-select>
                 
                 </mat-form-field>
-
             </div>
+            </div>
+           
             <!-- Due date -->
-            <div>
+            <div class="flex flex-row justify-between w-full gap-5">
+                <div class="w-1/2">   
                 <div class="font-semibold">Due Date</div>
                 <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                     [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !taskForm.value.dueDate,
@@ -62,7 +69,7 @@
                                         'text-red-800 bg-red-200 dark:text-red-100 dark:bg-red-500': taskForm.value.dueDate && isOverdue(taskForm.value.dueDate)}" (click)="dueDatePicker.open()">
                     <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
                     <span class="ml-2 text-md font-medium">
-                        <ng-container *ngIf="taskForm.value.dueDate">{{taskForm.value.dueDate |date:"dd-MMM-yyyy hh:mm a"}}</ng-container>
+                        <ng-container *ngIf="taskForm.value.dueDate">{{taskForm.value.dueDate |date:"dd-MMM-yyyy"}}</ng-container>
                         <ng-container *ngIf="!taskForm.value.dueDate">Not set</ng-container>
                     </span>
                     <mat-form-field
@@ -81,15 +88,16 @@
                     </mat-form-field>
                 </div>
             </div>
-{{taskForm.value.dueTime|json}}
-            <!-- Time -->
-            <div class="flex mt-2 w-full">      
-                <!-- Description -->
-                <mat-form-field class="w-full">
-                    <mat-label>End Time</mat-label>
-                    <input matInput type="time" [formControlName]="'dueTime'">
-                </mat-form-field>
+    <!-- Time -->
+    <div class="w-1/2">      
+             <mat-form-field class="w-full fuse-mat-dense ">
+            <mat-label>Task Time</mat-label>
+            <input matInput type="time" [formControlName]="'dueTime'">
+            </mat-form-field>
+              </div>
+
             </div>
+        
 
             <!-- Labels -->
             <div class="w-full">
@@ -122,20 +130,27 @@
     <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1 z-999" >
         <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent" style="z-index: 9999!important;">
         <!-- Delete -->
-        <ng-container class="ml-4" *ngIf="task.taskId !== -1">
-            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
-                Delete
+        <ng-container class="ml-4 " *ngIf="task.taskId !== -1">
+            <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                <mat-icon
+                class="icon-size-5"
+                   [svgIcon]="'heroicons_outline:trash'"></mat-icon> 
+                   <span class="ml-1 mr-1 text-xs">Delete</span>  
             </button>
         </ng-container>
 
         <!-- Cancel -->
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
-            Cancel
+        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs">Cancel</span> 
         </button>
         <!-- Save -->
-        <button class="ml-2 primary-2" mat-flat-button  [disabled]="taskForm.invalid" [matTooltip]="'Click to Save'"
+        <button class="ml-2 primary-2 h-8" mat-flat-button  [disabled]="taskForm.invalid" [matTooltip]="'Click to Save'"
             (click)="save()">
-            Save
+            <mat-icon
+         class="icon-size-5 mr-2 text-white"
+       [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+   <span class="ml-1 mr-1 text-xs">Save</span>
         </button>
 
     </div>

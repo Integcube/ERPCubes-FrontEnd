@@ -96,6 +96,7 @@ export class Call {
     taskId: number;
     isTask:number;
     tasktime:number;
+    callDate:Date| null;
     constructor(reg) {
         this.callId = reg.callId ? reg.callId : -1
         this.reasonId = reg.reasonId ? reg.reasonId : -1
@@ -103,7 +104,7 @@ export class Call {
         this.endTime = reg.endTime || new Date(); 
         this.taskId = reg.taskId ? reg.taskId : -1
         this.isTask = reg.isTask ? reg.isTask : -1
-        
+        this.callDate = reg.callDate || new Date(); 
     }
 }
 export class Email {
@@ -130,10 +131,13 @@ export class Meeting{
     createdBy: string;
     createdDate: Date;
     createdbyName:string;
+    meetingDate:Date;
     constructor(reg){
         this.meetingId = reg.meetingId?reg.meetingId:-1
         this.startTime = reg.startTime || new Date(); 
         this.endTime = reg.endTime || new Date(); 
+        this.meetingDate = reg.meetingDate || new Date(); 
+        
     }
 }
 export class Note {

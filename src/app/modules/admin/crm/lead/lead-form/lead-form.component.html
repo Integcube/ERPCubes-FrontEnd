@@ -1,5 +1,5 @@
-<div class="flex flex-col w-full " >
-    <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
+<div class="flex flex-col w-full overflow-hidden" fuseScrollbar >
+    <div class=" flex  sticky top-0  h-18 sm:h-18 px-6 sm:px-6 bg-accent-100" style="background-color: #00bda5!important;">
         <!-- Close button -->
         <div class="flex justify-start items-center w-full">
             <ng-container *ngIf="lead$|async as lead">
@@ -15,46 +15,65 @@
     <!-- Edit mode -->
     <ng-container>
         <!-- Contact form -->
-        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12 pt-6"  >
+        <div class="flex  items-center px-8 sm:px-8 pt-6"  >
             <div class="w-full max-w-3xl">
                 <form [formGroup]="leadForm">
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>First Name</mat-label>
-                            <input matInput [formControlName]="'firstName'" [spellcheck]="false" class="h-2!" #firstName>
-                            <mat-error *ngIf="leadForm.get('firstName').hasError('required')">
-                                First Name is required
-                            </mat-error>
-                        </mat-form-field>
+                    <div class="flex flex-row justify-between w-full gap-5">
+                        <div class="w-1/2">
+                            <mat-form-field class="fuse-mat-dense w-full">
+                                <mat-label class="text-md font-medium">First Name</mat-label>
+                                <input matInput [formControlName]="'firstName'" [spellcheck]="false" class="h-2!" #firstName>
+                                <mat-error *ngIf="leadForm.get('firstName').hasError('required')">
+                                    First Name is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="w-1/2"> 
+                            <mat-form-field class="fuse-mat-dense w-full">
+                                <mat-label class="text-md font-medium">Last Name</mat-label>
+                                <input matInput [formControlName]="'lastName'" [spellcheck]="false" #lastName>
+                                <mat-error *ngIf="leadForm.get('lastName').hasError('required')">
+                                    Last Name is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
                     </div>
-                    <div>
+                    
+                    <div class="flex flex-row justify-between w-full gap-5">
+                        <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Last Name</mat-label>
-                            <input matInput [formControlName]="'lastName'" [spellcheck]="false" #lastName>
-                            <mat-error *ngIf="leadForm.get('lastName').hasError('required')">
-                                Last Name is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Email</mat-label>
+                            <mat-label class="text-md font-medium">Email</mat-label>
                             <input matInput [formControlName]="'email'" [spellcheck]="false" #email>
                         </mat-form-field>
                     </div>
-                    <div>
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Phone</mat-label>
+                            <mat-label class="text-md font-medium">Phone</mat-label>
                             <input matInput [formControlName]="'mobile'" [spellcheck]="false" #mobile>
                         </mat-form-field>
                     </div>
-                    <div>
+                </div>
+                <div class="flex flex-row justify-between w-full gap-5">
+                    <div class="w-1/2">
+                    <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                        <mat-label class="text-md font-medium">Product</mat-label>
+                        <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
+                            <mat-option class="text-md font-medium" [value]=-1>--Select Product--</mat-option>
+                            <ng-container *ngIf="product$|async as products">
+                                <mat-option class="text-md font-medium" *ngFor="let product of products"
+                                    [value]="product.productId">{{product.productName}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                            <mat-label>Lead Owner</mat-label>
+                            <mat-label class="text-md font-medium">Lead Owner</mat-label>
                             <mat-select [formControlName]="'leadOwner'" [spellcheck]="false" #leadOwner>
-                                <mat-option [value]="-1">Select Lead Owner...</mat-option>
+                                <mat-option class="text-md font-medium" [value]="-1">--Select Lead  Owner--</mat-option>
                                 <ng-container *ngIf="users$|async as users">
-                                    <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
+                                    <mat-option  class="text-md font-medium" *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                                 </ng-container>
                             </mat-select>
                             <mat-error *ngIf="leadForm.get('leadOwner').hasError('required')">
@@ -63,66 +82,57 @@
                         </mat-form-field>
 
                     </div>
-                    <div>
+                </div>
+                <div class="flex flex-row justify-between w-full gap-5">
+                    <div class="w-1/2">
+                    <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                        <mat-label class="text-md font-medium">Status</mat-label>
+                        <mat-select [formControlName]="'status'" [spellcheck]="false" #leadStatus>
+                            <mat-option class="text-md font-medium" [value]="-1">--Select  Status--</mat-option>
+                            <ng-container *ngIf="leadStatus$|async as status">
+                                <mat-option class="text-md font-medium" *ngFor="let s of status"
+                                    [value]="s.statusId">{{s.statusTitle}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+
+                <div class="w-1/2">
+                    <mat-form-field class="fuse-mat-dense  flex-auto w-full">
+                        <mat-label class="text-md font-medium">Source</mat-label>
+                        <mat-select class="text-md font-medium" [formControlName]="'sourceId'" [spellcheck]="false" #leadsource>
+                            <mat-option [value]=-1>--Select  Source--</mat-option>
+                            <ng-container   *ngIf="leadSource$|async as source">
+                                <mat-option *ngFor="let s of source"
+                                    [value]="s.sourceId">{{s.sourceTitle}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="flex flex-row justify-between w-full gap-5">
+                <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Industry</mat-label>
+                            <mat-label class="text-md font-medium">Industry</mat-label>
                             <mat-select [formControlName]="'industryId'" [spellcheck]="false" #leadIndustryId>
-                                <mat-option [value]="-1">Select Industries...</mat-option>
+                                <mat-option class="text-md font-medium" [value]="-1">--Select industry--</mat-option>
                                 <ng-container *ngIf="industries$|async as industries">
-                                    <mat-option *ngFor="let industry of industries"
+                                    <mat-option class="text-md font-medium" *ngFor="let industry of industries"
                                         [value]="industry.industryId">{{industry.industryTitle}}</mat-option>
                                 </ng-container>
                             </mat-select>
                         </mat-form-field>
 
                     </div>
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Product</mat-label>
-                            <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
-                                <mat-option [value]=-1>Select Product...</mat-option>
-                                <ng-container *ngIf="product$|async as products">
-                                    <mat-option *ngFor="let product of products"
-                                        [value]="product.productId">{{product.productName}}</mat-option>
-                                </ng-container>
-                            </mat-select>
-                        </mat-form-field>
-
-                    </div>
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Status</mat-label>
-                            <mat-select [formControlName]="'status'" [spellcheck]="false" #leadStatus>
-                                <mat-option [value]="-1">Select Lead Status...</mat-option>
-                                <ng-container *ngIf="leadStatus$|async as status">
-                                    <mat-option *ngFor="let s of status"
-                                        [value]="s.statusId">{{s.statusTitle}}</mat-option>
-                                </ng-container>
-                            </mat-select>
-                        </mat-form-field>
-
-                    </div>
-                    <div>
-                        <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Source</mat-label>
-                            <mat-select [formControlName]="'sourceId'" [spellcheck]="false" #leadsource>
-                                <mat-option [value]=-1>Select Lead Source...</mat-option>
-                                <ng-container *ngIf="leadSource$|async as source">
-                                    <mat-option *ngFor="let s of source"
-                                        [value]="s.sourceId">{{s.sourceTitle}}</mat-option>
-                                </ng-container>
-                            </mat-select>
-                        </mat-form-field>
-
-                    </div>
-
-                    <div>
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                            <mat-label>Campaign</mat-label>
+                            <mat-label class="text-md font-medium">Campaign</mat-label>
                             <mat-select [formControlName]="'campaignId'" [spellcheck]="false" #campaign>
-                                <mat-option value="-1">Select Campaign...</mat-option>
+                                <mat-option class="text-md font-medium" value="-1">--Select Campaign--</mat-option>
                                 <ng-container *ngIf="campaigns$|async as campaigns">
-                                    <mat-option *ngFor="let campaign of campaigns" [value]="campaign.campaignId">{{campaign.title}}</mat-option>
+                                    <mat-option class="text-md font-medium" *ngFor="let campaign of campaigns" [value]="campaign.campaignId">{{campaign.title}}</mat-option>
                                 </ng-container>
                             </mat-select>
                             <mat-error *ngIf="leadForm.get('campaignId').hasError('required')">
@@ -130,55 +140,65 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <div>
+                </div>
+                <div class="flex flex-row justify-between w-full gap-5">
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense w-full">
-                            <mat-label>Work Number</mat-label>
+                            <mat-label class="text-md font-medium">Work Number</mat-label>
                             <input matInput [formControlName]="'work'" [spellcheck]="false" #work>
                         </mat-form-field>
                     </div>
-                    <div>
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Address</mat-label>
+                            <mat-label class="text-md font-medium">Address</mat-label>
                             <input matInput [formControlName]="'address'" [spellcheck]="false" #billingCity>
                         </mat-form-field>
                     </div>
-                    <div>
+                </div>
+                    <div class="flex flex-row justify-between w-full gap-5">
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>City</mat-label>
+                            <mat-label class="text-md font-medium">City</mat-label>
                             <input matInput [formControlName]="'city'" [spellcheck]="false" #billingCity>
                         </mat-form-field>
                     </div>
-                    <div>
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
                             <mat-label>State</mat-label>
                             <input matInput [formControlName]="'state'" [spellcheck]="false" #billingState>
                         </mat-form-field>
                     </div>
-                    <div>
+                </div>
+                <div class="flex flex-row justify-between w-full gap-5">
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>ZIP</mat-label>
+                            <mat-label class="text-md font-medium">ZIP</mat-label>
                             <input matInput [formControlName]="'zip'" [spellcheck]="false" #billingZIP>
                         </mat-form-field>
                     </div>
-                    <div>
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Country</mat-label>
+                            <mat-label class="text-md font-medium">Country</mat-label>
                             <input matInput [formControlName]="'country'" [spellcheck]="false" #billingCountry>
                         </mat-form-field>
                     </div>
-                    <div class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+                </div>
+                    <div class="flex sticky bottom-0 items-center  -mx-8 sm:-mx-8 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <ng-container *ngIf="selectedlead.leadId !== -1">
-                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
-                                Delete
+                            <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                                <mat-icon [svgIcon]="'heroicons_outline:trash'" class="icon-size-5"></mat-icon>
+                                <span class="ml-2 text-xs">Delete</span>
                             </button>
                         </ng-container>
-                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
+                        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
                             [routerLink]="['../']">
-                            Cancel
+                            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                            <span class="ml-2 text-xs">Cancel</span>
                         </button>
-                        <button class="ml-2 primary-2" mat-flat-button [disabled]="leadForm.invalid"
+                        <button class="ml-2 primary-2 h-8" mat-flat-button [disabled]="leadForm.invalid"
                             [matTooltip]="'Click to Save Lead'" (click)="save()">
-                            Save
+                            <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
+                            <span class="ml-2 text-xs">Save</span>
                         </button>
                     </div>
                 </form>

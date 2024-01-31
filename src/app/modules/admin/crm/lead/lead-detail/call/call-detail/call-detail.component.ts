@@ -63,9 +63,7 @@ export class CallDetailComponent implements OnInit , OnDestroy {
   createForm() {
       this.composeForm = this._formBuilder.group({
           callId:[this._data.call.callId, Validators.required],
-          // to: [this.lead.firstName, [Validators.required, Validators.email]],
-          // cc     : ['', [Validators.email]],
-          // bcc    : ['', [Validators.email]],
+   
           subject: [this._data.call.subject,[Validators.required]],
           response: [this._data.call.response],
           startTime: [this.formatTime(this._data.call.startTime),[Validators.required]],
@@ -75,8 +73,10 @@ export class CallDetailComponent implements OnInit , OnDestroy {
           isTask: [this._data.call.isTask],
           taskId: [this._data.call.taskId],
           tasktime: [this.formatTime(this._data.call.dueDate)],
+          callDate: [this._data.call.callDate],
 
       });
+
   }
    formatTime(time: string|Date): string {
     const date = new Date(time);
@@ -162,6 +162,12 @@ export class CallDetailComponent implements OnInit , OnDestroy {
     this.composeForm.get('dueDate').setValue(null);
     this.cdr.markForCheck()
   }
+
+  resetCallDate(): void {
+    this.composeForm.get('callDate').setValue(null);
+    this.cdr.markForCheck()
+  }
+
   isOverdue(date: string): boolean {
     return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
   }

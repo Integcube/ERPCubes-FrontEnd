@@ -115,14 +115,20 @@
             </button>
           </div>
           <!-- Save -->
-          <button class="ml-auto" mat-flat-button [color]="'cancel'" [matTooltip]="'cancel'" (click)="closeDialog()">
-            Cancel
+          <button class="ml-auto h-8" mat-flat-button [color]="'cancel'" [matTooltip]="'cancel'" (click)="closeDialog()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs">Cancel</span> 
           </button>
-          <button class="ml-2 primary-2" mat-flat-button  [matTooltip]="'Save'" (click)="save()">
-            Save
+          <button class="ml-2 primary-2 h-8" mat-flat-button  [matTooltip]="'Save'" (click)="save()">
+            <mat-icon
+            class="icon-size-5 mr-2 text-white"
+            [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+            <span class="ml-1 mr-1 text-xs">Save</span>
           </button>
         </div>
       </ng-container>
     </div>
   </div>
-  
+
+
+

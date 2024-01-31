@@ -19,42 +19,48 @@
     <!-- Edit mode -->
     <ng-container>
         <!-- Contact form -->
-        <div class="relative flex flex-col flex-auto items-center px-6 sm:px-12 pt-6">
-            <div class="w-full max-w-3xl">
+        <div class="flex flex-col flex-auto items-center px-6 sm:px-12 pt-6 ">
+            <div class="w-full max-w-3xl ">
                 <form [formGroup]="userForm" (ngSubmit)="save()" (keydown.enter)="submitOnEnter($event)">
-                    <div>
+                    <div class="flex flex-row justify-between w-full gap-5">
+                        <div class="w-1/2">
+                   
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>First Name</mat-label>
                             <input matInput [formControlName]="'firstName'"  placeholder="Enter First Name..." [spellcheck]="false" class="h-2!" #firstName>
                         </mat-form-field>
                     </div>
-                    <div class="mt-8">
+                    <div class="w-1/2">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Last Name</mat-label>
                             <input matInput [formControlName]="'lastName'" placeholder="Enter Last Name..." [spellcheck]="false" #lastName>
                         </mat-form-field>
                     </div>
-                    <div class="mt-8">
+                </div>
+                <div class="">
+                    <div class="mt-4 ">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>User Name</mat-label>
                             <input matInput [formControlName]="'userName'"  placeholder="Enter User Name E.g Abcd" [spellcheck]="false" #userName>
                         </mat-form-field>
                     </div>
 
-                    <div class="mt-8">
+                    <div class="mt-4 ">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Email</mat-label>
                             <input matInput [formControlName]="'email'" placeholder="Enter Email.." [spellcheck]="false" #email>
                         </mat-form-field>
                     </div>
-
-                    <div class="mt-8">
+                </div>
+                <div class="">
+                    <div class="mt-4 ">
+                 
                         <mat-form-field class="fuse-mat-no-subscript w-full">
                             <mat-label>Phone Number</mat-label>
                             <input matInput [formControlName]="'phoneNumber'" placeholder="Enter Phone No." [spellcheck]="false" #phoneNumber>
                         </mat-form-field>
                     </div>
-                    <div class="mt-8"  class="mt-8" *ngIf="userForm.get('id').value == -1">
+                    <div class="mt-4 ">
                 <mat-form-field class="w-full">
                     <mat-label>Password</mat-label>
                     <input
@@ -78,29 +84,41 @@
                             *ngIf="passwordField.type === 'text'"
                             [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                     </button>
-                  
+           
+                    <mat-error *ngIf="userForm.get('password').hasError('required')">
+                        {{ passwordErrors.required }}
+                      </mat-error>
+                    
+                       
                 </mat-form-field>
-
+                {{ passwordErrors.pattern}}
             </div>
-
+        </div>
                     <!-- Actions -->
                     <div class="flex sticky bottom-0 items-center mt-10 -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <!-- Delete -->
         <ng-container *ngIf="selectedUser.id !== -1">
-            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()"[routerLink]="['../']">
-                Delete
+            <button class="h-8" mat-stroked-button  [color]="'warn'" type="button" [matTooltip]="'Deactivate User'" (click)="delete()">
+                <mat-icon [svgIcon]="'heroicons_outline:user-remove'" class="icon-size-5"></mat-icon>
+             <span class="ml-2 text-xs">Deactivate User</span>
+             
             </button>
         </ng-container>
 
         <!-- Cancel -->
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()" [routerLink]="['../']">
-            Cancel
+        <button class="ml-auto h-8"  mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDrawer()" [routerLink]="['../']">
+            
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs">Cancel</span>
         </button>
         <!-- Save -->
-        <button class="ml-2 primary-2" mat-flat-button [color]="'primary'" [disabled]="userName.invalid ||userForm.invalid"
+        <button class="ml-2 primary-2 h-8" mat-flat-button  [disabled]="userForm.invalid"
             [matTooltip]="'Save'"
             type="submit">
-            Save
+           
+            <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs">Save</span>
+            
         </button>
 
                     </div>

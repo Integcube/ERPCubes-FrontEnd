@@ -64,18 +64,22 @@
             <ng-container *ngIf="data.actions.cancel.show">
                 <button
                     mat-stroked-button
-                    [matDialogClose]="'cancelled'">
-                    {{data.actions.cancel.label}}
+                    [matDialogClose]="'cancelled'" class="h-8">
+                    <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                    <span class="ml-2 text-xs">{{data.actions.cancel.label}}</span>
+                    
                 </button>
             </ng-container>
 
             <!-- Confirm -->
             <ng-container *ngIf="data.actions.confirm.show">
                 <button
-                    mat-flat-button
+                    mat-flat-button class="h-8"
                     [color]="data.actions.confirm.color"
                     [matDialogClose]="'confirmed'">
-                    {{data.actions.confirm.label}}
+            
+                    <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
+                    <span class="ml-2 text-xs">{{data.actions.confirm.label}}</span>
                 </button>
             </ng-container>
 

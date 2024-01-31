@@ -24,6 +24,7 @@ import { TasksDetailsComponent } from './details/details.component';
 import { tasksRoutes } from './tasks.routing';
 import { TasksListComponent } from './list/list.component';
 import { RouterModule } from '@angular/router';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { RouterModule } from '@angular/router';
         MatSidenavModule,
         MatTooltipModule,
         FuseFindByKeyPipeModule,
-        SharedModule
+        SharedModule,
+        FuseScrollbarModule
     ],
     providers   : [
         {

@@ -4,13 +4,13 @@
 }
 </style>
 <div class="flex flex-col w-full" >
-    <div class="flex items-center mb-2 sm:mt-0 ">
+    <div class="flex flex-row items-center mb-2 sm:mt-0 s">
         <div class="flex-auto">
             <search-bar></search-bar>
         </div>
     
-        <div class="flex justify-end">
-            <button mat-flat-button  class="text-xs h-7 primary-2" [matTooltip]="'Create New Call'" (click)="addCall()">
+        <div class="">
+            <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Call'" (click)="addCall()">
                 <mat-icon
                 class="icon-size-5"
                    [svgIcon]="'heroicons_outline:phone'"></mat-icon>
