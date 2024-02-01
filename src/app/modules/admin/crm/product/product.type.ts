@@ -9,6 +9,7 @@ export class Product{
     isHovered: boolean;
     constructor(reg){
         this.productId = reg.productId?reg.productId:-1;
+        this.projectId = reg.projectId?reg.projectId:-1;
     }
 }
 export class Project {
