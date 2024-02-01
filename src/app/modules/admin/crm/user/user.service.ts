@@ -79,7 +79,6 @@ export class UserFormService {
   }
 
   saveUser(userId: any, user: FormGroup) {
-
     let data: UserForm = {
       id: userId,
       tenantId: this.user.tenantId,
@@ -99,9 +98,10 @@ export class UserFormService {
     let data: UserForm = {
       Id: userId,
       tenantId: this.user.tenantId,
+      userId: user.value.id,
       ...user.value
     }
-
+debugger
     return this._httpClient.post<UserForm[]>(this.updateUserURL, data).pipe(
       tap((users) => {
 

@@ -47,13 +47,16 @@ export class AuthSignInComponent implements OnInit
         this.signInForm = this._formBuilder.group({
             email     : [, [Validators.required]],
             password  : [, Validators.required],
-            rememberMe: ['']
+            rememberMe: [false]
         });
     }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
+
+  
+
 
     /**
      * Sign in
@@ -65,7 +68,6 @@ export class AuthSignInComponent implements OnInit
         {
             return;
         }
-
         // Disable the form
         this.signInForm.disable();
 
