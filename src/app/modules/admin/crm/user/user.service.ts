@@ -89,7 +89,6 @@ export class UserFormService {
 
     return this._httpClient.post<UserForm[]>(this.adduserListURL, data).pipe(
       tap((users) => {
-        debugger
         // this.getUsers().subscribe();
       }),
       catchError(err => this.handleError(err))

@@ -106,9 +106,22 @@
         </div>
       </ng-container>
                 <div class="flex-grow  bg-default  justify-between overflow-hidden" >
+                
                     <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-1 shadow mb-2">
-                   
-                        <div class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
+                        <div class="flex px-6  gap-2">
+                            <button class="h-7 primary-2" mat-flat-button (click)="setView()">
+                                <mat-icon class="text-xs" svgIcon="mat_outline:backup_table"></mat-icon>
+                                <span class="ml-2 text-xs" *ngIf="!isTable">Table</span>
+                                <span class="ml-2  text-xs" *ngIf="isTable">Status</span>
+                            </button>
+                            <!-- <button class="ml-4" mat-stroked-button class="h-8" (click)="createLead()" *ngIf="isTable">
+                                <mat-icon svgIcon="mat_outline:layers"></mat-icon>
+                                <span class="ml-2 mr-1">Bulk Actions</span>
+                            </button> -->
+                        </div>
+    
+                        <div
+                            class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                             <div class="flex flex-row gap-2">
                                 <!-- Owner -->
                                 <div class="flex gap-1 items-center p-2 rounded h-5"
@@ -120,14 +133,13 @@
                                         {{"("+filter.leadOwner.length+")"}}
                                     </span>
                                     <span class="font-bold hover:underline cursor-pointer text-xs" #usersPanelOrigin
-                                    [matTooltip]="'Filter by Contact Owner'"
-                                        (click)="openUsersPanel()"
+                                        [matTooltip]="'Filter by Contact Owner'" (click)="openUsersPanel()"
                                         [ngClass]="filter.leadOwner.length ? 'text-white' : 'text-primary'">
-                                     Lead Owner
+                                        Lead Owner
                                         <!-- <mat-icon [svgIcon]="'heroicons_outline:users'"></mat-icon> -->
                                     </span>
                                     <ng-template #usersPanel>
-                                        <div class="w-60 rounded border shadow-md bg-card" >
+                                        <div class="w-60 rounded border shadow-md bg-card">
                                             <div class="flex items-center m-3 mr-2">
                                                 <div class="flex items-center">
                                                     <mat-icon class="icon-size-5"
@@ -156,7 +168,7 @@
                                     </ng-template>
                                     <mat-icon [ngClass]="filter.leadOwner.length ? 'text-white' : 'text-primary'"
                                         svgIcon="heroicons_outline:filter" class=" hover:underline cursor-pointer"
-                                         (click)="openUsersPanel()"  [matTooltip]="'Filter by Contact Owner'"></mat-icon>
+                                        (click)="openUsersPanel()" [matTooltip]="'Filter by Contact Owner'"></mat-icon>
                                     <mat-icon *ngIf="filter.leadOwner.length" matTooltip="remove"
                                         class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
                                         (click)="cancelFilters(1)"></mat-icon>
@@ -164,12 +176,12 @@
                                 <!-- Create -->
                                 <div class="flex gap-1 items-center p-2 rounded h-5"
                                     [ngStyle]="{'background-color': filter.createdDate ? '#E85038':'transparent'}">
-
-                                <span class="font-bold hover:underline cursor-pointer text-xs " #createdDatePanelOrigin
-                                    (click)="openCreatedDatePanel()" [matTooltip]="'Filter by Created Date'"
-                                    [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'">
-                                    Created Date
-
+    
+                                    <span class="font-bold hover:underline cursor-pointer text-xs " #createdDatePanelOrigin
+                                        (click)="openCreatedDatePanel()" [matTooltip]="'Filter by Created Date'"
+                                        [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'">
+                                        Created Date
+    
                                     </span>
                                     <ng-template #createdDatePanel>
                                         <div class="w-60 rounded border shadow-md bg-card">
@@ -197,7 +209,8 @@
                                         </div>
                                     </ng-template>
                                     <mat-icon [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'"
-                                        svgIcon="heroicons_outline:filter" (click)="openCreatedDatePanel()" class="hover:underline cursor-pointer"></mat-icon>
+                                        svgIcon="heroicons_outline:filter" (click)="openCreatedDatePanel()"
+                                        class="hover:underline cursor-pointer"></mat-icon>
                                     <mat-icon *ngIf="filter.createdDate" matTooltip="remove"
                                         class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
                                         (click)="cancelFilters(2)"></mat-icon>
@@ -205,9 +218,10 @@
                                 <!-- Modified -->
                                 <div class="flex gap-1 items-center p-2 rounded h-5"
                                     [ngStyle]="{'background-color': filter.modifiedDate ? '#E85038':'transparent'}">
-
-                                    <span class="font-bold hover:underline cursor-pointer text-xs" [matTooltip]="'Filter by Modified Date'"
-                                        #modifiedDatePanelOrigin (click)="openModifiedDatePanel()"
+    
+                                    <span class="font-bold hover:underline cursor-pointer text-xs"
+                                        [matTooltip]="'Filter by Modified Date'" #modifiedDatePanelOrigin
+                                        (click)="openModifiedDatePanel()"
                                         [ngClass]="filter.modifiedDate ? 'text-white' : 'text-primary'">
                                         Modified Date
                                     </span>
@@ -238,7 +252,7 @@
                                     </ng-template>
                                     <mat-icon [ngClass]="filter.modifiedDate ? 'text-white' : 'text-primary'"
                                         svgIcon="heroicons_outline:filter" class="hover:underline cursor-pointer"
-                                         (click)="openModifiedDatePanel()"></mat-icon>
+                                        (click)="openModifiedDatePanel()"></mat-icon>
                                     <mat-icon *ngIf="filter.modifiedDate" matTooltip="remove"
                                         class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
                                         (click)="cancelFilters(3)"></mat-icon>
@@ -247,9 +261,9 @@
                                 <div class="flex gap-1 items-center p-2 rounded h-5"
                                     [ngStyle]="{'background-color': filter.leadStatus.length ? '#E85038':'transparent'}">
                                     <span *ngIf="filter.leadStatus.length"
-                                        class="font-bold hover:underline cursor-pointer text-xs"  #usersPanelOrigin
+                                        class="font-bold hover:underline cursor-pointer text-xs" #usersPanelOrigin
                                         (click)="openUsersPanel()" c
-                                        [ngClass]="filter.leadStatus.length ? 'text-white' : 'text-primary'" >
+                                        [ngClass]="filter.leadStatus.length ? 'text-white' : 'text-primary'">
                                         {{"("+filter.leadStatus.length+")"}}
                                     </span>
                                     <span class="font-bold hover:underline cursor-pointer text-xs" #leadStatusPanelOrigin
@@ -296,7 +310,7 @@
                             <div class="flex flex-row gap-2 align items-center">
                                 <ng-container *ngIf="customList$|async as customList">
                                     <button mat-stroked-button class="w-5 min-w-5 max-w-5 h-5"
-                                       *ngIf="customList.listId != -1" [matTooltip]="'save filter'"
+                                        *ngIf="customList.listId != -1" [matTooltip]="'save filter'"
                                         (click)="saveFilter(customList)"><mat-icon>save</mat-icon></button>
                                     <button mat-stroked-button class="w-5! min-w-5 max-w-5 h-5"
                                         *ngIf="customList.listId != -1" [matTooltip]="'edit view'"

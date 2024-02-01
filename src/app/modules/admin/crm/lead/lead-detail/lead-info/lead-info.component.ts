@@ -94,8 +94,6 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
-
-
   addTask(){
     let tasks = new TaskModel({})
     this._matDialog.open(TaskDetailComponent, {

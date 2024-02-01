@@ -1,112 +1,95 @@
-<div class="inset-0 flex flex-col min-w-0 overflow-hidden">
+<div class="inset-0 flex flex-col overflow-hidden">
     <!-- Main -->
-    <div
-        class="flex-auto p-6 sm:p-8 sm:pt-4 overflow-y-auto"
-        cdkScrollable>
+    <div class="flex-auto px-3 sm:px-4  max-w-screen min-w-screen w-screen overflow-y-auto" cdkScrollable>
 
         <!-- Lists -->
-        <div
-            class="flex"
-            cdkDropList
-            [cdkDropListData]="statusWiseLeads"
-            [cdkDropListOrientation]="'horizontal'">
+        <div class="flex" cdkDropList [cdkDropListData]="statusWiseLeads" [cdkDropListOrientation]="'horizontal'">
 
             <!-- Group all cdkDropList's after this point together so that the cards can be transferred between lists -->
-            <div
-                class="flex items-start"
-                cdkDropListGroup>
+            <div class="flex items-start" cdkDropListGroup>
 
                 <!-- List -->
-                <ng-container *ngFor="let list of statusWiseLeads; trackBy: trackByFn">
-                    <div
-                        class="flex-0 w-72 p-2 rounded-2xl bg-default"
-                        cdkDrag
-                        [cdkDragLockAxis]="'x'">
+                <ng-container *ngIf="statusWiseLeads?.length>0">
+                    <ng-container *ngFor="let status of statusWiseLeads; trackBy: trackByFn">
+                        <div class="flex-0 w-90 p-2 rounded-2xl bg-default" cdkDrag [cdkDragLockAxis]="'x'">
 
-                        <div
-                            class="flex items-center justify-between"
-                            cdkDragHandle>
-                            <div class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                                <input
-                                    class="w-full font-medium leading-5 bg-transparent"
-                                    [spellcheck]="'false'"
-                                    [value]="list.statusTitle"
-                                    #listTitleInput>
+                            <div class="flex items-center justify-start gap-1" cdkDragHandle>
+                                <div class="flex font-semibold items-center py-2 pl-3 rounded-md">
+                                    {{status.statusTitle}}
+                                </div>
+                                <div
+                                    class="flex items-center justify-center min-w-6 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
+                                    {{status.leads.length}}
+                                </div>
                             </div>
-                            <div class="flex items-center justify-center min-w-6 ml-4 text-sm font-semibold leading-6 rounded-full bg-gray-300 text-secondary dark:bg-gray-700">
-                                {{list.leads.length}}
-                            </div>
-                        </div>
 
-                        <!-- Cards -->
-                        <div class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border">
+                            <!-- Cards -->
                             <div
-                                [id]="list.id"
-                                class="p-3 pb-0"
-                                cdkDropList
-                                [cdkDropListData]="list.cards"
-                                (cdkDropListDropped)="cardDropped($event)">
+                                class="mt-2 rounded-xl bg-gray-400 bg-opacity-12 dark:bg-transparent dark:border max-h-60 h-60 min-h-60 md:max-h-80 md:min-h-80 md:h-80 lg:max-h-120 lg:h-120 lg:min-h-120  overflow-hidden" fuseScrollbar>
+                                <!-- max-h-36 h-36 min-h-36 md:max-h-80 md:min-h-80 md:h-80 lg:max-h-20 lg:h-120 lg:min-h-120  overflow-auto -->
+                                <div [id]="status.statusId" class="p-3 pb-0" cdkDropList
+                                    [cdkDropListData]="status.leads" (cdkDropListDropped)="leadDropped($event, status.statusTitle)">
 
-                                <!-- Card -->
-                                <ng-container *ngFor="let card of list.leads; trackBy: trackByFn">
-                                    <a
-                                        class="flex flex-col items-start mb-3 p-5 space-y-3 shadow rounded-lg overflow-hidden bg-card"
-                                        [routerLink]="['card', card.id]"
-                                        cdkDrag>
-                                        <!-- Cover image -->
-                                        <ng-container *ngIf="card.coverImage">
-                                            <div class="-mx-5 -mt-5 mb-2">
-                                                <img
-                                                    class="w-full object-cover"
-                                                    [src]="card.coverImage">
+                                    <!-- Card -->
+                                    <ng-container *ngFor="let lead of status.leads; trackBy: trackByFn">
+                                        <a class="flex flex-col items-start mb-3 p-2 space-y-3 shadow rounded-lg overflow-hidden bg-card" cdkDrag>
+                                            <div class="flex w-full gap-1 content-center">
+                                                <!-- Image -->
+                                                <!-- <ng-container *ngIf="lead.avatar">
+                                                    <img class="object-cover w-6 min-h-6" [src]="lead.avatar" alt="Contact avatar" />
+                                                </ng-container>
+                                                <ng-container *ngIf="!lead.avatar">
+                                                    <div
+                                                        class="flex items-center justify-center w-6 h-6 rounded-full uppercase font-semibold bg-gray-200 text-gray-600">
+                                                        {{lead.firstName.charAt(0)}}
+                                                    </div>
+                                                </ng-container> -->
+                                                <!-- Title -->
+                                                <div class="text-base font-medium leading-5 self-center hover:underline hover:pointer" (click)="previewLead(lead.leadId)">{{lead.firstName + " " +
+                                                    lead.lastName}}</div>
                                             </div>
-                                        </ng-container>
-                                        <!-- Title -->
-                                        <div class="text-lg font-medium leading-5">{{card.title}}</div>
-                                        <!-- Labels -->
-                                        <ng-container *ngIf="card.labels.length">
-                                            <div>
-                                                <div class="flex flex-wrap -mx-1 -mb-2">
-                                                    <ng-container *ngFor="let label of card.labels; trackBy: trackByFn">
-                                                        <div class="mx-1 mb-2 py-0.5 px-3 rounded-full text-sm font-medium text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">
-                                                            {{label.title}}
-                                                        </div>
-                                                    </ng-container>
+                                            <div class="text-xs"><span class="font-medium">Score</span><span class="fornt-green ml-1">90</span></div>
+                                            <div class="flex flex-row justify-start w-full  border-t ">
+                                                <div class="flex flex-col justify-center">
+                                                    <button mat-icon-button class="h-5 w-5" (click)="addAction(lead.leadId, 'Note')">
+                                                        <mat-icon class="icon-size-3.5">edit_note</mat-icon>
+                                                    </button>
+                                                </div>
+                                                <div class="flex flex-col justify-center" >
+                                                    <button mat-icon-button class="h-5 w-5" (click)="addAction(lead.leadId, 'Task')">
+                                                        <mat-icon class="icon-size-3.5 ">add_task</mat-icon>
+                                                    </button>
+                                                </div>
+                                                <div class="flex flex-col justify-center">
+                                                    <button mat-icon-button class="h-6 w-6" (click)="addAction(lead.leadId, 'Email')">
+                                                        <mat-icon class="icon-size-3.5">email</mat-icon>
+                                                    </button>
+                                                </div>
+                                                <div class="flex flex-col justify-center" >
+                                                    <button mat-icon-button class="h-6 w-6" (click)="addAction(lead.leadId, 'Call')">
+                                                        <mat-icon class="icon-size-3.5">call</mat-icon>
+                                                    </button>
+                                                </div>
+                                                <div class="flex flex-col justify-center">
+                                                    <button mat-icon-button class="h-6 w-6" (click)="addAction(lead.leadId, 'Meeting')">
+                                                        <mat-icon class="icon-size-3.5">person</mat-icon>
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </ng-container>
-                                        <!-- Due date -->
-                                        <ng-container *ngIf="card.dueDate">
-                                            <div
-                                                class="flex items-center rounded text-sm font-medium leading-5 text-secondary"
-                                                [ngClass]="{'text-red-600': isOverdue(card.dueDate)}">
-                                                <mat-icon
-                                                    class="icon-size-4 text-current"
-                                                    [svgIcon]="'heroicons_outline:clock'"></mat-icon>
-                                                <div class="ml-1">
-                                                    {{card.dueDate | date: 'longDate'}}
-                                                </div>
-                                            </div>
-                                        </ng-container>
-                                    </a>
-                                </ng-container>
+                                        </a>
+                                    </ng-container>
+                                </div>
+
+
                             </div>
-
-                            <!-- New card -->
-                            <scrumboard-board-add-card
-                                (saved)="addCard(list, $event)"
-                                [buttonTitle]="list.cards.length ? 'Add another card' : 'Add a card'">
-                            </scrumboard-board-add-card>
                         </div>
-                    </div>
+                    </ng-container>
                 </ng-container>
+
             </div>
 
         </div>
 
     </div>
 
-</div>
-<div class="absolute invisible w-0 h-0 opacity-0 pointer-events-none">
-    <router-outlet></router-outlet>
 </div>
