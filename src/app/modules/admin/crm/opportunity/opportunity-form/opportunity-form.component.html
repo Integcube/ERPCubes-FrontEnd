@@ -18,44 +18,44 @@
                 <form [formGroup]="opportunityForm">
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>First Name</mat-label>
+                            <mat-label i18n>First Name</mat-label>
                             <input matInput [formControlName]="'firstName'" [spellcheck]="false" class="h-2!" #firstName>
-                            <mat-error *ngIf="opportunityForm.get('firstName').hasError('required')">
+                            <mat-error *ngIf="opportunityForm.get('firstName').hasError('required')" i18n>
                                 First Name is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Last Name</mat-label>
+                            <mat-label i18n>Last Name</mat-label>
                             <input matInput [formControlName]="'lastName'" [spellcheck]="false" #lastName>
-                            <mat-error *ngIf="opportunityForm.get('lastName').hasError('required')">
+                            <mat-error *ngIf="opportunityForm.get('lastName').hasError('required')" i18n>
                                 Last Name is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Email</mat-label>
+                            <mat-label i18n>Email</mat-label>
                             <input matInput [formControlName]="'email'" [spellcheck]="false" #email>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Phone</mat-label>
+                            <mat-label i18n>Phone</mat-label>
                             <input matInput [formControlName]="'mobile'" [spellcheck]="false" #mobile>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                            <mat-label>Opportunity Owner</mat-label>
+                            <mat-label i18n>Opportunity Owner</mat-label>
                             <mat-select [formControlName]="'opportunityOwner'" [spellcheck]="false" #opportunityOwner>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="users$|async as users">
                                     <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                                 </ng-container>
                             </mat-select>
-                            <mat-error *ngIf="opportunityForm.get('opportunityOwner').hasError('required')">
+                            <mat-error *ngIf="opportunityForm.get('opportunityOwner').hasError('required')" i18n>
                                 Opportunity Owner is required
                             </mat-error>
                         </mat-form-field>
@@ -63,7 +63,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Industry</mat-label>
+                            <mat-label i18n>Industry</mat-label>
                             <mat-select [formControlName]="'industryId'" [spellcheck]="false" #IndustryId>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="industries$|async as industries">
@@ -76,7 +76,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Status</mat-label>
+                            <mat-label i18n>Status</mat-label>
                             <mat-select [formControlName]="'statusId'" [spellcheck]="false" #opportunityStatus>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="opportunityStatus$|async as status">
@@ -89,7 +89,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Source</mat-label>
+                            <mat-label i18n>Source</mat-label>
                             <mat-select [formControlName]="'sourceId'" [spellcheck]="false" #opportunitysource>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="opportunitySource$|async as source">
@@ -102,7 +102,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Product</mat-label>
+                            <mat-label i18n>Product</mat-label>
                             <mat-select [formControlName]="'productId'" [spellcheck]="false" #product>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="product$|async as products">
@@ -115,53 +115,53 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense w-full">
-                            <mat-label>Work Number</mat-label>
+                            <mat-label i18n>Work Number</mat-label>
                             <input matInput [formControlName]="'work'" [spellcheck]="false" #work>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Address</mat-label>
+                            <mat-label i18n>Address</mat-label>
                             <input matInput [formControlName]="'address'" [spellcheck]="false" #billingCity>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>City</mat-label>
+                            <mat-label i18n>City</mat-label>
                             <input matInput [formControlName]="'city'" [spellcheck]="false" #billingCity>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>State</mat-label>
+                            <mat-label i18n>State</mat-label>
                             <input matInput [formControlName]="'state'" [spellcheck]="false" #billingState>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>ZIP</mat-label>
+                            <mat-label i18n>ZIP</mat-label>
                             <input matInput [formControlName]="'zip'" [spellcheck]="false" #billingZIP>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Country</mat-label>
+                            <mat-label i18n>Country</mat-label>
                             <input matInput [formControlName]="'country'" [spellcheck]="false" #billingCountry>
                         </mat-form-field>
                     </div>
                     <div
                         class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <ng-container *ngIf="selectedOpportunity.opportunityId !== -1">
-                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
                                 Delete
                             </button>
                         </ng-container>
                         <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
-                            [routerLink]="['../']">
+                            [routerLink]="['../']" i18n>
                             Cancel
                         </button>
                         <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="opportunityForm.invalid"
-                            [matTooltip]="'Save'" (click)="save()">
+                            [matTooltip]="'Save'" (click)="save()" i18n>
                             Save
                         </button>
                     </div>

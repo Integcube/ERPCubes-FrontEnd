@@ -57,6 +57,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { LeadImportComponent } from './lead-import/lead-import.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { LeadStatusComponent } from './lead-status/lead-status.component';
+import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { LeadStatusComponent } from './lead-status/lead-status.component';
     SearchBarComponent,
     LeadImportComponent,
     LeadStatusComponent,
+    LeadRestoreComponent,
      
   ],
   imports: [

@@ -69,6 +69,21 @@ export class LeadFilter {
     modifiedDate: Date = null;
     leadStatus: number[] = [];
 }
+
+export class DeletedLead {
+    leadId: number;
+    name: string = "";
+    status: number;
+    statusTitle: string = "";
+    leadOwner: string = "";
+    leadOwnerName: string = "";
+    productId: number;
+    productTitle: string = "";
+    campaignId: string = "";
+    campaignTitle: string = "";
+    createdDate: Date;
+}
+
 export interface Activity {
     activityId: string;
     userId: string;

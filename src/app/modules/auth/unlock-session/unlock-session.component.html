@@ -7,8 +7,8 @@
             </div>
 
             <!-- Title -->
-            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Unlock your session</div>
-            <div class="mt-0.5 font-medium">Your session is locked due to inactivity</div>
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight" i18n>Unlock your session</div>
+            <div class="mt-0.5 font-medium" i18n>Your session is locked due to inactivity</div>
 
             <!-- Alert -->
             <fuse-alert
@@ -29,7 +29,7 @@
 
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label i18n>Full name</mat-label>
                     <input
                         id="name"
                         matInput
@@ -38,7 +38,7 @@
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label i18n>Password</mat-label>
                     <input
                         id="password"
                         matInput
@@ -59,7 +59,7 @@
                             *ngIf="passwordField.type === 'text'"
                             [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
                     </button>
-                    <mat-error>
+                    <mat-error i18n>
                         Password is required
                     </mat-error>
                 </mat-form-field>
@@ -71,7 +71,7 @@
                     [color]="'primary'"
                     [disabled]="unlockSessionForm.disabled"
                     (click)="unlock()">
-                    <span *ngIf="!unlockSessionForm.disabled">
+                    <span *ngIf="!unlockSessionForm.disabled" i18n>
                         Unlock your session
                     </span>
                     <mat-progress-spinner
@@ -115,10 +115,10 @@
         <!-- Content -->
         <div class="z-10 relative w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
-                <div>Welcome to</div>
-                <div>our community</div>
+                <div i18n>Welcome to</div>
+                <div i18n>our community</div>
             </div>
-            <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400">
+            <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400" i18n>
                 Fuse helps developers to build organized and well coded dashboards full of beautiful and rich modules.
                 Join us and start building your application today.
             </div>
@@ -137,7 +137,7 @@
                         class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover"
                         src="assets/images/avatars/male-16.jpg">
                 </div>
-                <div class="ml-4 font-medium tracking-tight text-gray-400">More than 17k people joined us, it's your turn</div>
+                <div class="ml-4 font-medium tracking-tight text-gray-400" i18n>More than 17k people joined us, it's your turn</div>
             </div>
         </div>
     </div>

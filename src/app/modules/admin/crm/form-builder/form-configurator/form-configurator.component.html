@@ -1,6 +1,6 @@
 <div class="flex flex-col w-full overflow-hidden">
     <div class="flex w-full justify-between overflow-hidden h-15 px-6" style="background-color: #00bda5!important;">
-        <button mat-flat-button color="primary" class="self-center h-9" (click)="allFormFieldsSaved()">Save</button>
+        <button mat-flat-button color="primary" class="self-center h-9" (click)="allFormFieldsSaved()" i18n>Save</button>
         <span class="text-white font-bold text-2xl self-center"> {{selectedForm.name}} </span>
         <div class="flex items-center justify-end">
             <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']">
@@ -11,11 +11,11 @@
     <div class="flex flex-grow w-full overflow-hidden">
         <div class="flex flex-col w-1/2  md:w-1/3">
             <div class="flex justify-center items-center w-full h-15  bg-primary">
-                <span class="text-lg text-white font-bold my-2" *ngIf="!fieldSettingsView">Add Field</span>
+                <span class="text-lg text-white font-bold my-2" *ngIf="!fieldSettingsView" i18n>Add Field</span>
                 <div class="flex justify-center items-center w-full h-full gap-4" *ngIf="fieldSettingsView">
-                    <span class="text-lg text-white font-bold truncate">Edit Field</span>
+                    <span class="text-lg text-white font-bold truncate" i18n>Edit Field</span>
                     <button mat-icon-button class="rounded-full w-10 h-10" (click)="closrFieldSetting('add')">
-                        <mat-icon class="text-white">close</mat-icon>
+                        <mat-icon class="text-white" i18n>close</mat-icon>
                     </button>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                                     <button mat-icon-button color="warn"
                                         class="rounded-full w-10 h-10 mx-7 flex self-center items-center bg-accent-100 group-hover:flex"
                                         (click)="fieldRemoved(f)" *ngIf="!f.isFixed ">
-                                        <mat-icon class="text-white">remove</mat-icon>
+                                        <mat-icon class="text-white" i18n>remove</mat-icon>
                                     </button>
                                 </div>
                             </div>

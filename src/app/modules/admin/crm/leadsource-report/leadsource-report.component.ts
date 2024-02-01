@@ -55,9 +55,9 @@ export class LeadSourceReportComponent {
         this.leadSourceReportCount = report.length;
         this.dataSource = new MatTableDataSource(report);
         const currentDate = new Date();
-              this.startDate = new Date(currentDate.setDate(currentDate.getDate() - 30));
+              this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
         const endingDate = new Date();
-              this.endDate = new Date(endingDate.setDate(endingDate.getDate() + 30));    
+              this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);    
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
     });

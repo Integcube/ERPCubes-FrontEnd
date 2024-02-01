@@ -17,7 +17,7 @@
     <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="composeForm">
         <!-- Subject -->
         <mat-form-field>
-            <mat-label>Subject</mat-label>
+            <mat-label i18n>Subject</mat-label>
             <input
                 matInput
                 [formControlName]="'subject'">
@@ -31,20 +31,20 @@
             [modules]="quillModules">
         </quill-editor> -->
         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-            <mat-label>Response</mat-label>
+            <mat-label i18n>Response</mat-label>
             <textarea matInput [formControlName]="'response'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
             class="resize-none h-16">
             </textarea>
         </mat-form-field>
         <!-- Start Time -->
         <mat-form-field>
-            <mat-label>Start Time</mat-label>
+            <mat-label i18n>Start Time</mat-label>
             <input matInput type="time" [formControlName]="'startTime'">
         </mat-form-field>
 
         <!-- End Time -->
         <mat-form-field>
-            <mat-label>End Time</mat-label>
+            <mat-label i18n>End Time</mat-label>
             <input matInput type="time" [formControlName]="'endTime'">
         </mat-form-field>
        <!-- Actions -->

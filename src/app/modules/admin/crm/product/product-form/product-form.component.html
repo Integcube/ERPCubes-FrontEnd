@@ -2,7 +2,7 @@
     <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
         <!-- Close button -->
         <div class="flex justify-start items-center w-full">
-            <a class="text-2xl text-white font-bold">Create Product</a>
+            <a class="text-2xl text-white font-bold" i18n>Create Product</a>
         </div>
         <div class="flex items-center justify-end">
             <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
@@ -19,29 +19,29 @@
                     <div class="flex flex-col min-h-screen max-h-screen">
                         <div>
                             <mat-form-field class="fuse-mat-dense  w-full">
-                                <mat-label>Product Name</mat-label>
+                                <mat-label i18n>Product Name</mat-label>
                                 <input matInput [formControlName]="'productName'" [spellcheck]="false" class="h-2!"
                                     #productName>
                             </mat-form-field>
                         </div>
                         <div class="mt-2">
                             <mat-form-field class="fuse-mat-dense  w-full">
-                                <mat-label>Description</mat-label>
+                                <mat-label i18n>Description</mat-label>
                                 <input matInput [formControlName]="'description'" [spellcheck]="false" #description>
                             </mat-form-field>
                         </div>
                       
                         <div class="mt-2">
                             <mat-form-field class="fuse-mat-dense  w-full">
-                                <mat-label>Price</mat-label>
+                                <mat-label i18n>Price</mat-label>
                                 <input matInput [formControlName]="'price'" [spellcheck]="false" #price>
                             </mat-form-field>
                         </div>
                         <div class="mt-2">
                             <mat-form-field class="fuse-mat-dense  w-full">
-                                <mat-label>Project</mat-label>
+                                <mat-label i18n>Project</mat-label>
                                 <mat-select matInput [formControlName]="'projectId'" [spellcheck]="false" #productId>
-                                    <mat-option [value]="-1">--None--</mat-option>
+                                    <mat-option [value]="-1" i18n>--None--</mat-option>
                                     <ng-container *ngIf="projects$ | async as projects">
                                         <mat-option *ngFor="let p of projects" [value]="p.projectId">{{p.title}}</mat-option>
                                     </ng-container>
@@ -57,7 +57,7 @@
                             <button class="h-8" mat-stroked-button  [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()"
                                 [routerLink]="['../']">
                                 <mat-icon [svgIcon]="'heroicons_outline:trash'" class="icon-size-5"></mat-icon>
-                                <span class="ml-2 text-xs">Delete</span>
+                                <span class="ml-2 text-xs" i18n>Delete</span>
                             </button>
                         </ng-container>
 
@@ -66,13 +66,13 @@
                         <button class="ml-auto h-8" mat-stroked-button  [matTooltip]="'Cancel'" (click)="closeDrawer()"
                             [routerLink]="['../']">
                             <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-                            <span class="ml-2 text-xs">Cancel</span>
+                            <span class="ml-2 text-xs" i18n>Cancel</span>
                         </button>
                         <!-- Save -->
                         <button class="ml-2 primary-2 h-8" mat-flat-button  [disabled]="productName.invalid"
                             [matTooltip]="'Save'" type="submit">
                             <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
-                            <span class="ml-2 text-xs">Save</span>
+                            <span class="ml-2 text-xs" i18n>Save</span>
                         </button>
 
                     </div>

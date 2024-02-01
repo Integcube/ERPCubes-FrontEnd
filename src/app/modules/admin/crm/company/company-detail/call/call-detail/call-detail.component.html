@@ -2,7 +2,7 @@
 
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium">New Call</div>
+        <div class="text-lg font-medium" i18n>New Call</div>
         <button mat-icon-button (click)="discard()" [tabIndex]="-1">
             <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
@@ -12,7 +12,7 @@
     <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="composeForm">
         <!-- Subject -->
         <mat-form-field>
-            <mat-label>Subject</mat-label>
+            <mat-label i18n>Subject</mat-label>
             <input matInput [formControlName]="'subject'">
         </mat-form-field>
         <!-- Body -->
@@ -23,37 +23,37 @@
             [modules]="quillModules">
         </quill-editor> -->
         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-            <mat-label>Response</mat-label>
+            <mat-label i18n>Response</mat-label>
             <textarea matInput [formControlName]="'response'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
                 class="resize-none h-16">
             </textarea>
         </mat-form-field> 
         <!-- Start Time -->
         <mat-form-field>
-            <mat-label>Start Time</mat-label>
+            <mat-label i18n>Start Time</mat-label>
             <input matInput type="time" [formControlName]="'startTime'">
         </mat-form-field>
 
         <!-- End Time -->
         <mat-form-field>
-            <mat-label>End Time</mat-label>
+            <mat-label i18n>End Time</mat-label>
             <input matInput type="time" [formControlName]="'endTime'">
         </mat-form-field>
        <!-- Actions -->
        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-0">
         <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">        
         <!-- Delete -->
-        <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+        <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
             Delete
         </button>
 
         <!-- Cancel -->
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()">
+        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()" i18n>
             Cancel
         </button>
 
         <!-- Save -->
-        <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()">
+        <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()" i18n>
             Save
         </button>
        </div>

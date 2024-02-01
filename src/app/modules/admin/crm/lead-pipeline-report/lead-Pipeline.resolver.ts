@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { leadPipelineService } from "./lead-pipeline.service";
-import { LeadPipelineFilter } from "./lead-pipeline.type";
+import { LeadPipelineFilter } from "./lead-Pipeline.type";
 @Injectable({
   providedIn: 'root'
 })

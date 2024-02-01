@@ -6,19 +6,36 @@ import { Router } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
-import { LeadMonthly, LeadStatus } from './lead-monthly.type';
+import { LeadMonthly, LeadMonthlyFilter, LeadStatus } from './lead-monthly.type';
 import { LeadMonthlyService } from './lead-monthly.service';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
+
+class CustomDateAdapter extends NativeDateAdapter {
+  format(date: Date): string {
+    return `${date.getFullYear()}`;
+  }
+}
 
 @Component({
   selector: 'app-lead-monthly',
   templateUrl: './lead-monthly.component.html',
   styleUrls: ['./lead-monthly.component.scss'],
+  providers: [
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: { dateInput: 'YYYY' },
+        display: { dateInput: 'YYYY', monthYearLabel: 'YYYY', dateA11yLabel: 'LL', monthYearA11yLabel: 'YYYY' },
+      },
+    },
+  ],
 })
 export class LeadMonthlyComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('exporter') public exporter;
-originalData: LeadMonthly[];
   dataSource: MatTableDataSource<LeadMonthly>;
   displayedColumns: string[] = [
     'month',
@@ -34,11 +51,6 @@ originalData: LeadMonthly[];
   leadMonthlyCount: number = 0;
   leadStatusTypes: string[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  selectedYear: number; // Add this variable to store the selected year
-  years: number[] = Array.from({ length: new Date().getFullYear() - 1900 + 1 }, (_, index) => new Date().getFullYear() - index);
-  currentYear: number = new Date().getFullYear()
-
-  
 
   _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -48,27 +60,63 @@ originalData: LeadMonthly[];
     private _router: Router,
   ) {}
 
-
+  leadMonthlyFilter: LeadMonthlyFilter = new LeadMonthlyFilter({});
+  users$ = this._leadMonthlyService.users$
+  products$ = this._leadMonthlyService.products$
+  leadSources$ = this._leadMonthlyService.leadSources$;
   reports$ = this._leadMonthlyService.leadMonthly$;
   monthly$ = this.reports$.pipe(
     map((reports) => reports.map((r) => ({ ...r } as LeadMonthly))),
-    map((reports) => this.generateEmptyMonths(reports).concat(reports))
+    map((reports) => this.generateEmptyMonths(reports))
   );
+
+  ngOnInit(): void {
+    this.monthly$.subscribe((report) => {
+      const emptyMonths = this.generateEmptyMonths(report);
+      const sumOfTotalLeads = report.reduce((sum, monthly) => sum + (monthly.totalLeads || 0), 0);
+      this.leadMonthlyCount = sumOfTotalLeads;
+      this.dataSource = new MatTableDataSource(report? report : emptyMonths);
+      this._changeDetectorRef.markForCheck();
+    });
+    this.leadStatusTypes = this.getUniqueLeadStatusTypes();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+
+  getLeadMonthlyReports() {
+    debugger;
+    this._leadMonthlyService.getLeadMonthly(this.leadMonthlyFilter).subscribe();
+  }
+
+  public onYearSelected(date: Date, datepicker: MatDatepicker<Date>) {
+    const normalizedYear = date.getFullYear();
+    this.leadMonthlyFilter.year = new Date(normalizedYear, 12, 0);
+    datepicker.close();
+  }
 
   generateEmptyMonths(reports: LeadMonthly[]): LeadMonthly[] {
     const allMonths: LeadMonthly[] = [];
     const currentYear = new Date().getFullYear();
     const months = Array.from({ length: 12 }, (_, index) => index + 1);
   
-    for (let year = currentYear; year >= currentYear - 20; year--) {
+
       for (const month of months) {
-        const existingMonth = reports.find((r) => r.year === year && r.month === month);
+        debugger;
+        const existingMonth = reports.find((r) => r.month === month);
   
         if (existingMonth) {
           allMonths.push(existingMonth);
         } else {
           allMonths.push({
-            year: year,
+            year: currentYear,
             month: month,
             totalLeads: 0,
             leadStatusList: [], // Initialize leadStatusList as an empty array
@@ -81,50 +129,28 @@ originalData: LeadMonthly[];
           });
         }
       }
-    }
+
   
     return allMonths;
   }
 
-  ngOnInit(): void {
-    this.monthly$.subscribe((report) => {
-      const emptyMonths = this.generateEmptyMonths(report);
-      this.leadMonthlyCount = emptyMonths.length;
-      this.originalData = emptyMonths;
-      this.dataSource = new MatTableDataSource(emptyMonths);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this._changeDetectorRef.markForCheck();
+  getUniqueLeadStatusTypes(): string[] {
+    const leadStatusTypes = new Set<string>();
+    
+    // Iterate over the data to collect unique lead status types
+    this.dataSource.data.forEach((row) => {
+      row.leadStatusList.forEach((status) => {
+        leadStatusTypes.add(status.statusTitle);
+      });
     });
-    this.filterByYear(this.currentYear);
-    this.leadStatusTypes = this.getUniqueLeadStatusTypes();
-  }
-getUniqueLeadStatusTypes(): string[] {
-  const leadStatusTypes = new Set<string>();
-  
-  // Iterate over the data to collect unique lead status types
-  this.dataSource.data.forEach((row) => {
-    row.leadStatusList.forEach((status) => {
-      leadStatusTypes.add(status.statusTitle);
-    });
-  });
 
-  // Convert the Set to an array
-  return Array.from(leadStatusTypes);
-}
-getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
-  const status = leadStatusList.find((status) => status.statusTitle === statusTitle);
-  return status ? status.count : 0;
-}
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // Convert the Set to an array
+    return Array.from(leadStatusTypes);
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next(null);
-    this._unsubscribeAll.complete();
+  getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
+    const status = leadStatusList.find((status) => status.statusTitle === statusTitle);
+    return status ? status.count : 0;
   }
 
   toggleAllRows() {
@@ -150,36 +176,6 @@ getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
     }`;
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-  
-    // Check if the filter value is empty
-    if (filterValue === '') {
-      // If empty, reset the filter to show the original data
-      this.dataSource.data = this.originalData;
-  
-      // Reset paginator to the first page
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-    } else {
-      // If not empty, filter based on the first letter of month names
-      const filteredData = this.dataSource.data.filter(row =>
-        (this.monthToWord(row.month).toLowerCase().startsWith(filterValue) ||
-         this.monthToWord(row.month).toLowerCase().includes(' ' + filterValue))
-        && (!this.selectedYear || row.year === this.selectedYear)
-      );
-  
-      // Update the data source with the filtered data
-      this.dataSource.data = filteredData;
-  
-      // Reset paginator to the first page
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
-    }
-  }
-
   monthToWord(month: number): string {
     // Implement your logic to convert month number to word
     // For example, you can use an array of month names
@@ -187,22 +183,8 @@ getLeadStatusCount(leadStatusList: LeadStatus[], statusTitle: string): number {
     return monthNames[month - 1] || '';
   }
 
-  filterByYear(year: number) {
-    this.selectedYear = year;
-    this.dataSource.filter = this.selectedYear.toString();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
   trackByFn(index: number, item: any): any {
     return item.id || index;
-  }
-
-  addView() {}
-
-  onYearSelected(year: number) {
-    this.filterByYear(year);
   }
   
 }

@@ -25,7 +25,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
   industries$ = this._leadService.industries$;
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
-  product$ = this._leadService.product$;
+  products$ = this._leadService.products$;
   campaigns$ = this._leadService.campaigns$;
   leadForm: FormGroup;
   editMode: boolean = false;

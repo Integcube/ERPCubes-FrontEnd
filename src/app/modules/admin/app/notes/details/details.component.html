@@ -5,18 +5,18 @@
       <div>
         <input
           class="w-full p-2 text-2xl" style="background-color: #f1f1f1;"
-          [placeholder]="'Enter Note Title'"
+          placeholder="Enter Note Title"
           [(ngModel)]="note.noteTitle"
-          (input)="updateNoteDetails(note)">
+          (input)="updateNoteDetails(note)" i18n-placeholder>
       </div>
       <!-- Note -->
       <div class="flex w-full py-5" >
         <textarea style="background-color: #f1f1f1;"
           class="w-full"
-          [placeholder]="'Write Note'"
+          placeholder="Write Note"
           [(ngModel)]="note.content"
           (input)="updateNoteDetails(note)"
-          matTextareaAutosize></textarea>
+          matTextareaAutosize i18n-placeholder></textarea>
       </div>
       <!-- Tasks -->
       <ng-container *ngIf="note.tasks">
@@ -31,9 +31,9 @@
               <input  style="background-color: #f1f1f1;"
                 class="w-full px-1 py-0.5"
                 [ngClass]="{'text-secondary line-through': task.isCompleted}"
-                [placeholder]="'Click Enter to Save Task'"
+                placeholder="Click Enter to Save Task"
                 [(ngModel)]="task.task"
-                (input)="updateTaskOnNote(task)">
+                (input)="updateTaskOnNote(task)" i18n-placeholder>
               <mat-icon
                 class="hidden group-hover:flex ml-auto icon-size-5 cursor-pointer"
                 [svgIcon]="'heroicons_solid:x'"
@@ -46,9 +46,9 @@
               [svgIcon]="'heroicons_solid:plus'"></mat-icon>
             <input
               class="w-full ml-1.5 px-1 py-0.5"
-              [placeholder]="'Click Enter to Save Task '"
+              placeholder="Click Enter to Save Task"
               (keydown.enter)="addTaskToNote(newTaskInput.value); newTaskInput.value = ''"
-              #newTaskInput>
+              #newTaskInput  i18n-placeholder>
           </div>
         </div>
       </ng-container>
@@ -115,10 +115,10 @@
             </button>
           </div>
           <!-- Save -->
-          <button class="ml-auto h-8"  mat-flat-button [color]="'cancel'" [matTooltip]="'cancel'" (click)="closeDialog()">
+          <button class="ml-auto h-8"  mat-flat-button [color]="'cancel'" [matTooltip]="'cancel'" (click)="closeDialog()" i18n>
             Cancel
           </button>
-          <button class="ml-2 h-8 primary-2" mat-flat-button [color]="'primary'" [matTooltip]="'Save'" (click)="save()">
+          <button class="ml-2 h-8 primary-2" mat-flat-button [color]="'primary'" [matTooltip]="'Save'" (click)="save()" i18n>
             Save
           </button>
         </div>

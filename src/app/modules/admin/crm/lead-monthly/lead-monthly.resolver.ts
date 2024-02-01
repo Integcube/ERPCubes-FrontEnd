@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  Router, Resolve,
+  Resolve,
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
 import { LeadMonthlyService } from './lead-monthly.service';
+import { LeadMonthlyFilter } from './lead-monthly.type';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,8 @@ export class LeadMonthlyResolver implements Resolve<any> {
   constructor(
     private _leadMonthlyService: LeadMonthlyService){ }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    return this._leadMonthlyService.getLeadMonthly();
+    let filter = new LeadMonthlyFilter({});
+    return this._leadMonthlyService.getLeadMonthly(filter);
   }
 }
 @Injectable({
@@ -25,5 +26,28 @@ export class UserResolver implements Resolve<any>{
     private _leadMonthlyService: LeadMonthlyService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this._leadMonthlyService.getUsers();
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductResolver implements Resolve<any>{
+  constructor(
+    private _leadMonthlyService: LeadMonthlyService) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadMonthlyService.getProducts();
+  }
+}
+
+
+@Injectable({
+  providedIn:'root'
+})
+export class LeadSourceResolver implements Resolve<any>{
+  constructor(private _leadMonthlyService:LeadMonthlyService){
+  }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._leadMonthlyService.getLeadSource();
   }
 }

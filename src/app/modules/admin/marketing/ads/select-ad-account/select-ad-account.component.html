@@ -2,18 +2,18 @@
 <div class="flex flex-col justify-between min-h-1/2 h-1/2">
     <div class="flex flex-col flex-auto -m-6">
         <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-            <div class="text-lg font-medium">Select Facebook ad accounts</div>
+            <div class="text-lg font-medium" i18n>Select Facebook ad accounts</div>
             <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
                 <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
         </div>
     </div>
     <div class="flex flex-col justify-center flex-grow gap-4 my-12 w-full ">
-        <span class="text-accent2  text-lg font-semibold">Select the bellow account(s) you want to connect to ERPCubes</span>
+        <span class="text-accent2  text-lg font-semibold" i18n>Select the bellow account(s) you want to connect to ERPCubes</span>
         <div class="flex items-center flex-col mt-2 justify-center w-full">
             <table class="min-w-full overflow-y-auto" mat-table [dataSource]="adAccounts">
                 <ng-container matColumnDef="adaccountId">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef i18n>
                         Ad Account Id
                     </th>
                     <td mat-cell *matCellDef="let budget">
@@ -21,7 +21,7 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="adaccount">
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th mat-header-cell *matHeaderCellDef i18n>
                         Ad Account
                     </th>
                     <td mat-cell *matCellDef="let budget">
@@ -36,10 +36,10 @@
     </div>
     <div class="flex bg-default sticky bottom-0  -m-6">
         <div class="flex items-center  h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-default gap-2">
-            <button class="ml-auto" mat-flat-button [color]="'primary'" [matTooltip]="'Connect'" (click)="saveAdAccount()">
+            <button class="ml-auto" mat-flat-button [color]="'primary'" [matTooltip]="'Connect'" (click)="saveAdAccount()" i18n>
                 Connect
             </button>
-            <button class="ml-2" mat-stroked-button (click)="closeDialog()">
+            <button class="ml-2" mat-stroked-button (click)="closeDialog()" i18n>
                 Cancel
             </button>
             <!-- <span class="text-accent2 text-lg hover:underline cursor-pointer">Create ad account</span> -->

@@ -1,10 +1,8 @@
 import { leadPipelineService } from './lead-pipeline.service';
-import { LeadReport, LeadStatus, Product ,LeadSource,LeadPipelineFilter } from "./lead-pipeline.type";
+import { LeadReport, LeadStatus, Product ,LeadSource,LeadPipelineFilter } from "./lead-Pipeline.type";
 import { ChangeDetectorRef, Component, Inject, ViewChild, OnInit, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subject, combineLatest, map } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-lead-Pipeline',
   templateUrl: './lead-pipeline.component.html',
@@ -30,10 +28,6 @@ export class LeadPipelineComponent implements OnInit, OnDestroy {
   leadSources$ = this._leadPipelineService.leadSource$;
   leadReport$ = this._leadPipelineService.leadReport$;
 
-  getLeadReports(){
-    this._leadPipelineService.getLeadReport(this.leadPipelineFilter).subscribe();
-  }
-
   ngOnInit(): void {
     this.leadReport$.subscribe((report) => {
       //this.activityReportCount = report.length;
@@ -42,10 +36,14 @@ export class LeadPipelineComponent implements OnInit, OnDestroy {
       this._changeDetectorRef.markForCheck();
   });
   }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
 
+  getLeadReports(){
+    this._leadPipelineService.getLeadReport(this.leadPipelineFilter).subscribe();
+  }
 
 }

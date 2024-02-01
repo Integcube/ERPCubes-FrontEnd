@@ -24,7 +24,7 @@
                         </ng-container>
                         <div class="flex items-center">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
-                            <div class="ml-1.5 leading-6 truncate text-secondary">You have {{todayTasks?.length??'no'}}
+                            <div class="ml-1.5 leading-6 truncate text-secondary" i18n>You have {{todayTasks?.length??'no'}}
                                 new Tasks</div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     <div class="flex flex-col items-center ">
                         <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-blue-500">
                             {{leads?.length??0}}</div>
-                        <div class="text-md font-medium text-blue-600 dark:text-blue-500">Total Leads</div>
+                        <div class="text-md font-medium text-blue-600 dark:text-blue-500" i18n>Total Leads</div>
                     </div>
                 </div>
                 <!-- New -->
@@ -54,7 +54,7 @@
                     <div class="flex flex-col items-center mt-1">
                         <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-amber-500">
                             {{calculateLeadNumber(1)}}</div>
-                        <div class="text-md font-medium text-amber-600 dark:text-amber-500">Total New</div>
+                        <div class="text-md font-medium text-amber-600 dark:text-amber-500" i18n>Total New</div>
                     </div>
                 </div>
                 <!-- Qualified -->
@@ -65,7 +65,7 @@
                     <div class="flex flex-col items-center mt-2">
                         <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-purple-500">
                             {{calculateLeadNumber(4)}}</div>
-                        <div class="text-md font-medium text-purple-600 dark:text-purple-500">Total Qualified</div>
+                        <div class="text-md font-medium text-purple-600 dark:text-purple-500" i18n>Total Qualified</div>
                     </div>
                 </div>
                 <!-- Won -->
@@ -76,7 +76,7 @@
                     <div class="flex flex-col items-center mt-1">
                         <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-green-500">
                             {{calculateLeadNumber(6)}}</div>
-                        <div class="text-md font-medium text-green-600 dark:text-green-500">Total Won</div>
+                        <div class="text-md font-medium text-green-600 dark:text-green-500" i18n>Total Won</div>
                     </div>
                 </div>
                 <!-- Lost -->
@@ -87,7 +87,7 @@
                     <div class="flex flex-col items-center mt-1">
                         <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-red-500">
                             {{calculateLeadNumber(5)}}</div>
-                        <div class="text-md font-medium text-red-600 dark:text-red-500">Total Lost</div>
+                        <div class="text-md font-medium text-red-600 dark:text-red-500" i18n>Total Lost</div>
                     </div>
                 </div>
             </div>
@@ -112,7 +112,7 @@
         <div class="flex gap-4 px-4 mt-2" fuseScrollbar>
             <div class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                 <div class="flex justify-between">
-                    <div class="text-lg font-medium tracking-tight leading-6 truncate">Lead Monthly Progress</div>
+                    <div class="text-lg font-medium tracking-tight leading-6 truncate" i18n>Lead Monthly Progress</div>
                     <div class="ml-2">
                         <button class="h-6 min-h-6 px-2 rounded-full bg-hover" mat-button
                             [matMenuTriggerFor]="accountBalanceMenu">
@@ -128,7 +128,7 @@
                     <table class="min-w-240 " mat-table [dataSource]="filterLeads">
                         <!-- Name -->
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef sticky>
+                            <th mat-header-cell *matHeaderCellDef sticky i18n>
                                 Name
                             </th>
                             <td mat-cell *matCellDef="let budget">
@@ -152,7 +152,7 @@
                         </ng-container>
                         <!-- Email -->
                         <ng-container matColumnDef="email">
-                            <th mat-header-cell *matHeaderCellDef>
+                            <th mat-header-cell *matHeaderCellDef i18n>
                                 Email
                             </th>
                             <td mat-cell *matCellDef="let budget">
@@ -161,7 +161,7 @@
                         </ng-container>
                         <!-- Phone -->
                         <ng-container matColumnDef="phone">
-                            <th mat-header-cell *matHeaderCellDef>
+                            <th mat-header-cell *matHeaderCellDef i18n>
                                 Phone
                             </th>
                             <td mat-cell *matCellDef="let budget">
@@ -170,7 +170,7 @@
                         </ng-container>
                         <!-- Status -->
                         <ng-container matColumnDef="leadStatus">
-                            <th mat-header-cell *matHeaderCellDef>
+                            <th mat-header-cell *matHeaderCellDef i18n>
                                 Status
                             </th>
                             <td mat-cell *matCellDef="let budget">
@@ -179,7 +179,7 @@
                         </ng-container>
                         <!-- createdDate -->
                         <ng-container matColumnDef="createdDate">
-                            <th mat-header-cell *matHeaderCellDef>
+                            <th mat-header-cell *matHeaderCellDef i18n>
                                 Date
                             </th>
                             <td mat-cell *matCellDef="let budget">

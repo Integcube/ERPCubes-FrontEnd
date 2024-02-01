@@ -2,7 +2,7 @@
 
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium">New Message</div>
+        <div class="text-lg font-medium" i18n>New Message</div>
         <button mat-icon-button (click)="close()" [tabIndex]="-1">
             <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
@@ -13,16 +13,16 @@
 
         <!-- To -->
         <mat-form-field>
-            <mat-label>To</mat-label>
+            <mat-label i18n>To</mat-label>
             <input matInput [formControlName]="'to'" readonly="true">
-            <mat-error *ngIf="composeForm.get('to').hasError('required')">
+            <mat-error *ngIf="composeForm.get('to').hasError('required')" i18n>
                 Sender email is required
             </mat-error>
         </mat-form-field>
 
         <!-- Subject -->
         <mat-form-field>
-            <mat-label>Subject</mat-label>
+            <mat-label i18n>Subject</mat-label>
             <input matInput [formControlName]="'subject'">
         </mat-form-field>
 
@@ -33,17 +33,17 @@
         <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
             <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
             <!-- Delete -->
-            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
                 Delete
             </button>
 
             <!-- Cancel -->
-            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()">
+            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()" i18n>
                 Cancel
             </button>
 
             <!-- Save -->
-            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()">
+            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()" i18n>
                 Save
             </button>
         </div>

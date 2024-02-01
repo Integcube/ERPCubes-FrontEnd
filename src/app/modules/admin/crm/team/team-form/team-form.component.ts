@@ -43,7 +43,7 @@ export class TeamFormComponent implements OnInit {
     this.teamForm = this._formBuilder.group({
       teamId: [, Validators.required],
       teamName: ["", Validators.required],
-      teamLeaderId: ["", Validators.required],
+      teamLeader: ["", Validators.required],
       teamLeaderName: [""],
       teamMembersId: [[]],
       teamMembersName: [[]],
@@ -134,7 +134,7 @@ export class TeamFormComponent implements OnInit {
   onTeamLeaderSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedTeamLeader: User = event.option.value as User;
     this.teamForm.get('teamLeaderName').patchValue(selectedTeamLeader.name);
-    this.teamForm.get('teamLeaderId').patchValue(selectedTeamLeader.id);
+    this.teamForm.get('teamLeader').patchValue(selectedTeamLeader.id);
     this._changeDetectorRef.markForCheck();
   }
 

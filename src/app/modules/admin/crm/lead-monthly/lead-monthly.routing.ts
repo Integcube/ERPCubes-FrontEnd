@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { LeadMonthlyResolver, UserResolver } from "./lead-monthly.resolver";
+import { LeadMonthlyResolver, LeadSourceResolver, ProductResolver, UserResolver } from "./lead-monthly.resolver";
 import { LeadMonthlyComponent } from "./lead-monthly.component";
 
 
@@ -9,7 +9,9 @@ export const leadMonthlyRoutes: Routes = [
         component:LeadMonthlyComponent,
         resolve: {
             users: UserResolver,
-            leadMonthly: LeadMonthlyResolver
+            leadMonthly: LeadMonthlyResolver,
+            products: ProductResolver,
+            leadSource: LeadSourceResolver,
         }
     },
 ];

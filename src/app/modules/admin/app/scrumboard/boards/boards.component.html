@@ -6,7 +6,7 @@
     <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
 
         <!-- Title -->
-        <div class="mt-4 md:mt-24 text-3xl md:text-6xl font-extrabold tracking-tight leading-7 sm:leading-10">
+        <div class="mt-4 md:mt-24 text-3xl md:text-6xl font-extrabold tracking-tight leading-7 sm:leading-10" i18n>
             Scrumboard Boards
         </div>
 
@@ -14,7 +14,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 md:mt-16">
             <ng-container *ngFor="let board of boards; trackBy: trackByFn">
                 <a
-                    class="flex flex-col items-start w-56 p-6 rounded-lg shadow bg-card rounded-lg hover:shadow-xl transition-shadow duration-150 ease-in-out"
+                    class="flex flex-col items-start w-56 p-6 rounded-lg shadow bg-card hover:shadow-xl transition-shadow duration-150 ease-in-out"
                     [routerLink]="[board.id]">
                     <div class="flex items-center justify-center p-4 rounded-full bg-primary-50 text-primary-700 dark:bg-primary dark:text-on-primary">
                         <mat-icon
@@ -46,7 +46,7 @@
                     </ng-container>
                     <!-- Last activity -->
                     <div class="flex items-center mt-4 text-md font-md">
-                        <div class="text-secondary">Edited:</div>
+                        <div class="text-secondary" i18n>Edited:</div>
                         <div class="ml-1">{{formatDateAsRelative(board.lastActivity)}}</div>
                     </div>
                 </a>

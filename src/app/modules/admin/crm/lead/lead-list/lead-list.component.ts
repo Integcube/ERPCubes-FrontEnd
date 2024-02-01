@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail.component';
 import { LeadImportComponent } from '../lead-import/lead-import.component';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { LeadRestoreComponent } from '../lead-restore/lead-restore.component';
 
 @Component({
   selector: 'app-lead-list',
@@ -545,7 +546,16 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     );
   }
-
+  openRestoreDialog() {
+    const restoreDialogRef = this.dialog.open(LeadRestoreComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%"
+      }
+    );
+  }
   // exportToExcel() {
   //   this.exporter.exportTable('xls', { fileName: 'Lead-list' });
   // }

@@ -5,7 +5,7 @@
                                   
                 <!-- Step 1: Upload File -->
                 <mat-step>
-                    <ng-template matStepLabel>Select</ng-template>
+                    <ng-template matStepLabel i18n>Select</ng-template>
                     <div class="flex flex-col flex-grow justify-center items-center mt-4">
                         <div class="flex flex-row flex-auto items-center gap-3">
                             <!-- Use inline styles to apply styles directly in HTML -->
@@ -15,13 +15,13 @@
                                 [class.hover:bg-gray-300]="hovered && !isSelected" [class.hover:scale-110]="hovered && !isSelected"
                                 [class.selected]="isSelected">
                                 <img class="w-16 mr-2" src="assets/test-imgs/excel.svg">
-                                <span class="font-semibold">MS Excel</span>
+                                <span class="font-semibold" i18n>MS Excel</span>
                             </div>
                             <div class="flex flex-row flex-auto p-5 items-center border" [ngStyle]="{'border-color': '#e0e0e0'}"
                                 (mouseenter)="hovered = true" (mouseleave)="hovered = false"
                                 [class.hover:bg-gray-300]="hovered && !isSelected" [class.hover:scale-110]="hovered && !isSelected">
                                 <img class="h-10 mr-2" src="assets/test-imgs/csv.svg">
-                                <span class="font-semibold">CSV File</span>
+                                <span class="font-semibold" i18n>CSV File</span>
                             </div>
                         </div>
                     </div>
@@ -29,19 +29,19 @@
                   
                 <!-- Step 2: Select Excel File -->
                 <mat-step>
-                    <ng-template matStepLabel>Upload</ng-template>
+                    <ng-template matStepLabel i18n>Upload</ng-template>
                     <div class="flex flex-col flex-auto mt-10 pt-12 bg-card shadow rounded-2xl mx-6 min-h-3/4 pb-10 overflow-hidden">
                         <div class="flex flex-col flex-grow justify-center items-center mt-4">
                             <div class="flex flex-row flex-auto p-3">
                                 <img class="w-13 mr-2" src="assets/test-imgs/excel.svg">
                             </div>
-                            <button class="h-7" mat-flat-button color="primary">
+                            <button class="h-7" mat-flat-button color="primary" i18n>
                                 <input (change)="selectFile($event)" type="file" class="absolute top-0 left-0 opacity-0 w-full h-full cursor-pointer" />
                                 Upload
                             </button>
-                            <p class="mt-4" *ngIf="!file">Please upload the Excel file containing your products.</p>
-                            <p class="text-green-400 mt-4" *ngIf="file && isFileValid">File uploaded successfully!</p>
-                            <p class="text-red-500 mt-4" *ngIf="!file && !fileUploaded">Upload a file first.</p>
+                            <p class="mt-4" *ngIf="!file" i18n>Please upload the Excel file containing your products.</p>
+                            <p class="text-green-400 mt-4" *ngIf="file && isFileValid" i18n>File uploaded successfully!</p>
+                            <p class="text-red-500 mt-4" *ngIf="!file && !fileUploaded" i18n>Upload a file first.</p>
                             <p class="text-red-500 mt-4" *ngIf="invalidFileMessage">{{ invalidFileMessage }}</p>
                         </div>
                     </div>
@@ -49,10 +49,10 @@
 
                 <!-- Step 2: Map Columns -->
                 <mat-step>
-                    <ng-template matStepLabel>Map Columns</ng-template>
+                    <ng-template matStepLabel i18n>Map Columns</ng-template>
                     <div class="flex flex-col flex-grow justify-center items-center mt-4 overflow-hidden">
                       <!-- <button mat-flat-button color="primary" (click)="openColumnMappingDialog()">Map Columns</button> -->
-                      <p class="mt-4 mb-4">Map the columns from your Excel file to corresponding fields</p>
+                      <p class="mt-4 mb-4" i18n>Map the columns from your Excel file to corresponding fields</p>
                       
                       <!-- Column Mapping Modal -->
                       <ng-container *ngIf="stepper.selectedIndex === 2 && showColumnMapping">
@@ -61,13 +61,13 @@
 
                                 <!-- Excel Column -->
                                 <ng-container matColumnDef="Excel Column">
-                                  <mat-header-cell *matHeaderCellDef > Excel Column </mat-header-cell>
+                                  <mat-header-cell *matHeaderCellDef i18n> Excel Column </mat-header-cell>
                                   <mat-cell *matCellDef="let element"> {{ element }} </mat-cell>
                                 </ng-container>
                               
                                 <!-- Map to -->
                                 <ng-container matColumnDef="Map to">
-                                  <mat-header-cell *matHeaderCellDef > Map to </mat-header-cell>
+                                  <mat-header-cell *matHeaderCellDef i18n> Map to </mat-header-cell>
                                   <mat-cell *matCellDef="let element">
                                     <mat-form-field>
                                         <mat-select [(ngModel)]="columnMappings[element]" (ngModelChange)="onProductColumnChange(element, $event)">
@@ -82,7 +82,7 @@
 
                                 <!-- Map Status -->
                                 <ng-container matColumnDef="Map Status">
-                                    <mat-header-cell *matHeaderCellDef> Map Status </mat-header-cell>
+                                    <mat-header-cell *matHeaderCellDef i18n> Map Status </mat-header-cell>
                                     <mat-cell *matCellDef="let element" class="w-1/2">                           
                                       <mat-icon class="w-1/2" [svgIcon]="getColumnIcon(element)" [style.color]="getColumnColor(element)"></mat-icon>
                                     </mat-cell>
@@ -112,18 +112,18 @@
         <div class="bg-default sticky bottom-0 -mx-6 z-999">
             <div class="flex px-10 my-4 justify-between">
                 <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex === 0" (click)="closeDialog()">
-                    <span class="ml-2 mr-1">Cancel</span>
+                    <span class="ml-2 mr-1" i18n>Cancel</span>
                 </button>
                 <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex > 0" (click)="moveStepperToPreviousStep()">
-                    <span class="ml-2 mr-1">Back</span>
+                    <span class="ml-2 mr-1" i18n>Back</span>
                 </button>
                 <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2"
                     [disabled]="stepper.selectedIndex === 1 && !file" (click)="moveStepperToNextStep()">
-                    <span class="ml-2 mr-1">Next</span>
+                    <span class="ml-2 mr-1" i18n>Next</span>
                 </button>
 
                 <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="applyColumnMapping()">
-                    <span class="ml-2 mr-1">Save</span>
+                    <span class="ml-2 mr-1" i18n>Save</span>
                 </button>
             </div>
         </div>
@@ -146,8 +146,8 @@
 <!-- <mat-step>
     <ng-template matStepLabel>Map Columns</ng-template>
     <div class="flex flex-col flex-grow justify-center items-center mt-4">
-        <button mat-flat-button color="primary" (click)="openColumnMappingDialog()">Map Columns</button>
-        <p class="mt-4">Map the columns from your Excel file to corresponding fields.</p> -->
+        <button mat-flat-button color="primary" (click)="openColumnMappingDialog()" i18n>Map Columns</button>
+        <p class="mt-4" i18n>Map the columns from your Excel file to corresponding fields.</p> -->
         
         <!-- Column Mapping Modal (similar to the Ads Account HTML) -->
         <!-- <ng-container *ngIf="stepper.selectedIndex === 2 && showColumnMapping">
@@ -156,13 +156,13 @@
                 <!-- <mat-list> -->
                     <!-- <div class="flex mb-4">
                         <div class="w-full bg-gray-300 h-8">
-                            <mat-label class="text-base  font-bold">Excel Column</mat-label>
+                            <mat-label class="text-base  font-bold" i18n>Excel Column</mat-label>
                         </div>
                       </div> -->
                     <!-- <mat-list-item class="flex items-center" *ngFor="let column of excelColumns">
                         <div mat-line class="w-1/2">{{ column }}</div>
                         <mat-form-field class="w-96">
-                            <mat-label>Map to</mat-label>
+                            <mat-label i18n>Map to</mat-label>
                             <mat-select [(ngModel)]="columnMappings[column]" class="w-full">
                                 <mat-option *ngFor="let excelColumn of productColumns" [value]="excelColumn">
                                     {{ excelColumn }}
@@ -171,7 +171,7 @@
                         </mat-form-field>
                     </mat-list-item>
                 </mat-list>
-                <button mat-flat-button color="primary" class="mt-4" (click)="applyColumnMapping()">Save Mapping</button>
+                <button mat-flat-button color="primary" class="mt-4" (click)="applyColumnMapping()" i18n>Save Mapping</button>
             </div>
         </ng-container>
     </div>

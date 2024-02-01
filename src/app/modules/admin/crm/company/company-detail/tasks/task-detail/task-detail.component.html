@@ -2,7 +2,7 @@
     <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 overflow-y-auto">
         <!-- Header -->
         <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-            <div class="text-lg font-medium">Task</div>
+            <div class="text-lg font-medium" i18n>Task</div>
             <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
                 <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </button>
@@ -13,34 +13,34 @@
             [formGroup]="taskForm">
             <!-- Title -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                <mat-label>Title</mat-label>
+                <mat-label i18n>Title</mat-label>
                 <textarea matInput [formControlName]="'taskTitle'" [rows]="1" cdkTextareaAutosize
                     [cdkAutosizeMinRows]="1">
                     </textarea>
             </mat-form-field>
             <!-- Description -->
             <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                <mat-label>Description</mat-label>
+                <mat-label i18n>Description</mat-label>
                 <textarea matInput [formControlName]="'description'" [rows]="1" cdkTextareaAutosize
                     [cdkAutosizeMinRows]="1" class="resize-none h-16">
                     </textarea>
             </mat-form-field>
                 <mat-form-field class="w-full">
-                    <mat-label>Task Owner</mat-label>
+                    <mat-label i18n>Task Owner</mat-label>
                     <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #taskOwner>
                         <mat-option value="-1"></mat-option>
                         <ng-container *ngIf="users$|async as users">
                             <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                         </ng-container>
                     </mat-select>
-                    <mat-error *ngIf="taskForm.get('taskOwner').hasError('required')">
+                    <mat-error *ngIf="taskForm.get('taskOwner').hasError('required')" i18n>
                         Task Owner is required
                     </mat-error>
                 </mat-form-field>
 
             <!-- Due date -->
             <div>
-                <div class="font-semibold">Due Date</div>
+                <div class="font-semibold" i18n>Due Date</div>
                 <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                     [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !taskForm.value.dueDate,
                                         'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': taskForm.value.dueDate && !isOverdue(taskForm.value.dueDate),
@@ -49,17 +49,17 @@
                     <span class="ml-2 text-md font-medium">
                         <ng-container *ngIf="taskForm.value.dueDate">{{taskForm.value.dueDate |
                             date:'longDate'}}</ng-container>
-                        <ng-container *ngIf="!taskForm.value.dueDate">Not set</ng-container>
+                        <ng-container *ngIf="!taskForm.value.dueDate" i18n>Not set</ng-container>
                     </span>
                     <mat-form-field
                         class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
                         <input matInput [formControlName]="'dueDate'" [matDatepicker]="dueDatePicker">
                         <mat-datepicker #dueDatePicker>
                             <mat-datepicker-actions>
-                                <button mat-button (click)="resetDueDate()" matDatepickerCancel>
+                                <button mat-button (click)="resetDueDate()" matDatepickerCancel i18n>
                                     Clear
                                 </button>
-                                <button mat-flat-button [color]="'primary'" matDatepickerApply>
+                                <button mat-flat-button [color]="'primary'" matDatepickerApply i18n>
                                     Select
                                 </button>
                             </mat-datepicker-actions>
@@ -69,7 +69,7 @@
             </div>
             <!-- Labels -->
             <div class="w-full">
-                <div class="font-semibold">Tags</div>
+                <div class="font-semibold" i18n>Tags</div>
                 <div class="mt-1 rounded-md border border-gray-300 shadow-sm overflow-hidden">
                     <!-- Header -->
                     <div class="flex items-center my-2 mx-3">
@@ -99,18 +99,18 @@
         <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent" style="z-index: 9999!important;"> 
         <!-- Delete -->
         <ng-container class="ml-4" *ngIf="task.taskId !== -1">
-            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
                 Delete
             </button>
         </ng-container>
 
         <!-- Cancel -->
-        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDialog()" i18n>
             Cancel
         </button>
         <!-- Save -->
         <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="taskForm.invalid" [matTooltip]="'Save'"
-            (click)="save()">
+            (click)="save()" i18n>
             Save
         </button>
 

@@ -1,7 +1,7 @@
 <div class="flex flex-col w-full">
     <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
         <div class="flex justify-start items-center w-full">
-            <a class="text-2xl text-white font-bold">Team Information</a>
+            <a class="text-2xl text-white font-bold" i18n>Team Information</a>
         </div>
         <div class="flex items-center justify-end">
             <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']" (click)="closeDrawer()">
@@ -16,13 +16,13 @@
                     <div class="h-screen">
                         <div>
                             <mat-form-field class="fuse-mat-dense  w-full">
-                                <mat-label>Team Name</mat-label>
+                                <mat-label i18n>Team Name</mat-label>
                                 <input matInput [formControlName]="'teamName'" [spellcheck]="false" #teamName>
                             </mat-form-field>
                         </div>
                         <div>
                             <mat-form-field class="fuse-mat-dense w-full">
-                                <mat-label>Team Leader</mat-label>
+                                <mat-label i18n>Team Leader</mat-label>
                                 <input matInput [formControlName]="'teamLeaderName'" [matAutocomplete]="auto"
                                     [spellcheck]="false">
                                 <mat-autocomplete #auto="matAutocomplete"
@@ -34,7 +34,7 @@
                             </mat-form-field>
                         </div>
                         <div>
-                            <div class="font-medium mb-1.5">Team Members</div>
+                            <div class="font-medium mb-1.5" i18n>Team Members</div>
                             <div class="flex flex-wrap items-center -m-1.5">
                                 <ng-container *ngFor="let selectedTeamMember of teamForm.value.teamMembersName">
                                     <div
@@ -48,12 +48,12 @@
                                     <ng-container *ngIf="selectedTeam.teamMembersId">
                                         <mat-icon class="icon-size-5"
                                             [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Edit</span>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap" i18n>Edit</span>
                                     </ng-container>
                                     <ng-container *ngIf="!selectedTeam.teamMembersId">
                                         <mat-icon class="icon-size-5"
                                             [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                                        <span class="ml-1.5 text-md font-medium whitespace-nowrap" i18n>Add</span>
                                     </ng-container>
                                     <ng-template #teamMembersPanel>
                                         <div class="w-60 rounded border shadow-md bg-card">
@@ -96,17 +96,17 @@
                     <div class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12  pr-1 pl-1 sm:pr-7 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <ng-container *ngIf="selectedTeam.teamId !== -1">
                             <button mat-button [color]="'warn'" [matTooltip]="'Delete'"
-                                (click)="deleteTeamCall(); $event.preventDefault()">
+                                (click)="deleteTeamCall(); $event.preventDefault()" i18n>
                                 Delete
                             </button>
                         </ng-container>
                         <button class="ml-auto" mat-button [matTooltip]="'Cancel'"
-                            (click)="closeDrawer(); $event.preventDefault()" [routerLink]="['../']">
+                            (click)="closeDrawer(); $event.preventDefault()" [routerLink]="['../']" i18n>
                             Cancel
                         </button>
                         <div class="m-4 ">
                             <button class="ml-2 primary-2" mat-flat-button  [disabled]="!teamForm.valid" (click)="saveTeam()"
-                                [matTooltip]="'Save'" type="submit">
+                                [matTooltip]="'Save'" type="submit" i18n>
                                 Save
                             </button>
                         </div>

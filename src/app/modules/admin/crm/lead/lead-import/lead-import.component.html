@@ -145,7 +145,7 @@
 <!-- <mat-step>
     <ng-template matStepLabel>Map Columns</ng-template>
     <div class="flex flex-col flex-grow justify-center items-center mt-4">
-        <button mat-flat-button color="primary" (click)="openColumnMappingDialog()">Map Columns</button>
+        <button mat-flat-button color="primary" (click)="openColumnMappingDialog()" i18n>Map Columns</button>
         <p class="mt-4">Map the columns from your Excel file to corresponding fields.</p> -->
         
         <!-- Column Mapping Modal (similar to the Ads Account HTML) -->
@@ -155,13 +155,13 @@
                 <!-- <mat-list> -->
                     <!-- <div class="flex mb-4">
                         <div class="w-full bg-gray-300 h-8">
-                            <mat-label class="text-base  font-bold">Excel Column</mat-label>
+                            <mat-label class="text-base  font-bold" i18n>Excel Column</mat-label>
                         </div>
                       </div> -->
                     <!-- <mat-list-item class="flex items-center" *ngFor="let column of excelColumns">
                         <div mat-line class="w-1/2">{{ column }}</div>
                         <mat-form-field class="w-96">
-                            <mat-label>Map to</mat-label>
+                            <mat-label i18n>Map to</mat-label>
                             <mat-select [(ngModel)]="columnMappings[column]" class="w-full">
                                 <mat-option *ngFor="let excelColumn of leadColumns" [value]="excelColumn">
                                     {{ excelColumn }}

@@ -68,7 +68,7 @@ export class TeamService {
       userId: this.user.id,
       teamId: team.teamId,
       teamName: team.teamName,
-      teamLeader: team.teamLeaderId,
+      teamLeader: team.teamLeader,
       teamMembersId: team.teamMembersId.join(','),
     }
     return this._httpClient.post<Team[]>(this.saveTeamURL, data).pipe(

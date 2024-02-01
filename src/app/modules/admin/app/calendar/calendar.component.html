@@ -3,11 +3,11 @@
   <div class="flex flex-col p-6 sm:p-6">
     <button class="h-9 primary-2" mat-flat-button  (click)="addEvent()">
       <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
-      <span class="ml-1 mr-1">Add Event</span>
+      <span class="ml-1 mr-1" i18n>Add Event</span>
   </button>
   <div class="flex flex-col">
     <div class="my-4">
-      <span class="text-primary text-lg font-semibold">My Calendar</span>
+      <span class="text-primary text-lg font-semibold" i18n>My Calendar</span>
     </div>
     <ng-container *ngIf="eventTypes$|async as types">
       <ng-container *ngFor="let type of types">

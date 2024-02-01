@@ -89,7 +89,7 @@
                                         </ng-container>
                                     </div>
                                     <div class="min-w-0 ml-4 w-full">
-                                        <div class="font-medium leading-5 truncate">Client#{{ticket.customerId}}</div>
+                                        <div class="font-medium leading-5 truncate" i18n>Client#{{ticket.customerId}}</div>
                                         <div
                                             class="leading-5 truncate text-secondary "
                                             [class.text-accent2]="!ticket.latestConversation.readStatus"
@@ -122,7 +122,7 @@
                     <mat-icon
                         class="icon-size-24"
                         [svgIcon]="'heroicons_outline:chat'"></mat-icon>
-                    <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Tickets</div>
+                    <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary" i18n>No Tickets</div>
                 </div>
             </ng-template>
 

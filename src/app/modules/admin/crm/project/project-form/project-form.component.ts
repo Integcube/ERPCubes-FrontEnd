@@ -35,7 +35,7 @@ export class ProjectFormComponent implements OnInit {
     this.projectForm = this._formBuilder.group({
       projectId: [, Validators.required],
       title: ['', Validators.required],
-      companyId: [0, Validators.required],
+      companyId: [-1, Validators.required],
       code: [, Validators.required],
       budget: ['', Validators.required],
       description: ['']

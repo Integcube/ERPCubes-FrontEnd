@@ -2,7 +2,7 @@
     <div class="flex flex-row h-10 sm:h-18 px-8 sm:px-12 bg-accent-100" style="background-color: #00bda5!important;">
         <!-- Close button -->
         <div class="flex justify-start items-center w-full">
-            <a class="text-2xl text-white font-bold">Edit User</a>
+            <a class="text-2xl text-white font-bold" i18n>Edit User</a>
         </div>
         <div class="flex items-center justify-end">
             <a
@@ -26,13 +26,13 @@
                         <div class="w-1/2">
                    
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>First Name</mat-label>
+                            <mat-label i18n>First Name</mat-label>
                             <input matInput [formControlName]="'firstName'"  placeholder="Enter First Name..." [spellcheck]="false" class="h-2!" #firstName>
                         </mat-form-field>
                     </div>
                     <div class="w-1/2">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Last Name</mat-label>
+                            <mat-label i18n>Last Name</mat-label>
                             <input matInput [formControlName]="'lastName'" placeholder="Enter Last Name..." [spellcheck]="false" #lastName>
                         </mat-form-field>
                     </div>
@@ -40,14 +40,14 @@
                 <div class="">
                     <div class="mt-4 ">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>User Name</mat-label>
+                            <mat-label i18n>User Name</mat-label>
                             <input matInput [formControlName]="'userName'"  placeholder="Enter User Name E.g Abcd" [spellcheck]="false" #userName>
                         </mat-form-field>
                     </div>
 
                     <div class="mt-4 ">
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Email</mat-label>
+                            <mat-label i18n>Email</mat-label>
                             <input matInput [formControlName]="'email'" placeholder="Enter Email.." [spellcheck]="false" #email>
                         </mat-form-field>
                     </div>
@@ -56,13 +56,13 @@
                     <div class="mt-4 ">
                  
                         <mat-form-field class="fuse-mat-no-subscript w-full">
-                            <mat-label>Phone Number</mat-label>
+                            <mat-label i18n>Phone Number</mat-label>
                             <input matInput [formControlName]="'phoneNumber'" placeholder="Enter Phone No." [spellcheck]="false" #phoneNumber>
                         </mat-form-field>
                     </div>
                     <div class="mt-4 ">
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label i18n>Password</mat-label>
                     <input
                         id="password"
                         matInput
@@ -100,7 +100,7 @@
         <ng-container *ngIf="selectedUser.id !== -1">
             <button class="h-8" mat-stroked-button  [color]="'warn'" type="button" [matTooltip]="'Deactivate User'" (click)="delete()">
                 <mat-icon [svgIcon]="'heroicons_outline:user-remove'" class="icon-size-5"></mat-icon>
-             <span class="ml-2 text-xs">Deactivate User</span>
+             <span class="ml-2 text-xs" i18n>Deactivate User</span>
              
             </button>
         </ng-container>
@@ -109,7 +109,7 @@
         <button class="ml-auto h-8"  mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDrawer()" [routerLink]="['../']">
             
             <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-            <span class="ml-2 text-xs">Cancel</span>
+            <span class="ml-2 text-xs" i18n>Cancel</span>
         </button>
         <!-- Save -->
         <button class="ml-2 primary-2 h-8" mat-flat-button  [disabled]="userForm.invalid"
@@ -117,7 +117,7 @@
             type="submit">
            
             <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
-            <span class="ml-2 text-xs">Save</span>
+            <span class="ml-2 text-xs" i18n>Save</span>
             
         </button>
 

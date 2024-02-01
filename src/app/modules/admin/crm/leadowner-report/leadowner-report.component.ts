@@ -24,8 +24,9 @@ export class LeadOwnerReportComponent {
   leadOwner:string
   statusId:number
   sourceId:number
-  startDate: Date
-  endDate: Date
+  //currentDate = new Date();
+  startDate = new Date(new Date().getFullYear(),new Date().getMonth(),1);
+  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,0); 
   dataSource: MatTableDataSource<LeadOwnerReport>;
   displayedColumns: string[] = [ 'leadOwnerName', 'totalLeads', 'totalRevenue', 'averageDealSize', 'winLeads', 'winRates', 'convertedleads', 'conversionRate'];
   selection = new SelectionModel<LeadOwnerReport>(true, []);
@@ -62,11 +63,7 @@ export class LeadOwnerReportComponent {
      this.leadOwner="-1";
      this.leadOwnerReportWithUser$.subscribe((report) => {
         this.leadOwnerReportCount = report.length;
-        this.dataSource = new MatTableDataSource(report);
-        const currentDate = new Date();
-            this.startDate = new Date(currentDate.setDate(currentDate.getDate() - 30));
-        const endingDate = new Date();
-            this.endDate = new Date(endingDate.setDate(endingDate.getDate() + 30));    
+        this.dataSource = new MatTableDataSource(report);    
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
         

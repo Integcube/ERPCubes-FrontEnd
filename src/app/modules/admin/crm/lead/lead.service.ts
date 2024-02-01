@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -13,8 +13,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class LeadService {
   private readonly getLeadListURL = `${environment.url}/Lead/all`
+  private readonly getDeletedLeadsURL = `${environment.url}/Lead/allDeleted`
   private readonly saveLeadURL = `${environment.url}/Lead/save`
   private readonly deleteLeadURL = `${environment.url}/Lead/delete`
+  private readonly restoreLeadURL = `${environment.url}/Lead/restore`
   private readonly getIndustriesURL = `${environment.url}/Industry/all`
   private readonly getUsersUrl = `${environment.url}/Users/all`
   private readonly getLeadSourceUrl = `${environment.url}/Lead/allSource`
@@ -56,10 +58,11 @@ export class LeadService {
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
   private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
+  private _deletedLeads: BehaviorSubject<DeletedLead[] | null> = new BehaviorSubject(null);
   private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
   private _leadSource: BehaviorSubject<LeadSource[] | null> = new BehaviorSubject(null);
   private _leadStatus: BehaviorSubject<LeadStatus[] | null> = new BehaviorSubject(null);
-  private _product: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
+  private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
   private _notes: BehaviorSubject<Note[] | null> = new BehaviorSubject(null);
   private _note: BehaviorSubject<Note | null> = new BehaviorSubject(null);
   private _tags: BehaviorSubject<Tag[] | null> = new BehaviorSubject(null);
@@ -170,9 +173,9 @@ export class LeadService {
       catchError(err => this.handleError(err))
     )
 
-    get statusWiseLeads$():Observable<StatusWiseLeads[]>{
-      return this._statusWiseLeads.asObservable();
-    }
+  get statusWiseLeads$():Observable<StatusWiseLeads[]>{
+    return this._statusWiseLeads.asObservable();
+  }
 
   get activities$(): Observable<any> {
     return this._activities.asObservable();
@@ -222,6 +225,10 @@ export class LeadService {
     return this._leads.asObservable();
   }
 
+  get deletedLeads$(): Observable<DeletedLead[]> {
+    return this._deletedLeads.asObservable();
+  }
+
   get leadSource$(): Observable<LeadSource[]> {
     return this._leadSource.asObservable();
   }
@@ -238,8 +245,8 @@ export class LeadService {
     return this._users.asObservable();
   }
 
-  get product$(): Observable<Product[]> {
-    return this._product.asObservable();
+  get products$(): Observable<Product[]> {
+    return this._products.asObservable();
   }
 
   get eventTypes$(): Observable<EventType[]> {
@@ -342,32 +349,13 @@ export class LeadService {
     }
     return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
       tap((leads) => {
-        this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
+        this._leads.next(leads);
       }),
       catchError(err => this.handleError(err))
     );
-    // return this.filter$.pipe(
-    //   switchMap((filter: LeadFilter) => {
-    //     const data = {
-    //       id: this.user.id,
-    //       tenantId: this.user.tenantId,
-    //       leadOwner: filter?.leadOwner.join(', ') || "",
-    //       createdDate: filter?.createdDate || null,
-    //       modifiedDate: filter?.modifiedDate || null,
-    //       leadStatus: filter?.leadStatus.join(', ') || "",
-    //     };
-    //     return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
-    //       tap((leads) => {
-    //         this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
-    //       }),
-    //       catchError(error => {
-    //         alert(error);
-    //         return EMPTY;
-    //       })
-    //     );
-    //   })
-    // );
   }
+
+
 
   getIndustries(): Observable<Industry[]> {
     let data = {
@@ -431,7 +419,7 @@ export class LeadService {
     }
     return this._httpClient.post<Product[]>(this.getProductUrl, data).pipe(
       tap((product) => {
-        this._product.next(product);
+        this._products.next(product);
       }),
       catchError(err => this.handleError(err))
 
@@ -820,7 +808,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
   saveEmail(email: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -838,7 +825,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
   saveMeeting(meeting: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -859,7 +845,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
   saveLead(lead: Lead) {
     let data = {
       id: this.user.id,
@@ -875,7 +860,32 @@ export class LeadService {
 
     );
   }
-
+  getDeletedLeads(): Observable<DeletedLead[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<DeletedLead[]>(this.getDeletedLeadsURL, data).pipe(
+      tap((leads) => {
+        this._deletedLeads.next(leads);
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+  restoreLeads(deletedLeads: DeletedLead[]) {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      deletedLeads,
+    }
+    debugger;
+    return this._httpClient.post<Lead[]>(this.restoreLeadURL, data).pipe(
+      tap((lead) => {
+        this.getLeads().subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
   saveCall(call: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,

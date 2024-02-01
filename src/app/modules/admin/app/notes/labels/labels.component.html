@@ -1,7 +1,7 @@
 <div class="flex flex-col flex-auto w-80 min-w-80 p-2 md:p-4">
     <!-- Header -->
     <div class="flex items-center justify-between">
-        <div class="text-2xl font-semibold">Edit labels</div>
+        <div class="text-2xl font-semibold" i18n>Edit labels</div>
         <button
             matDialogClose
             mat-icon-button>
@@ -15,9 +15,9 @@
         <input
             name="new-label"
             [autocomplete]="'off'"
-            [placeholder]="'Create new label'"
+            placeholder="Create new label"
             matInput
-            #newLabelInput>
+            #newLabelInput i18n-placeholder>
         <button
             [class.invisible]="newLabelInput.value.trim() === ''"
             mat-icon-button

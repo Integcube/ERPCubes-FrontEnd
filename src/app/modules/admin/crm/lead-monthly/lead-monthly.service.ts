@@ -5,16 +5,20 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
-import { LeadMonthly } from './lead-monthly.type';
+import { LeadMonthly, LeadMonthlyFilter, LeadSource, Product,  } from './lead-monthly.type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LeadMonthlyService {
   user: User;
-  private readonly getUsersUrl = `${environment.url}/Users/all`
-  private readonly getLeadMonthlyUrl = `${environment.url}/Lead/leadByMonth`
+  private readonly getUsersURL = `${environment.url}/Users/all`
+  private readonly getProductsURL = `${environment.url}/Product/all`
+  private readonly getLeadSourceURL = `${environment.url}/Lead/allSource`
+  private readonly getLeadMonthlyURL = `${environment.url}/Lead/leadByMonth`
   private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null)
+  private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null)
+  private _leadSources: BehaviorSubject<LeadSource[] | null> = new BehaviorSubject(null)
   private _leadMonthly: BehaviorSubject<LeadMonthly[] | null> = new BehaviorSubject(null)
   constructor(
     private _userService: UserService,
@@ -28,29 +32,62 @@ export class LeadMonthlyService {
   get leadMonthly$(): Observable<LeadMonthly[]> {
     return this._leadMonthly.asObservable()
   }
-  getLeadMonthly(): Observable<LeadMonthly[]> {
+  get users$(): Observable<User[]> {
+    return this._users.asObservable()
+  }
+  get products$(): Observable<Product[]> {
+    return this._products.asObservable()
+  }
+  get leadSources$(): Observable<LeadSource[]> {
+    return this._leadSources.asObservable()
+  }
+  getLeadMonthly(filter: LeadMonthlyFilter): Observable<LeadMonthly[]> {
     let data = {
-        tenantId: this.user.tenantId,
-        id: this.user.id,
-    };
-
-    return this._httpClient.post<LeadMonthly[]>(this.getLeadMonthlyUrl, data).pipe(
-        tap((leadMonthly) => {
-            this._leadMonthly.next(leadMonthly);
+      ...filter,
+      tenantId : this.user.tenantId,
+      year : filter.year.getFullYear().toString()
+    }
+    return this._httpClient.post<LeadMonthly[]>(this.getLeadMonthlyURL, data).pipe(
+        tap((report) => {
+            this._leadMonthly.next(report);
         }),
         catchError((err) => this.handleError(err))
     );
-}
+  }
   getUsers(): Observable<User[]> {
     let data = {
         id: this.user.id,
         tenantId: this.user.tenantId,
     }
-    return this._httpClient.post<User[]>(this.getUsersUrl, data).pipe(
+    return this._httpClient.post<User[]>(this.getUsersURL, data).pipe(
         tap((users) => {
             this._users.next(users);
         }),
         catchError(err=>this.handleError(err))
+    );
+  }
+  getProducts(): Observable<Product[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Product[]>(this.getProductsURL, data).pipe(
+      tap((product) => {
+        this._products.next(product);
+      }),
+      catchError(err=>this.handleError(err))
+    );
+  }
+  getLeadSource(): Observable<LeadSource[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<LeadSource[]>(this.getLeadSourceURL, data).pipe(
+      tap((leadSource) => {
+        this._leadSources.next(leadSource);
+      }),
+      catchError(err => this.handleError(err))
     );
   }
   private handleError(err: HttpErrorResponse): Observable<never> {

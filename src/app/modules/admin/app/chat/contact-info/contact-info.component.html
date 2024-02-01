@@ -5,7 +5,7 @@
         <button mat-icon-button (click)="drawer.close()">
             <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
-        <div class="ml-2 text-lg font-medium">Ticket info</div>
+        <div class="ml-2 text-lg font-medium" i18n>Ticket info</div>
     </div>
 
     <div class="overflow-y-auto flex flex-col flex-grow px-4 ">
@@ -15,20 +15,20 @@
                 <div class="relative flex flex-0 items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
                         <mat-icon svgIcon="heroicons_outline:user-circle" class="icon-size-5"></mat-icon>
                 </div>
-                <div class="ml-2 text-lg font-medium leading-5 truncate">Client#{{ticket.customerId}}</div>
+                <div class="ml-2 text-lg font-medium leading-5 truncate" i18n>Client#{{ticket.customerId}}</div>
             </div>
             <div class="flex flex-col gap-3">
                 <div class="flex text-base gap-2 w-full">
-                    <span class="font-medium text-gray-600 w-20">Platform:</span>
+                    <span class="font-medium text-gray-600 w-20" i18n>Platform:</span>
                     <span>{{ticket.socialMediaPlatform}}</span>
                 </div>
                 <div class="flex text-base gap-2 w-full">
-                    <span class="font-medium text-gray-600 w-20">Local time:</span>
+                    <span class="font-medium text-gray-600 w-20" i18n>Local time:</span>
                     <span>{{ticket.timestamp|date}}</span>
                 </div>
                 <div class="flex text-base gap-2 w-full">
-                    <span class="font-medium text-gray-600 w-20">Language:</span>
-                    <span>English (United States)</span>
+                    <span class="font-medium text-gray-600 w-20" i18n>Language:</span>
+                    <span i18n>English (United States)</span>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <form class="flex flex-col" #FormName = "ngForm">
                 <mat-form-field
                 class="fuse-mat-dense">
-                <mat-label>Assignee</mat-label>
+                <mat-label i18n>Assignee</mat-label>
                 <mat-select [ngModel]="ticket.assigneeId" name="assignee">
                     <mat-option [value]="-1">-</mat-option>
                     <mat-option *ngFor="let user of users$|async" [value]="user.id">{{user.name}}</mat-option>
@@ -44,7 +44,7 @@
             </mat-form-field>
             <mat-form-field
             class="fuse-mat-dense">
-            <mat-label>Type</mat-label>
+            <mat-label i18n>Type</mat-label>
             <mat-select [ngModel]="ticket.type" name="type">
                 <mat-option [value]=-1>-</mat-option>
                 <mat-option *ngFor="let type of types$|async" [value]="type.ticketTypeId">{{type.typeName}}</mat-option>
@@ -52,7 +52,7 @@
         </mat-form-field>
         <mat-form-field
         class="fuse-mat-dense">
-        <mat-label>Priority</mat-label>
+        <mat-label i18n>Priority</mat-label>
         <mat-select [ngModel]="ticket.priority" name="priority">
             <mat-option [value]=-1>-</mat-option>
             <mat-option *ngFor="let priority of priorities$|async" [value]="priority.ticketPriorityId">{{priority.priorityName}}</mat-option>
@@ -77,7 +77,7 @@
         class="sticky bottom-0 flex flex-0 items-center h-18 px-4 border-t justify-end  bg-gray-50 dark:bg-transparent">
         <div class="flex gap-1 ">
             <button class="ml-4 h-10 border-r-0  rounded-r-none" mat-flat-button [color]="'primary'">
-                <span class="ml-2 mr-1 text-sm" (click)="submit(1)">Submit as Open</span>
+                <span class="ml-2 mr-1 text-sm" (click)="submit(1)" i18n>Submit as Open</span>
             </button>
             <button class="h-10 min-w-4 w-4 rounded-l-none p-0 m-0 px-4" mat-flat-button [color]="'primary'" matRipple
                 [matMenuTriggerFor]="dropdownMenu">

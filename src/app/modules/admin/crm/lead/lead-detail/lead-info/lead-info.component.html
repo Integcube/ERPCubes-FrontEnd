@@ -189,7 +189,7 @@
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
                                     [formControlName]="'industryId'" #industryId>
-                                    <ng-container *ngIf="product$|async as products">
+                                    <ng-container *ngIf="products$|async as products">
                                         <option [value]="-1"></option>
                                         <option *ngFor="let product of products"  [value]="product.productId">{{product.productName}}</option>
                                         </ng-container>

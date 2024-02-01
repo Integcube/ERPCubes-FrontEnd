@@ -8,7 +8,7 @@
                                     'text-yellow-300': taskForm.value.status === 3,
                                                 ' text-green-300 ': taskForm.value.status === 1,
                                                 ' text-blue-300'  : taskForm.value.status === 2}"></mat-icon>
-                    <span class="ml-2 font-semibold">MARK AS COMPLETE</span>
+                    <span class="ml-2 font-semibold" i18n>MARK AS COMPLETE</span>
 
                 </button>
                 <div class="flex items-center">
@@ -29,21 +29,21 @@
             <!-- Task Owner -->
             <div>
                 <mat-form-field class="fuse-mat-textarea w-full">
-                    <mat-label>Task owner</mat-label>
+                    <mat-label i18n>Task owner</mat-label>
                     <mat-select [formControlName]="'taskOwner'" [spellcheck]="false" #taskOwner>
                         <mat-option value="-1"></mat-option>
                         <ng-container *ngIf="users$|async as users">
                             <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                         </ng-container>
                     </mat-select>
-                    <mat-error *ngIf="taskForm.get('taskOwner').hasError('required')">
+                    <mat-error *ngIf="taskForm.get('taskOwner').hasError('required')" i18n>
                         Task Owner is required
                     </mat-error>
                 </mat-form-field>
             </div>
             <!-- Tags -->
             <div>
-                <div class="font-medium mb-1.5">Tags</div>
+                <div class="font-medium mb-1.5" i18n>Tags</div>
                 <div class="flex flex-wrap items-center -m-1.5">
                     <!-- Tags -->
                     <ng-container *ngIf="tags.length">
@@ -60,7 +60,7 @@
                         (click)="openTagsPanel()" #tagsPanelOrigin>
                         <ng-container *ngIf="tags.length">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
-                            <span class="ml-1.5 text-md font-medium whitespace-nowrap">Add</span>
+                            <span class="ml-1.5 text-md font-medium whitespace-nowrap" i18n>Add</span>
                         </ng-container>
                         <!-- <ng-container *ngIf="!tags.length">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
@@ -126,7 +126,7 @@
                                         (click)="createTag(newTagInput.value); newTagInput.value = ''" matRipple>
                                         <mat-icon class="mr-2 icon-size-5"
                                             [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                                        <div class="break-all">Create "<b>{{newTagInput.value}}</b>"</div>
+                                        <div class="break-all" i18n>Create "<b>{{newTagInput.value}}</b>"</div>
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
             <div class="flex flex-wrap items-center mt-8">
                 <!-- Priority -->
                 <div>
-                    <div class="font-medium">Priority</div>
+                    <div class="font-medium" i18n>Priority</div>
                     <div class="flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                         [ngClass]="{'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': taskForm.value.priority === 3,
                                 'text-gray-800 bg-gray-200 dark:text-gray-100 dark:bg-gray-500': taskForm.value.priority === 2,
@@ -151,13 +151,13 @@
                         <ng-container *ngIf="taskForm.value.priority === 3">
                             <mat-icon class="icon-size-5 text-current"
                                 [svgIcon]="'heroicons_solid:arrow-narrow-down'"></mat-icon>
-                            <span class="ml-2 mr-1 text-md font-medium">Low</span>
+                            <span class="ml-2 mr-1 text-md font-medium" i18n>Low</span>
                         </ng-container>
 
                         <!-- Normal -->
                         <ng-container *ngIf="taskForm.value.priority === 2">
                             <mat-icon class="icon-size-4 text-current" [svgIcon]="'heroicons_solid:minus'"></mat-icon>
-                            <span class="ml-2 mr-1 text-md font-medium">Normal</span>
+                            <span class="ml-2 mr-1 text-md font-medium" i18n>Normal</span>
                         </ng-container>
 
                         <!-- High -->
@@ -172,7 +172,7 @@
                         <button [ngClass]="{'bg-hover': taskForm.value.priority === 3}" mat-menu-item
                             (click)="setPriority(3)">
                             <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">Low</span>
+                                <span class="font-medium" i18n>Low</span>
                                 <mat-icon class="mr-0 icon-size-4 text-green-600 dark:text-green-500"
                                     [svgIcon]="'heroicons_solid:arrow-narrow-down'"></mat-icon>
                             </span>
@@ -181,7 +181,7 @@
                         <button [ngClass]="{'bg-hover': taskForm.value.priority === 2}" mat-menu-item
                             (click)="setPriority(2)">
                             <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">Normal</span>
+                                <span class="font-medium" i18n>Normal</span>
                                 <mat-icon class="mr-0 icon-size-4 text-gray-600 dark:text-gray-500"
                                     [svgIcon]="'heroicons_solid:minus'"></mat-icon>
                             </span>
@@ -191,7 +191,7 @@
                         <button [ngClass]="{'bg-hover': taskForm.value.priority === 1} " mat-menu-item
                             (click)="setPriority(1)">
                             <span class="inline-flex items-center justify-between w-full min-w-30 leading-5">
-                                <span class="font-medium">High</span>
+                                <span class="font-medium" i18n>High</span>
                                 <mat-icon class="mr-0 icon-size-4 text-red-600 dark:text-red-500"
                                     [svgIcon]="'heroicons_solid:arrow-narrow-up'"></mat-icon>
                             </span>
@@ -200,7 +200,7 @@
                 </div>
                 <!-- Due date -->
                 <div class="ml-6">
-                    <div class="font-medium text-base">Due Date</div>
+                    <div class="font-medium text-base" i18n>Due Date</div>
                     <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer"
                         [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !taskForm.value.dueDate,
                                 'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': taskForm.value.dueDate && !isOverdue(),
@@ -209,7 +209,7 @@
                         <span class="ml-2 text-md font-medium">
                             <ng-container *ngIf="taskForm.value.dueDate">{{taskForm.value.dueDate |
                                 date:'longDate'}}</ng-container>
-                            <ng-container *ngIf="!taskForm.value.dueDate">Not set</ng-container>
+                            <ng-container *ngIf="!taskForm.value.dueDate" i18n>Not set</ng-container>
                         </span>
                         <mat-form-field
                             class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
@@ -228,14 +228,14 @@
                 </div>
                 <!-- Time -->
                 <mat-form-field class="mx-4 mt-4">
-                    <mat-label class="font-medium text-base">Task Time</mat-label>
+                    <mat-label class="font-medium text-base" i18n>Task Time</mat-label>
                     <input matInput type="time" [formControlName]="'dueTime'">
                 </mat-form-field>
             </div>
             <!-- Notes -->
             <div class="mt-8">
                 <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full">
-                    <mat-label>Description</mat-label>
+                    <mat-label i18n>Description</mat-label>
                     <textarea matInput [formControlName]="'description'" [spellcheck]="false"
                         matTextareaAutosize></textarea>
                 </mat-form-field>
@@ -246,17 +246,17 @@
             <ng-container *ngIf="task.taskId !== -1">
                 <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteTask()">
                     <mat-icon [svgIcon]="'heroicons_outline:trash'" class="icon-size-5"></mat-icon>
-                    <span class="ml-2 text-xs">Delete</span>
+                    <span class="ml-2 text-xs" i18n>Delete</span>
                 </button>
             </ng-container>
             <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDrawer()" [routerLink]="['../']">
                 <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-                <span class="ml-2 text-xs">Cancel</span>
+                <span class="ml-2 text-xs" i18n>Cancel</span>
             </button>
             <button class="ml-2 primary-2 h-8" mat-flat-button  [disabled]="taskForm.invalid" [matTooltip]="'Save'"
                 (click)="save()">
                 <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
-                <span class="ml-2 text-xs">Save</span>
+                <span class="ml-2 text-xs" i18n>Save</span>
             </button>
         </div>
     </form>

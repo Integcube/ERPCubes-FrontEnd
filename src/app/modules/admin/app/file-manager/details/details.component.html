@@ -41,27 +41,27 @@
     </div>
 
     <!-- Information -->
-    <div class="text-lg font-medium mt-8">Information</div>
+    <div class="text-lg font-medium mt-8" i18n>Information</div>
     <div class="flex flex-col mt-4 border-t border-b divide-y font-medium">
         <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Created By</div>
+            <div class="text-secondary" i18n>Created By</div>
             <div>{{item.createdBy}}</div>
         </div>
         <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Created At</div>
+            <div class="text-secondary" i18n>Created At</div>
             <div>{{item.createdAt}}</div>
         </div>
         <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Modified At</div>
+            <div class="text-secondary" i18n>Modified At</div>
             <div>{{item.modifiedAt}}</div>
         </div>
         <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Size</div>
+            <div class="text-secondary" i18n>Size</div>
             <div>{{item.size}}</div>
         </div>
         <ng-container *ngIf="item.contents">
             <div class="flex items-center justify-between py-3">
-                <div class="text-secondary">Contents</div>
+                <div class="text-secondary" i18n>Contents</div>
                 <div>{{item.contents}}</div>
             </div>
         </ng-container>
@@ -69,7 +69,7 @@
 
     <!-- Description -->
     <div class="flex items-center justify-between mt-8">
-        <div class="text-lg font-medium">Description</div>
+        <div class="text-lg font-medium" i18n>Description</div>
         <button mat-icon-button>
             <mat-icon
                 class="icon-size-5"
@@ -82,7 +82,7 @@
                 <div>{{item.description}}</div>
             </ng-container>
             <ng-container *ngIf="!item.description">
-                <div class="italic text-secondary">Click here to add a description</div>
+                <div class="italic text-secondary" i18n>Click here to add a description</div>
             </ng-container>
         </div>
     </div>
@@ -92,12 +92,12 @@
         <button
             class="flex-auto"
             mat-flat-button
-            [color]="'primary'">
+            [color]="'primary'" i18n>
             Download
         </button>
         <button
             class="flex-auto"
-            mat-stroked-button>
+            mat-stroked-button i18n>
             Delete
         </button>
     </div>

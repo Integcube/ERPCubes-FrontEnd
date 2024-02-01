@@ -3,10 +3,10 @@
         <!-- Close button -->
         <div class="flex justify-start items-center w-full">
             <ng-container *ngIf="company$|async as company">
-                <a class="text-2xl text-white font-bold truncate">{{company.name}}</a>
+                <a class="text-2xl text-white font-bold truncate" i18n>{{company.name}}</a>
             </ng-container>
             <ng-container *ngIf="!company$|async as company">
-                <a class="text-2xl text-white font-bold">Create Company</a>
+                <a class="text-2xl text-white font-bold" i18n>Create Company</a>
             </ng-container>
         </div>
         <div class="flex items-center justify-end">
@@ -23,32 +23,32 @@
                 <form [formGroup]="companyForm">
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Company Name</mat-label>
+                            <mat-label i18n>Company Name</mat-label>
                             <input matInput [formControlName]="'name'" [spellcheck]="false" class="h-2!" #name>
-                            <mat-error *ngIf="companyForm.get('name').hasError('required')">
+                            <mat-error *ngIf="companyForm.get('name').hasError('required')" i18n>
                                 Company Name is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Company Domain</mat-label>
+                            <mat-label i18n>Company Domain</mat-label>
                             <input matInput [formControlName]="'website'" [spellcheck]="false" #website>
-                            <mat-error *ngIf="companyForm.get('website').hasError('required')">
+                            <mat-error *ngIf="companyForm.get('website').hasError('required')" i18n>
                                 Website is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense flex-auto w-full">
-                            <mat-label>Company Owner</mat-label>
+                            <mat-label i18n>Company Owner</mat-label>
                             <mat-select [formControlName]="'companyOwner'" [spellcheck]="false" #salesOwner>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="users$|async as users">
                                     <mat-option *ngFor="let user of users" [value]="user.id">{{user.name}}</mat-option>
                                 </ng-container>
                             </mat-select>
-                            <mat-error *ngIf="companyForm.get('companyOwner').hasError('required')">
+                            <mat-error *ngIf="companyForm.get('companyOwner').hasError('required')" i18n>
                                 Company Owner is required
                             </mat-error>
                         </mat-form-field>
@@ -56,7 +56,7 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  flex-auto w-full">
-                            <mat-label>Industry</mat-label>
+                            <mat-label i18n>Industry</mat-label>
                             <mat-select [formControlName]="'industryId'" [spellcheck]="false" #companyIndustryId>
                                 <mat-option value="-1"></mat-option>
                                 <ng-container *ngIf="industries$|async as industries">
@@ -69,37 +69,37 @@
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Phone</mat-label>
+                            <mat-label i18n>Phone</mat-label>
                             <input matInput [formControlName]="'mobile'" [spellcheck]="false" #mobile>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense w-full">
-                            <mat-label>Work</mat-label>
+                            <mat-label i18n>Work</mat-label>
                             <input matInput [formControlName]="'work'" [spellcheck]="false" #work>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>City</mat-label>
+                            <mat-label i18n>City</mat-label>
                             <input matInput [formControlName]="'billingCity'" [spellcheck]="false" #billingCity>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>State</mat-label>
+                            <mat-label i18n>State</mat-label>
                             <input matInput [formControlName]="'billingState'" [spellcheck]="false" #billingState>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>ZIP</mat-label>
+                            <mat-label i18n>ZIP</mat-label>
                             <input matInput [formControlName]="'billingZip'" [spellcheck]="false" #billingZIP>
                         </mat-form-field>
                     </div>
                     <div>
                         <mat-form-field class="fuse-mat-dense  w-full">
-                            <mat-label>Country</mat-label>
+                            <mat-label i18n>Country</mat-label>
                             <input matInput [formControlName]="'billingCountry'" [spellcheck]="false" #billingCountry>
                         </mat-form-field>
                     </div>
@@ -108,19 +108,19 @@
                         class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <!-- Delete -->
                         <ng-container *ngIf="selectedCompany.companyId !== -1">
-                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
                                 Delete
                             </button>
                         </ng-container>
 
                         <!-- Cancel -->
                         <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
-                            [routerLink]="['../']">
+                            [routerLink]="['../']" i18n>
                             Cancel
                         </button>
                         <!-- Save -->
                         <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="companyForm.invalid"
-                            [matTooltip]="'Save'" (click)="save()">
+                            [matTooltip]="'Save'" (click)="save()" i18n>
                             Save
                         </button>
 

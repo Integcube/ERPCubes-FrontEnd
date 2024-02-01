@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-4 sm:py-6 sm:px-6 border-b bg-card dark:bg-transparent">
         <div class="flex-1 min-w-0">
             <!-- Title -->
-                <h2 class="text-3xl font-bold tracking-tight leading-none">
+                <h2 class="text-3xl font-bold tracking-tight leading-none" i18n>
                     Admin Settings
                 </h2>
         </div>
@@ -16,15 +16,15 @@
                     <!-- title & description -->
                     <div class="flex flex-col items-start mt-2 gap-4">
                         <img class="h-8 w-8" src="assets/images/logo/facebook.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight">Messenger</div>
+                        <div class="text-2xl font-semibold leading-tight" i18n>Messenger</div>
                     </div>
-                
+                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
                     <div class="w-12 h-1 my-2 border-t-2"></div>
                     <!-- URL -->
                     <div class="w-full max-w-3xl">
                         <form [formGroup]="messengerForm">
                             <div>
-                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
                                     <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
+                                <label for="tenantId" class="text-sm font-semibold" i18n>Verify Token:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -52,15 +52,15 @@
                     <!-- title & description -->
                     <div class="flex flex-col items-start mt-2 gap-4">
                         <img class="h-8 w-8" src="assets/images/logo/whatsapp.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight">WhatsApp</div>
+                        <div class="text-2xl font-semibold leading-tight" i18n>WhatsApp</div>
                     </div>
-              
+                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
                     <div class="w-12 h-1 my-2 border-t-2"></div>
                     <!-- URL -->
                     <div class="w-full max-w-3xl">
                         <form [formGroup]="whatsappForm">
                             <div>
-                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
                                     <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -88,14 +88,15 @@
                     <!-- title & description -->
                     <div class="flex flex-col items-start mt-2 gap-4">
                         <img class="h-8 w-8" src="assets/images/logo/instagram.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight">Instagram</div>
+                        <div class="text-2xl font-semibold leading-tight" i18n>Instagram</div>
                     </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
                     <div class="w-12 h-1 my-2 border-t-2"></div>
                     <!-- URL -->
                     <div class="w-full max-w-3xl">
                         <form [formGroup]="instagramForm">
                             <div>
-                                <label for="url" class="text-sm font-semibold">URL:</label>
+                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
                                     <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -103,7 +104,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
+                                <label for="tenantId" class="text-sm font-semibold" i18n>Verify Token:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"

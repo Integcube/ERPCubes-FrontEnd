@@ -95,31 +95,31 @@
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">About This Company</span>
+                        <span class="text-base font-semibold" i18n>About This Company</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col">
                     <div class="w-full max-w-3xl">
                         <form [formGroup]="opportunityForm">
                             <div>
-                                <label for="name" class="text-sm font-semibold ml-3">First Name:</label>
+                                <label for="name" class="text-sm font-semibold ml-3" i18n>First Name:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                         [formControlName]="'firstName'" #name>
                                 </div>
-                                <mat-error *ngIf="opportunityForm.get('firstName').hasError('required')" class="text-sm">
+                                <mat-error *ngIf="opportunityForm.get('firstName').hasError('required')" class="text-sm" i18n>
                                     First Name is required
                                 </mat-error>
                             </div>
                             <div>
-                                <label for="lastName" class="text-sm font-semibold ml-3">Last Name:</label>
+                                <label for="lastName" class="text-sm font-semibold ml-3" i18n>Last Name:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                         [formControlName]="'lastName'" #lastName>
                                 </div>
-                                <mat-error *ngIf="opportunityForm.get('lastName').hasError('required')" class="text-sm">
+                                <mat-error *ngIf="opportunityForm.get('lastName').hasError('required')" class="text-sm" i18n>
                                     Last Name is required
                                 </mat-error>
                             </div>
@@ -130,12 +130,12 @@
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                         [formControlName]="'email'" #email>
                                 </div>
-                                <mat-error *ngIf="opportunityForm.get('email').hasError('required')" class="text-sm">
+                                <mat-error *ngIf="opportunityForm.get('email').hasError('required')" class="text-sm" i18n>
                                     Email is required
                                 </mat-error>
                             </div>
                            <div>
-                                <label for="opportunityOwner" class="text-sm font-semibold ml-3">Opportunity Owner:</label>
+                                <label for="opportunityOwner" class="text-sm font-semibold ml-3" i18n>Opportunity Owner:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
@@ -145,12 +145,12 @@
                                         </ng-container>
                                     </select>
                                 </div>
-                                <mat-error *ngIf="opportunityForm.get('email').hasError('required')" class="text-sm">
+                                <mat-error *ngIf="opportunityForm.get('email').hasError('required')" class="text-sm" i18n>
                                     Email is required
                                 </mat-error>
                              </div>
                            <div>
-                                <label for="industryId" class="text-sm font-semibold ml-3">Industry:</label>
+                                <label for="industryId" class="text-sm font-semibold ml-3" i18n>Industry:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="sourceId" class="text-sm font-semibold ml-3">Source:</label>
+                                <label for="sourceId" class="text-sm font-semibold ml-3" i18n>Source:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
@@ -176,7 +176,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="productId" class="text-sm font-semibold ml-3">Product:</label>
+                                <label for="productId" class="text-sm font-semibold ml-3" i18n>Product:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
@@ -189,7 +189,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="mobile" class="text-sm font-semibold ml-3">Mobile:</label>
+                                <label for="mobile" class="text-sm font-semibold ml-3" i18n>Mobile:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -197,7 +197,7 @@
                                 </div>
                              </div>
                             <div>
-                                <label for="work" class="text-sm font-semibold ml-3">Work:</label>
+                                <label for="work" class="text-sm font-semibold ml-3" i18n>Work:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -205,7 +205,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="city" class="text-sm font-semibold ml-3">City:</label>
+                                <label for="city" class="text-sm font-semibold ml-3" i18n>City:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -213,7 +213,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="state" class="text-sm font-semibold ml-3">State:</label>
+                                <label for="state" class="text-sm font-semibold ml-3" i18n>State:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -221,7 +221,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="zip" class="text-sm font-semibold ml-3">ZIP:</label>
+                                <label for="zip" class="text-sm font-semibold ml-3" i18n>ZIP:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -229,7 +229,7 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="country" class="text-sm font-semibold ml-3">Country:</label>
+                                <label for="country" class="text-sm font-semibold ml-3" i18n>Country:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
@@ -240,7 +240,7 @@
                             <div class="flex flex-row justify-end " *ngIf="!opportunityForm.invalid && opportunityForm.dirty">
                                 <!-- Save -->
                                 <button class="ml-2" mat-stroked-button class="text-xs" [matTooltip]="'Save'"
-                                    (click)="save()">
+                                    (click)="save()" i18n>
                                     Save
                                 </button>
 
@@ -253,18 +253,18 @@
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">Website Activity</span>
+                        <span class="text-base font-semibold" i18n>Website Activity</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <p class="text-primary">Track the customer requests associated with this record.</p>
+                <p class="text-primary" i18n>Track the customer requests associated with this record.</p>
             </mat-expansion-panel>
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">Company Subscription</span>
+                        <span class="text-base font-semibold" i18n>Company Subscription</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <p class="text-primary">Track the customer requests associated with this record.</p>
+                <p class="text-primary" i18n>Track the customer requests associated with this record.</p>
             </mat-expansion-panel>
         </mat-accordion>
     </div>

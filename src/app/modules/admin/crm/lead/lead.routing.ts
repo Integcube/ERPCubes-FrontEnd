@@ -50,6 +50,7 @@ export const leadRoutes: Routes = [
                     meeting: MeetingResolver,
                     CallReason:CallReasonCResolver
                 },
-            }]
+            }
+        ]
     },
 ];

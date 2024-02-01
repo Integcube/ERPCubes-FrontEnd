@@ -22,11 +22,11 @@
                     class="w-full text-lg font-medium leading-5"
                     [spellcheck]="'off'"
                     [formControlName]="'title'"
-                    [placeholder]="'Enter card title...'"
+                    placeholder="Enter card title..."
                     (keydown.enter)="save()"
                     cdkTextareaAutosize
                     #titleInput
-                    #titleAutosize="cdkTextareaAutosize">
+                    #titleAutosize="cdkTextareaAutosize"  i18n-placeholder>
                 </textarea>
             </div>
             <div class="flex items-center mt-2">
@@ -35,7 +35,7 @@
                     mat-flat-button
                     [color]="'primary'"
                     [type]="'button'"
-                    (click)="save()">
+                    (click)="save()" i18n>
                     Add card
                 </button>
                 <button

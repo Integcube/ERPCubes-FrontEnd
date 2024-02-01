@@ -12,7 +12,7 @@
         <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
             <a
                 mat-stroked-button
-                [routerLink]="['..']">
+                [routerLink]="['..']" i18n>
                 <mat-icon
                     class="icon-size-5 mr-2"
                     [svgIcon]="'heroicons_solid:view-boards'"></mat-icon>
@@ -20,7 +20,7 @@
             </a>
             <button
                 class="ml-3"
-                mat-stroked-button>
+                mat-stroked-button i18n>
                 <mat-icon
                     class="icon-size-5 mr-2"
                     [svgIcon]="'heroicons_solid:cog'"></mat-icon>
@@ -81,7 +81,7 @@
                                 <mat-menu #listMenu="matMenu">
                                     <button
                                         mat-menu-item
-                                        (click)="renameList(listTitleInput)">
+                                        (click)="renameList(listTitleInput)" i18n>
                                         <mat-icon
                                             class="icon-size-5"
                                             [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
@@ -89,7 +89,7 @@
                                     </button>
                                     <button
                                         mat-menu-item
-                                        (click)="deleteList(list.id)">
+                                        (click)="deleteList(list.id)" i18n>
                                         <mat-icon
                                             class="icon-size-5"
                                             [svgIcon]="'heroicons_solid:trash'"></mat-icon>
