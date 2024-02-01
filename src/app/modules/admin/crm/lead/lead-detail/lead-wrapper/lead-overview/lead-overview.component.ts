@@ -44,9 +44,6 @@ export class LeadOverviewComponent implements AfterViewInit {
       next: () => {
         this.goToStep(statusId);
       },
-      error: (err) => {
-        alert(`Daniyal: ${JSON.stringify(err)}`);
-      },
     });
   }
 

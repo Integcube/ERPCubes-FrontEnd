@@ -20,6 +20,7 @@ export const leadRoutes: Routes = [
             customList: CustomListResolver,
             eventType:EventTypeResolver,
             campaigns: CampaignsResolver,
+            tags: TagsResolver,
         },
         children: [
             {
@@ -42,7 +43,6 @@ export const leadRoutes: Routes = [
                 component: LeadDetailComponent,
                 resolve: {
                     selectedCompany: SelectedLeadResolver,
-                    tags: TagsResolver,
                     notes: NoteResolver,
                     tasks: TaskResolver,
                     email: EmailResolver,

@@ -1,15 +1,24 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import moment from 'moment';
-import { Subject } from 'rxjs';
-import { StatusWiseLeads } from '../lead.type';
+import { Subject, takeUntil } from 'rxjs';
+import { Call, Email, Meeting, Note, StatusLeads, StatusWiseLeads, TaskModel } from '../lead.type';
 import { LeadService } from '../lead.service';
+import { MatDialog } from '@angular/material/dialog';
+import { cloneDeep } from 'lodash';
+import { CallDetailComponent } from '../lead-detail/call/call-detail/call-detail.component';
+import { EmailDetailComponent } from '../lead-detail/email/email-detail/email-detail.component';
+import { MeetingDetailComponent } from '../lead-detail/meeting/meeting-detail/meeting-detail.component';
+import { NoteDetailComponent } from '../lead-detail/notes/note-detail/note-detail.component';
+import { TaskDetailComponent } from '../lead-detail/tasks/task-detail/task-detail.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-lead-status',
   templateUrl: './lead-status.component.html',
   styleUrls: ['./lead-status.component.scss'],
   encapsulation  : ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadStatusComponent implements OnInit, OnDestroy {
 
@@ -26,6 +35,9 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
   constructor(
       private _changeDetectorRef: ChangeDetectorRef,
       private _leadService:LeadService,
+      private _matDialog: MatDialog,
+      private _router: Router,
+      private _activatedRoute: ActivatedRoute,
   )
   {
   }
@@ -33,7 +45,7 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
   ngOnInit(): void
   {
     this._leadService.getStausWiseLeads().subscribe(
-      data=>{this.statusWiseLeads = [...data]; }
+      data=>{this.statusWiseLeads = [...data]; this._changeDetectorRef.detectChanges()}
     )
   }
 
@@ -57,31 +69,33 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
   //     this._scrumboardService.updateLists(updated).subscribe();
   // }
 
-  // cardDropped(event: CdkDragDrop<Card[]>): void
-  // {
-  //     // Move or transfer the item
-  //     if ( event.previousContainer === event.container )
-  //     {
-  //         // Move the item
-  //         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //     }
-  //     else
-  //     {
-  //         // Transfer the item
-  //         transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+  leadDropped(event: CdkDragDrop<StatusLeads[]>, title:string): void
+  {
+      // Move or transfer the item
+      if ( event.previousContainer === event.container )
+      {
+          // Move the item
+          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      }
+      else
+      {
+          // Transfer the item
+          transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+          event.container.data[event.currentIndex].status = +event.container.id;
+          let lead:StatusLeads = event.container.data[event.currentIndex];
+          this._leadService.ChangeLeadStatus(lead.leadId, lead.status, title).pipe(takeUntil(this._unsubscribeAll)).subscribe();
 
-  //         // Update the card's list it
-  //         event.container.data[event.currentIndex].listId = event.container.id;
-  //     }
+      }
 
-  //     // Calculate the positions
-  //     const updated = this._calculatePositions(event);
+      // Calculate the positions
+    //   const updated = this._calculatePositions(event);
+      // Update the cards
+    }
 
-  //     // Update the cards
-  //     this._scrumboardService.updateCards(updated).subscribe();
-  // }
-
-
+  updateLead(leadId: number) {
+    this._router.navigate(['./', leadId], { relativeTo: this._activatedRoute });
+    this._changeDetectorRef.markForCheck();
+  }
   isOverdue(date: string): boolean
   {
       return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
@@ -91,7 +105,9 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
   {
       return item.id || index;
   }
-
+  previewLead(leadId: number) {
+    this._router.navigate(['detail-view', leadId], { relativeTo: this._activatedRoute });
+  }
 
   private _calculatePositions(event: CdkDragDrop<any[]>): any[]
   {
@@ -141,5 +157,70 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
       // Return currentItem
       return [currentItem];
   }
-
+  setSelectedLead(leadId:number){
+        this._leadService.setSelectedLead(leadId);
+  }
+  addAction(leadId: number, action:string){
+this.setSelectedLead(leadId);
+    if(action==="Note"){
+        this.addNote();
+    }
+    else if(action==="Task"){
+        this.addTask();
+    }
+    else if(action==="Email"){
+        this.addEmail();
+    }
+    else if(action==="Call"){
+        this.addCall();
+    }
+    else if(action==="Meeting"){
+        this.addMeeting();
+    }
+  }
+  addNote(){
+    let note = new Note({})
+    this._matDialog.open(NoteDetailComponent, {
+      autoFocus: false,
+      data     : {
+          note: cloneDeep(note)
+      }
+  });
+  }
+  addTask(){
+    let tasks = new TaskModel({})
+    this._matDialog.open(TaskDetailComponent, {
+      autoFocus: false,
+      data     : {
+          task: cloneDeep(tasks)
+      }
+  });
+  }
+  addMeeting(){
+    let meeting = new Meeting({})
+    this._matDialog.open(MeetingDetailComponent, {
+      autoFocus: false,
+      data     : {
+          meeting: cloneDeep(meeting)
+      }
+  });
+  }
+  addCall(){
+    let call = new Call({})
+    this._matDialog.open(CallDetailComponent, {
+      autoFocus: false,
+      data     : {
+          call: cloneDeep(call)
+      }
+  });
+  }
+  addEmail(){
+    let email = new Email({})
+    this._matDialog.open(EmailDetailComponent, {
+      autoFocus: false,
+      data     : {
+          email: cloneDeep(email)
+      }
+  });
+  }
 }

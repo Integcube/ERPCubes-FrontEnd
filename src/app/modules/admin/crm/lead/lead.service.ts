@@ -1042,5 +1042,12 @@ export class LeadService {
       panelClass: colorName,
     });
   }
+
+  setSelectedLead(leadId:number){
+    let leads = this._leads.value;
+    const lead = leads.find(item => item.leadId === leadId) || null;
+    this._lead.next(lead);
+    return lead;
+  }
 }
 
