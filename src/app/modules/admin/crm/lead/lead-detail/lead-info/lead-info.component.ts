@@ -11,6 +11,7 @@ import { EmailDetailComponent } from '../email/email-detail/email-detail.compone
 import { CallDetailComponent } from '../call/call-detail/call-detail.component';
 import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
 import{LeadDetailComponent} from 'app/modules/admin/crm/lead/lead-detail/lead-detail.component'
+import { LeadScoreComponent } from '../lead-score/lead-score.component';
 @Component({
   selector: 'app-lead-info',
   templateUrl: './lead-info.component.html',
@@ -27,7 +28,8 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
   products$ = this._leadService.products$;
-  
+  leadScore$ = this._leadService.calculateleadScore$;
+ 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(private _formBuilder: FormBuilder,
@@ -103,6 +105,11 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
+
+
+  convertToInteger(value: number): number {
+    return parseInt(value.toString(), 10);
+  }
  toggleDrawer(): void
   {
       // Toggle the drawer
@@ -135,4 +142,12 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
+
+  leadScore(){
+  
+    this._matDialog.open(LeadScoreComponent, {
+      autoFocus: false,
+  });
+  }
+
 }

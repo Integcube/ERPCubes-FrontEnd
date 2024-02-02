@@ -24,7 +24,7 @@
         <ng-container *ngIf="filteredData$|async as notes; else noNotes">
             <ng-container *ngIf="notes.length else noNotes">
                 <ng-container *ngFor="let note of notes">
-                    <div class="relative mb-4 bg-white">
+                    <div class="relative mb-4 bg-white shadow-md">
                         <!-- Mail list -->
                         <div class="overflow-y-auto" #emailList>
                             <!-- Item loop -->

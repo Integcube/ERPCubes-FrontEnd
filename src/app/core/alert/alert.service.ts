@@ -13,7 +13,7 @@ export class AlertService {
       horizontalPosition: 'center',
       verticalPosition: 'bottom',
       panelClass: panelClass,
-      ...config // Merge provided config with default config
+      ...config 
     };
 
     this.snackBar.open(message, undefined, snackBarConfig);

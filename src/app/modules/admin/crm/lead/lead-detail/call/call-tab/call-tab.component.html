@@ -23,7 +23,7 @@
     <ng-container *ngIf="filteredData$ | async as calls; else noCalls">
         <ng-container  *ngIf="calls.length else noCalls">
             <ng-container *ngFor="let call of calls">
-                <div class="relative mb-4 bg-white">
+                <div class="relative mb-4 bg-white shadow-md">
                     <!-- Mail list -->
                     <div class="overflow-y-auto" #emailList>
                         <!-- Item loop -->

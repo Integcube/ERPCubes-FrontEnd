@@ -19,64 +19,61 @@
 
             <!-- Main -->
             <div class="flex-auto">
-
-                <!-- Header -->
-                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-3 px-6 md:px-8">
-
-                    <!-- Title -->
-                    <div>
-                        <div class="text-3xl font-bold tracking-tight leading-none">Product</div>
-                        <div class="ml-0.5 font-medium text-secondary">
-                            <ng-container *ngIf="productCount > 0">
-                                {{productCount}}
-                            </ng-container>
-                            {{productCount | i18nPlural: {
-                            '=0'   : 'No products',
-                            '=1'   : 'product',
-                            'other': 'products'
-                        } }}
-                        </div>
-                    </div>
-
-                    <!-- Main actions -->
-                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                        <!-- Search -->
-                        <div class="flex-auto">
-                            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
-                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
-                                <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl" [autocomplete]="'off'"
-                                    [placeholder]="'Search products'">
-                            </mat-form-field>
-                        </div>
-                        <button class="ml-2 h-7 w-20" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
-                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
-                              </svg>
-                              
-                            <span class="ml-1 mr-1 text-sm">Export</span>
-                        </button>
+   <div class="flex  sm:flex-row  items-end   sm:items-end sm:justify-between py-3 px-6 md:px-8 ">
+     
+    <div>
+        <div class="text-3xl font-bold tracking-tight leading-none">Product</div>
+        <div class="ml-0.5 font-medium text-secondary">
+            <ng-container *ngIf="productCount > 0">
+                {{productCount}}
+            </ng-container>
+            {{productCount | i18nPlural: {
+            '=0'   : 'No products',
+            '=1'   : 'product',
+            'other': 'products'
+        } }}
+        </div>
+    </div>
+   
+        <div class="sm:mt-0">
+      
+      
+            <div class="flex gap-0">
+                <button class="ml-2 h-8 w-20" mat-stroked-button (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z" clip-rule="evenodd" />
+                      </svg>
                       
-                        <!--border-r-0 rounded-r-none-->
-                        <button class="ml-2 h-7 w-20" mat-stroked-button (click)="openConnectorDialog()">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
-                                <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
-                              </svg>
-                              
-                            <span class="ml-1 mr-1 text-sm">Import</span>
-                        </button>
-                    
-                    
-                        <!-- Add contact button -->
-                        <button
-                            class="ml-4 h-7 primary-2"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="createProduct()">
-                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-2 mr-1">Add</span>
-                        </button>
-                    </div>
-                </div>
+                    <span class="ml-1 mr-1 text-xs">Export</span>
+                </button>
+              
+                <!--border-r-0 rounded-r-none-->
+                <button class="ml-2 h-8 w-20" mat-stroked-button (click)="openConnectorDialog()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
+                      </svg>
+                      
+                    <span class="ml-1 mr-1 text-xs">Import</span>
+                </button>
+            
+            
+                <!-- Add contact button -->
+                <button
+                    class="ml-4 h-8 primary-2"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="createProduct()">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1 text-xs">Add</span>
+                </button>
+        </div>
+
+
+        </div>
+       
+    </div>
+                <!-- Header -->
+          
 
                  <!-- Project selector -->
                  <!-- <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6  sm:px-8">
@@ -105,27 +102,41 @@
                 <!-- Company list -->
                 <div class="flex-auto py-2 bg-default min-h-3/4">
                     <div class="flex flex-col flex-auto bg-card shadow  mx-5 overflow-hidden ">
+                        <div class="flex  flex-wrap justify-between px-2 py-2">
+                            <div class="flex-auto self-center">
+                                <mat-form-field
+                                    class="fuse-mat-dense fuse-mat-no-subscript w-1/2 h-10" >
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                                        [autocomplete]="'off'" [placeholder]="'Search Leads'">
+                                </mat-form-field>
+                            </div>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 100]"
+                            aria-label="Select page of users"></mat-paginator>
+                        </div>
                       <ng-container *ngIf="products$ | async as products">
                         <ng-container *ngIf="products.length; else noProduct">
                             <div class="flex-auto  bg-card overflow-x-auto">
                                 <table mat-table [dataSource]="dataSource"  matSort>
                                     <!-- Select -->
                                     <ng-container matColumnDef="select">
-                                        <th mat-header-cell *matHeaderCellDef class="w-5 border-r-0">
+                                        <th mat-header-cell *matHeaderCellDef class="w-20">
                                             <mat-checkbox (change)="$event ? toggleAllRows() : null"
                                                 [checked]="selection.hasValue() && isAllSelected()" color="accent"
                                                 color="accent"
                                                 [indeterminate]="selection.hasValue() && !isAllSelected()"
                                                 [aria-label]="checkboxLabel()">
                                             </mat-checkbox>
+                                            No.
                                         </th>
-                                        <td mat-cell *matCellDef="let row" class="w-5 border-r-0">
+                                        <td mat-cell *matCellDef="let row let i = index" class="w-20 ">
                                             <mat-checkbox (click)="$event.stopPropagation()"
                                                 (change)="$event ? selection.toggle(row) : null" 
                                                 color="accent"
                                                 [checked]="selection.isSelected(row)" 
                                                 [aria-label]="checkboxLabel(row)"  >                                  
                                             </mat-checkbox>
+                                            {{ i + 1 }}
                                         </td>
                                     </ng-container>
                                     <!-- ID Column -->
@@ -133,12 +144,12 @@
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;"> Product Name </th>
                                         <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'" class="group relative overflow-hidden"  (mouseenter)="onMouseEnter(row)" (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
                                             <div class="flex items-center justify-between">
-                                                <span (click)="previewProduct(row)" class="hover:text-clip truncate"><u>{{row.productName | tblimit: row.isHovered}}</u></span>
-                                                <span *ngIf="row.isHovered" class="relative right-0">
+                                                <span (click)="previewProduct(row)" class="hover:text-clip truncate" (click)="updateProduct(row)" ><u>{{row.productName | tblimit: row.isHovered}}</u></span>
+                                                <!-- <span *ngIf="row.isHovered" class="relative right-0">
                                                   <button mat-stroked-button (click)="updateProduct(row)" class="h-8"> 
                                                     <span class="text-xs">Preview</span>
                                                   </button>
-                                                </span>
+                                                </span> -->
                                             </div>
                                         </td>
                                     </ng-container>
@@ -160,7 +171,7 @@
                                         <td class="mat-cell" colspan="4">No data matching the filter</td>
                                     </tr>
                                 </table>
-                                <mat-paginator [pageSizeOptions]="[10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                            <div class="pb-2"></div>
                             </div>
                         </ng-container>
                      </ng-container>

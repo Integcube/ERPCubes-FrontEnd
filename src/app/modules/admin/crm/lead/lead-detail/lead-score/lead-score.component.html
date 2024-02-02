@@ -1,0 +1,85 @@
+<style>
+    .success-snackbar {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+</style>
+
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Lead Qualification Assessment</div>
+        <button
+            mat-icon-button
+            (click)="discard()"
+            [tabIndex]="-1">
+            <mat-icon
+                class="text-current"
+                [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+    <form class="flex flex-col flex-auto p-6 pt-0 sm:pt-0 sm:p-8">
+          <ng-container *ngIf="QuestionsList && QuestionsList.length > 0; else noQuestions">
+            <ng-container *ngFor="let question of QuestionsList; let i = index">
+              <div class="p-2 mt-3 bg-default shadow">
+                <div class="flex flex-row justify-between">
+                  <span class="text-1xl text-gray-800">{{ question.title }}</span>
+                  <!-- Emoji rendering based on the rating -->
+                  <ng-container >
+                    <span matTooltip="Question Weightage in Assessment" class="text-hint "> {{ question.weightage}}%</span>
+                  </ng-container>
+              
+                   
+              
+                </div>
+                <div class="flex flex-row ">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <svg
+                      class="w-6 h-6 cursor-pointer"
+                      [ngClass]="{
+                        'text-yellow-500': star <= question.rating,
+                        'text-gray-500': star > question.rating || question.rating === undefined
+                      }"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      (click)="onRatingClick(i, star)"
+                    >
+                      <path
+                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                      />
+                    </svg>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          
+          <ng-template #noQuestions>
+            <div class="p-2 mt-3">
+              <div class=" text-gray-800 text-2xl">  
+                <mat-icon
+                class="icon-size-5 mr-2"
+                   [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon> No Questions found.</div>
+              <div class="text-gray-800 sm-xs">Please contact to administration to add questions for this product.</div>
+            </div>
+          </ng-template>
+     
+
+       <div class="flex flex-col  max-w-240 md:min-w-160 max-h-16 -m-6 mt-3">
+       <div class="flex  items-center justify-between h-16  bg-gray-50 dark:bg-transparent">
+      
+        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs" i18n>Cancel</span> 
+        </button>
+        <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save Lead Qualification'" mat-stroked-button *ngIf="QuestionsList"  [disabled]=" QuestionsList.length==0"  (click)="SaveLeadScore()">
+            <mat-icon
+            class="icon-size-5 mr-2 text-white"
+               [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+            <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+        </button>
+     
+       </div>
+      </div>
+    </form>
+</div>

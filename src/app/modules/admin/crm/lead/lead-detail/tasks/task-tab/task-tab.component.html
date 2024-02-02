@@ -23,7 +23,7 @@
         <ng-container *ngIf="filteredData$|async as tasks; else noTask">
             <ng-container *ngIf="tasks.length; else noTask">
                 <ng-container *ngFor="let task of tasks">
-                    <fuse-card class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer"
+                    <fuse-card class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow-md"
                         (click)="updateTask(task)">                  
                             <div class="flex flex-row items-center justify-between p-2">
                                 <div class="flex flex-row items-center justify-center">

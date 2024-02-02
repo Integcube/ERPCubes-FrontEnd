@@ -23,7 +23,7 @@
     <ng-container *ngIf="filteredData$|async as emails; else noEmails">
         <ng-container *ngIf="emails.length else noEmails">
             <ng-container *ngFor="let email of emails">
-                <div class="relative mb-4 bg-white">
+                <div class="relative mb-4 bg-white shadow-md">
                     <!-- Mail list -->
                     <div class="overflow-y-auto" #emailList>
                         <ng-container>

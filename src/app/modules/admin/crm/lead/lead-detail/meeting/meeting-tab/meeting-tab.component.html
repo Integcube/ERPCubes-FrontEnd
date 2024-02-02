@@ -21,7 +21,7 @@
     <ng-container *ngIf="meetings$ | async as meetings; else noMeetings">
         <ng-container *ngIf="meetings.length; else noMeetings">
             <ng-container *ngFor="let meeting of meetings">
-                <div class="relative mb-4 bg-white">
+                <div class="relative mb-4 bg-white shadow-md">
                     <!-- Mail list -->
                     <div class="overflow-y-auto" #emailList>
                         <!-- Item loop -->

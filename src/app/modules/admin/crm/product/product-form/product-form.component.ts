@@ -98,8 +98,8 @@ export class ProductFormComponent implements OnInit {
   delete() {
      // Open the confirmation dialog
      const confirmation = this._fuseConfirmationService.open({
-      title: 'Delete lead',
-      message: 'Are you sure you want to delete this lead? This action cannot be undone!',
+      title: 'Delete Product',
+      message: 'Are you sure you want to delete this Product?',
       actions: {
         confirm: {
           label: 'Delete'
@@ -123,5 +123,6 @@ export class ProductFormComponent implements OnInit {
       }
     });
   }
+
 }
 

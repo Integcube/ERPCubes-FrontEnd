@@ -54,6 +54,10 @@ export class LeadService {
   private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
   private readonly getAllCampaignsURL = `${environment.url}/Campaign/all`
   private readonly getStatusWiseLeadsUrl = `${environment.url}/Lead/getStatusWiseLeads`
+  private readonly getScoreListUrl = `${environment.url}/Lead/getScoreList`
+  private readonly saveleadScoreUrl = `${environment.url}/Lead/saveleadScore`
+  private readonly CalculateleadScoreUrl = `${environment.url}/Lead/calculateleadScore`
+  
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -80,7 +84,8 @@ export class LeadService {
   private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
   private _campaigns: BehaviorSubject<Campaign[] | null> = new BehaviorSubject(null);
   private _statusWiseLeads: BehaviorSubject<StatusWiseLeads[] | null> = new BehaviorSubject(null);
-
+  private _calculateleadScore: BehaviorSubject<any|null> = new BehaviorSubject(null);
+  
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -272,7 +277,10 @@ export class LeadService {
   get campaigns$(): Observable<Campaign[]> {
     return this._campaigns.asObservable();
   }
-
+  get calculateleadScore$(): Observable<any> {
+    return this._calculateleadScore.asObservable();
+  }
+  
   getCampaigns(): Observable<Campaign[]> {
     let data = {
       id: this.user.id,
@@ -473,6 +481,20 @@ export class LeadService {
 
     );
   }
+  GetLeadScore(leadId: number): Observable<Call[]> {
+    let data = {
+      leadId: leadId
+    }
+    return this._httpClient.post<any>(this.CalculateleadScoreUrl, data).pipe(
+      tap((calls) => {
+        this._calculateleadScore.next(calls);
+      }),
+      catchError(err => this.handleError(err))
+
+    );
+  }
+
+  
 
   getActivities(count: number, leadId: number): Observable<any> {
 
@@ -499,6 +521,9 @@ export class LeadService {
     );
   }
 
+
+
+  
   getEventType(): Observable<EventType[]> {
     let data = {
       id: this.user.id,
@@ -872,13 +897,23 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
+  getScoreList(LeadId: number): Observable<any[]> {
+    let data = {
+      LeadId: LeadId,
+      tenantId: this.user.tenantId,
+    };
+    return this._httpClient.post<any[]>(this.getScoreListUrl, data).pipe(
+      catchError(err => this.handleError(err))
+    );
+  }
+
   restoreLeads(deletedLeads: DeletedLead[]) {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
       deletedLeads,
     }
-    debugger;
     return this._httpClient.post<Lead[]>(this.restoreLeadURL, data).pipe(
       tap((lead) => {
         this.getLeads().subscribe();
@@ -911,6 +946,22 @@ export class LeadService {
     );
   }
 
+  saveleadScore(scores: any[], leadId: number): Observable<any> {
+   let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      leadId: leadId,
+      Leads:scores
+    }
+    return this._httpClient.post<Call[]>(this.saveleadScoreUrl, data).pipe(
+      tap((call) => {
+        this.GetLeadScore(leadId).subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+  
+  
   saveCustomList(leadList: LeadCustomList): Observable<LeadCustomList> {
     let data = {
       id: this.user.id,

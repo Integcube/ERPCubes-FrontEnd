@@ -125,7 +125,6 @@ export class CallDetailComponent implements OnInit , OnDestroy {
     const dueDate = this.composeForm.get('dueDate').value;
     const taskTime = this.composeForm.get('tasktime').value;
     const combinedDateTime = this.combineDateAndTime(dueDate, taskTime);
-    debugger
     this.composeForm.patchValue({
       dueDate: combinedDateTime
     });

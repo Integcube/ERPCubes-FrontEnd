@@ -58,6 +58,7 @@ import { LeadImportComponent } from './lead-import/lead-import.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { LeadStatusComponent } from './lead-status/lead-status.component';
 import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
+import { LeadScoreComponent } from './lead-detail/lead-score/lead-score.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,7 @@ import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
     LeadImportComponent,
     LeadStatusComponent,
     LeadRestoreComponent,
-     
+    LeadScoreComponent,
   ],
   imports: [
     RouterModule.forChild(leadRoutes),

@@ -14,14 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ErrorInterceptor implements HttpInterceptor {
     constructor(private snackBar: MatSnackBar
     ) { }
-    showNotification(colorName, text, placementFrom, placementAlign) {
-        this.snackBar.open(text, "", {
-            duration: 2000,
-            verticalPosition: placementFrom,
-            horizontalPosition: placementAlign,
-            panelClass: colorName,
-        });
-    }
+
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler

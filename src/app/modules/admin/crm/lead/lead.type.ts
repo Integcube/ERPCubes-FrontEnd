@@ -30,6 +30,7 @@ export class Lead {
     modifiedDate: Date;
     isHovered: boolean;
     avatar: any;
+    rating: any;
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;
         this.status = reg.status ? reg.status : 1;
@@ -39,6 +40,8 @@ export class Lead {
         this.productId = reg.productId ? reg.productId : -1;
         this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
         this.campaignId=reg.campaignId ? reg.campaignId : "-1";
+        this.rating = reg.rating ? reg.rating : 0;
+        
     }
 }
 export interface LeadSource {
