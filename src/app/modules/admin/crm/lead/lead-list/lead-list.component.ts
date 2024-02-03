@@ -43,7 +43,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
   //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
-  displayedColumns: string[] = ['select', 'name', 'productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
+  displayedColumns: string[] = ['select', 'name', 'rating','productTitle', 'phone', 'leadStatus','leadOwnerName', 'createdDate'];
   isTable: boolean = true
   selection = new SelectionModel<Lead>(true, []);
   customList$ = this._leadService.customList$;
@@ -140,7 +140,7 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     this._usersPanelOverlayRef.detach();
   }
   getLeads(list: LeadCustomList, name: string): void {
-    debugger
+
     if (list === null) {
       list = new LeadCustomList({});
       list.listTitle = name;

@@ -21,14 +21,20 @@ export class LeadPipelineFilter {
         this.sourceId = reg.sourceId?reg.sourceId:-1; 
         this.productId = reg.productId?reg.productId:-1;
         this.status =  reg.status?reg.status:-1;
+
+        const currentDate = new Date();
+        
+
+        
+
         if (reg.startDate === null || reg.startDate === undefined) {
             const currentDate = new Date();
-            this.startDate = new Date(currentDate.setDate(currentDate.getDate() - 30));
+            this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
         } else {
             this.startDate = reg.startDate;
         }
-        this.endDate = reg.endDate?reg.endDate:new Date(); 
-        // this.startDate.setDate(this.startDate.getDate() - 30);
+        this.endDate = reg.endDate?reg.endDate: this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);
+       
     }
 }
 

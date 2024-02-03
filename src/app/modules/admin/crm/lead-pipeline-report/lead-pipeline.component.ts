@@ -12,7 +12,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 export class LeadPipelineComponent implements OnInit, OnDestroy {
   @ViewChild('exporter') public exporter;
   dataSource: MatTableDataSource<LeadReport>;
-  displayedColumns: string[] = [ 'statusTitle', 'totalLeads', 'totalLeadValue', 'averageDealValue', 'winLeads', 'winRate', 'convertedLeads','conversionRate','expectedRevenue'];
+  displayedColumns: string[] = [ 'statusTitle', 'totalLeads', 'totalLeadValue', 'averageDealValue','expectedRevenue','percentage'];
 
   constructor(
     private _leadPipelineService: leadPipelineService,

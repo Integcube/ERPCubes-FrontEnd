@@ -98,18 +98,19 @@
         <div class="flex-auto p-2 bg-default min-h-3/4">
             <div class="flex flex-col flex-auto bg-card shadow  mx-5 overflow-hidden mt-2">
                 <div class="flex-auto  bg-card overflow-x-auto">
-                    <table mat-table [dataSource]="dataSource" matSort matTableExporter #exporter="matTableExporter">
+                    <ng-container *ngIf="dataSource">
+                    <table mat-table  [dataSource]="dataSource"  matSort matTableExporter #exporter="matTableExporter">
 
                         <!-- Username Column -->
                         <ng-container matColumnDef="statusTitle">
-                            <th mat-header-cell *matHeaderCellDef mat-header-sort i18n>Status</th>
-                            <td mat-cell *matCellDef="let row"> {{row.statusTitle}} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-header-sort i18n [ngClass]="{'font-semibold': row?.statusTitle === 'Total'}"  >Status</th>
+                            <td mat-cell *matCellDef="let row" [ngClass]="{'font-semibold': row?.statusTitle === 'Total'}"> {{row.statusTitle}} </td>
                         </ng-container>
                         <!-- Leads Column -->
                         <ng-container matColumnDef="totalLeads">
                             <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort
                                 style="background-color: #f0f2f5;" i18n>No. Leads </th>
-                            <td mat-cell class="text-right" *matCellDef="let row" style="background-color: #f0f2f5;">
+                            <td mat-cell class="text-right" *matCellDef="let row"  style="background-color: #f0f2f5;">
                                 {{row.totalLeads !== 0 ? row.totalLeads : '-' }} </td>
                         </ng-container>
                         <!-- Notes Column -->
@@ -126,33 +127,9 @@
                             <td mat-cell class="text-right" *matCellDef="let row"> {{row.averageDealValue !== 0 ?
                                 row.averageDealValue : '-' }} </td>
                         </ng-container>
-                        <!-- Notes Column -->
-                        <ng-container matColumnDef="winLeads">
-                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort i18n> Win Leads </th>
-                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.winLeads !== 0 ? row.winLeads :
-                                '-' }} </td>
-                        </ng-container>
-                        <!-- Notes Column -->
-                        <ng-container matColumnDef="winRate">
-                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort
-                                style="background-color: #f0f2f5;" i18n> Win Rate % </th>
-                            <td mat-cell class="text-center" *matCellDef="let row" style="background-color: #f0f2f5;">
-                                {{ row.winRate !== 0 ? row.winRate + '%' : '-' }} </td>
-                        </ng-container>
-                        <!-- Notes Column -->
-                        <ng-container matColumnDef="convertedLeads">
-                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort i18n> Converted Leads
-                            </th>
-                            <td mat-cell class="text-right" *matCellDef="let row"> {{row.convertedLeads !== 0 ?
-                                row.convertedLeads : '-' }} </td>
-                        </ng-container>
+                     
+                       
 
-                        <ng-container matColumnDef="conversionRate">
-                            <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort i18n> Conversion Rate %
-                            </th>
-                            <td mat-cell class="text-center" *matCellDef="let row"> {{row.conversionRate !== 0 ?
-                                row.conversionRate + '%': '-' }} </td>
-                        </ng-container>
                         <!-- Notes Column -->
                         <ng-container matColumnDef="expectedRevenue">
                             <th mat-header-cell class="text-center" *matHeaderCellDef mat-header-sort i18n> Expected Revenue
@@ -161,7 +138,13 @@
                                 row.expectedRevenue : '-' }} </td>
                         </ng-container>
                         <!-- Notes Column -->
-
+                        <ng-container matColumnDef="percentage">
+                            <th mat-header-cell class="text-center"  [ngClass]="{'font-semibold': row?.statusTitle === 'Total'}" style="background-color: #f0f2f5;" *matHeaderCellDef mat-header-sort i18n> % Of Leads
+                            </th>
+                            <td mat-cell class="text-center" *matCellDef="let row" [ngClass]="{'font-semibold': row?.statusTitle === 'Total'}" style="background-color: #f0f2f5;">{{ row.percentage !== 0 ? (row.percentage | number: '1.2-2') + ' %' : '-' }}</td>
+                        </ng-container>
+                        <!-- Notes Column -->
+                        
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         <tr class="mat-row" *matNoDataRow>
@@ -170,6 +153,7 @@
                     </table>
                     <mat-paginator [pageSizeOptions]="[10, 25, 100]"
                         aria-label="Select page of reports"></mat-paginator>
+                    </ng-container>
                 </div>
                 <!-- No Reports -->
                 <ng-template #noReports>

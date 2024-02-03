@@ -481,7 +481,7 @@ export class LeadService {
 
     );
   }
-  GetLeadScore(leadId: number): Observable<Call[]> {
+  GetLeadScore(leadId: number): Observable<any[]> {
     let data = {
       leadId: leadId
     }

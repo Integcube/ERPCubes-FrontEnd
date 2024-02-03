@@ -3,7 +3,7 @@ import { ActivityReportService } from './activity-report.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Subject, combineLatest, map } from 'rxjs';
-import { ActivityReport } from './activity-report.type';
+import { ActivityReport,Filter } from './activity-report.type';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
@@ -16,7 +16,7 @@ export class ActivityReportComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('exporter') public exporter;
-
+  leadPipelineFilter: Filter = new Filter({});
   dataSource: MatTableDataSource<ActivityReport>;
   displayedColumns: string[] = [ 'leadOwnerName', 'lead', 'note', 'call', 'email', 'task', 'meeting']; 
   selection = new SelectionModel<ActivityReport>(true, []);
@@ -24,6 +24,7 @@ export class ActivityReportComponent {
   totalActivities: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   
+ 
 
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -34,10 +35,14 @@ export class ActivityReportComponent {
   reports$ = this._activityReportService.activityReport$
   activityReportWithUser$ = this.reports$;
   
+  products$ = this._activityReportService.prodcts$
+  project$ = this._activityReportService.project$;
+  leadStatuses$ = this._activityReportService.leadStatus$;
+
+
   ngOnInit(): void {
     this.activityReportWithUser$.subscribe((report) => {
         this.activityReportCount = report.length;
-        debugger
         this.dataSource = new MatTableDataSource(report);
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
@@ -52,32 +57,40 @@ export class ActivityReportComponent {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-    this.selection.select(...this.dataSource.data);
+
+  getLeadReports(){
+    this._activityReportService.getActivityReport(this.leadPipelineFilter).subscribe();
   }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  checkboxLabel(row?: ActivityReport): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadOwner + 1}`;
-  }
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-  trackByFn(index: number, item: any): any {
-      return item.id || index;
-  }
+
+  // toggleAllRows() {
+  //   if (this.isAllSelected()) {
+  //     this.selection.clear();
+  //     return;
+  //   }
+  //   this.selection.select(...this.dataSource.data);
+  // }
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.dataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+  // checkboxLabel(row?: ActivityReport): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  //   }
+  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadOwner + 1}`;
+  // }
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
+  // trackByFn(index: number, item: any): any {
+  //     return item.id || index;
+  // }
+
+ 
+
 }

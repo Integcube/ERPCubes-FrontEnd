@@ -28,7 +28,7 @@ export class LeadOwnerReportComponent {
   startDate = new Date(new Date().getFullYear(),new Date().getMonth(),1);
   endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,0); 
   dataSource: MatTableDataSource<LeadOwnerReport>;
-  displayedColumns: string[] = [ 'leadOwnerName', 'totalLeads', 'totalRevenue', 'averageDealSize', 'winLeads', 'winRates', 'convertedleads', 'conversionRate'];
+  displayedColumns: string[] = [ 'leadOwnerName', 'totalLeads', 'totalRevenue', 'averageDealSize', 'convertedleads', 'conversionRate', 'winLeads', 'winRates'];
   selection = new SelectionModel<LeadOwnerReport>(true, []);
   leadOwnerReportCount: number = 0;
   totalLeadOwner: number = 0;
@@ -43,17 +43,8 @@ export class LeadOwnerReportComponent {
   usernames$ = this._leadOwnerReportService.users$
   source$ = this._leadOwnerReportService.sourec$
   status$=this._leadOwnerReportService.statesus$
-  reports$ = this._leadOwnerReportService.leadOwnerReport$
   usersList : any[] =[];
-  leadOwnerReportWithUser$ = combineLatest(
-    this.usernames$,
-    this.reports$,
-  ).pipe(
-    map(([users, reports]) => reports.map(r => ({
-      ...r,
-      leadOwnerName: users.find(a => a.id === r.leadOwner)?.name
-    } as LeadOwnerReport)))
-  )
+  leadOwnerReportWithUser$ =this._leadOwnerReportService.leadOwnerReport$
   sources: LeadSource[] = [];
   statuses: LeadStatus[]=[];
   
@@ -83,35 +74,11 @@ export class LeadOwnerReportComponent {
     this.dataSource.sort = this.sort;
   }
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
+  
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  // toggleAllRows() {
-  //   if (this.isAllSelected()) {
-  //     this.selection.clear();
-  //     return;
-  //   }
-  //   this.selection.select(...this.dataSource.data);
-  // }
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataSource.data.length;
-  //   return numSelected === numRows;
-  // }
-  // checkboxLabel(row?: LeadOwnerReport): string {
-  //   if (!row) {
-  //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-  //   }
-  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadOwner + 1}`;
-  // }
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
+
 
   getLeadOwnerReports(){
     this._leadOwnerReportService.getLeadOwnerReport(this.startDate.toISOString(), this.endDate.toISOString(), this.sourceId, this.statusId, this.leadOwner).subscribe();

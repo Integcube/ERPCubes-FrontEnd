@@ -28,7 +28,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
   products$ = this._leadService.products$;
-  leadScore$ = this._leadService.calculateleadScore$;
+  calculatedleadScore$ = this._leadService.calculateleadScore$;
  
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 

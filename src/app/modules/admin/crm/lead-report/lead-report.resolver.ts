@@ -28,10 +28,10 @@ export class LeadReportResolver implements Resolve<any>{
   constructor(
     private _leadReportService: LeadReportService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-   
-    const startDate = new Date();
-    const endDate=new Date();
-
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+      const endingDate = new Date();
+      const endDate= new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
     return this._leadReportService.getLeadReport(startDate.toISOString(), endDate.toISOString(), -1);
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Filter } from './activity-report.type';
 import {
   Resolve,
   RouterStateSnapshot,
@@ -12,7 +13,8 @@ export class ActivityReportResolver implements Resolve<any> {
   constructor(
     private _activityReportService: ActivityReportService){ }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    return this._activityReportService.getActivityReport();
+    let filter = new Filter({});
+    return this._activityReportService.getActivityReport(filter);
   }
 }
 @Injectable({
@@ -25,3 +27,39 @@ export class UserResolver implements Resolve<any>{
     return this._activityReportService.getUsers();
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LeadStatusResolver implements Resolve<any>{
+  constructor(
+    private _activityReportService: ActivityReportService) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._activityReportService.getLeadStatus();
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProjectResolver implements Resolve<any>{
+  constructor(
+    private _activityReportService: ActivityReportService) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._activityReportService.getProject();
+  }
+}
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductResolver implements Resolve<any>{
+  constructor(
+    private _activityReportService: ActivityReportService) { }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this._activityReportService.getProducts();
+  }
+}
+

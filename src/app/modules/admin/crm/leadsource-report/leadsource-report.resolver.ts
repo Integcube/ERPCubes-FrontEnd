@@ -13,9 +13,13 @@ export class LeadSourceReportResolver implements Resolve<any> {
   constructor(
     private _leadSourceReportService: LeadSourceReportService){ }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    var today : Date = new Date();
-    const startOfMonth: Date = new Date(today.getFullYear(), today.getMonth(), -1);
-    return this._leadSourceReportService.getLeadSourceReport(startOfMonth.toISOString(), today.toISOString(), -1);
+    
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+    const endingDate = new Date();
+    const  endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);    
+
+    return this._leadSourceReportService.getLeadSourceReport(startOfMonth.toISOString(), endDate.toISOString(), -1);
   }
 }
 @Injectable({

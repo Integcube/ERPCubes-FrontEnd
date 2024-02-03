@@ -66,32 +66,32 @@
                             <!-- Username Column -->
                             <ng-container matColumnDef="source">
                                 <th mat-header-cell *matHeaderCellDef mat-header-sort i18n> Source </th>
-                                <td mat-cell *matCellDef="let row"> {{row.source}} </td>
+                                <td mat-cell *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.source}} </td>
                             </ng-container>
                             <!-- Leads Column -->
                             <ng-container matColumnDef="totalLeads">
                                 <th mat-header-cell class ="text-center" *matHeaderCellDef mat-header-sort i18n> Total Leads </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.totalLeads}} </td>
+                                <td mat-cell class = "text-right" *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.totalLeads}} </td>
                             </ng-container>
                             <!-- Notes Column -->
                             <ng-container matColumnDef="convertedLeads">
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Converted Leads </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.convertedLeads}} </td>
+                                <td mat-cell class = "text-right" *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.convertedLeads}} </td>
                             </ng-container>
                             <!-- Notes Column -->
                             <ng-container matColumnDef="conversionRate">
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Conversion Rate </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.conversionRate}} </td>
+                                <td mat-cell class = "text-center" *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.conversionRate| number: '1.2-2'}}%</td>
                             </ng-container>
                             <!-- Notes Column -->
                             <ng-container matColumnDef="averageDealSize">
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Average Deal Size </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.averageDealSize}} </td>
+                                <td mat-cell class = "text-right" *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.averageDealSize}} </td>
                             </ng-container>
                             <!-- Notes Column -->
                             <ng-container matColumnDef="totalRevenue">
                                 <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Total Revenue </th>
-                                <td mat-cell class = "text-right" *matCellDef="let row"> {{row.totalRevenue}} </td>
+                                <td mat-cell class = "text-right" *matCellDef="let row" [ngClass]="{'font-semibold': row?.source === 'Total'}"> {{row.totalRevenue}} </td>
                             </ng-container>
                 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

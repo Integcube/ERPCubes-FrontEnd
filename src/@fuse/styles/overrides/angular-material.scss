@@ -26,6 +26,29 @@
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Calendar
 /* ----------------------------------------------------------------------------------------------------- */
+.fc-direction-ltr .fc-daygrid-event.fc-event-end, .fc-direction-rtl .fc-daygrid-event.fc-event-start {
+    margin-right: 2px;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start, .fc-direction-rtl .fc-daygrid-event.fc-event-end {
+    margin-left: 2px;
+}
+
+.fc .fc-daygrid-event {
+    margin-top: 3px;
+    z-index: 6;
+}
+
+
+.fc-event.fc-event-draggable, .fc-event[href] {
+    cursor: pointer;
+}
+
+.fc-daygrid-dot-event {
+    align-items: center;
+    display: flex;
+    padding: 4px 7px;
+}
 
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Angular Material helpers & overrides

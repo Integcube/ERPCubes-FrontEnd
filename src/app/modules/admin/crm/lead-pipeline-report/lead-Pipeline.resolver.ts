@@ -35,7 +35,6 @@ export class ProductResolver implements Resolve<any>{
   constructor(
     private _leadReportService: leadPipelineService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-   debugger
     return this._leadReportService.getProducts();
   }
 }
@@ -61,7 +60,6 @@ export class LeadReportResolver implements Resolve<any>{
     private _leadReportService: leadPipelineService) { }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
    let filter = new LeadPipelineFilter({});
-   debugger
     return this._leadReportService.getLeadReport(filter);
   }
 }

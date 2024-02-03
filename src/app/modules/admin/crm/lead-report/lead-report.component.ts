@@ -34,8 +34,10 @@ export class LeadReportComponent implements OnInit, OnDestroy {
   HeaderConfig: { key: string; label: string }[] = [];
   ngOnInit(): void {
    
-    this.startDate = new Date();
-    this.endDate=new Date();
+    const currentDate = new Date();
+    this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+      const endingDate = new Date();
+    this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
     this.prodId=-1;
     this.leadReportWithUser$.subscribe((report) => {
       this.leadReportCount = report.length;
@@ -49,6 +51,7 @@ export class LeadReportComponent implements OnInit, OnDestroy {
     this.product$.subscribe(
       data=>{this.products = [...data] }
     );
+  
   }
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
