@@ -41,19 +41,19 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy
         this._fileManagerListComponent.matDrawer.open();
 
         // Get the item
-        this._fileManagerService.item$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((item: Item) => {
+        // this._fileManagerService.item$
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe((item: Item) => {
 
-                // Open the drawer in case it is closed
-                this._fileManagerListComponent.matDrawer.open();
+        //         // Open the drawer in case it is closed
+        //         this._fileManagerListComponent.matDrawer.open();
 
-                // Get the item
-                this.item = item;
+        //         // Get the item
+        //         this.item = item;
 
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
+        //         // Mark for check
+        //         this._changeDetectorRef.markForCheck();
+        //     });
     }
 
     /**

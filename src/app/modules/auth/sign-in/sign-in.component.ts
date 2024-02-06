@@ -43,11 +43,15 @@ export class AuthSignInComponent implements OnInit
      */
     ngOnInit(): void
     {
+        const subdomain = window.location.hostname.split('.')[0];
+
         // Create the form
         this.signInForm = this._formBuilder.group({
             email     : [, [Validators.required]],
             password  : [, Validators.required],
-            rememberMe: [false]
+            rememberMe: [false],
+            subdomain:[subdomain],
+
         });
     }
 

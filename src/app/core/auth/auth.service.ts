@@ -99,7 +99,7 @@ export class AuthService
      *
      * @param credentials
      */
-    signIn(credentials: { email: string; password: string }): Observable<any>
+    signIn(credentials: { email: string; password: string; subdomain:string; }): Observable<any>
     {
         // Throw error, if the user is already logged in
         if ( this._authenticated )
