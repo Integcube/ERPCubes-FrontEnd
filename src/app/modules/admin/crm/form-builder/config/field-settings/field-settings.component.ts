@@ -35,7 +35,9 @@ export class FieldSettingsComponent implements OnInit {
  
   onFieldPropertyChange(changedField:FormField): void {
     // Emit the updated selectedField object
-    this.selectedField.values = this.options.join(',');
+    if((this.selectedField.fieldType == 5 || this.selectedField.fieldType == 6 || this.selectedField.fieldType == 7)){
+      this.selectedField.values = this.options.join(',');
+    }
     this.dataEvent.emit(this.selectedField);
   }
   addOption() {
