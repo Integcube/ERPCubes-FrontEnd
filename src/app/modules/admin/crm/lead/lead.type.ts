@@ -262,6 +262,8 @@ export class LeadImportList {
         this.leadId = reg.leadId ? reg.leadId : -1;
         this.status = reg.status ? reg.status : 0;
         this.createdDate = reg.createdDate ? reg.createdDate : Date.now;
+        this.leadOwner = reg.leadOwner ? reg.leadOwner : "-1";
+
     }
 }
 export interface EventType {

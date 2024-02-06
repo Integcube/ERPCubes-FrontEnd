@@ -4,7 +4,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FileManagerService } from '../file-manager.service';
-import { Item, Items } from '../file-manager.types';
+import { Item } from '../file-manager.types';
 
 
 @Component({
@@ -17,8 +17,9 @@ export class FileManagerListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
     drawerMode: 'side' | 'over';
-    selectedItem: Item;
-    items: Items;
+    items: Item[];
+    files:Item[];
+    folders:Item[];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -33,14 +34,10 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     {
         this._fileManagerService.items$
             .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((items: Items) => {
+            .subscribe((items: Item[]) => {
                 this.items = items;
-                this._changeDetectorRef.markForCheck();
-            });
-        this._fileManagerService.item$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((item: Item) => {
-                this.selectedItem = item;
+                this.files = items.filter(item => item.type !== 'Folder');
+                this.folders = items.filter(item => item.type == 'Folder');
                 this._changeDetectorRef.markForCheck();
             });
         this._fuseMediaWatcherService.onMediaQueryChange$('(min-width: 1440px)')
