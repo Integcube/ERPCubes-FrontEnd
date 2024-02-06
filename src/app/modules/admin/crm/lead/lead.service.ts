@@ -488,6 +488,11 @@ export class LeadService {
     return this._httpClient.post<any>(this.CalculateleadScoreUrl, data).pipe(
       tap((calls) => {
         this._calculateleadScore.next(calls);
+        debugger
+        let leads = this._leads.value;
+        let leadToUpdateIndex = leads.findIndex(a=>a.leadId == leadId);
+        leads[leadToUpdateIndex].rating = calls.rating;
+        this._leads.next(leads);
       }),
       catchError(err => this.handleError(err))
 

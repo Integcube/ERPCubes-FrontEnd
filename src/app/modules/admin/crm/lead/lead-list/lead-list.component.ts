@@ -19,6 +19,7 @@ import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail
 import { LeadImportComponent } from '../lead-import/lead-import.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { LeadRestoreComponent } from '../lead-restore/lead-restore.component';
+import { LeadScoreComponent } from '../lead-detail/lead-score/lead-score.component';
 
 @Component({
   selector: 'app-lead-list',
@@ -559,5 +560,5 @@ export class LeadListComponent implements OnInit,AfterViewInit {
   // exportToExcel() {
   //   this.exporter.exportTable('xls', { fileName: 'Lead-list' });
   // }
-
+ 
 }

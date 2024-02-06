@@ -43,9 +43,9 @@
                             </mat-form-field>
                         </div>
                         <!-- Add Team button -->
-                        <button class="ml-4 h-7 primary-2" mat-flat-button  (click)="createTeam()">
+                        <button class="ml-4 h-8 primary-2" mat-flat-button  (click)="createTeam()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-1 mr-1" i18n>Add</span>
+                            <span class="ml-1 mr-1 text-xs" i18n>Add</span>
                         </button>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                                                 Team Name
                                             </th>
                                             <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'" class="group relative overflow-hidden"
-                                                (mouseenter)="onMouseEnter(row)" (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
+                                                (mouseenter)="onMouseEnter(row)" (click)="updateTeam(row)" (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
                                                 <div class="flex items-center justify-between">
                                                     <span class="hover:text-clip truncate">
                                                         <u>
@@ -87,7 +87,7 @@
                                                         </u>
                                                     </span>
                                                     <span *ngIf="row.isHovered" class="relative right-0">
-                                                        <button mat-stroked-button (click)="updateTeam(row)" class="h-8">
+                                                        <button mat-stroked-button (click)="updateTeam(row)" class="h-7">
                                                             <span class="text-xs" i18n>Preview</span>
                                                         </button>
                                                     </span>

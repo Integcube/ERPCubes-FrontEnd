@@ -74,7 +74,7 @@
                          matTooltip="Click to Open Lead Qualification Assessment Form"
                          [ngClass]="{
                             'status1': leadScorea.rating <= 3,
-                            'Status4': leadScorea.rating > 3 && leadScorea.rating < 4,
+                            'Status4': leadScorea.rating > 3 && leadScorea.rating <= 4,
                             'Status5': leadScorea.rating >= 4
                           }" >{{ leadScorea.rating | number:'1.2-2' }}</span>
                     </ng-container>

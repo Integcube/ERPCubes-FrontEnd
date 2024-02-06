@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit,Inject, ChangeDetectionStrategy,ChangeDetectorRef  } from '@angular/core';
 import { Call, Lead } from '../../lead.type';
-import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
+import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LeadService } from '../../lead.service';
@@ -15,10 +15,9 @@ export class LeadScoreComponent implements OnInit , OnDestroy {
   lead: Lead
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   composeForm: UntypedFormGroup;
-
-
+ 
   QuestionsList :any[];
-
+  
 
   onRatingClick(questionIndex: number, rating: number): void {
     const question = this.QuestionsList[questionIndex];
@@ -47,8 +46,12 @@ export class LeadScoreComponent implements OnInit , OnDestroy {
  
   ngOnInit(): void {
     
-    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data }})
+    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>
+      { this.lead = { ...data }
+    })
+
       this.GetLeadScore();
+   
      }
 
   createForm() {
@@ -78,7 +81,8 @@ SaveLeadScore() {
 
   this._leadService.saveleadScore(this.QuestionsList, this.lead.leadId).subscribe((data) => {
     this.matDialogRef.close()
-    this.showSuccessSnackbar('Lead Qualification Saved')
+    this.showSuccessSnackbar('Lead Qualification Saved');
+    
   
   });
 
@@ -89,4 +93,6 @@ private showSuccessSnackbar(message: string): void {
     panelClass: ['success-snackbar'] // Apply a custom CSS class for styling
   });
 }
+
+
 }

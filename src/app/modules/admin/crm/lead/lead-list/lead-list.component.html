@@ -397,14 +397,14 @@
                                             </ng-container>
                                             <ng-container matColumnDef="rating">
                                                 <th mat-header-cell *matHeaderCellDef mat-sort-header i18n> Rating </th>
-                                                <td mat-cell *matCellDef="let row" class=""> 
+                                                <td mat-cell *matCellDef="let row" class="" > 
                                                    
                                                     <div class="flex flex-row mt-2" >
                                                         <ng-container >
                                                         <span class="flex flex-row">
                                                             <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
                                                                 <svg
-                                                                class="w-4 h-4 cursor-pointer"
+                                                                class="w-4 h-4 "
                                                                 [ngClass]="{
                                                                   'text-yellow-500': star <=  row.rating,
                                                                   'text-gray-500': star > row.rating ||  row.rating === undefined
@@ -421,11 +421,11 @@
                                                         </span>
                                                       
                                                       
-                                                          <span class="cursor-pointer  py-1 px-1 ml-1 -mt-1 rounded-full text-xs  text-white " 
+                                                          <span class=" py-1 px-1 ml-1 -mt-1 rounded-full text-xs  text-white " 
                                                              matTooltip="Lead Qualification Assessment Rating"
                                                              [ngClass]="{
                                                                 'status1':  row.rating <= 3,
-                                                                'Status4':  row.rating > 3 &&  row.rating < 4,
+                                                                'Status4':  row.rating > 3 &&  row.rating <= 4,
                                                                 'Status5':  row.rating >= 4
                                                               }" >{{  row.rating | number:'1.2-2' }}</span>
                                                         </ng-container>
