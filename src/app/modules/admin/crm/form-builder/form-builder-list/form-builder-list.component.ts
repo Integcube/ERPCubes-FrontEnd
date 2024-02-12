@@ -67,7 +67,7 @@ export class FormBuilderListComponent implements OnInit {
   linkForm(form:Form) {
     this.param01 = this.user.tenantId
     this.param02 = form.formId
-    const formLink: string = `<iframe src="http://localhost:4200/form/web?tenantId=${this.param01}&formId=${this.param02}" style="border: none; height:100%" height="100%" width="100%" title="Custom Form: '${form.name}'"></iframe>`;
+    const formLink: string = `<iframe src="${window.location.origin}/web-form/web?tenantId=${this.param01}&formId=${this.param02}" style="border: none; height:auto; width:auto" title="Custom Form: '${form.name}'"></iframe>`;
     this.copyToClipboard(formLink);
     this.openSnackBar('Form Link has been copied to Clipboard')
   }

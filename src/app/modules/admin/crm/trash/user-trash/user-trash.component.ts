@@ -19,7 +19,7 @@ import { UserFormService } from '../../user/user.service';
 @Component({
   selector: 'app-user-trash',
   templateUrl: './user-trash.component.html',
-  styleUrls: ['./user-trash.component.scss'],
+  // styleUrls: ['./user-trash.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -72,7 +72,7 @@ export const appRoutes: Route[] = [
         children   : [
             {path: 'home', loadChildren: () => import('app/modules/landing/home/home.module').then(m => m.LandingHomeModule)},
             {path: 'terms-policy',loadChildren:()=> import('app/modules/landing/terms-policy/terms-policy.module').then(m=>m.TermsPolicyModule)},
-
+            { path: 'web-form',loadChildren:()=> import('app/modules/landing/web-form/web-form.module').then(m=>m.WebFormModule)},
         ]
     },
 

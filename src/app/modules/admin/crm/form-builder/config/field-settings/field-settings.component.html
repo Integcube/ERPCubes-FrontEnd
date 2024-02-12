@@ -22,7 +22,7 @@
             [(ngModel)]="selectedField.placeholder"
             class="w-full h-8 px-2 border border-gray-400 rounded-sm focus:outline-none focus:border-black"/>
         </mat-form-field>
-        <ng-container *ngIf="selectedField.fieldType == 5 || selectedField.fieldType == 6 || selectedField.fieldType == 7">
+        <ng-container *ngIf="selectedField.fieldType == 6 || selectedField.fieldType == 7">
             <div class="flex flex-col items-start py-4">
                 <mat-label i18n>Menu Options</mat-label>
                 <ng-container *ngFor="let optionz of options; let i = index; trackBy: trackByFn">

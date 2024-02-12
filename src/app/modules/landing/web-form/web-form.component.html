@@ -8,44 +8,45 @@
                         <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{field.fieldLabel}}</mat-label>
                             <input matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}">
+                                [ngModelOptions]="{standalone: true}" [ngStyle]="applyCustomStyles(field)">
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 2">
-                        <mat-form-field class="fuse-mat-dense w-1/2">
+                        <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{field.fieldLabel}}</mat-label>
-                            <input matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}">
+                            <textarea matInput [(ngModel)]="field.result" [spellcheck]="false"
+                                [ngModelOptions]="{standalone: true}" [ngStyle]="applyCustomStyles(field)"></textarea>
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 3">
-                        <mat-form-field class="fuse-mat-dense w-1/2">
+                        <mat-form-field class="fuse-mat-dense w-full " [class]="field.css">
                             <mat-label>{{field.fieldLabel}}</mat-label>
                             <input matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}">
+                                [ngModelOptions]="{standalone: true}" type="number" [ngStyle]="applyCustomStyles(field)">
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 4">
-                        <mat-form-field class="fuse-mat-dense w-1/2">
+                        <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{field.fieldLabel}}</mat-label>
                             <input matInput 
                             [matDatepicker]="picker"
                             (dateChange)="onDatePicked($event, field.fieldLabel)"
                             [spellcheck]="false"
-                            [ngModelOptions]="{standalone: true}">
+                            [ngModelOptions]="{standalone: true}"
+                            [ngStyle]="applyCustomStyles(field)">
                             <mat-hint>MM/DD/YYYY</mat-hint>
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 5">
-                        <mat-checkbox name="field.fieldLabel" [checked]="field.result==='true'"
+                        <mat-checkbox name="value" 
                             (change)="onCheckBoxChange($event, field.fieldLabel)">
                             {{field.fieldLabel}}
                         </mat-checkbox>
                     </div>
                     <div *ngIf="field.fieldType == 6">
-                        <mat-form-field class="fuse-mat-dense w-1/2">
+                        <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{ field.fieldLabel }}</mat-label>
                             <mat-select [(ngModel)]="field.result" name="field.values">
                                 <ng-container *ngFor="let value of field.values|Split">
@@ -55,7 +56,7 @@
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 7">
-                        <mat-form-field class="fuse-mat-dense w-1/2">
+                        <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{ field.fieldLabel }}</mat-label>
                             <mat-select name="field.values"
                                 (selectionChange)="onMultipleSelect($event, field.fieldLabel)" multiple>

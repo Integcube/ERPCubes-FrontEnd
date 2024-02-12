@@ -13,12 +13,14 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
 import { webFormRoutes } from './web-form.routing';
+import { SplitPipe } from '@fuse/pipes/split/split.pipe';
 
 
 
 @NgModule({
   declarations: [
-    WebFormComponent
+    WebFormComponent,
+    SplitPipe
   ],
   imports: [
     RouterModule.forChild(webFormRoutes),

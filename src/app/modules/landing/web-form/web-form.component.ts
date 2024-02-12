@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { Form, FormField } from 'app/modules/landing/web-form/web-form.type';
 import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
 import { WebFormService } from './web-form.service';
@@ -14,7 +14,8 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 export class WebFormComponent implements OnInit {
   constructor(
     private _webFormService: WebFormService,
-    private _router: Router,
+    private _renderer: Renderer2,
+    private el: ElementRef,
     private _activatedRoute: ActivatedRoute,)
   { }
   private errorMessageSubject = new Subject<string>();
@@ -41,6 +42,19 @@ export class WebFormComponent implements OnInit {
       this.formArray = forms
       this.form = forms.find(form => form.formId === +this.param2)
     })
+
+  }
+
+
+  applyCustomStyles(field: FormField) {
+    const css = field.css.split(';')  // Split the string by semicolons to get an array of property-value pairs
+    .filter(pair => pair.trim())     // Remove any empty elements resulting from extra semicolons
+    .reduce((cssObject, pair) => {
+      const [property, value] = pair.split(':');  // Split each pair by colon to get property and value
+      cssObject[property.trim()] = value.trim();  // Assign property-value pair to the CSS object
+      return cssObject;
+    }, {});
+    return css;
   }
 
   onMultipleSelect(event: MatSelectChange, fieldLabel: string) {
@@ -49,6 +63,7 @@ export class WebFormComponent implements OnInit {
   }
 
   onCheckBoxChange(event: MatCheckboxChange, fieldLabel: string) {
+    debugger;
     const field = this.fieldArray.find(field => field.fieldLabel === fieldLabel);
     if (field) {
       if (field.result != "true") {
