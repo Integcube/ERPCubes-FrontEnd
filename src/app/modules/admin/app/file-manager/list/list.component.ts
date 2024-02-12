@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef,ElementRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
@@ -6,11 +6,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FileManagerService } from '../file-manager.service';
 import { Item } from '../file-manager.types';
 
-interface FileData {
-    name: string;
-    type: string;
-    size: number;
-  }
+
 @Component({
     selector       : 'file-manager-list',
     templateUrl    : './list.component.html',
@@ -19,24 +15,12 @@ interface FileData {
 })
 export class FileManagerListComponent implements OnInit, OnDestroy
 {
-
-
-    @ViewChild('gallery') gallery: ElementRef;
-    @ViewChild('overlay') overlay: ElementRef;
-    @ViewChild('hiddenInput') hiddenInput: ElementRef;
-
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
     drawerMode: 'side' | 'over';
     items: Item[];
     files:Item[];
     folders:Item[];
-
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    files: Record<string, FileData> = {};
-    counter = 0;
-    emptyVisible = true;
-
-
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -82,4 +66,6 @@ export class FileManagerListComponent implements OnInit, OnDestroy
 
 
 
+
+    
 }
