@@ -35,16 +35,16 @@
         <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
             <!-- Delete -->
             <ng-container>
-                <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteForm()" i18n>
+                <button mat-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="deleteForm()" i18n>
                     Delete
                 </button>
             </ng-container>
             <!-- Cancel -->
-            <button class="ml-auto mr-2" mat-button [matTooltip]="'Cancel'" (click)="close()" i18n>
+            <button class="ml-auto mr-2 h-8"  mat-button [matTooltip]="'Cancel'" (click)="close()" i18n>
                 Cancel
             </button>
             <!-- Save -->
-            <button class=" mr-4" mat-flat-button [color]="'primary'" [disabled]="!isFormValid()" (click)="saveForm()" i18n>
+            <button class=" mr-4 h-8 primary-2" mat-flat-button [color]="'primary'" [disabled]="customForm.invalid" (click)="saveForm()" i18n>
                 Save
             </button>
         </div>

@@ -78,20 +78,21 @@ export class FormBuilderService {
 
         )
     }
-    deleteForm(form: Form) {
+    
+    deleteForm(form: Form): Observable<Form> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
             formId: form.formId
-        }
-        return this._httpClient.post<Form[]>(this.deleteFormURL, data)
-        .pipe(
-            tap(forms => {
-                this.getForms().subscribe()
-            })
-        ),
-        catchError(err => { alert(err); return EMPTY}); 
-    }
+        };
+        return this._httpClient.post<Form>(this.deleteFormURL, data).pipe(
+          tap((customList) => {
+            this.getForms().subscribe();
+          }),
+          catchError(err => this.handleError(err))
+        );
+      }
+
     getSelectedForm(id: number): Observable<Form[]> {
         return this._forms.pipe(
             take(1),

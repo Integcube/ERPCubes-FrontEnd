@@ -39,7 +39,6 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     )
   }
   newfieldSelected(fieldType:FormFieldType) {
-    console.log('Received New Fields Type in Parent:', fieldType);
     let newField: FormField = {
       formId: this.selectedForm.formId,
       fieldId: this.FieldArray.length + 1,
@@ -57,6 +56,7 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     this.fieldSettingsView = true
   }
   fieldSaved(field: FormField) {
+    debugger
     const FieldArrayIndex = this.FieldArray.findIndex(id => id.fieldId == field.fieldId)
     if(FieldArrayIndex === -1) {
       this.FieldArray.push(field)
@@ -65,7 +65,6 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
       this.FieldArray[FieldArrayIndex] = field
     }
     this.fieldSettingsView = false
-    console.log(this.FieldArray)
   }
   fieldRemoved(field: FormField) {
     const formFieldIndex = this.FieldArray.indexOf(field)
@@ -88,13 +87,12 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     // }
   }
   allFormFieldsSaved() {
-    console.log('Form Fields Save Request: Parent')
+  
     this._formBuilderService.saveFormFields(this.FieldArray).subscribe(() => {
       this._router.navigate(['../'], { relativeTo: this._activatedRoute });
     },
     (error) => {
-      // Handle error appropriately, e.g., show a message or log the error
-      console.error('Error saving form fields:', error);
+   
     })
   }
   dropped(event: CdkDragDrop<FormField[]>): void {

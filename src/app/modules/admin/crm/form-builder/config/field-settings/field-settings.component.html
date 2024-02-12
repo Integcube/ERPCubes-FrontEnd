@@ -2,23 +2,23 @@
     <div class="flex flex-row justify-between h-10 sm:h-18 px-5 sm:px-9">
         <div class="flex items-center w-full">
             <span class="text-2xl text-black font-bold" i18n>Field Settings</span>
-        </div>
-        <button mat-icon-button class="rounded-full w-10 h-10 self-center items-center bg-accent-100"
+        </div> 
+        <button mat-icon-button class="rounded-full w-10 h-10 self-center items-center bg-accent-100"  matTooltip="Click to save Field setting"
             (click)="onFieldPropertyChange(selectedField)">
             <mat-icon class="text-accent2" i18n>done</mat-icon>
         </button>
     </div>
     <form class="flex flex-col h-10 sm:h-18 px-5 sm:px-9 gap-4">
-        <mat-form-field>
+        <mat-form-field >
             <mat-label>Field Label</mat-label>
-            <input matInput type="text" name="fieldLabel" #fieldLabel
+            <input matInput type="text"  matTooltip="Specify a meaningful title for the field." name="fieldLabel" #fieldLabel
             [(ngModel)]="selectedField.fieldLabel"
             [readonly]="selectedField.isFixed"
             class="w-full h-8 px-2 border border-gray-400 rounded-sm focus:outline-none focus:border-black"/>
         </mat-form-field>
         <mat-form-field>
-            <mat-label i18n>Place Holder</mat-label>
-            <input matInput type="text" name="placeholder" #placeholder
+            <mat-label i18n>Placeholder</mat-label>
+            <input matInput type="text" matTooltip="Add a field placeholder that will be displayed in the field." name="placeholder" #placeholder
             [(ngModel)]="selectedField.placeholder"
             class="w-full h-8 px-2 border border-gray-400 rounded-sm focus:outline-none focus:border-black"/>
         </mat-form-field>
@@ -34,12 +34,12 @@
                         mat-icon-button color="warn" 
                         class="rounded-full w-10 h-10 flex items-center bg-accent-100"
                         (click)="removeOption(optionz)">
-                            <mat-icon class="text-white">remove</mat-icon>
+                            <mat-icon class="text-white" matTooltip="remove option">remove</mat-icon>
                         </button>
                     </div>
                 </ng-container>
                 <span>
-                    <button mat-icon-button color="primary"
+                    <button mat-icon-button color="primary"  matTooltip="Click to add"
                     class="rounded-full w-10 h-10 flex items-center "
                     (click)="addOption()">
                         <mat-icon class="text-white">add</mat-icon>

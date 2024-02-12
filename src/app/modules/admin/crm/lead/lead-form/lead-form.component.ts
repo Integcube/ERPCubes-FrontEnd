@@ -96,6 +96,7 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
     this._unsubscribeAll.complete();
   }
   save() {
+
     this.selectedlead = { ...this.leadForm.value }
     this._leadService.saveLead(this.selectedlead).subscribe(
       {

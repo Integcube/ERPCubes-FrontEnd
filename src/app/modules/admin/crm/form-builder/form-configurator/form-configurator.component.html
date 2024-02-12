@@ -1,20 +1,54 @@
-<div class="flex flex-col w-full overflow-hidden">
-    <div class="flex w-full justify-between overflow-hidden h-15 px-6" style="background-color: #00bda5!important;">
-        <button mat-flat-button color="primary" class="self-center h-9" (click)="allFormFieldsSaved()" i18n>Save</button>
+<div class="flex flex-col w-full overflow-hidden ">
+    <!-- <div class="flex w-full justify-between overflow-hidden h-10 px-6" style="background-color: #00bda5!important;">
+ 
         <span class="text-white font-bold text-2xl self-center"> {{selectedForm.name}} </span>
         <div class="flex items-center justify-end">
             <a mat-icon-button [matTooltip]="'Close'" [routerLink]="['../']">
                 <mat-icon class="text-white" [svgIcon]="'heroicons_outline:x'"></mat-icon>
             </a>
         </div>
+        <button mat-flat-button  class="self-center h-8 primary-2" (click)="allFormFieldsSaved()" i18n>Save</button>
+    </div> -->
+    <div class="flex  sm:flex-row  items-end bg-white   sm:items-end sm:justify-between py-3 px-6 md:px-8 mb-2 shadow">
+     
+        <div>
+          
+            <div class="ml-0.5 font-medium text-secondary">
+                <ng-container >
+                    <div class="text-3xl font-bold tracking-tight leading-none" i18n>{{selectedForm.name}}</div>
+                </ng-container>
+                
+            </div>
+        </div>
+   
+        <div class="sm:mt-0">
+      
+      
+            <div class="flex gap-0">
+                <button class="ml-2 h-8 w-20" mat-stroked-button [routerLink]="['../']">
+                    <mat-icon [svgIcon]="'heroicons_outline:x'" class="icon-size-5"></mat-icon>
+                      
+                    <span class="ml-1 mr-1 text-xs" i18n>Cancel</span>
+                </button>
+           
+            <button class="ml-4 h-8 primary-2" mat-flat-button   (click)="allFormFieldsSaved()"
+                [matTooltip]="'Add to click changes'">
+                <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
+                <span class="ml-2 text-xs" i18n>Save Form</span>
+            </button>
+        </div>
+
+
+        </div>
+       
     </div>
-    <div class="flex flex-grow w-full overflow-hidden">
-        <div class="flex flex-col w-1/2  md:w-1/3">
+    <div class="flex flex-grow w-full overflow-hidden ">
+        <div class="flex flex-col w-1/2  md:w-1/3 border-r-2 pr-2">
             <div class="flex justify-center items-center w-full h-15  bg-primary">
                 <span class="text-lg text-white font-bold my-2" *ngIf="!fieldSettingsView" i18n>Add Field</span>
                 <div class="flex justify-center items-center w-full h-full gap-4" *ngIf="fieldSettingsView">
                     <span class="text-lg text-white font-bold truncate" i18n>Edit Field</span>
-                    <button mat-icon-button class="rounded-full w-10 h-10" (click)="closrFieldSetting('add')">
+                    <button mat-icon-button class="rounded-full w-10 h-10" matTooltip="Back to Field menu" (click)="closrFieldSetting('add')">
                         <mat-icon class="text-white" i18n>close</mat-icon>
                     </button>
                 </div>
@@ -27,7 +61,7 @@
             </div>
         </div>
         <!-- Field List View -->
-        <div class="flex flex-col max-h-full bg-default overflow-auto w-full">
+        <div class="flex flex-col max-h-full  overflow-auto w-full">
             <div class="flex flex-col justify-start w-full min-w-full max-w-full  ">
                 <div class="flex flex-col justify-start gap-4 py-8 w-full h-full bg-default">
                     <ng-container *ngIf="FieldArray">
@@ -46,7 +80,7 @@
                                     <button mat-icon-button color="warn"
                                         class="rounded-full w-10 h-10 mx-7 flex self-center items-center bg-accent-100 group-hover:flex"
                                         (click)="fieldRemoved(f)" *ngIf="!f.isFixed ">
-                                        <mat-icon class="text-white" i18n>remove</mat-icon>
+                                        <mat-icon class="text-white" matTooltip="Click Delete Field" i18n>remove</mat-icon>
                                     </button>
                                 </div>
                             </div>

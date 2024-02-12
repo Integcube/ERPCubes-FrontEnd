@@ -5,15 +5,15 @@
         <div class="flex flex-col bg-card sm:flex-row md:flex-col flex-auto justify-between py-3 px-6 md:px-8">
             <!-- Title -->
             <div>
-                <div class="text-3xl font-bold tracking-tight leading-none" i18n>Forms</div>
+                <div class="text-3xl font-bold tracking-tight leading-none" matTooltip="You Can Creat custom Form For Your Lead" i18n>Forms</div>
                 <div class="ml-0.5 font-medium text-secondary">
                     <ng-container *ngIf="formList.length > 0">
                         {{formList.length}}
                     </ng-container>
                     {{formList.length | i18nPlural: {
-                    '=0' : 'No Reports',
+                    '=0' : 'No Forms',
                     '=1' : 'Report',
-                    'other': 'Reports'
+                    'other': 'Forms'
                     } }}
                 </div>
             </div>
@@ -27,16 +27,16 @@
                     </mat-form-field>
                 </div>
                 <!-- Add company button -->
-                <button class="ml-4" mat-flat-button [color]="'primary'" (click)="createForm()">
+                <button class="ml-4 h-8 primary-2" mat-flat-button [color]="'primary'" (click)="createForm()">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                    <span class="ml-2 mr-1" i18n>Add</span>
+                    <span class="ml-2 mr-1 text-xs" i18n>Add</span>
                 </button>
             </div>
         </div>
         <div class="flex flex-grow py-5 bg-default px-6 min-w-full">
             <div class="grid grid-cols-1 md:grid-cols-3  sm:grid-cols-2 gap-4 w-full">
                 <div *ngFor="let f of formList; let i = index"
-                    class="flex flex-col p-4 border-r-2 min-h-30 bg-white hover:border-2 border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between relative">
+                    class="flex flex-col p-4 border-1 min-h-30 bg-white hover:border-2 border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between relative">
                     <div (mouseenter)="updateHoverState(i, true)" (mouseleave)="updateHoverState(i, false)">
                         <div class="flex flex-col justify-start gap-2 pb-2">
                             <div class="flex gap-2">

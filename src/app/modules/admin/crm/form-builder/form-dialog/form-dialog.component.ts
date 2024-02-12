@@ -28,14 +28,12 @@ export class FormDialogComponent implements OnInit {
   ngOnInit(): void {
     this.customForm = this._formBuilder.group({
       formId: 0,
-      name: [, Validators.required],
+      name: [ ,Validators.required],
       description: ["", Validators.required],
       code: ''
     });
     this.selectedForm = this._data.form
-    
     this.customForm.patchValue(this.selectedForm, {emitEvent: false})
-    console.log(this.customForm)
   }
   close(): void {
     this.matDialogRef.close();
@@ -43,13 +41,13 @@ export class FormDialogComponent implements OnInit {
   saveForm() {
     this.selectedForm = {...this.customForm.value}
     this._formBuilderService.saveForm(this.selectedForm).subscribe()
-    this.close()
+    this.close();
   }
-  deleteForm() {
-    this.selectedForm = {...this.customForm.value}
+
+
+  deleteForm(){
     this._formBuilderService.deleteForm(this.selectedForm)
+    .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
   }
-  isFormValid(): boolean {
-    return this.customForm.valid && !this.customForm.pristine;
-  }
+
 }
