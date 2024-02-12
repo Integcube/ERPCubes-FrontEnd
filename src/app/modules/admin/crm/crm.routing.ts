@@ -32,8 +32,8 @@ export const crmRoutes: Routes = [
         { path: 'campaign',loadChildren:()=> import('app/modules/admin/crm/campaign/campaign.module').then(m=>m.CampaignModule)},
         { path: 'project',loadChildren:()=> import('app/modules/admin/crm/project/project.module').then(m=>m.ProjectModule)},
         { path: 'forms',loadChildren:()=> import('app/modules/admin/crm/form-builder/form-builder.module').then(m=>m.FormBuilderModule)},
-        { path: 'web-form',loadChildren:()=> import('app/modules/landing/web-form/web-form.module').then(m=>m.WebFormModule)},
-        
+        //{ path: 'web-form',loadChildren:()=> import('app/modules/landing/web-form/web-form.module').then(m=>m.WebFormModule)},
+        { path: 'lead-questionaire', loadChildren:() => import('app/modules/admin/crm/lead-questionaire/lead-questionaire.module').then(m => m.LeadQuestionaireModule)}
     ]
 },
 ]
