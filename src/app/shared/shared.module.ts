@@ -9,6 +9,7 @@ import { BoldPipe } from '@fuse/pipes/bold/bold.pipe';
 import {FilterPipe} from '@fuse/pipes/filter/filter';
 import {OrderByPipe} from '@fuse/pipes/oderBy/orderBy';
 import { MonthToWordPipe } from '@fuse/pipes/month-pipe/month-convert.pipe';
+import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
 @NgModule({
     declarations:[
         TableLimitPipe,
@@ -19,6 +20,7 @@ import { MonthToWordPipe } from '@fuse/pipes/month-pipe/month-convert.pipe';
         MonthToWordPipe,
         FilterPipe,
         OrderByPipe,
+        TrashComponent,
     ],
     imports: [
         CommonModule,
@@ -36,7 +38,8 @@ import { MonthToWordPipe } from '@fuse/pipes/month-pipe/month-convert.pipe';
         BoldPipe,
         MonthToWordPipe,
         FilterPipe,
-        OrderByPipe
+        OrderByPipe,
+        TrashComponent
     ]
 })
 export class SharedModule

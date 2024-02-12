@@ -22,16 +22,16 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     this.tenantId =  this.user.tenantId
     this.messengerForm = this._formBuilder.group({
-      url: `https://www.meta.com/in/subuktageenfarooqi/${this.tenantId}`,
-      tenantId: 1
+      url: `https://callbe.thequantus.com/api/Webhook/messanger?${this.tenantId}`,
+      tenantId: 'BL090'
     })
     this.whatsappForm = this._formBuilder.group({
-      url: `https://www.web.whatsapp.com/in/subuktageenfarooqi/${this.tenantId}`,
-      tenantId: 1
+      url: `https://callbe.thequantus.com/api/Webhook/whatsapp?${this.tenantId}`,
+      tenantId: 'BL090'
     })
     this.instagramForm = this._formBuilder.group({
-      url: `https://www.instagram.com/in/subuktageenfarooqi/${this.tenantId}`,
-      tenantId: 1
+      url: `https://callbe.thequantus.com/api/Webhook/instagram?${this.tenantId}`,
+      tenantId: 'BL090'
     })
   }
 }

@@ -44,7 +44,7 @@ export class ChatService {
     }
     private startConnection = () => {
         this._ticketConnection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7020/ticketHub', {
+            .withUrl(`${environment.signalR}/ticketHub`, {
                 transport: HttpTransportType.WebSockets,
                 skipNegotiation: true
             })

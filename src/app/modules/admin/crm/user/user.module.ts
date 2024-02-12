@@ -25,16 +25,12 @@ import { SharedModule } from 'app/shared/shared.module';
 import { userRoutes } from './user.routing';
 import moment from 'moment';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
-import { UserTrashComponent } from '../trash/user-trash/user-trash.component';
-
-
 
 @NgModule({
   declarations: [
     UserComponent,
     UserListComponent,
     UserFormComponent,
-    UserTrashComponent
   ],
   imports: [
     CommonModule,

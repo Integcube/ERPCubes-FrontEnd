@@ -128,7 +128,6 @@ export class UserFormService {
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
-    debugger;
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {
       errorMessage = `An error occurred: ${err.error.message}`;

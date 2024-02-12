@@ -39,10 +39,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { QuillModule } from 'ngx-quill';
-import { ProductTrashComponent } from '../trash/product-trash/product-trash.component';
-
-
-
 
 @NgModule({
   declarations: [
@@ -50,7 +46,6 @@ import { ProductTrashComponent } from '../trash/product-trash/product-trash.comp
     ProductListComponent,
     ProductFormComponent,
     ProductImportComponent,
-    ProductTrashComponent,
   ],
   imports: [
     CommonModule,

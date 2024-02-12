@@ -11,10 +11,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Observable, Subject, takeUntil, fromEvent, filter } from 'rxjs';
 import { UserForm } from '../user.type';
 import { UserFormService } from '../user.service';
-import { DeletedUsers } from '../../trash/trash.type';
-import { UserTrashComponent } from '../../trash/user-trash/user-trash.component';
-import { cloneDeep } from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-user-list',
@@ -178,8 +176,7 @@ export class UserListComponent implements OnInit {
   }
 
   openTrashDialog() {
-    let trash = new DeletedUsers({})
-    const restoreDialogRef = this._dialog.open(UserTrashComponent,
+    const restoreDialogRef = this._dialog.open(TrashComponent,
       {
         height: "100%",
         width: "100%",
@@ -188,10 +185,13 @@ export class UserListComponent implements OnInit {
 
         autoFocus: false,
       data     : {
-          trash: cloneDeep(trash)
+          type:"USER" 
       }
       }
     );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._userFormService.getUsers().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
   }
 
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../product.type';
-import { EMPTY, Observable, Subject, catchError, filter, fromEvent, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DOCUMENT } from '@angular/common';
@@ -13,11 +13,7 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProductService } from '../product.service';
 import { ProductImportComponent } from '../product-import/product-import.component';
 import { MatDialog } from '@angular/material/dialog';
-// import { ProductTrashComponent } from '../product-trash/product-trash.component';
-import { DeletedProducts } from '../../trash/trash.type';
-import { cloneDeep } from 'lodash';
-import { ProductTrashComponent } from '../../trash/product-trash/product-trash.component';
-// import { ProductTrashComponent } from '../product-trash/product-trash.component';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-product-list',
@@ -187,20 +183,8 @@ export class ProductListComponent implements OnInit {
     this.exporter.exportTable('xls', { fileName: 'Lead-list' });
   }
 
-  // trash(){
-  //   const dialogRef = this._dialog.open(ProductTrashComponent,
-  //     {
-  //       height: "100%",
-  //       width: "100%",
-  //       maxWidth: "100%",
-  //       maxHeight: "100%"
-  //     }
-  //   );
-  // }
-
   openTrashDialog() {
-    let trash = new DeletedProducts({})
-    const restoreDialogRef = this._dialog.open(ProductTrashComponent,
+    const restoreDialogRef = this._dialog.open(TrashComponent,
       {
         height: "100%",
         width: "100%",
@@ -209,9 +193,12 @@ export class ProductListComponent implements OnInit {
 
         autoFocus: false,
       data     : {
-          trash: cloneDeep(trash),
+          type: "PRODUCT",
       }
       }
     );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._productService.getProducts().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
   }
 }
