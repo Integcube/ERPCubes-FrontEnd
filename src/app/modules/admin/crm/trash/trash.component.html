@@ -1,11 +1,11 @@
 <div class="absolute flex flex-col  inset-0 justify-between overflow-hidden">
-    <!-- <div class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
+    <div class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-6 bg-card shadow overflow-hidden">
         <div class="flex flex-row justify-between  py-5">
             <div class="text-2xl font-semibold tracking-tight leading-none">Trash</div>
             <div class="justify-end ">
-                <button class="icon-size-7" mat-icon-button [color]="'bg-gray-300'  " [matTooltip]="'Close'" (click)="closeDialog()">
+                <!-- <button class="icon-size-7" mat-icon-button [color]="'bg-gray-300'  " [matTooltip]="'Close'" (click)="closeDialog()">
                     <mat-icon class="text-gray-400 icon-size-5" [svgIcon]="'heroicons_outline:x'"></mat-icon>
-                </button>
+                </button> -->
             </div>
         </div>
         
@@ -13,7 +13,7 @@
 
         <p>Items shown below can be restored individually or by selecting multiple. </p>
         <div class="flex flex-wrap justify-between py-3">
-            <div class="flex-auto self-center">
+            <!-- <div class="flex-auto self-center">
                 <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript w-1/3 h-10">
                     <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
                     <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
@@ -43,7 +43,7 @@
                         </button>
                     </mat-menu>
                 </mat-form-field>
-            </div>
+            </div> -->
         </div>
         
         <div class="flex flex-row items-center  p-2">
@@ -63,52 +63,37 @@
         
         </div>
         <div class="py-1 h-auto" *ngIf="trashItems; else loading" fuseScrollbar>
-                <ng-container *ngIf="trashItems.length; else noDeletedLeads">
-                    <ng-container *ngFor="let lead of trashItems">
-                        <fuse-card class="relative flex flex-col bg-card border-l-2 border-red-500 shadow overflow-x-auto  w-full filter-testimonial mb-2 rounded-sm cursor-pointer">
-                            <div class="flex flex-row items-center justify-between p-0">
-                                <div class="flex flex-wrap ml-1 text-md text-gray-700 font-normal px-2 ">
-                    <mat-checkbox (change)="toggleSelection($event, lead)"></mat-checkbox>
-                                    {{ lead.firstName }}
-                                </div>
-                                <div class="flex flex-row items-center gap-3">
-                                    <div class="flex flex-wrap ml-1 text-md font-normal line-clamp-1">
-                                        <span class="flex flex-0 items-center justify-center w-6 h-6 rounded-full overflow-hidden"
-                                            matTooltip="{{ lead.deletedBy }}">
-                                            <ng-container *ngIf="avatar">
-                                                <img class="object-cover w-full h-full" [src]="avatar" alt="Contact avatar" />
-                                            </ng-container>
-                                            <ng-container *ngIf="!avatar">
-                                                <div
-                                                    class="flex items-center justify-center w-full h-full rounded-full uppercase font-semibold bg-gray-200 text-gray-600">
-                                                    {{lead.deletedBy.charAt(0)}}
-                                                </div>
-                                            </ng-container>
-                                        </span>
-                                    </div>
-                                    
-
-                                    <div class="flex flex-wrap  text-xs text-gray-400 font-normal px-16 line-clamp-1">
-                                        
-                                                {{lead.deletedDate | date:'mediumDate'}}
-                                    </div>
-                                    <div>
-                                        <button mat-icon-button [matMenuTriggerFor]="optionsMenu">
-                                            <mat-icon svgIcon="more_horiz"></mat-icon>
-                                        </button>
-                                        <mat-menu #optionsMenu="matMenu">
-                                            <button  mat-menu-item  (click)="restoreLead(lead)">
-                                                <mat-icon svgIcon="restore"></mat-icon>
-                                                <span >Restore</span>
-                                            </button>
-                                        </mat-menu>
-                                    </div>
-                                </div>
-                            </div>
-                        </fuse-card>
-                    </ng-container>
-                </ng-container>
-        </div>
+            <ng-container *ngIf="trashItems.length; else noDeletedLeads">
+              <ng-container *ngFor="let item of trashItems">
+                <!-- Adjust the card structure based on your data -->
+                <fuse-card class="relative flex flex-col bg-card border-l-2 border-red-500 shadow overflow-x-auto w-full filter-testimonial mb-2 rounded-sm cursor-pointer">
+                  <div class="flex flex-row items-center justify-between p-0">
+                    <div class="flex flex-wrap ml-1 text-md text-gray-700 font-normal px-2">
+                      <!-- Adjust the content based on your data structure -->
+                      {{ item.name }}
+                    </div>
+                    <div class="flex flex-row items-center gap-3">
+                      <!-- ... Other HTML code ... -->
+                      <div class="flex flex-wrap text-xs text-gray-400 font-normal px-16 line-clamp-1">
+                        {{ item.deletedDate | date:'mediumDate'}}
+                      </div>
+                      <div>
+                        <!-- <button mat-icon-button [matMenuTriggerFor]="optionsMenu">
+                          <mat-icon svgIcon="more_horiz"></mat-icon>
+                        </button> -->
+                        <!-- <mat-menu #optionsMenu="matMenu"> -->
+                          <button mat-menu-item (click)="restoreItem(item)">
+                            <mat-icon svgIcon="restore"></mat-icon>
+                            <span>Restore</span>
+                          </button>
+                        <!-- </mat-menu> -->
+                      </div>
+                    </div>
+                  </div>
+                </fuse-card>
+              </ng-container>
+            </ng-container>
+          </div>
         <ng-template #loading>Loading deleted Items...</ng-template>
         <ng-template #noDeletedProducts>No deleted Items found!</ng-template>
     </div>
@@ -116,20 +101,20 @@
     <div class="bg-default sticky bottom-0 -mx-6 z-999">
         <div class="flex px-10 my-4 justify-between">
             <div class="justify-start">
-                <button class="ml-auto " mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                <!-- <button class="ml-auto " mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
                     <mat-icon
                     class="icon-size-5 mr-2"
                        [svgIcon]="'heroicons_outline:x-circle'" class=""></mat-icon>   
                        <span class="ml-1 mr-1 text-sm">Close</span>  
-                </button>
+                </button> -->
             </div> 
             <div class="justify-end">
-                <button mat-button [matTooltip]="'Restore Selected'" (click)="restoreBulkLead()"
+                <!-- <button mat-button [matTooltip]="'Restore Selected'" (click)="restoreBulkLead()"
                     [disabled]="!isAnyLeadSelected()">
                     <mat-icon svgIcon="restore"></mat-icon>
                     <span class="ml-1 mr-1 text-sm">Restore Selected</span>
-                </button>
+                </button> -->
             </div>
         </div>
-    </div> -->
+    </div>
 </div>

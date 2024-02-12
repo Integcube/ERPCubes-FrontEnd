@@ -1,16 +1,19 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { DeletedItems } from './trash.type';
 import { Subject, takeUntil } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TrashService } from './trash.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-trash',
   templateUrl: './trash.component.html',
 })
 export class TrashComponent implements OnInit, OnDestroy {
+  @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
+
   trashItems:DeletedItems[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   selection = new SelectionModel<DeletedItems>(true, []);
@@ -40,6 +43,7 @@ export class TrashComponent implements OnInit, OnDestroy {
       )
     }
     else if(this._data.type==="USER"){
+      debugger;
       this._trashService.getDeletedUsersList().pipe(takeUntil(this._unsubscribeAll)).subscribe(
         data=>{this.trashItems=[...data]}
       )
@@ -67,12 +71,12 @@ export class TrashComponent implements OnInit, OnDestroy {
     //   });
   }
 
-  // restoreLead(lead: DeletedLeads): void {
-  //   this._leadService.restoreLead(lead).subscribe(() => {
-  //     this.deletedLeads$ = this._leadService.getDeletedLeads();
-  //     this._changeDetectorRef.markForCheck();
-  //   });
-  // }
+  restoreItem(lead: DeletedItems): void {
+    this._trashService.restoreUser(lead).subscribe(() => {
+      this._trashService.getDeletedUsersList();
+      // this._changeDetectorRef.markForCheck();
+    });
+  }
 
 
   // Update restoreBulkProduct method
