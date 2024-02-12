@@ -7,6 +7,9 @@ export class Product{
     projectId: number;
     tenantId: number;
     isHovered: boolean;
+    deletedBy: string = '';
+    avatar: any;
+    deletedDate: Date;
     constructor(reg){
         this.productId = reg.productId?reg.productId:-1;
         this.projectId = reg.projectId?reg.projectId:-1;

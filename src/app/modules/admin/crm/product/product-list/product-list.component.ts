@@ -13,6 +13,11 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ProductService } from '../product.service';
 import { ProductImportComponent } from '../product-import/product-import.component';
 import { MatDialog } from '@angular/material/dialog';
+// import { ProductTrashComponent } from '../product-trash/product-trash.component';
+import { DeletedProducts } from '../../trash/trash.type';
+import { cloneDeep } from 'lodash';
+import { ProductTrashComponent } from '../../trash/product-trash/product-trash.component';
+// import { ProductTrashComponent } from '../product-trash/product-trash.component';
 
 @Component({
   selector: 'app-product-list',
@@ -180,5 +185,33 @@ export class ProductListComponent implements OnInit {
 
   exportToExcel() {
     this.exporter.exportTable('xls', { fileName: 'Lead-list' });
+  }
+
+  // trash(){
+  //   const dialogRef = this._dialog.open(ProductTrashComponent,
+  //     {
+  //       height: "100%",
+  //       width: "100%",
+  //       maxWidth: "100%",
+  //       maxHeight: "100%"
+  //     }
+  //   );
+  // }
+
+  openTrashDialog() {
+    let trash = new DeletedProducts({})
+    const restoreDialogRef = this._dialog.open(ProductTrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+
+        autoFocus: false,
+      data     : {
+          trash: cloneDeep(trash),
+      }
+      }
+    );
   }
 }

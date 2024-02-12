@@ -6,6 +6,8 @@ export const crmRoutes: Routes = [
         { path: 'company', loadChildren: () => import('app/modules/admin/crm/company/company.module').then(m => m.CompanyModule) },
         { path: 'leads', loadChildren: () => import('app/modules/admin/crm/lead/lead.module').then(m => m.LeadModule) },
         { path: 'opportunity',loadChildren:()=> import('app/modules/admin/crm/opportunity/opportunity.module').then(m=>m.OpportunityModule)},
+        { path: 'lead-import',loadChildren:()=> import('app/modules/admin/crm/lead-import/lead-import.module').then(m=>m.LeadImportModule)},
+
     ]
 },
 {

@@ -19,6 +19,11 @@ export class ProductService {
   private readonly deleteProductURL = `${environment.url}/Product/delete`
   private readonly getProjectURL = `${environment.url}/Project/all`
   private readonly saveBulkProductsURL = `${environment.url}/Product/bulkSave`
+  private readonly getDeletedProductList = `${environment.url}/Product/del`
+  private readonly getRestoreBulkProductList = `${environment.url}/Product/restoreBulk`
+  private readonly getRestoreProductList = `${environment.url}/Product/restore`
+
+
   user: User;
   private _product: BehaviorSubject<Product | null> = new BehaviorSubject(null);
   private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
@@ -161,5 +166,53 @@ export class ProductService {
       panelClass: colorName,
     });
   }  
+
+  getDeletedProducts(): Observable<Product[]> {
+    
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<Product[]>(this.getDeletedProductList, data).pipe(
+      tap((products) => {
+        this._products.next(products);
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+
+
+  restoreProduct(product: Product): Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      productId: product.productId
+    };
+
+    return this._httpClient.post<Product[]>(this.getRestoreProductList, data).pipe(
+      tap(() => {
+        this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
+        this.getDeletedProducts().subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+
+  restoreBulkProduct(productIds: number[]): Observable<any> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      productId: productIds
+    };
+  
+    return this._httpClient.post<Product[]>(this.getRestoreBulkProductList, data).pipe(
+      tap(() => {
+        this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this.getDeletedProducts().subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+
 
 }

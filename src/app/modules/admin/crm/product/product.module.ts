@@ -39,6 +39,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { QuillModule } from 'ngx-quill';
+import { ProductTrashComponent } from '../trash/product-trash/product-trash.component';
 
 
 
@@ -48,7 +49,8 @@ import { QuillModule } from 'ngx-quill';
     ProductComponent,
     ProductListComponent,
     ProductFormComponent,
-    ProductImportComponent
+    ProductImportComponent,
+    ProductTrashComponent,
   ],
   imports: [
     CommonModule,
@@ -84,7 +86,7 @@ import { QuillModule } from 'ngx-quill';
     FuseScrollbarModule,
     DragDropModule,
     QuillModule,
-    SharedModule,
+    SharedModule,    
   ],
   providers   : [
     {

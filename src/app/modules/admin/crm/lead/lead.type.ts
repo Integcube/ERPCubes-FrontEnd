@@ -297,3 +297,14 @@ export interface StatusLeads {
     leadOwner: string;
     mobile: string;
 }
+export class DeletedLeads{
+    leadId: number;
+    firstName: string = "";
+    deletedBy: string = '';
+    avatar: any;
+    deletedDate: Date;
+    constructor(reg){
+        this.leadId = reg.productId?reg.leadId:-1;
+    }
+}
+

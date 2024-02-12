@@ -20,6 +20,10 @@ import { LeadImportComponent } from '../lead-import/lead-import.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { LeadRestoreComponent } from '../lead-restore/lead-restore.component';
 import { LeadScoreComponent } from '../lead-detail/lead-score/lead-score.component';
+import { cloneDeep } from 'lodash';
+import { DeletedLeads } from '../../trash/trash.type';
+import { LeadTrashComponent } from '../../trash/lead-trash/lead-trash.component';
+
 
 @Component({
   selector: 'app-lead-list',
@@ -536,7 +540,16 @@ export class LeadListComponent implements OnInit,AfterViewInit {
     return item.id || index;
   }
 
-  
+  // addNote(){
+  //   let note = new Note({})
+  //   // this._changeDetectorRef.markForCheck();
+  //   this._matDialog.open(NoteDetailComponent, {
+  //     autoFocus: false,
+  //     data     : {
+  //         note: cloneDeep(note)
+  //     }
+  //   });
+  // }
   openConnectorDialog() {
     const dialogRef = this.dialog.open(LeadImportComponent,
       {
@@ -547,13 +560,36 @@ export class LeadListComponent implements OnInit,AfterViewInit {
       }
     );
   }
-  openRestoreDialog() {
-    const restoreDialogRef = this.dialog.open(LeadRestoreComponent,
+  // openRestoreDialog() {
+  //   let trash = new DeletedLeads({})
+  //   const restoreDialogRef = this.dialog.open(TrashComponent,
+  //     {
+  //       height: "100%",
+  //       width: "100%",
+  //       maxWidth: "100%",
+  //       maxHeight: "100%",
+
+  //       autoFocus: false,
+  //     data     : {
+  //         trash: cloneDeep(trash)
+  //     }
+  //     }
+  //   );
+  // }
+
+  openTrashDialog() {
+    let trash = new DeletedLeads({})
+    const restoreDialogRef = this.dialog.open(LeadTrashComponent,
       {
         height: "100%",
         width: "100%",
         maxWidth: "100%",
-        maxHeight: "100%"
+        maxHeight: "100%",
+
+        autoFocus: false,
+      data     : {
+          trash: cloneDeep(trash),
+      }
       }
     );
   }
