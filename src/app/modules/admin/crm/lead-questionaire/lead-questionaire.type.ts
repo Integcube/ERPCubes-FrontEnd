@@ -5,25 +5,21 @@ export class Question {
     order: number;
     productId: number;
     weightage: number;
-    tenantId: number;
-    isHovered: boolean;
     constructor(reg) {
+        this.title = reg.title ? reg.title : "New Question";
+        this.order = reg.order ? reg.order : -1;
+        this.weightage = reg.weightage ? reg.weightage : 0.1;
         this.questionId = reg.questionId ? reg.questionId : -1;
     }
 }
 
 
-export class Product{
-
+export interface Product{
     productId: number;
     productName: string;
-    description: string = '';
+    description: string;
     price: number;
     projectId: number;
     tenantId: number;
     isHovered: boolean;
-    constructor(reg){
-        this.productId = reg.productId?reg.productId:-1;
-        this.projectId = reg.projectId?reg.projectId:-1;
-    }
 }

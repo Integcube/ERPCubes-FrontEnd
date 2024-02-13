@@ -1,12 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Question } from '../lead-questionaire.type';
 import { LeadQuestionaireService } from '../lead-questionaire.service';
-import { LeadQuestionaireListComponent } from '../lead-questionaire-list/lead-questionaire-list.component';
-import { Subject, filter, takeUntil } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
@@ -16,12 +13,7 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./lead-questionaire-form.component.scss']
 })
 export class LeadQuestionaireFormComponent implements OnInit {
-  @ViewChild('title') private _titleField: ElementRef;
-  @ViewChild(MatSort) sort: MatSort;
-  // private questionsSubject = new Subject<Question[]>()
-  // questions$ = this.questionsSubject.asObservable();
   questions: Question[] = [];
-  selectedQuestion: Question = new Question({});
   dataSource: MatTableDataSource<Question>;
   weightageList = [
     {weightage: 0.1, title: "10%"},
@@ -46,59 +38,40 @@ export class LeadQuestionaireFormComponent implements OnInit {
     private matDialogRef: MatDialogRef<LeadQuestionaireFormComponent>,
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) private _data: { selectedQuestions: Question[] },
-    private _changeDetectorRef: ChangeDetectorRef,
     private _fuseConfirmationService: FuseConfirmationService,
     private _questionaireService: LeadQuestionaireService,
   ) { }
   
   ngOnInit(): void {
-    // this.questions$ = this._questionaireService.questions$;
-    // this._questionaireService.questions$
-    // .pipe(takeUntil(this._unsubscribeAll))
-    // .subscribe((questions: Question[]) => {
-    //   debugger;
-    //   this.questions = { ...questions };
-    //   this.dataSource = new MatTableDataSource(this.questions);
-    //   this.dataSource.sort = this.sort;
-    //   // Move the creation of questionaireForm inside the subscription
-    //   this._changeDetectorRef.markForCheck();
-    // });
     this.questions = this._data.selectedQuestions;
     this.dataSource = new MatTableDataSource(this.questions);
-  }
-
-  ngAfterViewInit(): void {
+    this._questionaireService.questions$.subscribe(
+      data=>this.questions = [...data]
+    )
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+  addLead(){
+    new Question({});
+    //DBsave
 
 
-  previewQuestion(question: Question){
-    this._questionaireService.selectedQuestion(question.questionId).subscribe();
+  // getProduct(){
+
+  // }
   }
 
-  addQuestion() {
-    this.selectedQuestion = new Question({})
-  }
 
-  updateQuestion(id: number){
-    this._questionaireService.selectedQuestion(id).subscribe(
-      question => {
-        this.selectedQuestion = question;
-      }
-    );
-  }
 
-  save() {
-    this.questions.push( this.selectedQuestion)
-    this.selectedQuestion = null
-    this._questionaireService.saveQuestionaire(this.questions).subscribe()
-    this.close();
-  }
+  // save() {
+  //   this.questions.push( this.selectedQuestion)
+  //   this.selectedQuestion = null
+  //   this._questionaireService.saveQuestionaire(this.questions).subscribe()
+  //   this.close();
+  // }
 
   delete() {
      // Open the confirmation dialog

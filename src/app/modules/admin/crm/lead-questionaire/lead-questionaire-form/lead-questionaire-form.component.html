@@ -1,158 +1,39 @@
-<style>
-  .success-snackbar {
-    background-color: #4CAF50;
-    /* Green */
-    color: white;
-  }
-</style>
-
 <div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
-  <div class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary">
+  <div
+    class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary w-full">
     <div class="text-lg font-medium">Lead Qualification Assessment</div>
     <button mat-icon-button (click)="discard()" [tabIndex]="-1">
       <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
     </button>
   </div>
-  {{questions|json}}
-  <form class="flex flex-col flex-auto p-6 pt-2 sm:pt-2 sm:p-8">
-    <!-- Add Question -->
-    <div class="flex flex-row justify-between w-full ">
-      <div>
-        <div>
-          <div class="items-center justify-between">
-            <span class="text-lg font-bold">Add Question</span>
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <div class="w-full max-w-3xl">
-              <div class="w-full">
-                  <label for="title" class="text-sm font-semibold ml-3">Title</label>
-                  <div
-                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="selectedQuestion.title"
-                      name="title" #title>
-                  </div>
-                  <!-- <mat-error *ngIf="selectedQuestion.title = null" class="text-sm">
-                    First Name is required
-                  </mat-error> -->
-              </div>
-              <div class="flex gap-3">
-                <div>
-                  <label for="code" class="text-sm font-semibold ml-3">Code</label>
-                  <div
-                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="selectedQuestion.code"
-                      name="code" #code>
-                  </div>
-                  <!-- <mat-error *ngIf="selectedQuestion.code = null" class="text-sm">
-                    First Name is required
-                  </mat-error> -->
-                </div>
-                <div>
-                  <label for="order" class="text-sm font-semibold ml-3">Order</label>
-                  <div
-                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="selectedQuestion.order"
-                      name="order" #order>
-                  </div>
-                  <!-- <mat-error *ngIf="selectedQuestion.order = null" class="text-sm">
-                    First Name is required
-                  </mat-error> -->
-                </div>
-                <div>
-                  <label for="weightage" class="text-sm font-semibold ml-3">Weightage</label>
-                  <div
-                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="selectedQuestion.weightage"
-                      name="weightage" #weightage>
-                  </div>
-                  <!-- <mat-error *ngIf="selectedQuestion.weightage = null" class="text-sm">
-                    First Name is required
-                  </mat-error> -->
-                </div>
-
-              </div>
-          </div>
-        </div>
-      </div>
+  <div class="flex justify-between px-6 py-2">
+    <div class="text-lg font-medium">Question List</div>
+    <div class="flex self-center">
+      <button class="ml-2 primary-2 h-8" [matTooltip]="'Click to Save Lead Qualification'" mat-stroked-button
+        *ngIf="questions" (click)="addLead()">
+        <!-- <mat-icon class="icon-size-5 mr-2 text-white" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon> -->
+        <span class="ml-1 mr-1 text-xs" i18n>Add Question</span>
+      </button>
     </div>
-    <!-- Existing Questions -->
-    <ng-container *ngFor="let question of questions; let i = index">
+  </div>
+  <div class="flex flx-col w-full py-6" *ngFor="let question of questions">
+    <div class="flex gap-5 w-full">
+      <div
+        class="flex w-5/6 items-center py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.title"
+          #name>
+      </div>
+      
+        <div
+        class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+        <select class="w-3 font-medium leading-5 bg-transparent h-full"
+        [formControlName]="'leadOwner'" #leadOwner>
+            <option *ngFor="let weight of weightageList"  [value]="weight.weightage">{{weight.title}}</option>
+        </select>
+      </div>
       <div>
-        <div class="items-center justify-between">
-          <span class="text-lg font-bold">{{question.title}}</span>
-        </div>
-        <div class="flex flex-col">
-          <div class="w-full max-w-3xl">
-            <div class="w-full">
-              <label for="title" class="text-sm font-semibold ml-3">Question Text</label>
-              <div
-                class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.title" name="title">
-              </div>
-              <!-- <mat-error *ngIf="question.title = null" class="text-sm">
-                First Name is required
-              </mat-error> -->
-            </div>
-            <div class="flex gap-3">
-              <div>
-                <label for="code" class="text-sm font-semibold ml-3">Code</label>
-                <div
-                  class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                  <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.code" name="code">
-                </div>
-                <!-- <mat-error *ngIf="question.code = null" class="text-sm">
-                  First Name is required
-                </mat-error> -->
-              </div>
-              <div>
-                <label for="order" class="text-sm font-semibold ml-3">Order</label>
-                <div
-                  class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                  <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.order" name="order">
-                </div>
-                <!-- <mat-error *ngIf="question.order = null" class="text-sm">
-                  First Name is required
-                </mat-error> -->
-              </div>
-              <div>
-                <label for="weightage" class="text-sm font-semibold ml-3">Weightage</label>
-                <div
-                  class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-gray-300 focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-                  <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.weightage" name="weightage">
-                </div>
-                <!-- <mat-error *ngIf="question.weightage = null" class="text-sm">
-                  First Name is required
-                </mat-error> -->
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-container>
-    <ng-template #noQuestions>
-      <div class="p-2 mt-3">
-        <div class=" text-gray-800 text-2xl">
-          <mat-icon class="icon-size-5 mr-2" [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon> No
-          Questions found.
-        </div>
-        <div class="text-gray-800 sm-xs">Please contact to administration to add questions for this product.</div>
-      </div>
-    </ng-template>
-    <div class="flex flex-col  max-w-240 md:min-w-160 max-h-16 -m-6 mt-3">
-      <div class="flex  items-center justify-between h-16  bg-gray-50 dark:bg-gray-300">
-
-        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
-          <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-          <span class="ml-2 text-xs" i18n>Cancel</span>
-        </button>
-        <button class="ml-2  primary-2 h-8" [matTooltip]="'Click to Save Lead Qualification'" mat-stroked-button
-          *ngIf="questions" [disabled]=" questions.length==0" (click)="SaveLeadScore()">
-          <mat-icon class="icon-size-5 mr-2 text-white" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
-          <span class="ml-1 mr-1 text-xs" i18n>Save</span>
-        </button>
 
       </div>
     </div>
-  </form>
+  </div>
 </div>

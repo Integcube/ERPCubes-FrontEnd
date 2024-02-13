@@ -1,16 +1,13 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { LeadQuestionaireService } from '../lead-questionaire.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable, Subject, filter, fromEvent, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
-import { DOCUMENT } from '@angular/common';
 import { UntypedFormControl } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatDrawer } from '@angular/material/sidenav';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Product, Question } from '../lead-questionaire.type';
 import { LeadQuestionaireFormComponent } from '../lead-questionaire-form/lead-questionaire-form.component';
 import { cloneDeep } from 'lodash';
@@ -39,15 +36,12 @@ export class LeadQuestionaireListComponent implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
-    @Inject(DOCUMENT) private _document: any,
     private _router: Router,
     private _matDialog: MatDialog,
     private _questionaireService: LeadQuestionaireService,
-    private _fuseMediaWatcherService: FuseMediaWatcherService,
   ) { }
 
   ngOnInit(): void {
-    //Get company List
     this.products$ = this._questionaireService.products$;
     this._questionaireService.products$
       .pipe(takeUntil(this._unsubscribeAll))
@@ -59,14 +53,6 @@ export class LeadQuestionaireListComponent implements OnInit {
         this.dataSource.sort = this.sort;
         this._changeDetectorRef.markForCheck();
       });
-    // Get selected company
-    this._questionaireService.product$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((product: Product) => {
-      this.selectedProduct = product;
-      this._changeDetectorRef.markForCheck();
-    });
-
   }
   onMouseEnter(row: Product){
     row.isHovered=true;
@@ -82,7 +68,6 @@ export class LeadQuestionaireListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
@@ -102,13 +87,6 @@ export class LeadQuestionaireListComponent implements OnInit {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
-  }
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: Product): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.productId + 1}`;
   }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -136,7 +114,6 @@ export class LeadQuestionaireListComponent implements OnInit {
     });
   }
   
-
   exportToExcel() {
     this.exporter.exportTable('xls', { fileName: 'Lead-list' });
   }
