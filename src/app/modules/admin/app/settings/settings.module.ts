@@ -1,30 +1,54 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SettingsComponent } from './settings.component';
-import { SharedModule } from 'app/shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { settingsRoutes } from './settings.routing';
-import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { FuseAlertModule } from '@fuse/components/alert';
+import { SharedModule } from 'app/shared/shared.module';
+import { SettingsComponent } from 'app/modules/admin/app/settings/settings.component';
+import { SettingsAccountComponent } from 'app/modules/admin/app/settings/account/account.component';
+import { SettingsSecurityComponent } from 'app/modules/admin/app/settings/security/security.component';
+import { SettingsPlanBillingComponent } from 'app/modules/admin/app/settings/plan-billing/plan-billing.component';
+import { SettingsNotificationsComponent } from 'app/modules/admin/app/settings/notifications/notifications.component';
+import { SettingsTeamComponent } from 'app/modules/admin/app/settings/team/team.component';
+import { settingsRoutes } from 'app/modules/admin/app/settings/settings.routing';
+import { SettingsChannelComponent } from './channel/channel.component';
 import { FuseCardModule } from '@fuse/components/card';
-
-
+import { ViewComponent } from './view/view.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [
-    SettingsComponent
-  ],
-  imports: [
-    RouterModule.forChild(settingsRoutes),
-    FuseCardModule,
-    MatExpansionModule,
-    MatTooltipModule,
-    MatIconModule,
-    FormsModule,
-    CommonModule,
-    SharedModule
-  ]
+    declarations: [
+        SettingsComponent,
+        SettingsAccountComponent,
+        SettingsSecurityComponent,
+        SettingsPlanBillingComponent,
+        SettingsNotificationsComponent,
+        SettingsTeamComponent,
+        SettingsChannelComponent,
+        ViewComponent
+    ],
+    imports     : [
+        RouterModule.forChild(settingsRoutes),
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatSlideToggleModule,
+        FuseAlertModule,
+        SharedModule,
+        FuseCardModule,
+        MatTooltipModule
+    ]
 })
-export class SettingsModule { }
+export class SettingsModule
+{
+}

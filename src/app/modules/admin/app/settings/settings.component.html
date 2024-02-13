@@ -1,151 +1,110 @@
-<div class="flex flex-col flex-auto min-w-0 ">
-    <!-- Header overflow-auto h-screen-->
-    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-4 sm:py-6 sm:px-6 border-b bg-card dark:bg-transparent">
-        <div class="flex-1 min-w-0">
-            <!-- Title -->
-                <h2 class="text-3xl font-bold tracking-tight leading-none" i18n>
-                    Admin Settings
-                </h2>
-        </div>
-    </div>
-    <div class="flex-auto sm:p-10 p-2 justify-center gap-4 bg-gray-300 h-full pb-10 sm:flex-col md:flex-row">
-        <div class="flex flex-wrap items-center justify-center gap-4 w-full max-w-400 -m-4">
-            <!-- Card #1 -->
-            <div class="flex flex-col shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
-                <div class="flex flex-col p-6">
-                    <!-- title & description -->
-                    <div class="flex flex-col items-start mt-2 gap-4">
-                        <img class="h-8 w-8" src="assets/images/logo/facebook.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight" i18n>Messenger</div>
-                    </div>
-                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
-                    <div class="w-12 h-1 my-2 border-t-2"></div>
-                    <!-- URL -->
-                    <div class="w-full max-w-3xl">
-                        <form [formGroup]="messengerForm">
-                            <div>
-                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="tenantId" class="text-sm font-semibold" i18n>Verify Token:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- Footer -->
-                <div class="flex flex-col w-full mt-auto">
+<div class="flex flex-col w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-hidden">
+
+    <mat-drawer-container class="flex-auto sm:h-full">
+
+        <!-- Drawer -->
+        <mat-drawer
+            class="sm:w-96 dark:bg-gray-900"
+            [autoFocus]="false"
+            [mode]="drawerMode"
+            [opened]="drawerOpened"
+            #drawer>
+            <!-- Header -->
+            <div class="flex items-center justify-between m-2 ml-6 mr-6 sm:my-10">
+                <!-- Title -->
+                <div class="text-3xl font-extrabold tracking-tight leading-none">Settings</div>
+                <!-- Close button -->
+                <div class="lg:hidden">
+                    <button
+                        mat-icon-button
+                        (click)="drawer.close()">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
                 </div>
             </div>
-            <!-- Card #2 -->
-            <div class="flex flex-col shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
-                <div class="flex flex-col p-6">
-                    <!-- title & description -->
-                    <div class="flex flex-col items-start mt-2 gap-4">
-                        <img class="h-8 w-8" src="assets/images/logo/whatsapp.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight" i18n>WhatsApp</div>
-                    </div>
-                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
-                    <div class="w-12 h-1 my-2 border-t-2"></div>
-                    <!-- URL -->
-                    <div class="w-full max-w-3xl">
-                        <form [formGroup]="whatsappForm">
-                            <div>
-                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
-                                </div>
+            <!-- Panel links -->
+            <div class="flex flex-col divide-y border-t border-b">
+                <ng-container *ngFor="let panel of panels; trackBy: trackByFn">
+                    <div
+                        class="flex px-8 py-3 cursor-pointer"
+                        [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
+                                    'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
+                        (click)="goToPanel(panel.id)">
+                        <mat-icon
+                            [ngClass]="{'text-hint': !selectedPanel || selectedPanel !== panel.id,
+                                        'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}"
+                            [svgIcon]="panel.icon"></mat-icon>
+                        <div class="ml-3">
+                            <div
+                                class="font-medium leading-6"
+                                [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}">
+                                {{panel.title}}
                             </div>
-                            <div>
-                                <label for="tenantId" class="text-sm font-semibold">Verify Token:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
-                                </div>
+                            <div class="mt-0.5 text-secondary">
+                                {{panel.description}}
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <!-- Footer -->
-                <div class="flex flex-col w-full mt-auto">
-                </div>
+                </ng-container>
             </div>
-            <!-- Card #3 -->
-            <div class="flex flex-col  shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
-                <div class="flex flex-col p-6">
-                    <!-- title & description -->
-                    <div class="flex flex-col items-start mt-2 gap-4">
-                        <img class="h-8 w-8" src="assets/images/logo/instagram.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight" i18n>Instagram</div>
-                    </div>
-                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
-                    <div class="w-12 h-1 my-2 border-t-2"></div>
-                    <!-- URL -->
-                    <div class="w-full max-w-3xl">
-                        <form [formGroup]="instagramForm">
-                            <div>
-                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <textarea class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'url'" #url></textarea>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="tenantId" class="text-sm font-semibold" i18n>Verify Token:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
-                                        [readOnly]="true" [formControlName]="'tenantId'" #tenantId>
-                                </div>
-                            </div>
-                        </form>
+        </mat-drawer>
+
+        <!-- Drawer content -->
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto px-6 pt-9 pb-12 md:p-8 md:pb-12 lg:p-12">
+
+                <!-- Panel header -->
+                <div class="flex items-center">
+
+                    <!-- Drawer toggle -->
+                    <button
+                        class="lg:hidden -ml-2"
+                        mat-icon-button
+                        (click)="drawer.toggle()">
+                        <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+                    </button>
+
+                    <!-- Panel title -->
+                    <div class="ml-2 lg:ml-0 text-2xl font-bold tracking-tight leading-none">
+                        {{getPanelInfo(selectedPanel).title}}
                     </div>
                 </div>
-                <!-- Footer -->
-                <div class="flex flex-col w-full mt-auto">
+
+                <!-- Load settings panel -->
+                <div class="mt-4">
+                    <ng-container [ngSwitch]="selectedPanel">
+                        <ng-container *ngSwitchCase="'channel'">
+                            <settings-channel></settings-channel>
+                        </ng-container>
+                        <!-- Account -->
+                        <ng-container *ngSwitchCase="'account'">
+                            <settings-account></settings-account>
+                        </ng-container>
+                        <!-- Security -->
+                        <ng-container *ngSwitchCase="'security'">
+                            <settings-security></settings-security>
+                        </ng-container>
+                        <!-- Plan & Billing -->
+                        <ng-container *ngSwitchCase="'plan-billing'">
+                            <settings-plan-billing></settings-plan-billing>
+                        </ng-container>
+                        <!-- Notifications -->
+                        <ng-container *ngSwitchCase="'notifications'">
+                            <settings-notifications></settings-notifications>
+                        </ng-container>
+                        <!-- Team -->
+                        <ng-container *ngSwitchCase="'team'">
+                            <settings-team></settings-team>
+                        </ng-container>
+                    </ng-container>
                 </div>
+
             </div>
-             <!-- Card #3 -->
-             <div class="flex flex-col  shadow rounded-2xl h-80 w-full bg-card md:w-80 lg:w-80">
-                <div class="flex flex-col p-6">
-                    <!-- title & description -->
-                    <div class="flex flex-col items-start mt-2 gap-4">
-                        <img class="h-8 w-8" src="assets/images/logo/chatbot-svgrepo-com.svg" alt="">
-                        <div class="text-2xl font-semibold leading-tight" i18n>Chatbot</div>
-                    </div>
-                    <div class="mt-0.5 line-clamp-2 text-secondary" i18n>description</div>
-                    <div class="w-12 h-1 my-2 border-t-2"></div>
-                    <!-- URL -->
-                    <div class="w-full max-w-3xl">
-                            <div>
-                                <label for="url" class="text-sm font-semibold" i18n>URL:</label>
-                                <div
-                                    class="flex items-center w-full py-2 px-3 rounded-sm cursor-text border border-gray-300">
-                                    <textarea class="w-full font-medium  bg-transparent" spellcheck="false" readonly="true">
-                                        <script src="https://callbe.thequantus.com/cb/cb.js?key=1" defer></script>
-                                      </textarea>
-                                </div>
-                            </div>
-                    </div>
-                </div>
-                <!-- Footer -->
-                <div class="flex flex-col w-full mt-auto">
-                </div>
-            </div>
-        </div>
-        
-    </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
 </div>
