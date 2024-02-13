@@ -1,39 +1,81 @@
-<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
+<div class="flex flex-col flex-auto max-w-240 md:min-w-160 max-h-120 min-h-120 pb-2 -m-6">
   <div
     class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary w-full">
-    <div class="text-lg font-medium">Lead Qualification Assessment</div>
-    <button mat-icon-button (click)="discard()" [tabIndex]="-1">
+    <div class="text-lg font-medium">Lead Qualification Questionaire</div>
+    <button mat-icon-button (click)="close()" [tabIndex]="-1">
       <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
     </button>
   </div>
-  <div class="flex justify-between px-6 py-2">
-    <div class="text-lg font-medium">Question List</div>
+
+  <div class="flex justify-between px-6 py-2 shadow mb-2">
+    <div class="self-center text-lg font-medium">Question List</div>
     <div class="flex self-center">
-      <button class="ml-2 primary-2 h-8" [matTooltip]="'Click to Save Lead Qualification'" mat-stroked-button
-        *ngIf="questions" (click)="addLead()">
-        <!-- <mat-icon class="icon-size-5 mr-2 text-white" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon> -->
-        <span class="ml-1 mr-1 text-xs" i18n>Add Question</span>
+      <button class=" primary-2 h-8" [matTooltip]="'Click to Add New Qualification'" mat-stroked-button
+        *ngIf="questions" (click)="addQuestion()">
+        <mat-icon class="icon-size-5 text-white">add</mat-icon>
+        <span class="ml-1 mr-1 text-xs" i18n>Add</span>
       </button>
     </div>
   </div>
-  <div class="flex flx-col w-full py-6" *ngFor="let question of questions">
-    <div class="flex gap-5 w-full">
-      <div
-        class="flex w-5/6 items-center py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" [(ngModel)]="question.title"
-          #name>
-      </div>
-      
-        <div
-        class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
-        <select class="w-3 font-medium leading-5 bg-transparent h-full"
-        [formControlName]="'leadOwner'" #leadOwner>
-            <option *ngFor="let weight of weightageList"  [value]="weight.weightage">{{weight.title}}</option>
-        </select>
-      </div>
-      <div>
 
+  <div fuseScrollbar class="flex-1 min-h-80">
+    <ng-container *ngIf="questions && questions.length > 0; else noQuestions">
+      <div class="flex flex-col w-full px-5" *ngFor="let question of questions; let i = index" >
+        <div class="flex gap-2 w-full">
+          <div class="flex min-w-1/8 items-center">
+            <span class="p-2 m-2">{{i+1}}</span>
+          </div>
+          <div
+            class="flex w-full items-center py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+            <input 
+            class="w-full font-medium leading-5 bg-transparent" 
+            [spellcheck]="'false'" 
+            [(ngModel)]="question.title" 
+            (blur)="saveQuestion(question)"
+            #title>
+          </div>
+          <div
+            class="flex w-1/6 items-center justify-end py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+            <select 
+            class="w-full font-medium leading-5 bg-transparent h-full"
+            [(ngModel)]="question.weightage" 
+            (blur)="saveQuestion(question)"
+            #weightage>
+                <option *ngFor="let weight of weightageList"  [value]="weight.weightage">{{weight.title}}</option>
+            </select>
+          </div>
+          <div class="flex w-1/6 items-center justify-end">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon class="icon-size-5 text-primary">more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="delete(question)">
+                <mat-icon class="icon-size-5 text-primary">delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+    
       </div>
-    </div>
+    </ng-container>
+    <ng-template #noQuestions>
+      <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
+          <mat-icon
+          class="icon-size-24 mr-2"
+          [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon>
+          <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Questions found.</div>
+          <span class="underline cursor-pointer" (click)="addQuestion()">Click to add</span>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Actions -->
+  <div class="flex items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+    <!-- Cancel -->
+    <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Close'" (click)="close()">
+      <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+      <span class="ml-2 text-xs" i18n>Close</span>
+    </button>
   </div>
 </div>

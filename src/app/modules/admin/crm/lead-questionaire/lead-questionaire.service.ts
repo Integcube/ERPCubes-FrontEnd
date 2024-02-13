@@ -13,9 +13,11 @@ import { UserService } from 'app/core/user/user.service';
 export class LeadQuestionaireService {
   private readonly getProductsURL = `${environment.url}/Product/all`;
   private readonly getQuestionaireURL = `${environment.url}/Lead/getQuestions`
-  private readonly saveQuestionaireURL = `${environment.url}/Lead/saveQuestions`
+  private readonly saveQuestionaireURL = `${environment.url}/Lead/saveQuestion`
+  private readonly deleteQuestionURL = `${environment.url}/Lead/deleteQuestion`
   user: User;
   private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
+  private _product: BehaviorSubject<Product | null> = new BehaviorSubject(null);
   private _questions: BehaviorSubject<Question[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
@@ -25,7 +27,9 @@ export class LeadQuestionaireService {
   get products$(): Observable<Product[]> {
     return this._products.asObservable();
   }
-
+  get product$(): Observable<Product> {
+    return this._product.asObservable();
+  }
   get questions$(): Observable<Question[]> {
     return this._questions.asObservable();
   }
@@ -43,11 +47,15 @@ export class LeadQuestionaireService {
     )
   }
 
-  getQuestionaire(id: number): Observable<Question[]> {
+  selectedProduct(product: Product){
+    this._product.next(product)
+  }
+
+  getQuestionaire(): Observable<Question[]> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      productId: id
+      productId: this._product.value.productId
     }
     return this._httpClient.post<Question[]>(this.getQuestionaireURL, data).pipe(
       tap(data => {
@@ -57,20 +65,37 @@ export class LeadQuestionaireService {
     )
   }
 
-  saveQuestionaire(questions: Question[]): Observable<Question[]> {
+  saveQuestion(questions: Question): Observable<Question[]> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      questions: { ...questions }
+      question: {
+        ...questions,
+        productId: this._product.value.productId
+      }
     }
     return this._httpClient.post<any>(this.saveQuestionaireURL, data).pipe(
       tap(() => {
-        this.getProducts();
+        this.getQuestionaire().subscribe();
       }),
       catchError(err => this.handleError(err))
     )
   }
 
+  deleteQuestion(question: Question): Observable<Question[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      questionId: question.questionId 
+    }
+    debugger;
+    return this._httpClient.post<any>(this.deleteQuestionURL, data).pipe(
+      tap(() => {
+        this.getQuestionaire().subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    )
+  }
   private handleError(err: HttpErrorResponse): Observable<never> {
     let errorMessage: string;
     if (err.error instanceof ErrorEvent) {

@@ -96,21 +96,12 @@ export class LeadQuestionaireListComponent implements OnInit {
     }
   }
 
-  openConnectorDialog(id: number) {
-    this._questionaireService.getQuestionaire(id).subscribe(questions => {
-      let selectedQuestions: Question[] = [];
-      if (questions == null) {
-        selectedQuestions.push(new Question({}));
-      } else {
-        selectedQuestions = questions;
-      }
-  
-      this._matDialog.open(LeadQuestionaireFormComponent, {
-        autoFocus: false,
-        data: {
-          selectedQuestions: cloneDeep(selectedQuestions)
-        }
-      });
+  openConnectorDialog(product: Product) {
+    this._questionaireService.selectedProduct(product);
+    this._questionaireService.getQuestionaire().subscribe();
+    
+    this._matDialog.open(LeadQuestionaireFormComponent, {
+      autoFocus: false,
     });
   }
   

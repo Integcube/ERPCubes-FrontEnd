@@ -1,11 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-import { Question } from '../lead-questionaire.type';
+import { Product, Question } from '../lead-questionaire.type';
 import { LeadQuestionaireService } from '../lead-questionaire.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-lead-questionaire-form',
@@ -14,7 +12,8 @@ import { MatSort } from '@angular/material/sort';
 })
 export class LeadQuestionaireFormComponent implements OnInit {
   questions: Question[] = [];
-  dataSource: MatTableDataSource<Question>;
+  //selectedProduct$ = this._questionaireService.product$
+  //dataSource: MatTableDataSource<Question>;
   weightageList = [
     {weightage: 0.1, title: "10%"},
     {weightage: 0.2, title: "20%"},
@@ -43,72 +42,35 @@ export class LeadQuestionaireFormComponent implements OnInit {
   ) { }
   
   ngOnInit(): void {
-    this.questions = this._data.selectedQuestions;
-    this.dataSource = new MatTableDataSource(this.questions);
-    this._questionaireService.questions$.subscribe(
-      data=>this.questions = [...data]
-    )
+    this._questionaireService.questions$.subscribe(data=>{
+      if (data) {
+        this.questions = [...data];
+      }
+    });
+
   }
 
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  addLead(){
-    new Question({});
-    //DBsave
-
-
-  // getProduct(){
-
-  // }
+  addQuestion(){
+    const emptyQuestion = new Question({});
+    this._questionaireService.saveQuestion(emptyQuestion).subscribe();
   }
 
+  saveQuestion(question: Question){
+    this._questionaireService.saveQuestion(question).subscribe();
+  }
 
-
-  // save() {
-  //   this.questions.push( this.selectedQuestion)
-  //   this.selectedQuestion = null
-  //   this._questionaireService.saveQuestionaire(this.questions).subscribe()
-  //   this.close();
-  // }
-
-  delete() {
-     // Open the confirmation dialog
-     const confirmation = this._fuseConfirmationService.open({
-      title: 'Delete Questionaire',
-      message: 'Are you sure you want to delete this Questionaire?',
-      actions: {
-        confirm: {
-          label: 'Delete'
-        }
-      }
-    });
-    // Subscribe to the confirmation dialog closed action
-    confirmation.afterClosed().subscribe((result) => {
-      // If the confirm button pressed...
-      if (result === 'confirmed') {
-        // this.selectedQuestions = { ...this.questionaireForm.value }
-        // this._questionaireService.deleteQuestions(this.selectedQuestions).subscribe(
-        //   {
-        //     next: () => {
-        //       this._leadQuestionaireListComponent.onBackdropClicked();
-        //       this.closeDrawer();
-        //       this._changeDetectorRef.markForCheck();
-        //     }
-        //   }
-        // );
-      }
-    });
+  delete(question: Question) {
+    debugger;
+    this._questionaireService.deleteQuestion(question).subscribe();
   }
 
   close(): void {
     this.matDialogRef.close();
   }
-
-  discard(): void {
-    this.matDialogRef.close();
-}
 
 }
 

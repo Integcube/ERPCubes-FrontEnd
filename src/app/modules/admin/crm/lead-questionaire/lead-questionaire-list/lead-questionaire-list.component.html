@@ -18,9 +18,7 @@
                 </div>
             </div>
 
-            <div class="sm:mt-0">
-
-
+            <!-- <div class="sm:mt-0">
                 <div class="flex gap-0">
                     <button class="ml-2 h-8 w-20" mat-stroked-button
                         (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
@@ -42,21 +40,8 @@
 
                         <span class="ml-1 mr-1 text-xs">Import</span>
                     </button>
-
-
-                    <!-- Add contact button -->
-                    <!-- <button
-                                class="ml-4 h-8 primary-2"
-                                mat-flat-button
-                                [color]="'primary'"
-                                (click)="createProduct()">
-                                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                                <span class="ml-2 mr-1 text-xs">Add</span>
-                            </button> -->
                 </div>
-
-
-            </div>
+            </div> -->
 
         </div>
         <!-- Product list -->
@@ -93,7 +78,7 @@
                                         class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)"
                                         (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
                                         <div class="flex items-center justify-between">
-                                            <span (click)="openConnectorDialog(row.productId)"
+                                            <span (click)="openConnectorDialog(row)"
                                                 class="hover:text-clip truncate"><u>{{row.productName | tblimit:
                                                     row.isHovered}}</u></span>
                                         </div>
