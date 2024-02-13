@@ -9,4 +9,6 @@ export interface Item
     size: number;
     createdDate: Date;
     createdBy: string;
+    modifiedDate: Date;
+    modifiedBy: string;
 }

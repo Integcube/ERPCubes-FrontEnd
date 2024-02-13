@@ -18,7 +18,7 @@ export class FileManagerService {
 
     private _items: BehaviorSubject<Item[] | null> = new BehaviorSubject(null);
     private _item: BehaviorSubject<Item | null> = new BehaviorSubject(null);
-
+    private _folder: BehaviorSubject<Item | null> = new BehaviorSubject(null);
     constructor(
         private _httpClient: HttpClient,
         private _userService:UserService,
@@ -33,10 +33,19 @@ export class FileManagerService {
     get item$(): Observable<Item> {
         return this._item.asObservable();
     }
-
-    // set item$(item:Item) {
-    //      this.item$ = of(item);
-    // }
+    
+    get folder$(): Observable<Item> {
+        return this._folder.asObservable();
+    }
+    setFolder(folderId:number){
+        this.items$.pipe(
+            tap(a=>{
+                const folder = a.find(value => value.fileId === folderId) || null;
+                this._folder.next(folder);
+            })
+        ).subscribe();
+      
+    }
 
     getItems(folderId: number): Observable<Item[]> {
         let data = {
@@ -47,39 +56,35 @@ export class FileManagerService {
             ContactId:this.contactEnumInstance.All,
         }
         return this._httpClient.post<Item[]>(this.getFiles, data).pipe(
-            tap((response: any) => {
+            tap((response: Item[]) => {
                 this._items.next(response);
+                this.setFolder(folderId)
+              
             }),
             catchError(err => this.handleError(err))
         );
     }
 
-    // getItemById(id: string): Observable<Item>
-    // {
-    //     return this._items.pipe(
-    //         take(1),
-    //         map((items) => {
+    getItemById(id: number): Observable<Item>
+    {
+        return this._items.pipe(
+            take(1),
+            map((items) => {
+                const item = items.find(value => value.fileId === id) || null;
+                this._item.next(item);
+                return item;
+            }),
+            switchMap((item) => {
 
-    //             // Find within the folders and files
-    //             const item = [...items.folders, ...items.files].find(value => value.id === id) || null;
+                if ( !item )
+                {
+                    return throwError('Could not found the item with id of ' + id + '!');
+                }
 
-    //             // Update the item
-    //             this._item.next(item);
-
-    //             // Return the item
-    //             return item;
-    //         }),
-    //         switchMap((item) => {
-
-    //             if ( !item )
-    //             {
-    //                 return throwError('Could not found the item with id of ' + id + '!');
-    //             }
-
-    //             return of(item);
-    //         })
-    //     );
-    // }
+                return of(item);
+            })
+        );
+    }
 
     private handleError(err: HttpErrorResponse): Observable<never> {
         let errorMessage: string;

@@ -17,9 +17,10 @@ export class FileManagerListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
     drawerMode: 'side' | 'over';
-    items: Item[];
-    files:Item[];
-    folders:Item[];
+    items: Item[]=[];
+    files:Item[]=[];
+    folders:Item[]=[];
+    selectedFolder:Item;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -30,14 +31,30 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     )
     {
     }
+    upload(){
+
+    }
+    createFolder(){
+
+    }
     ngOnInit(): void
     {
+        this._fileManagerService.folder$.pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((item: Item) => {
+            this.selectedFolder = item;
+            if(this.selectedFolder != null){
+                this.files = this.items.filter(item => item.type !== 'Folder');
+                this.folders = this.items.filter(item => item.type == 'Folder' && item.fileId != this.selectedFolder?.fileId);
+            }
+           
+            this._changeDetectorRef.markForCheck();
+        });
         this._fileManagerService.items$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((items: Item[]) => {
-                this.items = items;
-                this.files = items.filter(item => item.type !== 'Folder');
-                this.folders = items.filter(item => item.type == 'Folder');
+                this.items = items;              
+                this.files = this.items.filter(item => item.type !== 'Folder');
+                this.folders = this.items.filter(item => item.type == 'Folder' && item.fileId != this.selectedFolder?.fileId);
                 this._changeDetectorRef.markForCheck();
             });
         this._fuseMediaWatcherService.onMediaQueryChange$('(min-width: 1440px)')
