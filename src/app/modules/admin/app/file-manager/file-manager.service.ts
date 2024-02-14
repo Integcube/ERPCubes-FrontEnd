@@ -16,7 +16,9 @@ export class FileManagerService {
     private readonly deleteFile = `${environment.url}/DocumentLibrary/delete`
     private readonly updateFile = `${environment.url}/DocumentLibrary/update`
     private readonly downloadFileUrl = `${environment.url}/DocumentLibrary/getfile`
-    
+    private readonly savefolder = `${environment.url}/DocumentLibrary/addFolder`
+    private readonly saveFileurl = `${environment.url}/DocumentLibrary/saveFile`
+  
     user: User;
     contactEnumInstance: ContactEnum = new ContactEnum();
 
@@ -70,25 +72,45 @@ export class FileManagerService {
         );
     }
     
-    // addFolder():Observable<Item>{
-    //     let data = {
-    //         id: this.user.id,
-    //         tenantId: this.user.tenantId,
-    //         fileId: fileId,
-    //     }
-    //     return this._httpClient.post<any>(this.deleteFile, data).pipe(
-    //         tap((response: Item[]) => {
-    //             let items: Item[] = this._items.value;
-    //             let index = items.findIndex(a => a.fileId === fileId);
-    //             items.splice(index, 1);
-    //             this._items.next(items);
-    //         }),
-    //         catchError(err => this.handleError(err))
-    //     );
-    // }
-    // addDocument():Observable<Item>{
+    saveFile(file: File,parentId: number): Observable<any> {
+       
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('tenantId', this.user.tenantId.toString());
+        formData.append('id', this.user.id);
+        formData.append('parentId', parentId.toString());
+        return this._httpClient.post(this.saveFileurl, formData).pipe(tap((response: Item) => {
+            let items: Item[] = this._items.value;
+            items.push({...response});
+            this._items.next(items);
+          }),
+          catchError(err => this.handleError(err))
+        );
 
-    // }
+      }
+
+    addFolder(activeRoute: number, title: string): Observable<Item> {
+      
+        let fileId: number = 123; 
+    
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+          fileName: title,
+          parentId: activeRoute,
+          description: title
+        };
+
+        return this._httpClient.post<Item>(this.savefolder, data).pipe(
+          tap((response: Item) => {
+            let items: Item[] = this._items.value;
+            items.push({...response});
+            this._items.next(items);
+          }),
+          catchError(err => this.handleError(err))
+        );
+      }
+
     deletedItems(fileId: number): Observable<any> {
         let data = {
             id: this.user.id,

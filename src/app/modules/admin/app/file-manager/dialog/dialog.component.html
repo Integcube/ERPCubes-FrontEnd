@@ -1,0 +1,42 @@
+<ng-container>
+    <div class="flex flex-col flex-auto  max-h-140 -m-6 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+            <div class="text-lg font-medium" i18n>Create New Folder</div>
+            <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
+                <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+            </button>
+        </div>
+
+        <!-- Task form -->
+        <form [formGroup]="viewForm" class="flex flex-col flex-0 items-start w-full p-6 sm:p-8 overflow-y-auto">
+            <!-- Title -->
+            <mat-form-field class="fuse-mat-dense w-full">
+                <mat-label i18n>Folder Name</mat-label>
+                <input matInput [formControlName]="'Title'">
+                <mat-error *ngIf="viewForm.get('Title').hasError('required')" i18n>
+                    Title is required
+                </mat-error>
+            </mat-form-field>
+          
+        </form>
+        <!-- Actions -->
+        <div
+            class="flex sticky bottom-0 items-center py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
+            
+
+            <!-- Cancel -->
+            <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                <span class="ml-2 text-xs" i18n>Cancel</span> 
+            </button>
+            <!-- Save -->
+            <button class="ml-2 primary-2 h-8" mat-flat-button  [matTooltip]="'Save'" [disabled]="!viewForm.valid" (click)="save()">
+                <mat-icon
+         class="icon-size-5 mr-2 text-white"
+       [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+   <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+            </button>
+        </div>
+    </div>
+</ng-container>

@@ -5,6 +5,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FileManagerService } from '../file-manager.service';
 import { Item } from '../file-manager.types';
+import { MatDialog } from '@angular/material/dialog';
+import { FileManagerDialogComponent } from '../dialog/dialog.component';
 
 
 @Component({
@@ -27,32 +29,28 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private _fileManagerService: FileManagerService,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _matDialog: MatDialog,
+        private  _route: ActivatedRoute,
+
     )
     {
     }
-    uploadAvatar(fileList: FileList): void
+    uploadAvatar(event: any): void {
     {
-        if ( !fileList.length )
-        {
-            return;
+       const file = event?.target?.files[0];
+        if (file) {
+          let parentId = this._route.snapshot.paramMap.get('folderId'); 
+          this._fileManagerService.saveFile(file, +parentId)
+            .subscribe(response => {
+            }, error => {
+              console.error('Error uploading file:', error);
+            });
         }
-
-        // const allowedTypes = ['image/jpeg', 'image/png'];
-        const file = fileList[0];
-
-        // Return if the file is not allowed
-        // if ( !allowedTypes.includes(file.type) )
-        // {
-        //     return;
-        // }
-
-        // Upload the avatar
-        // this._contactsService.uploadAvatar(this.contact.id, file).subscribe();
     }
+}
 
-    createFolder(){
-    }
+  
     ngOnInit(): void
     {
         this._fileManagerService.folder$.pipe(takeUntil(this._unsubscribeAll))
@@ -91,7 +89,24 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         this._router.navigate(['./'], {relativeTo: this._activatedRoute});
         this._changeDetectorRef.markForCheck();
     }
+    createFolder() {
+       let pop= this._matDialog.open(FileManagerDialogComponent,{
+            autoFocus:false
+        });
+       pop.afterClosed().subscribe((result) => {
+    
+        if (result ) {
+            let activeroute= this._route.snapshot.paramMap.get('folderId');
+         this._fileManagerService.addFolder(+activeroute, result)
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe( data=>{
 
+            })
+        }
+      });
+      }
+
+      
     trackByFn(index: number, item: any): any
     {
         return item.id || index;

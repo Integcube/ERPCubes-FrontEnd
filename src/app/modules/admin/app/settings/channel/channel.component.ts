@@ -37,7 +37,7 @@ export class SettingsChannelComponent implements OnInit
 
     CopyView(Type: any): void {
         this.view.tenantId =  this.user.tenantId
-        this.view.Link= `https://callbe.thequantus.com/api/Webhook/${Type}?${this.user.tenantId}`;
+        this.view.Link= `https://callbe.thequantus.com/api/Webhook/${Type}?tenantId${this.user.tenantId}`;
         this.View(this.view);
       }
 

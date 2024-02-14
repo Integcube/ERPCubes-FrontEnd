@@ -12,6 +12,7 @@ import { FileManagerListComponent } from './list/list.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FileManagerDialogComponent } from './dialog/dialog.component';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FileManagerDialogComponent } from './dialog/dialog.component';
         MatTooltipModule,
         MatFormFieldModule,
         MatInputModule,
-        SharedModule
+        SharedModule,
+        FuseScrollbarModule
     ]
 })
 export class FileManagerModule

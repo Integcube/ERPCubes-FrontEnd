@@ -5,6 +5,7 @@ import { FileManagerService } from '../file-manager.service';
 import { Item } from '../file-manager.types';
 import { FileManagerListComponent } from '../list/list.component';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -22,7 +23,9 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy {
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fileManagerListComponent: FileManagerListComponent,
-        private _fileManagerService: FileManagerService
+        private _fileManagerService: FileManagerService,
+        private _activatedRoute: ActivatedRoute,
+        private _router: Router
     ) {
     }
 
@@ -69,7 +72,9 @@ export class FileManagerDetailsComponent implements OnInit, OnDestroy {
     }
     deleteFile() {
         this._fileManagerService.deletedItems(this.item.fileId).pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(data=>{this.closeDrawer()});
+            .subscribe(data=>{
+                this._router.navigate(['../../'], { relativeTo: this._activatedRoute });
+                this.closeDrawer()});
     }
 
     ngOnDestroy(): void {
