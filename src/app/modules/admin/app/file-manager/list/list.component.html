@@ -14,7 +14,7 @@
           <div>
             <div class="text-3xl font-bold tracking-tight leading-none" i18n>File Manager</div>
             <div class="ml-0.5 font-medium text-secondary">
-              <ng-container *ngIf="!files.length">
+              <ng-container *ngIf="files.length">
                 {{folders.length}} folders, {{files.length}} files
               </ng-container>
             </div>
@@ -32,16 +32,18 @@
               <span class="ml-2 mr-1 text-xs" i18n>Create Folder</span>
             </button>
             <!-- Add task button -->
-            <button class="ml-4 h-8 primary-2" mat-flat-button [color]="'primary'" (click)="upload()"
+            <button class="ml-4 h-8 primary-2" mat-flat-button [color]="'primary'" (click)="triggerFileInput.click()"
               [matTooltip]="'Create Task'">
               <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
               <span class="ml-2 mr-1 text-xs" i18n>Upload</span>
             </button>
+            <input #triggerFileInput type="file" style="display: none" (change)="uploadAvatar($event)">
+
           </div>
         </div>
         <!-- Items list -->
         <ng-container *ngIf="items && (folders.length > 0 || files.length > 0); else noItems">
-          <div class="p-6 md:p-8 space-y-8">
+          <div class="px-6 py-2 md:px-8 space-y-8">
             <!-- Folders -->
             <ng-container *ngIf="folders.length > 0">
               <div>
