@@ -31,11 +31,27 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     )
     {
     }
-    upload(){
+    uploadAvatar(fileList: FileList): void
+    {
+        if ( !fileList.length )
+        {
+            return;
+        }
 
+        // const allowedTypes = ['image/jpeg', 'image/png'];
+        const file = fileList[0];
+
+        // Return if the file is not allowed
+        // if ( !allowedTypes.includes(file.type) )
+        // {
+        //     return;
+        // }
+
+        // Upload the avatar
+        // this._contactsService.uploadAvatar(this.contact.id, file).subscribe();
     }
-    createFolder(){
 
+    createFolder(){
     }
     ngOnInit(): void
     {
@@ -81,8 +97,4 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         return item.id || index;
     }
 
-
-
-
-    
 }

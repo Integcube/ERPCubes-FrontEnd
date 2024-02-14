@@ -9,13 +9,17 @@ import { FileManagerDetailsComponent } from './details/details.component';
 import { FileManagerComponent } from './file-manager.component';
 import { fileManagerRoutes } from './file-manager.routing';
 import { FileManagerListComponent } from './list/list.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FileManagerDialogComponent } from './dialog/dialog.component';
 
 
 @NgModule({
     declarations: [
         FileManagerComponent,
         FileManagerDetailsComponent,
-        FileManagerListComponent
+        FileManagerListComponent,
+        FileManagerDialogComponent
     ],
     imports     : [
         RouterModule.forChild(fileManagerRoutes),
@@ -23,6 +27,8 @@ import { FileManagerListComponent } from './list/list.component';
         MatIconModule,
         MatSidenavModule,
         MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
         SharedModule
     ]
 })
