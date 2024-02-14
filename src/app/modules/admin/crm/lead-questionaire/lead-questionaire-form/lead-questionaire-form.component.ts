@@ -15,8 +15,11 @@ export class LeadQuestionaireFormComponent implements OnInit {
   //selectedProduct$ = this._questionaireService.product$
   //dataSource: MatTableDataSource<Question>;
   weightageList = [
+    {weightage: 0.05, title: "5%"},
     {weightage: 0.1, title: "10%"},
-    {weightage: 0.2, title: "20%"},
+    {weightage: 0.15, title: "15%"},
+    {weightage: 0.2, title:  "20%"},
+    {weightage: 0.25, title: "25%"},
     {weightage: 0.3, title: "30%"},
     {weightage: 0.4, title: "40%"},
     {weightage: 0.5, title: "50%"},

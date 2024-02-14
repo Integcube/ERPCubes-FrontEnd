@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-auto max-w-240 md:min-w-160 max-h-120 min-h-120 pb-2 -m-6">
+<div class="flex flex-col flex-auto max-w-240 md:min-w-160 max-h-120 min-h-120 pb-2 -m-6 bg-d">
   <div
     class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary w-full">
     <div class="text-lg font-medium">Lead Qualification Questionaire</div>
@@ -60,7 +60,7 @@
       </div>
     </ng-container>
     <ng-template #noQuestions>
-      <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
+      <div class="flex flex-auto flex-col items-center justify-center " style="margin-top: 10%;">
           <mat-icon
           class="icon-size-24 mr-2"
           [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon>
@@ -68,14 +68,8 @@
           <span class="underline cursor-pointer" (click)="addQuestion()">Click to add</span>
       </div>
     </ng-template>
-  </div>
+  </div>  
+  
+   
 
-  <!-- Actions -->
-  <div class="flex items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
-    <!-- Cancel -->
-    <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Close'" (click)="close()">
-      <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-      <span class="ml-2 text-xs" i18n>Close</span>
-    </button>
-  </div>
 </div>

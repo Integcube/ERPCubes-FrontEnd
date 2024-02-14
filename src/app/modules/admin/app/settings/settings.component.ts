@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit, OnDestroy
                 id         : 'channel',
                 icon       : 'heroicons_outline:globe-alt',
                 title      : 'Channel',
-                description: 'Integrate your channel  with Quantus to enhance communication.'
+                description: 'Integrate your channel'
             }
             // ,
             // {
@@ -52,13 +52,13 @@ export class SettingsComponent implements OnInit, OnDestroy
             //     title      : 'Account',
             //     description: 'Manage your public profile and private information'
             // }
-            // ,
-            // {
-            //     id         : 'security',
-            //     icon       : 'heroicons_outline:lock-closed',
-            //     title      : 'Security',
-            //     description: 'Manage your password and 2-step verification preferences'
-            // }
+            ,
+            {
+                id         : 'security',
+                icon       : 'heroicons_outline:lock-closed',
+                title      : 'Security',
+                description: 'Manage your password and 2-step verification preferences'
+            }
             // ,
             // {
             //     id         : 'plan-billing',

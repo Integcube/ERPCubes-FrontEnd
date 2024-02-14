@@ -17,9 +17,10 @@
                 [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
     </div>
-    <form class="flex flex-col flex-auto p-6 pt-0 sm:pt-0 sm:p-8">
+    <form class="flex flex-col flex-auto p-6 pt-0 sm:pt-0 sm:p-8 h-96 overflow-auto">
+     
           <ng-container *ngIf="QuestionsList && QuestionsList.length > 0; else noQuestions">
-            <ng-container *ngFor="let question of QuestionsList; let i = index">
+            <ng-container *ngFor="let question of QuestionsList; let i = index ">
               <div class="p-2 mt-3 bg-default shadow">
                 <div class="flex flex-row justify-between">
                   <span class="text-1xl text-gray-800">{{ question.title }}</span>
@@ -53,19 +54,22 @@
               </div>
             </ng-container>
           </ng-container>
-          
+         
+
+       
           <ng-template #noQuestions>
-            <div class="p-2 mt-3">
+            <div class="flex flex-col items-center p-2 mt-12">
+              <mat-icon
+              class="icon-size-24 mr-2"
+                 [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon>
               <div class=" text-gray-800 text-2xl">  
-                <mat-icon
-                class="icon-size-5 mr-2"
-                   [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon> No Questions found.</div>
+                No Questions found.</div>
               <div class="text-gray-800 sm-xs">Please contact to administration to add questions for this product.</div>
             </div>
           </ng-template>
      
 
-       <div class="flex flex-col  max-w-240 md:min-w-160 max-h-16 -m-6 mt-3">
+       <div class="flex flex-col  max-w-240 md:min-w-160 max-h-16 -m-6 mt-3 "  *ngIf="QuestionsList && QuestionsList.length > 0;">
        <div class="flex  items-center justify-between h-16  bg-gray-50 dark:bg-transparent">
       
         <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
