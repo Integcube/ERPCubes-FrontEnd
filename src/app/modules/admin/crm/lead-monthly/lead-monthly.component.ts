@@ -92,7 +92,6 @@ export class LeadMonthlyComponent {
   }
 
   getLeadMonthlyReports() {
-    debugger;
     this._leadMonthlyService.getLeadMonthly(this.leadMonthlyFilter).subscribe();
   }
 
@@ -109,7 +108,6 @@ export class LeadMonthlyComponent {
   
 
       for (const month of months) {
-        debugger;
         const existingMonth = reports.find((r) => r.month === month);
   
         if (existingMonth) {
