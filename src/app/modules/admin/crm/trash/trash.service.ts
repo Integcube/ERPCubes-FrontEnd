@@ -106,7 +106,9 @@ export class TrashService {
         };
 
         return this._httpClient.post<DeletedItems[]>(this.restoreLeadUrl, data).pipe(
-         
+            tap(() => {
+                this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+            }),
             catchError(err => this.handleError(err))
         );
     }
@@ -121,6 +123,7 @@ export class TrashService {
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkLeadUrl, data).pipe(
             tap(() => {
                 this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
             }),
             catchError(err => this.handleError(err))
         );
@@ -138,11 +141,13 @@ export class TrashService {
         );
     }
 
-    restoreUser(userForm: DeletedItems): Observable<DeletedItems> {
+    restoreUser(user: DeletedItems): Observable<DeletedItems> {
         let data = {
-            Id: this.user.id,
-            tenantId: this.user.tenantId,
-            userId: userForm.id
+            id: this.user.id,
+            user: {
+                id: user.id,
+                tenantId: this.user.tenantId
+              }
         };
         return this._httpClient.post<DeletedItems>(this.restoreUserListUrl, data).pipe(
             tap(() => {
@@ -151,13 +156,14 @@ export class TrashService {
             catchError(err => this.handleError(err))
         );
     }
-    restoreBulkUsers(userIds: number[]): Observable<DeletedItems[]> {
+    restoreBulkUsers(user: number[]): Observable<DeletedItems[]> {
         let data = {
-            Id: this.user.id,
-            tenantId: this.user.tenantId,
-            userId: userIds
+            id: this.user.id,
+            user:{
+                tenantId: this.user.tenantId,
+                id: user
+            }
         };
-
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkUserUrl, data).pipe(
             tap(() => {
                 this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');

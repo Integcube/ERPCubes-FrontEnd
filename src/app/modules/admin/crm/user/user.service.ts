@@ -43,7 +43,6 @@ export class UserFormService {
       id: this.user.id,
       tenantId: this.user.tenantId,
     }
-    debugger
     return this._httpClient.post<UserForm[]>(this.getuserListURL, data).pipe(
       tap((users) => {
         this._users.next(users);

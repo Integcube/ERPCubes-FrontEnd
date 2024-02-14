@@ -39,6 +39,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseCardModule } from '@fuse/components/card';
 import { FuseDrawerModule } from '@fuse/components/drawer';
 import { QuillModule } from 'ngx-quill';
+import { TrashModule } from '../trash/trash.module';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,8 @@ import { QuillModule } from 'ngx-quill';
     DragDropModule,
     QuillModule,
     SharedModule,    
+    TrashModule,
+
   ],
   providers   : [
     {

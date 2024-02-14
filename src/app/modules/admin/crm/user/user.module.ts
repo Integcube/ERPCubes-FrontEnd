@@ -25,6 +25,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { userRoutes } from './user.routing';
 import moment from 'moment';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { TrashModule } from '../trash/trash.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,9 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
     MatTableModule,
     MatTooltipModule,
     SharedModule,
-    FuseScrollbarModule
+    FuseScrollbarModule,
+    TrashModule,
+
   ],
   providers   : [
     {

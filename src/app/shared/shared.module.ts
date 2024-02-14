@@ -20,7 +20,6 @@ import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
         MonthToWordPipe,
         FilterPipe,
         OrderByPipe,
-        TrashComponent,
     ],
     imports: [
         CommonModule,
@@ -39,7 +38,6 @@ import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
         MonthToWordPipe,
         FilterPipe,
         OrderByPipe,
-        TrashComponent
     ]
 })
 export class SharedModule

@@ -59,6 +59,7 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { LeadStatusComponent } from './lead-status/lead-status.component';
 import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
 import { LeadScoreComponent } from './lead-detail/lead-score/lead-score.component';
+import { TrashModule } from '../trash/trash.module';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,7 @@ import { LeadScoreComponent } from './lead-detail/lead-score/lead-score.componen
     DragDropModule,
     SharedModule,
     QuillModule,
-    
+    TrashModule,
   ],schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],

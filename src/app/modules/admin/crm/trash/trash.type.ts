@@ -4,6 +4,7 @@ export class DeletedItems {
    deletedBy:string;
    avatar:any;
    deletedDate: Date;
+   tenantId: number
   }
   
   
