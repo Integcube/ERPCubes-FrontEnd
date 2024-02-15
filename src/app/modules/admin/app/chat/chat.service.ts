@@ -48,7 +48,9 @@ export class ChatService {
                 transport: HttpTransportType.WebSockets,
                 skipNegotiation: true
             })
+        
             .build();
+            
 
         this._ticketConnection
             .start()
@@ -218,6 +220,7 @@ export class ChatService {
             tenantId: this.user.tenantId,
             ...info
         }
+        debugger;
         return this._httpClient.post<TicketType[]>(this.saveInfoUrl, data).pipe(
             tap(a => this.getTickets()),
             catchError(err => this.handleError(err))

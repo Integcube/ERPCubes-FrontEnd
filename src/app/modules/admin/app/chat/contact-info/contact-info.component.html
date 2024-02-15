@@ -37,7 +37,7 @@
                 <mat-form-field
                 class="fuse-mat-dense">
                 <mat-label i18n>Assignee</mat-label>
-                <mat-select [ngModel]="ticket.assigneeId" name="assignee">
+                <mat-select [(ngModel)]="ticket.assigneeId" name="assignee">
                     <mat-option [value]="-1">-</mat-option>
                     <mat-option *ngFor="let user of users$|async" [value]="user.id">{{user.name}}</mat-option>
                 </mat-select>
@@ -45,7 +45,7 @@
             <mat-form-field
             class="fuse-mat-dense">
             <mat-label i18n>Type</mat-label>
-            <mat-select [ngModel]="ticket.type" name="type">
+            <mat-select [(ngModel)]="ticket.type" name="type">
                 <mat-option [value]=-1>-</mat-option>
                 <mat-option *ngFor="let type of types$|async" [value]="type.ticketTypeId">{{type.typeName}}</mat-option>
             </mat-select>
@@ -53,7 +53,7 @@
         <mat-form-field
         class="fuse-mat-dense">
         <mat-label i18n>Priority</mat-label>
-        <mat-select [ngModel]="ticket.priority" name="priority">
+        <mat-select [(ngModel)]="ticket.priority" name="priority">
             <mat-option [value]=-1>-</mat-option>
             <mat-option *ngFor="let priority of priorities$|async" [value]="priority.ticketPriorityId">{{priority.priorityName}}</mat-option>
         </mat-select>
@@ -64,7 +64,7 @@
     <textarea
     name="notes"
     #notes
-    [ngModel]="ticket.notes"
+    [(ngModel)]="ticket.notes"
     matInput
     [rows]="3"
     matTextareaAutosize></textarea>

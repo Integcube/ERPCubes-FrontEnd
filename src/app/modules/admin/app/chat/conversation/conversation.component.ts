@@ -132,12 +132,11 @@ export class ConversationComponent implements OnInit, OnDestroy
     resetChat(): void
     {
         // this._chatService.resetChat();
+        // Close the contact info in case it's opened
+        this.drawerOpened = false;
 
-        // // Close the contact info in case it's opened
-        // this.drawerOpened = false;
-
-        // // Mark for check
-        // this._changeDetectorRef.markForCheck();
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
     }
 
     /**

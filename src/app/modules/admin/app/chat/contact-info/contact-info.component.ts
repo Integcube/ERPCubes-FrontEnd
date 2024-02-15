@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
-import { Chat } from 'app/layout/common/quick-chat/quick-chat.types';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
 import { Ticket, TicketInfo } from '../chat.types';
