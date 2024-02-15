@@ -40,6 +40,12 @@ import {
 
 import { SelectAdAccountComponent } from './select-ad-account/select-ad-account.component';
 import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormsModule } from '@angular/forms';
+import { FuseDrawerModule } from '@fuse/components/drawer';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { MatTableExporterModule } from 'mat-table-exporter';
+import { DemoDialogComponent } from './demo-dialog/demo-dialog-account.component';
 
 
 @NgModule({
@@ -48,7 +54,8 @@ import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
     AdsDashboardComponent,
     CreateAdAccountComponent,
     ConnectAdAccountComponent,
-    SelectAdAccountComponent
+    SelectAdAccountComponent,
+    DemoDialogComponent
   ],
   imports: [
     RouterModule.forChild(adsRoute),
@@ -79,7 +86,6 @@ import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
     DragDropModule,
     MatDialogModule,
     MatStepperModule,
-
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 

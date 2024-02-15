@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateAdAccountComponent } from '../create-ad-account/create-ad-account.component';
 import { ConnectAdAccountComponent } from '../connect-ad-account/connect-ad-account.component';
+import { DemoDialogComponent } from '../demo-dialog/demo-dialog-account.component';
 
 @Component({
   selector: 'app-ads-dashboard',
@@ -26,5 +27,9 @@ export class AdsDashboardComponent implements OnInit {
   }
   openCreatorDialog() {
     const dialogRef = this.dialog.open(CreateAdAccountComponent);
+  }
+  openDemoDialog(){
+    const dialogRef = this.dialog.open(DemoDialogComponent);
+
   }
 }

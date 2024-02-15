@@ -1,4 +1,4 @@
-<div class="absolute flex flex-col justify-between h-full">
+<div class="absolute flex flex-col  inset-0   justify-between overflow-hidden">
     <div class="flex flex-grow justify-between gap-4">
         <div class="flex  min-w-20 items-baseline text-bold" i18n>Ads Setup</div>
         <div class="flex flex-grow max-w-1/2!">
@@ -64,7 +64,7 @@
                 <mat-step>
                     <ng-template matStepLabel>LEAD SYNCING</ng-template>
                     <div class="flex flex-col flex-grow justify-center items-center mt-4 ">
-                        <div class="flex flex-col justify-center items-center">
+                            <div class="flex flex-col justify-center items-center">
                             <h3 class="text-bold font-semibold text-center text-3xl" i18n>Automatically sync your leads from lead
                                 genration ads to your ERPCubes CRM</h3>
                             <p class="text-center mt-2 " i18n>
@@ -233,13 +233,13 @@
             <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex === 0" (click)="closeDialog()">
                 <span class="ml-2 mr-1" i18n>Cancel</span>
             </button>
-            <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex > 0" (click)="moveStepperToPreviousStep()">
+            <button class="h-9 primary-2" mat-stroked-button *ngIf="stepper.selectedIndex > 0" (click)="moveStepperToPreviousStep()">
                 <span class="ml-2 mr-1" i18n>Back</span>
             </button>
-            <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2" (click)="moveStepperToNextStep()">
+            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2" (click)="moveStepperToNextStep()">
                 <span class="ml-2 mr-1" i18n>Next</span>
             </button>
-            <button class="h-9" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="saveLeads()">
+            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="saveLeads()">
                 <span class="ml-2 mr-1" i18n>Done</span>
             </button>
         </div>
