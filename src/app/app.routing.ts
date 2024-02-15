@@ -101,8 +101,9 @@ export const appRoutes: Route[] = [
                 // {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},            ]},
                 
            //Marketing
-           {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)},
-           {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},]}
+           
+           {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},]},
+           {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)}
         ]
     }
 ];

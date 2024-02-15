@@ -97,7 +97,7 @@ import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
           },
           {
             id: CustomFacebookLoginProvider.PROVIDER_ID,
-            provider: new CustomFacebookLoginProvider('1043379676992727')
+            provider: new CustomFacebookLoginProvider('1141140310220884')
           }
         ],
         onError: (err) => {
