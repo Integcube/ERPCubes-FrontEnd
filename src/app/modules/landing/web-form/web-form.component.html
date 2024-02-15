@@ -2,27 +2,33 @@
     <ng-container *ngIf="fieldArray">
         <div class="flex flex-col flex-grow bg-gray-300">
 
-            <form class="m-6">
+            <form class="m-6" #customForm="ngForm">
                 <ng-container *ngFor="let field of fieldArray; let i = index">
                     <div *ngIf="field.fieldType == 1">
                         <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{field.fieldLabel}}</mat-label>
-                            <input matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}" [ngStyle]="applyCustomStyles(field)">
+                            <input matInput [(ngModel)]="field.result" [id]="field.fieldLabel" [spellcheck]="false"
+                                 [ngStyle]="applyCustomStyles(field)" [required]="field.isFixed" [name]="field.fieldLabel">
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 2">
                         <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{field.fieldLabel}}</mat-label>
-                            <textarea matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}" [ngStyle]="applyCustomStyles(field)"></textarea>
+                            <textarea matInput 
+                            [(ngModel)]="field.result" 
+                            [id]="field.fieldLabel" [name]="field.fieldLabel"
+                            [spellcheck]="false"
+                            [ngStyle]="applyCustomStyles(field)"></textarea>
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 3">
                         <mat-form-field class="fuse-mat-dense w-full " [class]="field.css">
                             <mat-label>{{field.fieldLabel}}</mat-label>
-                            <input matInput [(ngModel)]="field.result" [spellcheck]="false"
-                                [ngModelOptions]="{standalone: true}" type="number" [ngStyle]="applyCustomStyles(field)">
+                            <input matInput type="number"
+                            [(ngModel)]="field.result" 
+                            [id]="field.fieldLabel" [name]="field.fieldLabel"
+                            [spellcheck]="false"
+                            [ngStyle]="applyCustomStyles(field)">
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 4">
@@ -30,9 +36,9 @@
                             <mat-label>{{field.fieldLabel}}</mat-label>
                             <input matInput 
                             [matDatepicker]="picker"
+                            [id]="field.fieldLabel" [name]="field.fieldLabel"
                             (dateChange)="onDatePicked($event, field.fieldLabel)"
                             [spellcheck]="false"
-                            [ngModelOptions]="{standalone: true}"
                             [ngStyle]="applyCustomStyles(field)">
                             <mat-hint>MM/DD/YYYY</mat-hint>
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -45,20 +51,33 @@
                             {{field.fieldLabel}}
                         </mat-checkbox>
                     </div>
-                    <div *ngIf="field.fieldType == 6">
+                    <!-- <div *ngIf="field.fieldType == 6">
                         <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{ field.fieldLabel }}</mat-label>
-                            <mat-select [(ngModel)]="field.result" name="field.values">
+                            <mat-select [(ngModel)]="field.result" name="field.values" [id]="field.fieldLabel" [name]="field.fieldLabel">
                                 <ng-container *ngFor="let value of field.values|Split">
                                     <mat-option [value]="value">{{value}}</mat-option>
                                 </ng-container>
                             </mat-select>
                         </mat-form-field>
+                    </div> -->
+                    <div *ngIf="field.fieldType == 6">
+                        <mat-form-field class="fuse-mat-dense w-full">
+                            <mat-label>{{ field.fieldLabel }}</mat-label>
+                            <mat-select 
+                            [(ngModel)]="field.result" 
+                            [name]="field.fieldLabel" [id]="'select-' + field.fieldLabel">
+                                <ng-container *ngFor="let value of field.values | Split">
+                                    <mat-option [value]="value">{{ value }}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
+                    
                     <div *ngIf="field.fieldType == 7">
                         <mat-form-field class="fuse-mat-dense w-full">
                             <mat-label>{{ field.fieldLabel }}</mat-label>
-                            <mat-select name="field.values"
+                            <mat-select [name]="field.fieldLabel" [id]="'select-' + field.fieldLabel"
                                 (selectionChange)="onMultipleSelect($event, field.fieldLabel)" multiple>
                                 <ng-container *ngFor="let value of field.values|Split">
                                     <mat-option [value]="value">{{value}}</mat-option>
@@ -67,10 +86,16 @@
                         </mat-form-field>
                     </div>
                 </ng-container>
+               
             </form>
-            <button class="ml-2 self-center " mat-flat-button [color]="'primary'" (click)="allFormFieldsSaved()">
+            <button type="submit"
+            class="self-end mr-6" 
+            mat-flat-button [color]="'primary'" 
+            [disabled]="!customForm.valid"
+            (click)="allFormFieldsSaved()">
                 Save
             </button>
+            <div *ngIf="saveSuccess" class="text-green-600 font-medium mt-4 ml-6">Save Successful!</div>
         </div>
     </ng-container>
 </div>

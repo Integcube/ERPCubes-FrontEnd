@@ -70,14 +70,16 @@ export class FormConfiguratorComponent implements OnInit, OnDestroy {
     const formFieldIndex = this.FieldArray.indexOf(field)
     if(formFieldIndex !== 1) {
       this.FieldArray.splice(formFieldIndex, 1)
-      this.closrFieldSetting('add')
+      if(this.fieldSettingsView ==true){
+       this.closeFieldSetting()
+      }
     }
   }
   fieldClicked(field: FormField) {
     this.fieldSettingsView = true
     this.selectedField = field
   }
-  closrFieldSetting(tab: string) {
+  closeFieldSetting() {
     this.fieldSettingsView = !this.fieldSettingsView
     // if(tab === 'add') {
     //   this.fieldSettingsView = !this.fieldSettingsView

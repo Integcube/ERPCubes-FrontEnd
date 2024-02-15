@@ -48,7 +48,7 @@
                 <span class="text-lg text-white font-bold my-2" *ngIf="!fieldSettingsView" i18n>Add Field</span>
                 <div class="flex justify-center items-center w-full h-full gap-4" *ngIf="fieldSettingsView">
                     <span class="text-lg text-white font-bold truncate" i18n>Edit Field</span>
-                    <button mat-icon-button class="rounded-full w-10 h-10" matTooltip="Back to Field menu" (click)="closrFieldSetting('add')">
+                    <button mat-icon-button class="rounded-full w-10 h-10" matTooltip="Back to Field menu" (click)="closeFieldSetting()">
                         <mat-icon class="text-white" i18n>close</mat-icon>
                     </button>
                 </div>

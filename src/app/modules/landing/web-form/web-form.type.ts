@@ -9,8 +9,10 @@ export interface FormField {
     order:number;
     displayLabel:boolean;
     css:string;
-    result:string
 }
+export interface FormFieldResult extends FormField {
+    result: string;
+  }
 export interface Form {
     formId: number;
     name: string;

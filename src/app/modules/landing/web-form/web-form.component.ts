@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { Form, FormField } from 'app/modules/landing/web-form/web-form.type';
+import { Form, FormField, FormFieldResult } from 'app/modules/landing/web-form/web-form.type';
 import { EMPTY, Observable, Subject, catchError, takeUntil } from 'rxjs';
 import { WebFormService } from './web-form.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -12,22 +12,22 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
   styleUrls: ['./web-form.component.scss']
 })
 export class WebFormComponent implements OnInit {
-  constructor(
-    private _webFormService: WebFormService,
-    private _renderer: Renderer2,
-    private el: ElementRef,
-    private _activatedRoute: ActivatedRoute,)
-  { }
   private errorMessageSubject = new Subject<string>();
   errorMessage$ = this.errorMessageSubject.asObservable();
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  
+  constructor(
+    private _webFormService: WebFormService,
+    private _activatedRoute: ActivatedRoute,)
+  { }
 
-  fieldArray: FormField[]
+  saveSuccess: boolean;
+  fieldArray: FormFieldResult[]
   formArray: Form[]
   form: Form
   param1: string;
   param2: string;
-
+  
   ngOnInit(): void {
     this._activatedRoute.queryParams.subscribe(params => {
       this.param1 = params['tenantId'];
@@ -35,7 +35,7 @@ export class WebFormComponent implements OnInit {
     });
     this._webFormService.getFormFields(this.param1, this.param2)
     .subscribe(fields => {
-       this.fieldArray = fields
+      this.fieldArray = fields.map(field => ({ ...field, result: null }));
     })
     this._webFormService.getForms(this.param1)
     .subscribe(forms => {
@@ -45,25 +45,40 @@ export class WebFormComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
 
   applyCustomStyles(field: FormField) {
-    const css = field.css.split(';')  // Split the string by semicolons to get an array of property-value pairs
-    .filter(pair => pair.trim())     // Remove any empty elements resulting from extra semicolons
-    .reduce((cssObject, pair) => {
-      const [property, value] = pair.split(':');  // Split each pair by colon to get property and value
-      cssObject[property.trim()] = value.trim();  // Assign property-value pair to the CSS object
-      return cssObject;
-    }, {});
+    if (!field || !field.css) {
+        return null;
+    }
+    const css = field.css.split(';')
+      .map(pair => pair.trim())
+      .filter(pair => !!pair)
+      .reduce((cssObject, pair) => 
+        {
+          const [property, value] = pair.split(':');
+          if (property && value) {
+              cssObject[property.trim()] = value.trim();
+          }
+          return cssObject;
+        }, 
+        {}
+      );
+    if (Object.keys(css).length === 0) {
+        return null;
+    }
     return css;
   }
 
   onMultipleSelect(event: MatSelectChange, fieldLabel: string) {
-    let options:string = event.value.join(',')
-    this.fieldArray.find(field => field.fieldLabel === fieldLabel).result = options
+    let options:string = event.value.join(',');
+    this.fieldArray.find(field => field.fieldLabel === fieldLabel).result = options;
   }
 
   onCheckBoxChange(event: MatCheckboxChange, fieldLabel: string) {
-    debugger;
     const field = this.fieldArray.find(field => field.fieldLabel === fieldLabel);
     if (field) {
       if (field.result != "true") {
@@ -77,11 +92,17 @@ export class WebFormComponent implements OnInit {
   onDatePicked(event: MatDatepickerInputEvent<Date>, fieldLabel: string) {
     const field = this.fieldArray.find(field => field.fieldLabel === fieldLabel);
     if(field) {
-      field.result = event.value.toString()
+      field.result = event.value.toString();
     }
   }
 
   allFormFieldsSaved() {
-    this._webFormService.saveFormResults(this.fieldArray).subscribe()
+    this._webFormService.saveFormResults(this.fieldArray).subscribe(
+      () => {
+        this.saveSuccess = true;
+        setTimeout(() => { this.saveSuccess = false; }, 1000); // 1000 milliseconds = 1 second
+        this.fieldArray = this.fieldArray.map(field => ({ ...field, result: null }));
+      }
+    );
   }
 }

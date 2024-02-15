@@ -2,17 +2,22 @@
     <div class="w-full max-w-3xl">
         <div class="max-w-none mx-auto prose prose-sm">
             <img
-                class="w-20"
+                class="w-40"
                 src="assets/images/logo/Quantance.svg"
                 alt="Logo image"  i18n-alt>
-            <h1 i18n>Landing Module</h1>
+            <h1 i18n>Welcome to Quantus</h1>
             <p i18n>
-                This can be the landing or the welcome page of your application. If you have an SSR (Server Side Rendering) setup, or if you don't need to have Search engine
-                visibility and optimizations, you can even use this page as your primary landing page.
+                <strong class="text-xl font-medium">
+                    Our AI-powered CRM helps you identify & target the most promising leads for your business and build meaningful relationships with customers.
+                </strong>
             </p>
             <p i18n>
-                This is a separate "module", it has its own directory and routing setup and also it's completely separated from the actual application. This is also a simple example of
-                a multiple applications setup that uses the same codebase. You can have different entry points and essentially have different applications within the same codebase.
+                <strong class="text-xl font-medium">Leverage the power of </strong><br>
+                <strong class="text-2xl font-bold">AI Contact Management</strong><span class="p-8"></span>
+                <strong class="text-2xl font-bold">Sales Automation</strong><br>
+                <strong class="text-2xl font-bold">Sentiment Analysis</strong><span class="p-14"></span>
+                <strong class="text-2xl font-bold">Service Chatbots</strong><br>
+                <strong class="text-2xl font-bold">Workflow Automation</strong>
             </p>
         </div>
         <div>
@@ -20,7 +25,7 @@
                 class="mt-8"
                 mat-flat-button
                 [color]="'primary'"
-                [routerLink]="'/crm/contacts/leads'">
+                [routerLink]="'/crm-dashboard'">
                 <span i18n>Launch the App</span>
                 <mat-icon
                     class="ml-2 icon-size-5"

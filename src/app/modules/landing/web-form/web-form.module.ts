@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WebFormComponent } from './web-form.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -33,6 +33,7 @@ import { SplitPipe } from '@fuse/pipes/split/split.pipe';
     MatDatepickerModule,
     MatMomentDateModule,
     FormsModule,
+    ReactiveFormsModule,
     CommonModule,
     SharedModule
   ],
