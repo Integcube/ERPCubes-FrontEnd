@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead, Attachment } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -57,7 +57,9 @@ export class LeadService {
   private readonly getScoreListUrl = `${environment.url}/Lead/getScoreList`
   private readonly saveleadScoreUrl = `${environment.url}/Lead/saveleadScore`
   private readonly CalculateleadScoreUrl = `${environment.url}/Lead/calculateleadScore`
-  
+  private readonly getLeadAttachmentsURL = `${environment.url}/Lead/getLeadAttachments`
+  private readonly deleteLeadAttachmentURL = `${environment.url}/Lead/deleteLeadAttchments`
+  private readonly downloadFileURL = `${environment.url}/DocumentLibrary/getfile`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -85,7 +87,7 @@ export class LeadService {
   private _campaigns: BehaviorSubject<Campaign[] | null> = new BehaviorSubject(null);
   private _statusWiseLeads: BehaviorSubject<StatusWiseLeads[] | null> = new BehaviorSubject(null);
   private _calculateleadScore: BehaviorSubject<any|null> = new BehaviorSubject(null);
-  
+  private _leadAttachments: BehaviorSubject<Attachment[] | null> = new BehaviorSubject(null);
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -242,6 +244,9 @@ export class LeadService {
     return this._leadStatus.asObservable();
   }
 
+  get leadAttachments$(): Observable<Attachment[]> {
+    return this._leadAttachments.asObservable();
+  }
   get industries$(): Observable<Industry[]> {
     return this._industries.asObservable();
   }
@@ -306,7 +311,8 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-  getStausWiseLeads(): Observable<StatusWiseLeads[]> {
+
+  getStatusWiseLeads(): Observable<StatusWiseLeads[]> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -318,6 +324,7 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
   getTasks(leadId: number): Observable<TaskModel[]> {
     let data = {
       id: "-1",
@@ -362,8 +369,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
-
 
   getIndustries(): Observable<Industry[]> {
     let data = {
@@ -481,6 +486,7 @@ export class LeadService {
 
     );
   }
+
   GetLeadScore(leadId: number): Observable<any[]> {
     let data = {
       leadId: leadId
@@ -497,8 +503,6 @@ export class LeadService {
 
     );
   }
-
-  
 
   getActivities(count: number, leadId: number): Observable<any> {
 
@@ -524,9 +528,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-
-
-
   
   getEventType(): Observable<EventType[]> {
     let data = {
@@ -642,6 +643,51 @@ export class LeadService {
         this._customLists.next(customList);
       }),
       catchError(err => this.handleError(err))
+    );
+  }
+
+  getLeadAttachments(lead: Lead): Observable<Attachment[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      contactTypeId: this.contactEnumInstance.Lead,
+      leadId: lead.leadId
+    }
+    return this._httpClient.post<Attachment[]>(this.getLeadAttachmentsURL, data)
+    .pipe(
+      tap((attachment) => {
+        this._leadAttachments.next(attachment);
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+
+  deleteLeadAttachment(id:number, lead:Lead): Observable<Attachment[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      fileId: id,
+      contactTypeId: this.contactEnumInstance.Lead,
+      leadId: lead.leadId
+    }
+    debugger;
+    return this._httpClient.post<Attachment[]>(this.deleteLeadAttachmentURL, data)
+    .pipe(
+      tap(() => {
+        this.getLeadAttachments(lead).subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    );
+  }
+
+  downloadFile(path: string): Observable<any> {
+    debugger;
+    const fullUrl = `${this.downloadFileURL}?filePath=${path}`;
+    return this._httpClient.get(fullUrl, {
+        responseType: 'blob',
+        observe: 'response'
+    }).pipe(          
+        catchError(err => this.handleError(err))
     );
   }
 
@@ -837,6 +883,7 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
   saveEmail(email: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -854,6 +901,7 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
   saveMeeting(meeting: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -874,6 +922,7 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
   saveLead(lead: Lead) {
     let data = {
       id: this.user.id,
@@ -889,6 +938,7 @@ export class LeadService {
 
     );
   }
+
   getDeletedLeads(): Observable<DeletedLead[]> {
     let data = {
       id: this.user.id,
@@ -925,6 +975,7 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
+
   saveCall(call: any, leadId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -964,7 +1015,6 @@ export class LeadService {
       catchError(err => this.handleError(err))
     );
   }
-  
   
   saveCustomList(leadList: LeadCustomList): Observable<LeadCustomList> {
     let data = {

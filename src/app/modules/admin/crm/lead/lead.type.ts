@@ -308,3 +308,11 @@ export class DeletedLeads{
     }
 }
 
+export class Attachment {
+    fileId: number;
+    fileName: string;
+    path: string;
+    description: string;
+    type: string;
+    size: number;
+}

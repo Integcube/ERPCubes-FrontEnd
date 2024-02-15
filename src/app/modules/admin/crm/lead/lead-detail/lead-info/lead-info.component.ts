@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil, catchError, EMPTY } from 'rxjs';
 import { LeadService } from '../../lead.service';
-import { Call, Email, Lead, Meeting, Note, TaskModel } from '../../lead.type';
+import { Attachment, Call, Email, Lead, Meeting, Note, TaskModel } from '../../lead.type';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { NoteDetailComponent } from '../notes/note-detail/note-detail.component';
@@ -12,6 +12,7 @@ import { CallDetailComponent } from '../call/call-detail/call-detail.component';
 import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
 import{LeadDetailComponent} from 'app/modules/admin/crm/lead/lead-detail/lead-detail.component'
 import { LeadScoreComponent } from '../lead-score/lead-score.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-lead-info',
   templateUrl: './lead-info.component.html',
@@ -20,7 +21,13 @@ import { LeadScoreComponent } from '../lead-score/lead-score.component';
 
 })
 export class LeadInfoComponent implements OnInit, OnDestroy {
-
+  constructor(private _formBuilder: FormBuilder,
+    private _leadService: LeadService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _matDialog: MatDialog,
+    private _fuseConfirmationService: FuseConfirmationService,
+    private _fuseComponentsComponent: LeadDetailComponent)
+  { }
   selectedLead: Lead;
   leadForm: FormGroup;
   users$ = this._leadService.users$;
@@ -29,18 +36,10 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadSource$ = this._leadService.leadSource$;
   products$ = this._leadService.products$;
   calculatedleadScore$ = this._leadService.calculateleadScore$;
- 
+  leadAttachments: Attachment[]
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  constructor(private _formBuilder: FormBuilder,
-    private _leadService: LeadService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _matDialog: MatDialog,
-    private _fuseComponentsComponent: LeadDetailComponent
-
-
-    ) {
-  }
+  
   save() {
     this.selectedLead = { ...this.leadForm.value }
     this._leadService.saveLead(this.selectedLead).subscribe(
@@ -53,6 +52,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
     );
   }
+
   ngOnInit(): void {
     this.leadForm = this._formBuilder.group({
       leadId: [, Validators.required],
@@ -81,6 +81,11 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       this.leadForm.patchValue(company, { emitEvent: false });
       this._changeDetectorRef.markForCheck();
     });
+    this._leadService.leadAttachments$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((attachments: Attachment[]) => {
+      this.leadAttachments = { ...attachments };
+    });
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
@@ -105,12 +110,10 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
-
-
   convertToInteger(value: number): number {
     return parseInt(value.toString(), 10);
   }
- toggleDrawer(): void
+  toggleDrawer(): void
   {
       // Toggle the drawer
       this._fuseComponentsComponent.matDrawer.toggle();
@@ -142,12 +145,98 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
-
   leadScore(){
   
     this._matDialog.open(LeadScoreComponent, {
       autoFocus: false,
   });
   }
-
+  getAttachments() {
+    this._leadService.getLeadAttachments(this.selectedLead)
+      .subscribe(
+        (attachments: Attachment[]) => {
+          this.leadAttachments = attachments;
+        }
+      );
+  }
+  // deleteLeadAttachment(id: number) {
+  //   this._leadService.deleteLeadAttachment(id, this.selectedLead)
+  //     .subscribe(
+  //       (attachments: Attachment[]) => {
+  //         this.leadAttachments = { ...attachments };
+  //         debugger;
+  //       }
+  //     );
+  // }
+  deleteLeadAttachment(id: number) {
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Delete lead',
+      message: 'Are you sure you want to delete this lead? This action cannot be undone!',
+      actions: {
+        confirm: {
+          label: 'Delete'
+        }
+      }
+    });
+    // Subscribe to the confirmation dialog closed action
+    confirmation.afterClosed().subscribe((result) => {
+      // If the confirm button pressed...
+      if (result === 'confirmed') {
+        this._leadService.deleteLeadAttachment(id, this.selectedLead)
+        .subscribe(
+          (attachments: Attachment[]) => {
+            this.leadAttachments = { ...attachments };
+            debugger;
+          }
+        );
+      }
+    });
+  }
+  downloadFile(file: Attachment){
+    debugger;
+    this._leadService.downloadFile(file.path).pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
+        data=>{
+            if(data.body.size < 100){
+              }
+              else{
+                const fileExtension = file.type;
+                const url = window.URL.createObjectURL(data.body);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${file.fileName}.${fileExtension}`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }
+        }
+    );
+  }
+  file:any;
+  invalidFileMessage: string | null = null;
+  isFileValid = false;
+  fileUploaded = false;
+  isFileUploading = false;
+  selectFile(event) {
+    this.file = event.target.files[0];
+  
+    if (!this.file) {
+      console.error('No file selected');
+      this.isFileValid = false;
+      return;
+    }
+  
+    const allowedFileExtensions = ['.xlsx', '.xls'];
+    const fileExtension = this.file.name.toLowerCase();
+  
+    if (!allowedFileExtensions.some(ext => fileExtension.endsWith(ext))) {
+      // Set the error message for invalid file type
+      this.invalidFileMessage = 'Invalid file type. Please upload a valid Excel file.';
+      this.isFileValid = false;
+    } else {
+      this.invalidFileMessage = null; // Clear the error message
+      this.isFileValid = true; // File is valid
+    }
+  
+    this.fileUploaded = false;
+  }
 }

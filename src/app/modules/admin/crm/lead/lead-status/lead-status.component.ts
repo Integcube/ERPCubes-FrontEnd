@@ -44,7 +44,7 @@ export class LeadStatusComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void
   {
-    this._leadService.getStausWiseLeads().subscribe(
+    this._leadService.getStatusWiseLeads().subscribe(
       data=>{this.statusWiseLeads = [...data]; this._changeDetectorRef.detectChanges()}
     )
   }
