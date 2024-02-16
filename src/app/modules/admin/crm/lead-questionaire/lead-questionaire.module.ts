@@ -29,14 +29,14 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-
-
-
+import { CopyQuestionformComponent } from './copy-question-form/copy-question-form.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     LeadQuestionaireComponent,
     LeadQuestionaireFormComponent,
-    LeadQuestionaireListComponent
+    LeadQuestionaireListComponent,
+    CopyQuestionformComponent
   ],
   imports: [
     RouterModule.forChild(questionaireRoutes),
@@ -64,7 +64,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     FuseDrawerModule,
     FuseScrollbarModule,
     CommonModule,
-    SharedModule
+    SharedModule,
+    MatDialogModule
   ]
 })
 export class LeadQuestionaireModule { }

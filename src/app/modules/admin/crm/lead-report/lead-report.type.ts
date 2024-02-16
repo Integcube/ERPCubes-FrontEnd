@@ -5,7 +5,8 @@ export interface LeadReport {
     sId: number
     prodName: string
     prodId: number
-    count: number
+    count: number,
+    leadStatusId: number,
 }
 
 

@@ -60,7 +60,11 @@ export class LeadReportComponent implements OnInit, OnDestroy {
   getLeadReports(){
     this._leadReportService.getLeadReport(this.startDate.toISOString(), this.endDate.toISOString(), this.prodId).subscribe();
   }
+  getTotalForStatus(leadStatusId: number): number {
+    const total = this.userList.filter(s => s.leadStatusId === leadStatusId).reduce((acc, current) => acc + (current.count || 0), 0);
 
+    return total;
+  }
   
   trackByFn(index: number, item: any): any {
     return item.id || index;

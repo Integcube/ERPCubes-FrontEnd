@@ -4,6 +4,7 @@ import { LeadQuestionaireService } from '../lead-questionaire.service';
 import { Observable, Subject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { CopyQuestionformComponent } from '../copy-question-form/copy-question-form.component';
 
 @Component({
   selector: 'app-lead-questionaire-form',
@@ -12,8 +13,6 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 })
 export class LeadQuestionaireFormComponent implements OnInit {
   questions: Question[] = [];
-  //selectedProduct$ = this._questionaireService.product$
-  //dataSource: MatTableDataSource<Question>;
   weightageList = [
     {weightage: 0.05, title: "5%"},
     {weightage: 0.1, title: "10%"},
@@ -31,16 +30,11 @@ export class LeadQuestionaireFormComponent implements OnInit {
   ]
   editMode: boolean = false;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  showDeleteConfirmationDialog: boolean = false;
-  private deleteConfirmationDialogRef: MatDialogRef<any>;
-  get _deleteConfirmationDialogRef(): MatDialogRef<any> {
-    return this.deleteConfirmationDialogRef;
-  }
+
   constructor(
     private matDialogRef: MatDialogRef<LeadQuestionaireFormComponent>,
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) private _data: { selectedQuestions: Question[] },
-    private _fuseConfirmationService: FuseConfirmationService,
+    public _dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public selecteddata: any,
     private _questionaireService: LeadQuestionaireService,
   ) { }
   
@@ -67,14 +61,19 @@ export class LeadQuestionaireFormComponent implements OnInit {
   }
 
   delete(question: Question) {
-    debugger;
     this._questionaireService.deleteQuestion(question).subscribe();
   }
 
   close(): void {
     this.matDialogRef.close();
   }
-
+  openConnectorDialog() {
+  
+    this._dialog.open(CopyQuestionformComponent, {
+      autoFocus: false,
+      data:this.selecteddata
+    });
+  }
 }
 
 

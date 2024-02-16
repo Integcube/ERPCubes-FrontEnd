@@ -53,7 +53,6 @@ export class ActivityReportComponent {
     this.dataSource.sort = this.sort;
   }
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
@@ -61,36 +60,5 @@ export class ActivityReportComponent {
   getLeadReports(){
     this._activityReportService.getActivityReport(this.leadPipelineFilter).subscribe();
   }
-
-  // toggleAllRows() {
-  //   if (this.isAllSelected()) {
-  //     this.selection.clear();
-  //     return;
-  //   }
-  //   this.selection.select(...this.dataSource.data);
-  // }
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataSource.data.length;
-  //   return numSelected === numRows;
-  // }
-  // checkboxLabel(row?: ActivityReport): string {
-  //   if (!row) {
-  //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-  //   }
-  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadOwner + 1}`;
-  // }
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-  // trackByFn(index: number, item: any): any {
-  //     return item.id || index;
-  // }
-
- 
 
 }

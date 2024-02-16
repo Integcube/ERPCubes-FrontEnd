@@ -1,0 +1,78 @@
+<div class="flex flex-col flex-auto max-w-240 md:min-w-160 max-h-120 min-h-120 pb-2 -m-6 bg-d">
+  <div
+    class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary w-full">
+    <div>
+      <span class="text-md font-medium">Copy Lead Qualification Question From Other products </span>
+      <span class="flex flex-row text-md mt-1">Question Copy For {{ selecteddata.productName }}</span>
+    </div>
+    <button mat-icon-button (click)="close()" [tabIndex]="-1">
+      <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+  </div>
+ 
+  <div class="flex justify-between px-6 py-2 shadow mb-2">
+    <div class="self-center text-lg font-medium">Question List</div>
+    <div class="flex w-80">
+        <mat-form-field class="fuse-mat-dense flex-auto w-full">
+          <mat-label i18n>Copy from</mat-label>
+          <mat-select  [spellcheck]="false" [(ngModel)]="prodId"   #leadOwner (selectionChange)="onSelectionChange(prodId)">
+              <mat-option [value]="-1"  i18n>--Select Products--</mat-option>
+              <ng-container *ngIf="product$ |async as  products">
+                  <mat-option *ngFor="let product of products" [value]="product.productId">{{product.productName}}</mat-option>
+              </ng-container>
+          </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div  class="flex-1 min-h-60" fuseScrollbar>
+    <ng-container *ngIf="questions && questions.length > 0; else noQuestions">
+      <div class="flex flex-col w-full px-5" *ngFor="let question of questions; let i = index" >
+        <div class="flex gap-2 w-full">
+          <div class="flex min-w-1/8 items-center">
+            <span class="p-2 m-2">{{i+1}}</span>
+          </div>
+          <div
+            class="flex w-full items-center py-1 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">  
+            <span>{{question.title}}</span>
+          </div>
+          <div
+            class="flex w-1/6 items-center justify-end py-1 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+            
+            <span>{{question.weightage*100}}%</span>
+          </div>
+          <div class="flex w-1/6 items-center justify-end">
+            <mat-checkbox [(ngModel)]="question.isChecked" color="accent"></mat-checkbox>
+
+          </div>
+        </div>
+    
+      </div>
+    </ng-container>
+    <ng-template #noQuestions>
+      <div class="flex flex-auto flex-col items-center justify-center " style="margin-top: 10%;">
+          <mat-icon
+          class="icon-size-24 mr-2"
+          [svgIcon]="'heroicons_outline:question-mark-circle'"></mat-icon>
+          <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Questions found.</div>
+         
+      </div>
+    </ng-template>
+  </div>  
+  <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 pt-2 sm:pl-8 bg-gray-50 dark:bg-transparent">
+    
+    <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
+        <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+        <span class="ml-2 text-xs" i18n>Cancel</span> 
+    </button>
+    <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save these Questions to Product'" mat-stroked-button   (click)="saveAndClose()">
+        <mat-icon
+        class="icon-size-5 mr-2 text-white"
+           [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+        <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+    </button>
+ 
+   </div>
+   
+
+</div>

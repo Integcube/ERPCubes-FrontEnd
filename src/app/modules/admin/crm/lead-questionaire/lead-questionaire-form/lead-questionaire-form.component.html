@@ -1,7 +1,12 @@
 <div class="flex flex-col flex-auto max-w-240 md:min-w-160 max-h-120 min-h-120 pb-2 -m-6 bg-d">
   <div
     class="flex flex-0 items-center justify-between h-16 pr-5 md:pr-3 pl-8 md:pl-6 bg-primary text-on-primary w-full">
-    <div class="text-lg font-medium">Lead Qualification Questionaire</div>
+    <div>
+     
+      <span class="text-lg ">  Lead Qualification Questions For </span>
+      <span class="flex flex-row text-md mt-1"> {{ selecteddata.productName }}</span>
+    </div>
+    
     <button mat-icon-button (click)="close()" [tabIndex]="-1">
       <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
     </button>
@@ -10,6 +15,11 @@
   <div class="flex justify-between px-6 py-2 shadow mb-2">
     <div class="self-center text-lg font-medium">Question List</div>
     <div class="flex self-center">
+      <button class="h-8 mr-2" [matTooltip]="'Click to Copy Qualification Question from other Products'" mat-stroked-button
+        *ngIf="questions" (click)="openConnectorDialog()">
+        <mat-icon class="icon-size-5">autorenew</mat-icon>
+        <span class="ml-1 mr-1 text-xs" i18n>Import</span>
+      </button>
       <button class=" primary-2 h-8" [matTooltip]="'Click to Add New Qualification'" mat-stroked-button
         *ngIf="questions" (click)="addQuestion()">
         <mat-icon class="icon-size-5 text-white">add</mat-icon>
@@ -35,7 +45,9 @@
             #title>
           </div>
           <div
-            class="flex w-1/6 items-center justify-end py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+            class="flex w-1/6 items-center justify-end py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900"
+            [matTooltip]="'Question weightage'"
+            >
             <select 
             class="w-full font-medium leading-5 bg-transparent h-full"
             [(ngModel)]="question.weightage" 

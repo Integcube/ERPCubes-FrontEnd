@@ -15,10 +15,13 @@ export class LeadQuestionaireService {
   private readonly getQuestionaireURL = `${environment.url}/Lead/getQuestions`
   private readonly saveQuestionaireURL = `${environment.url}/Lead/saveQuestion`
   private readonly deleteQuestionURL = `${environment.url}/Lead/deleteQuestion`
+  private readonly saveCopyQuestionurl = `${environment.url}/Lead/saveCopyQuestion`
   user: User;
   private _products: BehaviorSubject<Product[] | null> = new BehaviorSubject(null);
   private _product: BehaviorSubject<Product | null> = new BehaviorSubject(null);
   private _questions: BehaviorSubject<Question[] | null> = new BehaviorSubject(null);
+  private _copyquestions: BehaviorSubject<Question[] | null> = new BehaviorSubject(null);
+  
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
@@ -34,6 +37,10 @@ export class LeadQuestionaireService {
     return this._questions.asObservable();
   }
 
+  get copyquestions$(): Observable<Question[]> {
+    return this._copyquestions.asObservable();
+  }
+  
   getProducts(): Observable<Product[]> {
     let data = {
       id: this.user.id,
@@ -65,6 +72,21 @@ export class LeadQuestionaireService {
     )
   }
 
+
+  getQuestion(prodId:number): Observable<Question[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      productId: prodId
+    }
+    return this._httpClient.post<Question[]>(this.getQuestionaireURL, data).pipe(
+      tap(data => {
+        this._copyquestions.next(data);
+      }),
+      catchError(err => this.handleError(err))
+    )
+  }
+
   saveQuestion(questions: Question): Observable<Question[]> {
     let data = {
       id: this.user.id,
@@ -82,13 +104,27 @@ export class LeadQuestionaireService {
     )
   }
 
+  saveCopyQuestion(questions: Question[]): Observable<Question[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+       productId: this._product.value.productId,
+       questions,
+    }
+    return this._httpClient.post<any>(this.saveCopyQuestionurl, data).pipe(
+      tap(() => {
+        this.getQuestionaire().subscribe();
+      }),
+      catchError(err => this.handleError(err))
+    )
+  }
+
   deleteQuestion(question: Question): Observable<Question[]> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
       questionId: question.questionId 
     }
-    debugger;
     return this._httpClient.post<any>(this.deleteQuestionURL, data).pipe(
       tap(() => {
         this.getQuestionaire().subscribe();

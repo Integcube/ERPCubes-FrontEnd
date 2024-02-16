@@ -5,6 +5,7 @@ export class Question {
     order: number;
     productId: number;
     weightage: number;
+    isChecked:boolean
     constructor(reg) {
         this.title = reg.title ? reg.title : "New Question";
         this.order = reg.order ? reg.order : -1;

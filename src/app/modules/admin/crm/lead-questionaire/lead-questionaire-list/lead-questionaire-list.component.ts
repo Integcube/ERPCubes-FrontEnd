@@ -101,6 +101,7 @@ export class LeadQuestionaireListComponent implements OnInit {
     this._questionaireService.getQuestionaire().subscribe();
     
     this._matDialog.open(LeadQuestionaireFormComponent, {
+      data:product , 
       autoFocus: false,
     });
   }

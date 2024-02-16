@@ -25,14 +25,7 @@
                     <mat-option *ngFor="let user of scenarios" [value]="user.reasonId">{{user.title}}</mat-option>
                 </ng-container>
             </mat-select>
-        </mat-form-field>
-     
-
-
-
-
-        
-    
+        </mat-form-field> 
         <div *ngIf="selectedIsTask==1" class="w-full">
             <span class="text-sm text-hint" i18n>Task will be automatically created for this Call Response.</span>
          </div>
