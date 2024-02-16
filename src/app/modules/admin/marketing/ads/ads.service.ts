@@ -212,7 +212,7 @@ export class AdsService {
 
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {
-      duration: 2000,
+      duration: 100000,
       verticalPosition: placementFrom,
       horizontalPosition: placementAlign,
       panelClass: colorName,

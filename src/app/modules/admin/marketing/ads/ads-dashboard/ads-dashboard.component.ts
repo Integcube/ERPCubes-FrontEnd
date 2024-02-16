@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateAdAccountComponent } from '../create-ad-account/create-ad-account.component';
 import { ConnectAdAccountComponent } from '../connect-ad-account/connect-ad-account.component';
 import { DemoDialogComponent } from '../demo-dialog/demo-dialog-account.component';
+import { AdsService } from '../ads.service';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Component({
   selector: 'app-ads-dashboard',
@@ -11,7 +13,7 @@ import { DemoDialogComponent } from '../demo-dialog/demo-dialog-account.componen
 })
 export class AdsDashboardComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private _alertService:AlertService) { }
 
   ngOnInit(): void {
   }

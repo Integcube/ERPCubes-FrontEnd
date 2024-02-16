@@ -20,14 +20,14 @@ export class AlertService {
   }
 
   public showSuccess(message: string, config?: MatSnackBarConfig): void {
-    this.openSnackBar(message, ['success-snackbar'], config);
+    this.openSnackBar(message, ['snackbar-success'], config);
   }
 
   public showWarning(message: string, config?: MatSnackBarConfig): void {
-    this.openSnackBar(message, ['warning-snackbar'], config);
+    this.openSnackBar(message, ['snackbar-warning'], config);
   }
 
   public showError(message: string, config?: MatSnackBarConfig): void {
-    this.openSnackBar(message, ['error-snackbar'], config);
+    this.openSnackBar(message, ['snackbar-danger'], config);
   }
 }
