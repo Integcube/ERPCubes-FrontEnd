@@ -1,7 +1,8 @@
 <div class="flex flex-col flex-auto justify-start bg-white h-main-section">
     <div class="flex justify-between w-full px-3 pt-3">
         <div class="flex items-center">
-            <mat-icon class="text-xs text-accent2 cursor-pointer" svgIcon="heroicons_outline:chevron-left" [routerLink]="['/crm/contacts/leads']"></mat-icon>
+            <mat-icon class="text-xs text-accent2 cursor-pointer" svgIcon="heroicons_outline:chevron-left"
+                [routerLink]="['/crm/contacts/leads']"></mat-icon>
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [routerLink]="['/crm/contacts/leads']">
                 Leads
@@ -9,7 +10,7 @@
         </div>
 
 
-  
+
         <!-- <button
             class="-ml-3 sm:ml-0 mb-2 sm:mb-0 order-first sm:order-last"
             mat-icon-button
@@ -17,8 +18,8 @@
             <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
         </button> -->
 
-        
-     <!--    <div class="flex items-center">
+
+        <!--    <div class="flex items-center">
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [matMenuTriggerFor]="actionMenu">
                 Actions
@@ -31,7 +32,7 @@
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-down"></mat-icon>
         </div> -->
     </div>
-    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 border-b " >
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 border-b ">
         <!-- Avatar and name -->
         <div class="flex flex-auto items-center min-w-0">
             <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden shadow">
@@ -46,48 +47,41 @@
                 </ng-container>
             </div>
             <div class="min-w-0 ml-4">
-                <div class="text-xl leading-5 truncate" style="font-weight: 600;color: #0c5d99 !important">{{selectedLead.firstName + " " + selectedLead.lastName }}</div>
+                <div class="text-xl leading-5 truncate" style="font-weight: 600;color: #0c5d99 !important">
+                    {{selectedLead.firstName + " " + selectedLead.lastName }}</div>
                 <div class="leading-5 truncate text-secondary text-sm">{{selectedLead.email}}</div>
                 <div class="flex flex-row mt-2" (click)="leadScore()">
                     <ng-container *ngIf="calculatedleadScore$ | async as leadScorea">
-                    <span class="flex flex-row">
-                        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                            <svg
-                            class="w-4 h-4 cursor-pointer"
-                            [ngClass]="{
+                        <span class="flex flex-row">
+                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                <svg class="w-4 h-4 cursor-pointer" [ngClass]="{
                               'text-yellow-500': star <= leadScorea.rating,
                               'text-gray-500': star >leadScorea.rating || leadScorea.rating === undefined
-                            }"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                           >
-                            <path
-                              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                            />
-                          </svg>
-                          </ng-container>
-                    </span>
-                  
-                  
-                      <span class="cursor-pointer  py-1 px-1 ml-1 -mt-1 rounded-full text-xs  text-white " 
-                         matTooltip="Click to Open Lead Qualification Assessment Form"
-                         [ngClass]="{
+                            }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </ng-container>
+                        </span>
+
+
+                        <span class="cursor-pointer  py-1 px-1 ml-1 -mt-1 rounded-full text-xs  text-white "
+                            matTooltip="Click to Open Lead Qualification Assessment Form" [ngClass]="{
                             'status1': leadScorea.rating <= 3,
                             'Status4': leadScorea.rating > 3 && leadScorea.rating <= 4,
                             'Status5': leadScorea.rating >= 4
-                          }" >{{ leadScorea.rating | number:'1.2-2' }}</span>
+                          }">{{ leadScorea.rating | number:'1.2-2' }}</span>
                     </ng-container>
-                  </div>
-                  
-                  
+                </div>
+
+
             </div>
-            
+
         </div>
     </div>
     <div class="flex flex-row justify-between w-full  border-b px-6 pb-3 ">
         <div class="flex flex-col justify-center" (click)="addNote()">
-            <button mat-icon-button >
+            <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">edit_note</mat-icon>
             </button>
             <span class="text-sm text-center primary-2-Icon">
@@ -118,7 +112,7 @@
                 Task
             </span>
         </div>
-        <div class="flex flex-col justify-center"  (click)="addMeeting()">
+        <div class="flex flex-col justify-center" (click)="addMeeting()">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">person</mat-icon>
             </button>
@@ -137,10 +131,11 @@
     </div>
     <div class="flex flex-row justify-between w-full " fuseScrollbar>
         <mat-accordion>
+            <!-- About this Company -->
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base " >About This Company</span>
+                        <span class="text-base ">About This Company</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col">
@@ -179,30 +174,31 @@
                                     Email is required
                                 </mat-error>
                             </div>
-                           <div>
+                            <div>
                                 <label for="leadOwner" class="text-sm font-semibold ml-3">Lead Owner:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
-                                    [formControlName]="'leadOwner'" #leadOwner>
-                                    <ng-container *ngIf="users$|async as users">
-                                        <option *ngFor="let user of users"  [value]="user.id">{{user.name}}</option>
+                                        [formControlName]="'leadOwner'" #leadOwner>
+                                        <ng-container *ngIf="users$|async as users">
+                                            <option *ngFor="let user of users" [value]="user.id">{{user.name}}</option>
                                         </ng-container>
                                     </select>
                                 </div>
                                 <mat-error *ngIf="leadForm.get('email').hasError('required')" class="text-sm">
                                     Email is required
                                 </mat-error>
-                             </div>
-                           <div>
+                            </div>
+                            <div>
                                 <label for="industryId" class="text-sm font-semibold ml-3">Industry:</label>
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
-                                    [formControlName]="'industryId'" #industryId>
-                                    <ng-container *ngIf="industries$|async as industries">
-                                        <option [value]="-1"></option>
-                                        <option *ngFor="let industry of industries"  [value]="industry.industryId">{{industry.industryTitle}}</option>
+                                        [formControlName]="'industryId'" #industryId>
+                                        <ng-container *ngIf="industries$|async as industries">
+                                            <option [value]="-1"></option>
+                                            <option *ngFor="let industry of industries" [value]="industry.industryId">
+                                                {{industry.industryTitle}}</option>
                                         </ng-container>
                                     </select>
                                 </div>
@@ -212,10 +208,11 @@
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
-                                    [formControlName]="'sourceId'" #sourceId>
-                                    <ng-container *ngIf="leadSource$|async as sources">
-                                        <option [value]="-1"></option>
-                                        <option *ngFor="let source of sources"  [value]="source.sourceId">{{source.sourceTitle}}</option>
+                                        [formControlName]="'sourceId'" #sourceId>
+                                        <ng-container *ngIf="leadSource$|async as sources">
+                                            <option [value]="-1"></option>
+                                            <option *ngFor="let source of sources" [value]="source.sourceId">
+                                                {{source.sourceTitle}}</option>
                                         </ng-container>
                                     </select>
                                 </div>
@@ -225,10 +222,11 @@
                                 <div
                                     class="flex items-center w-full py-2 px-3 rounded-md cursor-pointer border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
                                     <select class="w-full font-medium leading-5 bg-transparent h-full"
-                                    [formControlName]="'industryId'" #industryId>
-                                    <ng-container *ngIf="products$|async as products">
-                                        <option [value]="-1"></option>
-                                        <option *ngFor="let product of products"  [value]="product.productId">{{product.productName}}</option>
+                                        [formControlName]="'industryId'" #industryId>
+                                        <ng-container *ngIf="products$|async as products">
+                                            <option [value]="-1"></option>
+                                            <option *ngFor="let product of products" [value]="product.productId">
+                                                {{product.productName}}</option>
                                         </ng-container>
                                     </select>
                                 </div>
@@ -240,7 +238,7 @@
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                         [formControlName]="'mobile'" #mobile>
                                 </div>
-                             </div>
+                            </div>
                             <div>
                                 <label for="work" class="text-sm font-semibold ml-3">Work:</label>
                                 <div
@@ -280,7 +278,7 @@
                                     <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
                                         [formControlName]="'country'" #country>
                                 </div>
-                            </div> 
+                            </div>
                             <!-- Actions -->
                             <div class="flex flex-row justify-end " *ngIf="!leadForm.invalid && leadForm.dirty">
                                 <!-- Save -->
@@ -295,26 +293,33 @@
                     <!-- </div> -->
                 </div>
             </mat-expansion-panel>
+            <!-- Attachments -->
             <mat-expansion-panel [togglePosition]="'before'">
-                <mat-expansion-panel-header (click) = "getAttachments()">
+                <mat-expansion-panel-header (click)="getAttachments()">
                     <mat-panel-title class="items-center justify-between">
                         <span class="text-base">Attachments</span>
                     </mat-panel-title>
-                    <div class="flex flex-grow justify-end items-center" >
-                        <mat-icon class="icon-size-4 font-bold text-primary">add</mat-icon>
-                        <!-- <input type="file" (change)="selectFile($event)" class="text-base font-semibold text-primary self-center hover:underline"/>Add -->
+                    <div class="flex flex-grow justify-end items-center">
+                        <button class=" h-8 bg-white border-0" mat-stroked-button [color]="'text-accent2'"
+                        (click)="triggerFileInput.click()" [matTooltip]="'Create Task'">
+                            <mat-icon class="icon-size-5 text-teal-500" [svgIcon]="'heroicons_solid:document-add'"></mat-icon>
+                            <span class=" mr-1 text-sm hover:underline" i18n>Upload</span>
+                        </button>
+                        <input #triggerFileInput type="file" style="display: none" (change)="selectFile($event)">
                     </div>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col gap-2">
                     <ng-container *ngIf="leadAttachments">
                         <ng-container *ngFor="let attachment of leadAttachments; let i=index">
-                            <div class="flex justify-between items-center h-10 p-1 gap-3 border border-primary-200 rounded-sm shadow bg-white">
+                            <div
+                                class="flex justify-between items-center h-10 p-1 gap-3 border border-primary-200 rounded-sm shadow bg-white">
                                 <div class="flex justify-start items-center p-1 gap-3">
                                     <div class="w-4 mt-2">
                                         <mat-icon class="icon-size-5 text-primary">description</mat-icon>
                                     </div>
                                     <div class="w-30 text-clip truncate">
-                                        <span class="cursor-pointer text-accent2 text-sm font-semibold" (click)="downloadFile(attachment)">
+                                        <span class="cursor-pointer text-accent2 text-sm font-semibold"
+                                            (click)="downloadFile(attachment)">
                                             {{attachment.fileName}}.{{attachment.type}}
                                         </span>
                                     </div>
@@ -325,7 +330,8 @@
                                     </div>
                                 </div>
                                 <div class="mt-2">
-                                    <mat-icon class="cursor-pointer icon-size-5" (click)="deleteLeadAttachment(attachment.fileId)">close</mat-icon>
+                                    <mat-icon class="cursor-pointer icon-size-5"
+                                        (click)="deleteLeadAttachment(attachment.fileId)">close</mat-icon>
                                 </div>
                             </div>
                         </ng-container>

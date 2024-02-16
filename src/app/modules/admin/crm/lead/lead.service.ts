@@ -60,6 +60,7 @@ export class LeadService {
   private readonly getLeadAttachmentsURL = `${environment.url}/Lead/getLeadAttachments`
   private readonly deleteLeadAttachmentURL = `${environment.url}/Lead/deleteLeadAttchments`
   private readonly downloadFileURL = `${environment.url}/DocumentLibrary/getfile`
+  private readonly saveFileURL = `${environment.url}/DocumentLibrary/addLeadFile`
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -670,7 +671,6 @@ export class LeadService {
       contactTypeId: this.contactEnumInstance.Lead,
       leadId: lead.leadId
     }
-    debugger;
     return this._httpClient.post<Attachment[]>(this.deleteLeadAttachmentURL, data)
     .pipe(
       tap(() => {
@@ -681,13 +681,29 @@ export class LeadService {
   }
 
   downloadFile(path: string): Observable<any> {
-    debugger;
     const fullUrl = `${this.downloadFileURL}?filePath=${path}`;
     return this._httpClient.get(fullUrl, {
         responseType: 'blob',
         observe: 'response'
     }).pipe(          
         catchError(err => this.handleError(err))
+    );
+  }
+
+  saveFile(file: File, selectedLead: Lead): Observable<Attachment[]> {
+    const parentId = 0   
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('tenantId', this.user.tenantId.toString());
+    formData.append('id', this.user.id);
+    formData.append('parentId', parentId.toString());
+    formData.append('contactTypeId', this.contactEnumInstance.Lead.toString());
+    formData.append('leadId', selectedLead.leadId.toString());
+    return this._httpClient.post<Attachment[]>(this.saveFileURL, formData).pipe(
+      tap(data => {
+        this.getLeadAttachments(selectedLead).subscribe();
+      }),
+      catchError(err => this.handleError(err))
     );
   }
 

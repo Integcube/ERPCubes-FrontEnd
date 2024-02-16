@@ -164,7 +164,6 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   //     .subscribe(
   //       (attachments: Attachment[]) => {
   //         this.leadAttachments = { ...attachments };
-  //         debugger;
   //       }
   //     );
   // }
@@ -186,14 +185,12 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
         .subscribe(
           (attachments: Attachment[]) => {
             this.leadAttachments = { ...attachments };
-            debugger;
           }
         );
       }
     });
   }
   downloadFile(file: Attachment){
-    debugger;
     this._leadService.downloadFile(file.path).pipe(takeUntil(this._unsubscribeAll))
     .subscribe(
         data=>{
@@ -211,32 +208,19 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
         }
     );
   }
-  file:any;
-  invalidFileMessage: string | null = null;
-  isFileValid = false;
-  fileUploaded = false;
-  isFileUploading = false;
   selectFile(event) {
-    this.file = event.target.files[0];
+    const file = event.target.files[0];
   
-    if (!this.file) {
+    if (!file) {
       console.error('No file selected');
-      this.isFileValid = false;
       return;
     }
-  
-    const allowedFileExtensions = ['.xlsx', '.xls'];
-    const fileExtension = this.file.name.toLowerCase();
-  
-    if (!allowedFileExtensions.some(ext => fileExtension.endsWith(ext))) {
-      // Set the error message for invalid file type
-      this.invalidFileMessage = 'Invalid file type. Please upload a valid Excel file.';
-      this.isFileValid = false;
-    } else {
-      this.invalidFileMessage = null; // Clear the error message
-      this.isFileValid = true; // File is valid
-    }
-  
-    this.fileUploaded = false;
+    this._leadService.saveFile(file, this.selectedLead)
+      .subscribe(response => {
+      }, error => {
+        console.error('Error uploading file:', error);
+      });
+    
   }
+
 }
