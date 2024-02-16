@@ -1,9 +1,11 @@
 /* 1. Components */
 @import 'components/example-viewer';
 @import 'components/input';
+@import 'components/snackbar.scss';
 
 /* 2. Overrides */
 @import 'overrides/angular-material';
 @import 'overrides/highlightjs';
 @import 'overrides/perfect-scrollbar';
 @import 'overrides/quill';
+
