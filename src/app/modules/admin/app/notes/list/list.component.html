@@ -106,6 +106,10 @@
                             [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                         <span class="hidden sm:inline-block ml-2 text-xs" i18n>New note</span>
                     </button>
+                    <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Notes'">
+                        <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                        <span class="ml-1 mr-1 text-xs" i18n>Note Trash</span>
+                    </button>
                 </div>
 
                 <!-- Notes -->

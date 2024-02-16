@@ -11,6 +11,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Subject, combineLatest, map, takeUntil, fromEvent, filter } from 'rxjs';
 import { ProjectService } from '../project.service';
 import { Project } from '../project.type';
+import { MatDialog } from '@angular/material/dialog';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-project-list',
@@ -44,6 +46,7 @@ export class ProjectListComponent implements OnInit {
     private _router: Router,
     private _projectService: ProjectService,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private dialog: MatDialog
   ) { }
   companyNames$ = this._projectService.companies$
   projects$ = this._projectService.projects$
@@ -151,4 +154,22 @@ export class ProjectListComponent implements OnInit {
   // previewProject(row: Project) {
   //   this._router.navigate(['detail-view', row.projectId], { relativeTo: this._activatedRoute });
   // }
+  openTrashDialog() {
+    const restoreDialogRef = this.dialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+  
+        autoFocus: false,
+      data     : {
+          type: "PROJECT",
+      }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._projectService.getProject().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
+  }
 }

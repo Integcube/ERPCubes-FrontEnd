@@ -68,11 +68,9 @@
                 </button>
 
                 <!-- Add contact button -->
-                <button
-                    class="ml-4 h-8"
-                    mat-stroked-button
-                    (click)="openTrashDialog()">
+                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Notes'">
                     <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                    <span class="ml-2 mr-1 text-xs" i18n>Product Trash</span>
                 </button>
         </div>
 

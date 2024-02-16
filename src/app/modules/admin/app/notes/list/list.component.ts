@@ -8,6 +8,7 @@ import { NotesLabelsComponent } from '../labels/labels.component';
 import { NotesService } from '../notes.service';
 import {  Note, Tag } from '../notes.types';
 import { NotesDetailsComponent} from '../details/details.component';
+import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
 
 @Component({
     selector       : 'notes-list',
@@ -252,4 +253,22 @@ export class NotesListComponent implements OnInit, OnDestroy
     {
         return item.id || index;
     }
+    openTrashDialog() {
+        const restoreDialogRef = this._matDialog.open(TrashComponent,
+          {
+            height: "100%",
+            width: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+    
+            autoFocus: false,
+            data: {
+              type: "NOTE",
+            }
+          }
+        );
+        restoreDialogRef.afterClosed().subscribe((result) => {
+          this._notesService.getNotes().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        });
+      }
 }

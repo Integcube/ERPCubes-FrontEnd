@@ -33,24 +33,6 @@ export class TrashComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
   }
 
-  getDeletedFilters(): void {
-    if (this._data.type === "LEAD") {
-      this._trashService.getDeletedLeads().subscribe((items: DeletedItems[]) => {
-        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
-      });
-    }
-    if (this._data.type === "PRODUCT") {
-      this._trashService.getDeletedProducts().subscribe((items: DeletedItems[]) => {
-        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
-      });
-    }
-    if (this._data.type === "USER") {
-      this._trashService.getDeletedUsersList().subscribe((items: DeletedItems[]) => {
-        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
-      });
-    }
-
-  }
 
 
   ngOnInit(): void {
@@ -67,6 +49,36 @@ export class TrashComponent implements OnInit, OnDestroy {
     }
     else if (this._data.type === "PRODUCT") {
       this._trashService.getDeletedProducts().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "NOTE") {
+      this._trashService.getDeletedNotes().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "TASK") {
+      this._trashService.getDeletedTask().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "TEAM") {
+      this._trashService.getDeletedTeam().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "CAMPAIGN") {
+      this._trashService.getDeletedCampaign().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "FORM") {
+      this._trashService.getDeletedForm().pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        data => { this.trashItems = this.filterItems = [...data] }
+      )
+    }
+    else if (this._data.type === "PROJECT") {
+      this._trashService.getDeletedProject().pipe(takeUntil(this._unsubscribeAll)).subscribe(
         data => { this.trashItems = this.filterItems = [...data] }
       )
     }
@@ -99,6 +111,24 @@ export class TrashComponent implements OnInit, OnDestroy {
     else if (this._data.type === "USER") {
       this._trashService.restoreUser(item).subscribe(data => { this.ngOnInit(); });
     }
+    else if (this._data.type === "NOTE") {
+      this._trashService.restoreNote(item).subscribe(data => { this.ngOnInit(); });
+    }
+    else if (this._data.type === "TASK") {
+      this._trashService.restoreTask(item).subscribe(data => { this.ngOnInit(); });
+    }
+    else if (this._data.type === "TEAM") {
+      this._trashService.restoreTeam(item).subscribe(data => { this.ngOnInit(); });
+    }
+    else if (this._data.type === "CAMPAIGN") {
+      this._trashService.restoreCampaign(item).subscribe(data => { this.ngOnInit(); });
+    }
+    else if (this._data.type === "FORM") {
+      this._trashService.restoreForm(item).subscribe(data => { this.ngOnInit(); });
+    }
+    else if (this._data.type === "PROJECT") {
+      this._trashService.restoreProject(item).subscribe(data => { this.ngOnInit(); });
+    }
   }
 
 
@@ -114,6 +144,26 @@ export class TrashComponent implements OnInit, OnDestroy {
       } else if (this._data.type === "USER") {
         a = this._trashService.restoreBulkUsers(selectedItemIds);
       }
+      else if (this._data.type === "NOTE") {
+        a = this._trashService.restoreBulkNotes(selectedItemIds);
+      }
+      else if (this._data.type === "TASK") {
+        a = this._trashService.restoreBulkTasks(selectedItemIds);
+      }
+      else if (this._data.type === "TEAM") {
+        a = this._trashService.restoreBulkTeam(selectedItemIds);
+      }
+      else if (this._data.type === "CAMPAIGN") {
+        a = this._trashService.restoreBulkCampaign(selectedItemIds);
+      }
+      else if (this._data.type === "FORM") {
+        a = this._trashService.restoreBulkForm(selectedItemIds);
+      }
+      else if (this._data.type === "PROJECT") {
+        a = this._trashService.restoreBulkProject(selectedItemIds);
+      }
+      
+      
   
       if (a) {
         a.pipe(
@@ -144,6 +194,60 @@ export class TrashComponent implements OnInit, OnDestroy {
     this._matDialogRef.close();
   }
 
+
+
+  getDeletedFilters(): void {
+    if (this._data.type === "LEAD") {
+      this._trashService.getDeletedLeads().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "PRODUCT") {
+      this._trashService.getDeletedProducts().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "USER") {
+      this._trashService.getDeletedUsersList().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "NOTE") {
+      this._trashService.getDeletedNotes().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "TASK") {
+      this._trashService.getDeletedTask().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "TEAM") {
+      this._trashService.getDeletedTeam().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "CAMPAIGN") {
+      this._trashService.getDeletedCampaign().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "FORM") {
+      this._trashService.getDeletedForm().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "PROJECT") {
+      this._trashService.getDeletedProject().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+
+
+
+  }
+
+
   filterByUser(user: string): void {
     if (this._data.type === "LEAD") {
       this._trashService.getDeletedLeads().pipe(
@@ -159,6 +263,48 @@ export class TrashComponent implements OnInit, OnDestroy {
       });
     } else if (this._data.type === "USER") {
       this._trashService.getDeletedUsersList().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "NOTE") {
+      this._trashService.getDeletedNotes().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "TASK") {
+      this._trashService.getDeletedTask().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "TEAM") {
+      this._trashService.getDeletedTeam().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "CAMPAIGN") {
+      this._trashService.getDeletedCampaign().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "FORM") {
+      this._trashService.getDeletedForm().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    }
+    else if (this._data.type === "PROJECT") {
+      this._trashService.getDeletedProject().pipe(
         map(items => items.filter(item => item.deletedBy === user))
       ).subscribe(filteredItems => {
         this.filterItems = filteredItems;

@@ -20,7 +20,26 @@ export class TrashService {
     private readonly getDeletedUsersUrl = `${environment.url}/Users/del`
     private readonly restoreUserListUrl = `${environment.url}/Users/restore`
     private readonly restoreBulkUserUrl = `${environment.url}/Users/restoreBulkUser`
+    private readonly getDeletedNoteListUrl = `${environment.url}/Notes/del`
+    private readonly restoreNoteUrl = `${environment.url}/Notes/restore`
+    private readonly restoreBulkNoteUrl = `${environment.url}/Notes/restoreBulk`
+    private readonly getDeletedTaskListUrl = `${environment.url}/Task/del`
+    private readonly restoreTaskUrl = `${environment.url}/Task/restore`
+    private readonly restoreBulkTaskUrl = `${environment.url}/Task/restoreBulk`
+    private readonly getDeletedTeamListUrl = `${environment.url}/Team/del`
+    private readonly restoreTeamkUrl = `${environment.url}/Team/restore`
+    private readonly restoreBulkTeamUrl = `${environment.url}/Team/restoreBulk`
+    private readonly getDeletedCampaignListUrl = `${environment.url}/Campaign/del   `
+    private readonly restoreCampaignkUrl = `${environment.url}/Campaign/restore`
+    private readonly restoreBulkCampaignUrl = `${environment.url}/Campaign/restoreBulkCampaign`
+    private readonly getDeletedFormListUrl = `${environment.url}/Forms/del`
+    private readonly restoreFormUrl = `${environment.url}/Forms/restore`
+    private readonly restoreBulkFormUrl = `${environment.url}/Forms/restoreBulk`
+    private readonly getDeletedProjectListUrl = `${environment.url}/Project/del`
+    private readonly restoreProjectUrl = `${environment.url}/Project/restore`
+    private readonly restoreBulkProjectUrl = `${environment.url}/Project/restoreBulk`
 
+    
     
     user: User;
     constructor(
@@ -107,7 +126,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreLeadUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+                this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
             }),
             catchError(err => this.handleError(err))
         );
@@ -122,7 +141,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkLeadUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+                this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
 
             }),
             catchError(err => this.handleError(err))
@@ -151,7 +170,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems>(this.restoreUserListUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
+                this.showNotification('snackbar-success', 'User restored successfully', 'bottom', 'center');
             }),
             catchError(err => this.handleError(err))
         );
@@ -166,7 +185,235 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkUserUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+                this.showNotification('snackbar-success', 'Users restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedNotes(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedNoteListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreNote(note: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            noteId: note.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreNoteUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Note restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkNotes(noteIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            noteId: noteIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkNoteUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Notes restored successfully', 'bottom', 'center');
+
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedTask(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedTaskListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreTask(task: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            taskId: task.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreTaskUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Task restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkTasks(taskIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            taskId: taskIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkTaskUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Tasks restored successfully', 'bottom', 'center');
+
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedTeam(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedTeamListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreTeam(team: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            teamId: team.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreTeamkUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Team restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkTeam(teamIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            teamId: teamIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkTeamUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Teams restored successfully', 'bottom', 'center');
+
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedCampaign(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedCampaignListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreCampaign(campaign: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            campaignId: campaign.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreCampaignkUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkCampaign(campaignIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            campaignId: campaignIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkCampaignUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
+
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedForm(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedFormListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreForm(form: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            formId: form.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreFormUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkForm(formIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            formId: formIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkFormUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
+
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    getDeletedProject(): Observable<DeletedItems[]>{
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedProjectListUrl, data).pipe(
+       
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreProject(project: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            projectId: project.id
+        };
+        return this._httpClient.post<DeletedItems[]>(this.restoreProjectUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Project restored successfully', 'bottom', 'center');
+            }),
+            catchError(err => this.handleError(err))
+        );
+    }
+    restoreBulkProject(projectIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            projectId: projectIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkProjectUrl, data).pipe(
+            tap(() => {
+                this.showNotification('snackbar-success', 'Projects restored successfully', 'bottom', 'center');
+
             }),
             catchError(err => this.handleError(err))
         );

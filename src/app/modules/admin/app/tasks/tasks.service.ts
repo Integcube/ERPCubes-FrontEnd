@@ -151,6 +151,7 @@ export class TasksService
 
     deleteTasks(id: number): Observable<Task[]> {
         let data = {
+            id: this.user.id,
             tenantId: this.user.tenantId,
             taskId: id
         }

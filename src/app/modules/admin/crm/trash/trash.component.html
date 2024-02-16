@@ -22,7 +22,7 @@
                         <mat-icon class="text-gray-400" svgIcon="heroicons_outline:filter"></mat-icon>
                     </button>
                     <mat-menu #filterMenu="matMenu">
-                        <!-- <button mat-menu-item (click)="filterByUser('All Users')">All Users</button> -->
+                        <button mat-menu-item>All Users</button>
                         <div class="mat-divider"></div>
                         <button mat-menu-item *ngFor="let user of deletedUsers; trackBy: trackByFn" (click)="filterByUser(user)  ">
                             <span class="flex flex-0 items-center justify-center w-6 h-6 rounded-full overflow-hidden" matTooltip="{{ user }}">

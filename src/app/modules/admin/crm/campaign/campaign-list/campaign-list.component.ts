@@ -12,6 +12,8 @@ import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Campaign } from '../campaign.type';
 import { cA } from '@fullcalendar/core/internal-common';
+import { MatDialog } from '@angular/material/dialog';
+import { TrashComponent } from '../../trash/trash.component';
 @Component({
   selector: 'app-campaign-list',
   templateUrl: './campaign-list.component.html',
@@ -44,6 +46,7 @@ export class CampaignListComponent implements OnInit {
     private _router: Router,
     private _campaignService: CampaignService,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private dialog: MatDialog
   ) { }
   productNames$ = this._campaignService.products$
   sourceTitles$ = this._campaignService.sources$
@@ -153,4 +156,22 @@ export class CampaignListComponent implements OnInit {
   // previewCampaign(row: Campaign) {
   //   this._router.navigate(['detail-view', row.campaignId], { relativeTo: this._activatedRoute });
   // }
+  openTrashDialog() {
+    const restoreDialogRef = this.dialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+  
+        autoFocus: false,
+      data     : {
+          type: "CAMPAIGN",
+      }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._campaignService.getCampaign().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
+  }
 }

@@ -8,6 +8,8 @@ import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { Tag,Task } from '../tasks.types';
 import { TasksService } from '../tasks.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
 
 
 @Component({
@@ -39,7 +41,8 @@ export class TasksListComponent implements OnInit, OnDestroy
         private _router: Router,
         private _tasksService: TasksService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _fuseNavigationService: FuseNavigationService
+        private _fuseNavigationService: FuseNavigationService,
+        private dialog: MatDialog
     )
     {
     }
@@ -167,4 +170,22 @@ export class TasksListComponent implements OnInit, OnDestroy
     {
         return item.id || index;
     }
+    openTrashDialog() {
+        const restoreDialogRef = this.dialog.open(TrashComponent,
+          {
+            height: "100%",
+            width: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+    
+            autoFocus: false,
+            data: {
+              type: "TASK",
+            }
+          }
+        );
+        restoreDialogRef.afterClosed().subscribe((result) => {
+          this._tasksService.getTasks().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        });
+      }
 }

@@ -47,6 +47,10 @@
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-1 mr-1 text-xs" i18n>Add</span>
                         </button>
+                        <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Leads'">
+                            <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                            <span class="ml-1 mr-1 text-xs" i18n>Team Trash</span>
+                        </button>
                     </div>
                 </div>
 

@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntypedFormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Team } from '../../team/team.type';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-form-builder-list',
@@ -23,7 +24,8 @@ export class FormBuilderListComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _formBuilderService:FormBuilderService,
     private _userService: UserService,
-    private _snackBar: MatSnackBar) 
+    private _snackBar: MatSnackBar,
+    private dialog: MatDialog) 
   { 
     this._userService.user$.subscribe( user => this.user = user)
   }
@@ -111,5 +113,23 @@ export class FormBuilderListComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  openTrashDialog() {
+    const restoreDialogRef = this.dialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+  
+        autoFocus: false,
+      data     : {
+          type: "FORM",
+      }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._formBuilderService.getForms().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
   }
 }

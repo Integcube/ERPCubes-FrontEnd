@@ -13,6 +13,8 @@ export class Team{
     teamMembersId: string = '';
     teamMembersName: string = '';
     isHovered: boolean;
+    deletedBy: string = '';
+    deletedDate: Date;
     constructor(reg){
         this.teamId = reg.teamId? reg.teamId:-1;
     }

@@ -1,4 +1,4 @@
-<div class="absolute flex flex-col  inset-4   justify-between overflow-hidden">
+<div class="absolute flex flex-col  inset-0   justify-between overflow-hidden">
     <div class="sm:col-span-2 md:col-span-4 lg:col-span-2 flex flex-col flex-auto p-3 bg-card shadow ">
         <!-- <div class="flex justify-center"> -->
             <mat-stepper class="flex-auto h-full" labelPosition="bottom" #stepper [linear]="true">
@@ -14,13 +14,13 @@
                                 (click)="toggleSelection()" (mouseenter)="hovered = true" (mouseleave)="hovered = false"
                                 [class.hover:bg-gray-300]="hovered && !isSelected" [class.hover:scale-110]="hovered && !isSelected"
                                 [class.selected]="isSelected">
-                                <img class="w-16 mr-2" src="assets/test-imgs/excel.svg">
+                                <img class="w-16 mr-2" src="assets/test-imgs/ExcelCSV.svg">
                                 <span class="font-semibold">MS Excel</span>
                             </div>
                             <div class="flex flex-row flex-auto p-5 items-center border" [ngStyle]="{'border-color': '#e0e0e0'}"
                                 (mouseenter)="hovered = true" (mouseleave)="hovered = false"
                                 [class.hover:bg-gray-300]="hovered && !isSelected" [class.hover:scale-110]="hovered && !isSelected">
-                                <img class="h-10 mr-2" src="assets/test-imgs/csv.svg">
+                                <img class="h-10 mr-2" src="assets/test-imgs/CSVFileFormat.svg">
                                 <span class="font-semibold">CSV File</span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                       
                       <!-- Column Mapping Modal -->
                       <ng-container *ngIf="stepper.selectedIndex === 2 && showColumnMapping">
-                        <div class="xl:col-span-2 flex flex-col flex-grow bg-card shadow rounded-2xl overflow-x-auto w-full">
+                        <div class="xl:col-span-2 flex flex-col flex-grow bg-card shadow rounded-2xl overflow-x-auto w-full" fuseScrollbar>
                             <mat-table [dataSource]="excelColumns">
 
                                 <!-- Excel Column -->
@@ -96,8 +96,18 @@
                       </ng-container>
                     </div>
                   </mat-step>
-                  
-                
+
+                <!-- Step 4: Completion (Hidden) -->
+                <mat-step style="display: none;">
+                    <ng-template matStepLabel>Completion</ng-template>
+                    <div class="flex flex-col flex-auto mt-10 pt-12 bg-card shadow rounded-2xl mx-6 min-h-3/4 pb-10 overflow-hidden">
+                        <div class="flex flex-col flex-grow justify-center items-center mt-4">
+                            <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
+                            <p class="mt-4">Leads imported successfully!</p>
+                        </div>
+                    </div>
+                </mat-step>
+  
 
                 <!-- Step 3: Completion (Hidden) -->
                 <!-- This step is hidden as you want to close the dialog after saving mapping -->
@@ -135,44 +145,3 @@
 
 
 
-
-
-
-
-
-
-
-
-<!-- <mat-step>
-    <ng-template matStepLabel>Map Columns</ng-template>
-    <div class="flex flex-col flex-grow justify-center items-center mt-4">
-        <button mat-flat-button color="primary" (click)="openColumnMappingDialog()">Map Columns</button>
-        <p class="mt-4">Map the columns from your Excel file to corresponding fields.</p> -->
-        
-        <!-- Column Mapping Modal (similar to the Ads Account HTML) -->
-        <!-- <ng-container *ngIf="stepper.selectedIndex === 2 && showColumnMapping">
-            <div class="xl:col-span-2 flex flex-col flex-auto bg-card shadow rounded-2xl overflow-hidden"> -->
-                <!-- <h2 class="text-2xl font-bold mb-4">Column Mapping</h2> -->
-                <!-- <mat-list> -->
-                    <!-- <div class="flex mb-4">
-                        <div class="w-full bg-gray-300 h-8">
-                            <mat-label class="text-base  font-bold">Excel Column</mat-label>
-                        </div>
-                      </div> -->
-                    <!-- <mat-list-item class="flex items-center" *ngFor="let column of excelColumns">
-                        <div mat-line class="w-1/2">{{ column }}</div>
-                        <mat-form-field class="w-96">
-                            <mat-label>Map to</mat-label>
-                            <mat-select [(ngModel)]="columnMappings[column]" class="w-full">
-                                <mat-option *ngFor="let excelColumn of leadColumns" [value]="excelColumn">
-                                    {{ excelColumn }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </mat-list-item>
-                </mat-list>
-                <button mat-flat-button color="primary" class="mt-4" (click)="applyColumnMapping()">Save Mapping</button>
-            </div>
-        </ng-container>
-    </div>
-</mat-step> -->

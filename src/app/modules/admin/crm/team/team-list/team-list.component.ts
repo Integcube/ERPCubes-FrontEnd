@@ -11,6 +11,8 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector        : 'app-team-list',
@@ -45,6 +47,7 @@ export class TeamListComponent implements OnInit  {
     private _router: Router,
     private _teamService: TeamService,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -185,5 +188,24 @@ export class TeamListComponent implements OnInit  {
 trackByFn(index: number, item: any): any
 {
     return item.id || index;
+}
+
+openTrashDialog() {
+  const restoreDialogRef = this.dialog.open(TrashComponent,
+    {
+      height: "100%",
+      width: "100%",
+      maxWidth: "100%",
+      maxHeight: "100%",
+
+      autoFocus: false,
+    data     : {
+        type: "TEAM",
+    }
+    }
+  );
+  restoreDialogRef.afterClosed().subscribe((result) => {
+    this._teamService.getTeams().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+  });
 }
 }

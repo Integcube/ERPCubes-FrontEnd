@@ -80,9 +80,12 @@ export class TeamService {
   }
   deleteTeam(team: Team): Observable<Team[]> {
     let data = {
-      teamId: team.teamId,
+      id: this.user.id,
       tenantId: this.user.tenantId,
+      teamId: team.teamId,
+
     }
+    debugger;
     return this._httpClient.post<Team[]>(this.deleteTeamURL, data).pipe(
       tap(() => {
         this.getTeams().subscribe();

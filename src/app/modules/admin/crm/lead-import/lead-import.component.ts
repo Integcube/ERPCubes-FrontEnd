@@ -149,6 +149,7 @@ export class LeadImportComponent implements OnInit {
 
         this.leadImportService.saveBulkImportLeads(mappedLeads).subscribe(() => {
           // this.closeDialog();
+          this.stepper.selectedIndex = 3;
           this.getAllLeads();
         });
       });
@@ -306,6 +307,4 @@ export class LeadImportComponent implements OnInit {
     fileReader.readAsArrayBuffer(this.file);
   }
   
-  
-
 }

@@ -21,7 +21,8 @@ export class AdsDashboardComponent implements OnInit {
         height: "100%",
         width: "100%",
         maxWidth: "100%",
-        maxHeight: "100%"
+        maxHeight: "100%",
+        disableClose: true 
       }
     );
   }
