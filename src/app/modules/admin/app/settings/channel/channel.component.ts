@@ -4,10 +4,12 @@ import { ViewComponent } from '../view/view.component';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
+import { ChatbotViewComponent } from '../chatbot-view/chatbot-view.component.component';
 export class LinkView {
     Link: string = "";
     Type: string = "";
     tenantId: number = -1;
+    token: string = "";
 }
 
 
@@ -37,16 +39,26 @@ export class SettingsChannelComponent implements OnInit
 
     CopyView(Type: any): void {
         this.view.tenantId =  this.user.tenantId
-        this.view.Link= `https://callbe.thequantus.com/api/Webhook/${Type}?tenantId=${this.user.tenantId}`;
+        this.view.Link= `https://callbe.thequantus.com/api/Webhook/${Type}?key=${this.user.tenantGuid}`;
+        this.view.token= "Wb87Q-24fs2-34343e3-42e23-re23re2"
         this.View(this.view);
       }
 
       CopychatBot(Type: any): void {
         this.view.tenantId =  this.user.tenantId
-        this.view.Link= `<script src="https://callbe.thequantus.com/cb/cb.js?key=${this.user.tenantId}" defer></script>`;
-        this.View(this.view);
+        this.view.Link= `<script src="https://callbe.thequantus.com/cb/cb.js?key=${this.user.tenantGuid}" defer></script>`;
+       
+        this._matDialog.open(ChatbotViewComponent, {
+          autoFocus: false,
+          data: {
+            view: this.view
+          }
+        });
       }
       
+      
+
+
     View(view:LinkView) {
         this._matDialog.open(ViewComponent, {
           autoFocus: false,

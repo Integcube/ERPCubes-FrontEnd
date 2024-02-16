@@ -1,14 +1,14 @@
 import { ChangeDetectorRef, Component, Inject, OnInit,ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { EMPTY, Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-view',
-  templateUrl: './view.component.html',
+  selector: 'chatbot-view.component',
+  templateUrl: './chatbot-view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ViewComponent implements OnInit, OnDestroy {
+export class ChatbotViewComponent implements OnInit, OnDestroy {
   viewForm:UntypedFormGroup
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   isCopied = false;
@@ -17,9 +17,9 @@ export class ViewComponent implements OnInit, OnDestroy {
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public Componetdata: any,
     private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<ViewComponent>
+    private _matDialogRef: MatDialogRef<ChatbotViewComponent>
   ) { }
-
+  selectedColor: string = '#000000';
   copyToClipboard(text: string): void {
     const textarea = document.createElement('textarea');
     textarea.value = text;
@@ -33,26 +33,12 @@ export class ViewComponent implements OnInit, OnDestroy {
       this.isCopied = false;
     }, 1000);
   }
-  copyToClipboardtoken(text: string): void {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-
-    this.isCopiedtoken = true;
-    setTimeout(() => {
-      this.isCopiedtoken = false;
-    }, 1000);
-  }
-  
 
   ngOnInit(): void {
+  
     this.viewForm = this._formBuilder.group({
       tenantId: [this.Componetdata.view.tenantId],
       Link: [this.Componetdata.view.Link],
-      token: [this.Componetdata.view.token],
     });
   }
  

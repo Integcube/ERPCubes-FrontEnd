@@ -7,4 +7,5 @@ export interface User
     status?: string;
     userName: string;
     tenantId:number;
+    tenantGuid:string;
 }

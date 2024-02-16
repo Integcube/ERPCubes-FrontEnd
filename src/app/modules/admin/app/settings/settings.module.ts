@@ -21,6 +21,7 @@ import { SettingsChannelComponent } from './channel/channel.component';
 import { FuseCardModule } from '@fuse/components/card';
 import { ViewComponent } from './view/view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ChatbotViewComponent } from './chatbot-view/chatbot-view.component.component';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         SettingsNotificationsComponent,
         SettingsTeamComponent,
         SettingsChannelComponent,
-        ViewComponent
+        ViewComponent,
+        ChatbotViewComponent
     ],
     imports     : [
         RouterModule.forChild(settingsRoutes),

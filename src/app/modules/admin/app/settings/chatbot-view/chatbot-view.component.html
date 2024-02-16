@@ -37,36 +37,17 @@
               </ng-template>
             </button>
           </div>
-          
-          <div class="relative w-full">
-            <div class="text-md mb-1">  Security Token</div>
-            <input
-              #copytoken
-              class="border rounded-md focus:outline-none p-3 text-white placeholder-gray-500 bg-gray-900 resize-none w-full"
-              readonly
-              formControlName="token"
-              type="password"
-              placeholder="Enter text here..."
-            >
-            <button
-              class="absolute bottom-2 right-1 h-6 border-0 text-white"
-              mat-stroked-button
-              [matTooltip]="'Click to Copy To Clipboard'"
-              (click)="copyToClipboardtoken(copytoken.value)"
-            >
-              <ng-container *ngIf="!isCopiedtoken; else copiedtoken">
-                <mat-icon class="icon-size-4 text-white">content_copy</mat-icon>
-                <span class="ml-2 text-xs" i18n>Copy</span>
-              </ng-container>
-              <ng-template #copiedtoken>
-                <mat-icon class="icon-size-4 text-white ">done</mat-icon>
-                <span class="ml-2 text-xs" i18n>Copied!</span>
-              </ng-template>
-            </button>
-          </div>
-          
-          
+          <!-- <input
+  #copytoken
+  class="border rounded-md focus:outline-none p-3 text-white resize-none w-full"
+  readonly
+  formControlName="token"
+  type="color"
+  placeholder="Enter text here..."
+  style="height: 40px; cursor: pointer;"
+  [(ngModel)]="selectedColor"
+> -->
         </form>
-       
+       {{selectedColor}}
     </div>
 </ng-container>

@@ -52,13 +52,13 @@ export class SettingsComponent implements OnInit, OnDestroy
             //     title      : 'Account',
             //     description: 'Manage your public profile and private information'
             // }
-            ,
-            {
-                id         : 'security',
-                icon       : 'heroicons_outline:lock-closed',
-                title      : 'Security',
-                description: 'Manage your password and 2-step verification preferences'
-            }
+            // ,
+            // {
+            //     id         : 'security',
+            //     icon       : 'heroicons_outline:lock-closed',
+            //     title      : 'Security',
+            //     description: 'Manage your password and 2-step verification preferences'
+            // }
             // ,
             // {
             //     id         : 'plan-billing',
