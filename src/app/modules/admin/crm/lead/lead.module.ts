@@ -60,6 +60,7 @@ import { LeadStatusComponent } from './lead-status/lead-status.component';
 import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
 import { LeadScoreComponent } from './lead-detail/lead-score/lead-score.component';
 import { TrashModule } from '../trash/trash.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { TrashModule } from '../trash/trash.module';
     MatDialogModule,
     MatStepperModule,
     MatTableExporterModule,
+    MatProgressSpinnerModule,
     FuseFindByKeyPipeModule,
     FormsModule,
     FuseCardModule,

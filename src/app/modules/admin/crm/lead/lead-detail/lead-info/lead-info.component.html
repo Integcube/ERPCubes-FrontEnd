@@ -294,24 +294,24 @@
                 </div>
             </mat-expansion-panel>
             <!-- Attachments -->
-            <mat-expansion-panel [togglePosition]="'before'">
-                <mat-expansion-panel-header (click)="getAttachments()">
+            <mat-expansion-panel [togglePosition]="'before'" (opened)="getAttachments()">
+                <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
                         <span class="text-base">Attachments</span>
                     </mat-panel-title>
                     <div class="flex flex-grow justify-end items-center">
                         <button class=" h-8 bg-white border-0" mat-stroked-button [color]="'text-accent2'"
-                        (click)="triggerFileInput.click()" [matTooltip]="'Create Task'">
-                            <mat-icon class="icon-size-5 text-teal-500" [svgIcon]="'heroicons_solid:document-add'"></mat-icon>
-                            <span class=" mr-1 text-sm hover:underline" i18n>Upload</span>
+                        (click)="triggerFileInput.click()" [matTooltip]="'Upload File'">
+                            <mat-icon class="icon-size-5 text-teal-500" [svgIcon]="'heroicons_solid:cloud-arrow-up'"></mat-icon>
+                            <span class="ml-1 mr-1 text-sm hover:underline" i18n>Upload</span>
                         </button>
                         <input #triggerFileInput type="file" style="display: none" (change)="selectFile($event)">
                     </div>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col gap-2">
-                    <ng-container *ngIf="leadAttachments;else noTask">
-                        <ng-container *ngIf="leadAttachments.length;else noTask">
-                            <ng-container *ngFor="let attachment of leadAttachments; let i=index">
+                    <ng-container *ngIf="leadAttachments$|async; else loadingAttachment">
+                        <ng-container *ngIf="(leadAttachments$|async).length ; else noAttachment">
+                            <ng-container *ngFor="let attachment of leadAttachments$|async; trackBy: trackByFn">
                                 <div
                                     class="flex justify-between items-center h-10 p-1 gap-3 border border-primary-200 rounded-sm shadow bg-white">
                                     <div class="flex justify-start items-center p-1 gap-3">
@@ -339,13 +339,21 @@
                         </ng-container>
                        
                     </ng-container>
-                    <ng-template #noTask>
+                    <ng-template #noAttachment>
                         <div class="flex flex-auto flex-col items-center justify-center">
                             <mat-icon
                                 class="icon-size-6"
                                 [svgIcon]="'heroicons_solid:document-add'"></mat-icon>
                             <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Attachment found!</div>
-                            <span class="underline cursor-pointer" (click)="triggerFileInput.click()">Click to Attachment</span>
+                            <span class="underline cursor-pointer" (click)="triggerFileInput.click()" (click)="$event.stopPropagation()">Click to Add Attachment</span>
+                        </div>
+                    </ng-template>
+                    <ng-template #loadingAttachment>
+                        <div class="flex flex-auto flex-col items-center justify-center">
+                            <mat-progress-spinner class="h-4 w-4"
+                            [color]="primary"
+                            [mode]="indeterminate"></mat-progress-spinner>
+                            <span>Loading Attachment</span>
                         </div>
                     </ng-template>
                 </div>

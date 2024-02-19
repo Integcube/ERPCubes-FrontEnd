@@ -58,7 +58,7 @@ export class LeadService {
   private readonly saveleadScoreUrl = `${environment.url}/Lead/saveleadScore`
   private readonly CalculateleadScoreUrl = `${environment.url}/Lead/calculateleadScore`
   private readonly getLeadAttachmentsURL = `${environment.url}/Lead/getLeadAttachments`
-  private readonly deleteLeadAttachmentURL = `${environment.url}/Lead/deleteLeadAttchments`
+  private readonly deleteLeadAttachmentURL = `${environment.url}/DocumentLibrary/delete`
   private readonly downloadFileURL = `${environment.url}/DocumentLibrary/getfile`
   private readonly saveFileURL = `${environment.url}/DocumentLibrary/addLeadFile`
   user: User;

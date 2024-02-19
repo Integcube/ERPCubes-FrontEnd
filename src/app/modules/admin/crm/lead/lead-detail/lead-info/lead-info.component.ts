@@ -36,7 +36,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadSource$ = this._leadService.leadSource$;
   products$ = this._leadService.products$;
   calculatedleadScore$ = this._leadService.calculateleadScore$;
-  leadAttachments: Attachment[]
+  leadAttachments$ = this._leadService.leadAttachments$
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
   
@@ -80,11 +80,6 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       this.selectedLead = { ...company };
       this.leadForm.patchValue(company, { emitEvent: false });
       this._changeDetectorRef.markForCheck();
-    });
-    this._leadService.leadAttachments$
-    .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((attachments: Attachment[]) => {
-      this.leadAttachments = { ...attachments };
     });
   }
   ngOnDestroy(): void {
@@ -154,23 +149,15 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   getAttachments() {
     this._leadService.getLeadAttachments(this.selectedLead)
       .subscribe(
-        (attachments: Attachment[]) => {
-          this.leadAttachments = attachments;
-        }
+        // (attachments: Attachment[]) => {
+        //   this.leadAttachments = attachments;
+        // }
       );
   }
-  // deleteLeadAttachment(id: number) {
-  //   this._leadService.deleteLeadAttachment(id, this.selectedLead)
-  //     .subscribe(
-  //       (attachments: Attachment[]) => {
-  //         this.leadAttachments = { ...attachments };
-  //       }
-  //     );
-  // }
   deleteLeadAttachment(id: number) {
     const confirmation = this._fuseConfirmationService.open({
-      title: 'Delete lead',
-      message: 'Are you sure you want to delete this lead? This action cannot be undone!',
+      title: 'Delete Attachment',
+      message: 'Are you sure you want to delete this attachment? This action cannot be undone!',
       actions: {
         confirm: {
           label: 'Delete'
@@ -183,8 +170,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       if (result === 'confirmed') {
         this._leadService.deleteLeadAttachment(id, this.selectedLead)
         .subscribe(
-          (attachments: Attachment[]) => {
-            this.leadAttachments = { ...attachments };
+          () => {
+            this.getAttachments();
+            this._changeDetectorRef.detectChanges();
           }
         );
       }
@@ -216,11 +204,15 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       return;
     }
     this._leadService.saveFile(file, this.selectedLead)
-      .subscribe(response => {
-      }, error => {
-        console.error('Error uploading file:', error);
-      });
+      .subscribe(() => {
+        this.getAttachments();
+        this._changeDetectorRef.detectChanges();
+      }
+    );
     
+  }
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
   }
 
 }
