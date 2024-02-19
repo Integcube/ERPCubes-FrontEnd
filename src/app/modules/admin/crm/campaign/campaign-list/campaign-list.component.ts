@@ -71,6 +71,9 @@ export class CampaignListComponent implements OnInit {
         this.campaignCount = this.campaigns.length;
         this.dataSource = new MatTableDataSource(this.campaigns);
         this._changeDetectorRef.markForCheck();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+
       });
     // Get selected campaign
     this._campaignService.campaign$

@@ -61,6 +61,8 @@ export class TeamListComponent implements OnInit  {
         this.teamCount = this.teams.length;
         this.dataSource = new MatTableDataSource(this.teams);
         this._changeDetectorRef.markForCheck();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     // Get selected team
     this._teamService.team$

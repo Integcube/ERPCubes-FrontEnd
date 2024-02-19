@@ -69,6 +69,8 @@ export class ProjectListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.projects);
         console.log(this.dataSource)
         this._changeDetectorRef.markForCheck();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       });
     // Get selected project
     this._projectService.project$

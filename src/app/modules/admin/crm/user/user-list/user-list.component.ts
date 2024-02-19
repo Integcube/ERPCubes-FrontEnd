@@ -60,7 +60,8 @@ export class UserListComponent implements OnInit {
         this.users = [...users];
         this.userCount = users.length;
         this.dataSource = new MatTableDataSource(this.users);
-        this.ngAfterViewInit();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this._changeDetectorRef.markForCheck();
       });
     // Get selected company
