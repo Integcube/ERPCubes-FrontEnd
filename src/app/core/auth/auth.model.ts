@@ -7,5 +7,6 @@ export interface AuthModelResponse {
     tenantId:number,
     avatar?: string,
     status?: string,
-    tenantGuid:string
+    tenantGuid:string,
+    isDocumentAcces:number,
 }
