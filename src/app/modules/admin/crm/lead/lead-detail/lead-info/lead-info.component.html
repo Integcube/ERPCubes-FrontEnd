@@ -135,7 +135,7 @@
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base ">About This Company</span>
+                        <span class="text-base ">About This Lead</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col">
@@ -309,33 +309,45 @@
                     </div>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col gap-2">
-                    <ng-container *ngIf="leadAttachments">
-                        <ng-container *ngFor="let attachment of leadAttachments; let i=index">
-                            <div
-                                class="flex justify-between items-center h-10 p-1 gap-3 border border-primary-200 rounded-sm shadow bg-white">
-                                <div class="flex justify-start items-center p-1 gap-3">
-                                    <div class="w-4 mt-2">
-                                        <mat-icon class="icon-size-5 text-primary">description</mat-icon>
+                    <ng-container *ngIf="leadAttachments;else noTask">
+                        <ng-container *ngIf="leadAttachments.length;else noTask">
+                            <ng-container *ngFor="let attachment of leadAttachments; let i=index">
+                                <div
+                                    class="flex justify-between items-center h-10 p-1 gap-3 border border-primary-200 rounded-sm shadow bg-white">
+                                    <div class="flex justify-start items-center p-1 gap-3">
+                                        <div class="w-4 mt-2">
+                                            <mat-icon class="icon-size-5 text-primary">description</mat-icon>
+                                        </div>
+                                        <div class="w-30 text-clip truncate">
+                                            <span class="cursor-pointer text-accent2 text-sm font-semibold"
+                                                (click)="downloadFile(attachment)">
+                                                {{attachment.fileName}}.{{attachment.type}}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span class="text-accent2 text-sm font-semibold">
+                                                ({{attachment.size}})
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="w-30 text-clip truncate">
-                                        <span class="cursor-pointer text-accent2 text-sm font-semibold"
-                                            (click)="downloadFile(attachment)">
-                                            {{attachment.fileName}}.{{attachment.type}}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span class="text-accent2 text-sm font-semibold">
-                                            ({{attachment.size}})
-                                        </span>
+                                    <div class="mt-2">
+                                        <mat-icon class="cursor-pointer icon-size-5"
+                                            (click)="deleteLeadAttachment(attachment.fileId)">close</mat-icon>
                                     </div>
                                 </div>
-                                <div class="mt-2">
-                                    <mat-icon class="cursor-pointer icon-size-5"
-                                        (click)="deleteLeadAttachment(attachment.fileId)">close</mat-icon>
-                                </div>
-                            </div>
+                            </ng-container>
                         </ng-container>
+                       
                     </ng-container>
+                    <ng-template #noTask>
+                        <div class="flex flex-auto flex-col items-center justify-center">
+                            <mat-icon
+                                class="icon-size-6"
+                                [svgIcon]="'heroicons_solid:document-add'"></mat-icon>
+                            <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Attachment found!</div>
+                            <span class="underline cursor-pointer" (click)="triggerFileInput.click()">Click to Attachment</span>
+                        </div>
+                    </ng-template>
                 </div>
             </mat-expansion-panel>
             <!-- <mat-expansion-panel [togglePosition]="'before'">
