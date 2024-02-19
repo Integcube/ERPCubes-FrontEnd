@@ -21,7 +21,7 @@
 	width: 16%;
 	float: left;
 	position: relative;
-	background-color: #ddd;
+	background-color: #e6ebef;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
@@ -39,19 +39,19 @@
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	right: -18px;
+	// right: -18px;
 	width: 0;
 	height: -2;
-	border-top: 14px solid transparent;
-	border-bottom: 14px solid transparent;
-	border-left: 19px solid #ddd;
+	// border-top: 14px solid transparent;
+	// border-bottom: 14px solid transparent;
+	// border-left: 19px solid #ddd;
 	z-index: 2;
 }
 
 .arrow-steps .step:before {
-	right: auto;
-	left: 0;
-	border-left: 19px solid #f1f5f9;
+	// right: auto;
+	// left: 0;
+	// border-left: 19px solid #f1f5f9;
 	z-index: 0;
 }
 
@@ -97,9 +97,9 @@
 	text-decoration: none;
 }
 
-.arrow-steps .step.current:after {
-	border-left: 19px solid #4caf50 !important
-}
+// .arrow-steps .step.current:after {
+// 	border-left: 19px solid #4caf50 !important
+// }
 
 .arrow-steps .step.lastcurrent {
 	color: #fff;
@@ -114,15 +114,15 @@
 
 .arrow-steps .step.done {
 	color: #4caf50 !important;
-	background-color:#4caf50 !important
+	background-color:#c6f6d5 !important
 }
 
 .arrow-steps .step.done a {
-	color: white;
+	color: #4caf50;
 	text-decoration: none;
 }
 
-.arrow-steps .step.done:after {
-	border-left: 19px solid #4caf50 !important
-}
+// .arrow-steps .step.done:after {
+// 	border-left: 19px solid #4caf50 !important
+// }
 

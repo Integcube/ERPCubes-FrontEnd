@@ -16,6 +16,7 @@ import { TrashComponent } from '../../trash/trash.component';
 @Component({
   selector: 'app-form-builder-list',
   templateUrl: './form-builder-list.component.html',
+  styleUrls: ['./form-builder-list.component.scss'],
 })
 export class FormBuilderListComponent implements OnInit {
   user:User

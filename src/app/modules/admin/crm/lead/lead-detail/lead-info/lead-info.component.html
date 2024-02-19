@@ -5,7 +5,7 @@
                 [routerLink]="['/crm/contacts/leads']"></mat-icon>
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [routerLink]="['/crm/contacts/leads']">
-                Leads
+               Back to Leads
             </span>
         </div>
 
@@ -79,12 +79,12 @@
 
         </div>
     </div>
-    <div class="flex flex-row justify-between w-full  border-b px-6 pb-3 ">
+    <div class="flex flex-row justify-between w-full  border-b px-6 mt-2 pb-2 ">
         <div class="flex flex-col justify-center" (click)="addNote()">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">edit_note</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center primary-2-Icon mt-2">
                 Notes
             </span>
         </div>
@@ -92,15 +92,15 @@
             <button mat-icon-button (click)="addEmail()">
                 <mat-icon class="icon-size-5 primary-2-Icon">email</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center primary-2-Icon mt-1">
                 Email
             </span>
         </div>
         <div class="flex flex-col justify-center" (click)="addCall()">
             <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon">call</mat-icon>
+                <mat-icon class="icon-size-5 primary-2-Icon ">call</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center primary-2-Icon mt-1">
                 Call
             </span>
         </div>
@@ -108,7 +108,7 @@
             <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">add_task</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center primary-2-Icon mt-1">
                 Task
             </span>
         </div>
@@ -116,18 +116,18 @@
             <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">person</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center primary-2-Icon mt-1">
                 Meeting
             </span>
         </div>
-        <div class="flex flex-col justify-center">
+        <!-- <div class="flex flex-col justify-center">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5 primary-2-Icon">more_horiz</mat-icon>
             </button>
             <span class="text-sm text-center primary-2-Icon">
                 More
             </span>
-        </div>
+        </div> -->
     </div>
     <div class="flex flex-row justify-between w-full " fuseScrollbar>
         <mat-accordion>

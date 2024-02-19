@@ -51,7 +51,13 @@ export class LeadMonthlyComponent {
   leadMonthlyCount: number = 0;
   leadStatusTypes: string[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-
+  totalLeads: number = 0;
+  totalNewLeads: number = 0;
+  totalContactedLeads: number = 0;
+  totalInterestedLeads: number = 0;
+  totalQualifiedLeads: number = 0;
+  totalLostLeads: number = 0;
+  totalWonLeads: number = 0;
   _unsubscribeAll: Subject<any> = new Subject<any>();
 
   constructor(
@@ -75,15 +81,18 @@ export class LeadMonthlyComponent {
       const emptyMonths = this.generateEmptyMonths(report);
       const sumOfTotalLeads = report.reduce((sum, monthly) => sum + (monthly.totalLeads || 0), 0);
       this.leadMonthlyCount = sumOfTotalLeads;
+  
+      
       this.dataSource = new MatTableDataSource(report? report : emptyMonths);
       this._changeDetectorRef.markForCheck();
     });
     this.leadStatusTypes = this.getUniqueLeadStatusTypes();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  ngAfterViewInit(): void {
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   ngOnDestroy(): void {

@@ -20,8 +20,8 @@ export class AppResolver implements Resolve<any>
                 if (exists) {
                     return true;
                 } else {
-                    window.location.href = 'https://thequantus.com';
-                    return false;
+                     window.location.href = 'https://thequantus.com';
+                     return false;
                 }
             }),
             catchError(() => {
