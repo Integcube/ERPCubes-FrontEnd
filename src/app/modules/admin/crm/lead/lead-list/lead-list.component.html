@@ -26,12 +26,7 @@
         
         
             <div class="flex gap-0">
-                <!-- Add Trash button -->
-                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
-                    [matTooltip]="'Click to restore Deleted Leads'">
-                    <mat-icon class="icon-size-5" >delete</mat-icon>
-                    <span class="ml-1 mr-1 text-xs" i18n>Inactive Lead</span>
-                </button>
+                
                 <button class="ml-2 h-8 w-20" mat-stroked-button [matTooltip]="'Click Export Excel'"
                     (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
@@ -55,7 +50,12 @@
                     <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
                     <span class="ml-2 text-xs" i18n>Add Lead</span>
                 </button>
-        
+                <!-- Add Trash button -->
+                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
+                    [matTooltip]="'Click to restore Deleted Leads'">
+                    <mat-icon class="icon-size-5" >delete</mat-icon>
+                    <span class="ml-1 mr-1 text-xs" i18n>Inactive Lead</span>
+                </button>
         
             </div>
         
