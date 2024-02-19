@@ -8,4 +8,5 @@ export interface User
     userName: string;
     tenantId:number;
     tenantGuid:string;
+    isDocumentAcces:number;
 }

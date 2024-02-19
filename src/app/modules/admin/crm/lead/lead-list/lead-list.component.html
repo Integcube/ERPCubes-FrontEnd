@@ -46,16 +46,17 @@
                             
                         <span class="ml-1 mr-1 text-xs" i18n>Import</span>
                     </button> -->
+                    <!-- Add Trash button -->
+                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
+                [matTooltip]="'Click to restore Deleted Leads'">
+                <mat-icon class="icon-size-5" >delete</mat-icon>
+                <span class="ml-1 mr-1 text-xs" i18n>Inactive Lead</span>
+                </button>
                 <button class="ml-4 h-8 primary-2" mat-flat-button (click)="createLead()" [matTooltip]="'Add New Lead '">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
                     <span class="ml-2 text-xs" i18n>Add Lead</span>
                 </button>
-                <!-- Add Trash button -->
-                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
-                    [matTooltip]="'Click to restore Deleted Leads'">
-                    <mat-icon class="icon-size-5" >delete</mat-icon>
-                    <span class="ml-1 mr-1 text-xs" i18n>Inactive Lead</span>
-                </button>
+                
         
             </div>
         

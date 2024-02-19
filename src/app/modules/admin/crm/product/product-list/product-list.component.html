@@ -55,6 +55,12 @@
                       
                     <span class="ml-1 mr-1 text-xs">Import</span>
                 </button>
+
+                <!-- Add contact button -->
+                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Products'">
+                    <mat-icon class="icon-size-5" >delete</mat-icon>
+                            <span class="ml-1 mr-1 text-xs" i18n>Inactive Products</span>
+                </button>
             
             
                 <!-- Add contact button -->
@@ -68,11 +74,7 @@
                     <span class="ml-2 mr-1 text-xs">Add</span>
                 </button>
 
-                <!-- Add contact button -->
-                <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Products'">
-                    <mat-icon class="icon-size-5" >delete</mat-icon>
-                            <span class="ml-1 mr-1 text-xs" i18n>Inactive Products</span>
-                </button>
+                
         </div>
 
 

@@ -7,3 +7,11 @@
     width: 33px;
     height: 33px;
 }
+
+.mat-expansion-indicator::after {
+    color:  #e2e8f0 !important;
+}
+
+.mat-expansion-indicator::before {
+    color:  #e2e8f0 !important;
+}

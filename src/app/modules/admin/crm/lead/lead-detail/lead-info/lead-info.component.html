@@ -32,7 +32,7 @@
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-down"></mat-icon>
         </div> -->
     </div>
-    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 border-b ">
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 ">
         <!-- Avatar and name -->
         <div class="flex flex-auto items-center min-w-0">
             <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden shadow">
@@ -79,55 +79,57 @@
 
         </div>
     </div>
-    <div class="flex flex-row justify-between w-full  border-b px-6 mt-2 pb-2 ">
-        <div class="flex flex-col justify-center" (click)="addNote()">
-            <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon">edit_note</mat-icon>
-            </button>
-            <span class="text-sm text-center primary-2-Icon mt-2">
-                Notes
-            </span>
-        </div>
-        <div class="flex flex-col justify-center">
+    <div class="flex flex-row justify-center w-full gap-6 border-b px-4 mt-2 pb-2 ">
+      
+        <div class="flex flex-col items-center justify-center  cursor-pointer">
             <button mat-icon-button (click)="addEmail()">
-                <mat-icon class="icon-size-5 primary-2-Icon">email</mat-icon>
+                <mat-icon class="icon-size-5 ">email</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon mt-1">
+            <span class="text-sm text-center  mt-1">
                 Email
             </span>
         </div>
-        <div class="flex flex-col justify-center" (click)="addCall()">
+        <div class="flex flex-col items-center justify-center  cursor-pointer"  (click)="addCall()">
             <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon ">call</mat-icon>
+                <mat-icon class="icon-size-5 ">call</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon mt-1">
+            <span class="text-sm text-center mt-1">
                 Call
             </span>
         </div>
-        <div class="flex flex-col justify-center" (click)="addTask()">
+        <div class="flex flex-col items-center justify-center  cursor-pointer" (click)="addMeeting()">
             <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon">add_task</mat-icon>
+                <mat-icon class="icon-size-5">person</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon mt-1">
-                Task
-            </span>
-        </div>
-        <div class="flex flex-col justify-center" (click)="addMeeting()">
-            <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon">person</mat-icon>
-            </button>
-            <span class="text-sm text-center primary-2-Icon mt-1">
+            <span class="text-sm text-center mt-1">
                 Meeting
             </span>
         </div>
-        <!-- <div class="flex flex-col justify-center">
-            <button mat-icon-button>
-                <mat-icon class="icon-size-5 primary-2-Icon">more_horiz</mat-icon>
+      
+     <div class="flex flex-col items-center justify-center  cursor-pointer">
+            <button mat-icon-button [matMenuTriggerFor]="postCardMenu01"> 
+                <mat-icon class="icon-size-5">more_horiz</mat-icon>
             </button>
-            <span class="text-sm text-center primary-2-Icon">
+            <span class="text-sm text-center mt-1">
                 More
             </span>
-        </div> -->
+        </div> 
+        <mat-menu #postCardMenu01="matMenu">
+
+            <button  (click)="addTask()" mat-menu-item>
+                <span class="flex items-center">
+                <mat-icon class="icon-size-5 mr-1">add_task</mat-icon>
+                  <span class="text-sm truncate w-10"> Task</span>
+                </span>
+              </button>
+              <button (click)="addNote()" mat-menu-item>
+                <span class="flex items-center">
+                <mat-icon class="icon-size-5 mr-1">edit_note</mat-icon>
+                  <span class="text-sm truncate w-10"> Notes</span>
+                </span>
+              </button>
+            
+        </mat-menu>
     </div>
     <div class="flex flex-row justify-between w-full " fuseScrollbar>
         <mat-accordion>
@@ -300,12 +302,12 @@
                         <span class="text-base">Attachments</span>
                     </mat-panel-title>
                     <div class="flex flex-grow justify-end items-center">
-                        <button class=" h-8 bg-white border-0" mat-stroked-button [color]="'text-accent2'"
+                        <button class=" h-8 bg-white border-0" mat-stroked-button 
                         (click)="triggerFileInput.click()" [matTooltip]="'Upload File'">
-                            <mat-icon class="icon-size-5 text-teal-500" [svgIcon]="'heroicons_solid:cloud-arrow-up'"></mat-icon>
+                            <mat-icon class="icon-size-5" style="color:#E85038 !important;" [svgIcon]="'heroicons_solid:cloud-arrow-up'"></mat-icon>
                             <span class="ml-1 mr-1 text-sm hover:underline" i18n>Upload</span>
                         </button>
-                        <input #triggerFileInput type="file" style="display: none" (change)="selectFile($event)">
+                        <input #triggerFileInput type="file" style="display: none"   (change)="selectFile($event)">
                     </div>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col gap-2">
@@ -344,8 +346,8 @@
                             <mat-icon
                                 class="icon-size-6"
                                 [svgIcon]="'heroicons_solid:document-add'"></mat-icon>
-                            <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No Attachment found!</div>
-                            <span class="underline cursor-pointer" (click)="triggerFileInput.click()" (click)="$event.stopPropagation()">Click to Add Attachment</span>
+                            <div class="mt-2 text-2xl font-semibold tracking-tight text-secondary">No Attachment found!</div>
+                            <!-- <span class="underline cursor-pointer" (click)="triggerFileInput.click()" (click)="$event.stopPropagation()">Click to Add Attachment</span> -->
                         </div>
                     </ng-template>
                     <ng-template #loadingAttachment>

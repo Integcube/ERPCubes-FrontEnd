@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil, catchError, EMPTY } from 'rxjs';
 import { LeadService } from '../../lead.service';
@@ -21,13 +21,18 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 })
 export class LeadInfoComponent implements OnInit, OnDestroy {
+
+  @ViewChild('triggerFileInput') triggerFileInput: ElementRef;
   constructor(private _formBuilder: FormBuilder,
     private _leadService: LeadService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _matDialog: MatDialog,
     private _fuseConfirmationService: FuseConfirmationService,
     private _fuseComponentsComponent: LeadDetailComponent)
-  { }
+  { 
+    
+  }
+  
   selectedLead: Lead;
   leadForm: FormGroup;
   users$ = this._leadService.users$;
@@ -87,6 +92,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   addNote(){
     let note = new Note({})
     this._matDialog.open(NoteDetailComponent, {
@@ -197,8 +203,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
     );
   }
   selectFile(event) {
+    event.stopPropagation();
     const file = event.target.files[0];
-  
+    
     if (!file) {
       console.error('No file selected');
       return;
