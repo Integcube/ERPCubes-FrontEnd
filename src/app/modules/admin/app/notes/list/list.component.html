@@ -104,6 +104,10 @@
                                 #searchInput>
                         </mat-form-field>
                     </div>
+                    <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Notes'">
+                        <mat-icon class="icon-size-5" >delete</mat-icon>
+                        <span class="ml-1 mr-1 text-xs" i18n>Inactive Notes</span>
+                    </button>
                     <!-- New note -->
                     <button
                         class="ml-4 px-1 sm:px-4 min-w-10 primary-2 h-8 "
@@ -115,10 +119,7 @@
                             [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                         <span class="hidden sm:inline-block ml-2 text-xs" i18n>New note</span>
                     </button>
-                    <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()" [matTooltip]="'Click to restore Deleted Notes'">
-                        <mat-icon class="icon-size-5" >delete</mat-icon>
-                        <span class="ml-1 mr-1 text-xs" i18n>Inactive Notes</span>
-                    </button>
+                    
                 </div>
 
                 <!-- Notes -->
