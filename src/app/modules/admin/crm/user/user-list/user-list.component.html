@@ -39,6 +39,15 @@
                     </div>
 
                     <div class="sm:mt-0">
+                        <div class="flex gap-0">
+
+                        <!-- Add contact button -->
+                        <button class="ml-4 h-8" mat-stroked-button [color]="'warn'" (click)="openTrashDialog()"
+                            [matTooltip]="'Click to restore Deleted Users'">
+                            <mat-icon [svgIcon]="'heroicons_outline:user-remove'"></mat-icon>
+                            <span class="ml-1 mr-1 text-xs" i18n>Inactive User</span>
+                        
+                        </button>
       
       
                         <div class="flex gap-0">
@@ -52,17 +61,8 @@
                             <span class="ml-2 mr-1 text-xs" i18n>Add User</span>
                         </button>
 
-                        <!-- Add contact button -->
-                <button
-                class="ml-4 h-8"
-                mat-stroked-button
-                [color]="'warn'"
-                (click)="openTrashDialog()"
-                [matTooltip]="'Click to restore Deleted Users'">
-                <mat-icon [svgIcon]="'heroicons_outline:user-remove'"></mat-icon>
-                <span class="ml-1 mr-1 text-xs" i18n>Inactive User</span>
-
-            </button>
+                    </div>
+                        
                     </div>
             
             
