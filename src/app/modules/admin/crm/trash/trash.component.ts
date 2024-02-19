@@ -37,6 +37,72 @@ export class TrashComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getDeletedFilters();
+    switch(this._data.type) {
+      case "LEAD":
+        this._trashService.getDeletedLeads()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );
+        break;
+      case "USER":
+        this._trashService.getDeletedUsersList()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );
+        break;
+      case "PRODUCT":
+        this._trashService.getDeletedProducts()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "NOTE":
+        this._trashService.getDeletedNotes()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "TASK":
+        this._trashService.getDeletedTask()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "TEAM":
+        this._trashService.getDeletedTeam()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "CAMPAIGN":
+        this._trashService.getDeletedCampaign()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "FORM":
+        this._trashService.getDeletedForm()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );  
+        break;
+      case "PROJECT":
+        this._trashService.getDeletedProject()
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(
+            data => { this.trashItems = this.filterItems = [...data] }
+          );
+        break;
+    }
+    /** 
     if (this._data.type === "LEAD") {
       this._trashService.getDeletedLeads().pipe(takeUntil(this._unsubscribeAll)).subscribe(
         data => { this.trashItems = this.filterItems = [...data] }
@@ -82,7 +148,7 @@ export class TrashComponent implements OnInit, OnDestroy {
         data => { this.trashItems = this.filterItems = [...data] }
       )
     }
-
+    */
     this.searchInputControl.valueChanges
       .pipe(
         debounceTime(300), // Adjust debounce time as needed
