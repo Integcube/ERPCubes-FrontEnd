@@ -15,6 +15,7 @@ import { ContactInfoComponent } from './contact-info/contact-info.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { EmptyConversationComponent } from './empty-conversation/empty-conversation.component';
 import { MatSelectModule } from '@angular/material/select';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
     ],
     imports     : [
         RouterModule.forChild(chatRoutes),
+        FuseScrollbarModule,
         MatButtonModule,
         MatCheckboxModule,
         MatFormFieldModule,

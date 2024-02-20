@@ -93,23 +93,26 @@ export class ConversationComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
-    sendMessage(){
-      let message =  this.messageInput.nativeElement.value;
-      let conversation:Conversation = new Conversation({});
-      conversation.ticketId =this.ticket.ticketId;
-      conversation.messageBody= message;
-      conversation.isMine = true;
-      conversation.readStatus = true;
-      conversation.tenantId = this.ticket.tenantId;
-      this.ticket.latestConversation = {...conversation}
-      this._chatService.sendMessage(this.ticket).pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(
-        data=>{
-            this.messageInput.nativeElement.value = '';
-            this._changeDetectorRef.markForCheck();
-        }
-      );
-  }
+    sendMessage() 
+    {
+      let message =  this.messageInput.nativeElement.value.trim();
+      if(message) {  
+        let conversation:Conversation = new Conversation({});
+        conversation.ticketId =this.ticket.ticketId;
+        conversation.messageBody= message;
+        conversation.isMine = true;
+        conversation.readStatus = true;
+        conversation.tenantId = this.ticket.tenantId;
+        this.ticket.latestConversation = {...conversation}
+        this._chatService.sendMessage(this.ticket).pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+            data=>{
+                this.messageInput.nativeElement.value = '';
+                this._changeDetectorRef.markForCheck();
+            }
+        );
+      }
+    }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -131,7 +134,7 @@ export class ConversationComponent implements OnInit, OnDestroy
      */
     resetChat(): void
     {
-        // this._chatService.resetChat();
+        this._chatService.resetChat();
         // Close the contact info in case it's opened
         this.drawerOpened = false;
 

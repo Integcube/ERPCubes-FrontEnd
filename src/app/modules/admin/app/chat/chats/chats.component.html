@@ -1,4 +1,4 @@
-<div class="relative flex flex-auto w-full bg-card dark:bg-transparent">
+<div class="relative flex flex-auto w-full bg-card dark:bg-transparent" >
 
     <mat-drawer-container
         class="flex-auto h-full"
@@ -20,7 +20,6 @@
 
         <!-- Drawer content -->
         <mat-drawer-content class="flex overflow-hidden">
-
             <!-- Chats list -->
             <ng-container *ngIf="tickets && tickets.length > 0; else noTickets">
                 <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-72 bg-card dark:bg-transparent">
@@ -28,18 +27,14 @@
                     <!-- Header -->
                     <div class="flex flex-col flex-0 py-4 px-8 border-b bg-gray-50 dark:bg-transparent">
                         <div class="flex items-center">
-                            <div
-                                class="flex items-center mr-1 cursor-pointer"
-                              >
+                            <div class="flex items-center mr-1 cursor-pointer">
                                 <div class="w-10 h-10">
                                     <ng-container *ngIf="user.avatar">
-                                        <img
-                                            class="object-cover w-full h-full rounded-full"
-                                            [src]="user.avatar"
-                                            alt="Profile avatar"/>
+                                        <img class="object-cover w-full h-full rounded-full" [src]="user.avatar" alt="Profile avatar" />
                                     </ng-container>
                                     <ng-container *ngIf="!user.avatar">
-                                        <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                        <div
+                                            class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
                                             {{user.name.charAt(0)}}
                                         </div>
                                     </ng-container>
@@ -67,7 +62,7 @@
                     </div>
 
                     <!-- Chats -->
-                    <div class="flex-auto overflow-y-auto">
+                    <div class="flex-auto" fuseScrollbar>
                         <ng-container *ngIf="filteredTickets.length > 0; else noTickets">
                             <ng-container *ngFor="let ticket of filteredTickets; trackBy: trackByFn">
                                 <a
@@ -78,7 +73,7 @@
                                     <div class="relative flex flex-0 items-center justify-center w-10 h-10">                       
                                     <ng-container *ngIf="ticket.socialMediaPlatform=='Instagram'">
                                             <div
-                                                class="absolute bottom-0 right-0 flex-0 w-4 h-4 -ml-0.5 rounded-full  bg-white "
+                                                class="absolute bottom-0 right-0 flex-0 w-4 h-4 -ml-0.5 rounded-full  bg-white"
                                                 >
                                             <img src="assets/images/logo/instagram.svg" alt=""> </div>
                                         </ng-container>
@@ -91,8 +86,8 @@
                                     <div class="min-w-0 ml-4 w-full">
                                         <div class="font-medium leading-5 truncate" i18n>Client#{{ticket.customerId}}</div>
                                         <div
-                                            class="leading-5 truncate text-secondary "
-                                            [class.text-accent2]="!ticket.latestConversation.readStatus"
+                                            class="leading-5 truncate text-secondary"
+                                            [class.font-bold]="!ticket.latestConversation.readStatus"
                                             [class.dark:text-primary-500]="ticket.latestConversation.readStatus">
                                             {{ticket.latestConversation.messageBody}}
                                         </div>

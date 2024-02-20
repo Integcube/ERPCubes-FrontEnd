@@ -52,8 +52,8 @@
 
                 <!-- Conversation -->
                 <div class="flex flex-grow overflow-y-auto flex-col-reverse">
-                    <div class="flex flex-col flex-auto shrink p-6 bg-card dark:bg-transparent">
-                        <ng-container *ngFor="let message of coversations; let i = index; let first = first; let last = last; trackBy: trackByFn">
+                    <div class="flex flex-col flex-auto shrink p-6 bg-card dark:bg-transparent" >
+                        <ng-container *ngFor="let message of coversations; let i = index; let first = first; let last = last; trackBy: trackByFn" >
                             <!-- Start of the day -->
                             <ng-container *ngIf="first || (coversations[i - 1].timestamp | date:'d') !== (message.timestamp | date:'d')">
                                 <div class="flex items-center justify-center my-3 -mx-6">
@@ -125,11 +125,11 @@
                             class="min-h-5 my-0 resize-none"
                             style="margin: 11px 0 !important; padding: 0 !important;"
                             [rows]="1"
-                            matInput
+                            matInput (keyup.enter)="sendMessage()"
                             #messageInput></textarea>
                     </mat-form-field>
                     <div class="flex items-center h-11 my-px ml-4">
-                        <button (click)="sendMessage()"
+                        <button (click)="sendMessage()" 
                             mat-icon-button>
                             <mat-icon
                                 class="rotate-90"
