@@ -13,6 +13,10 @@ import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail
 import{LeadDetailComponent} from 'app/modules/admin/crm/lead/lead-detail/lead-detail.component'
 import { LeadScoreComponent } from '../lead-score/lead-score.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+
+
 @Component({
   selector: 'app-lead-info',
   templateUrl: './lead-info.component.html',
@@ -20,17 +24,21 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
   changeDetection:ChangeDetectionStrategy.OnPush
 
 })
-export class LeadInfoComponent implements OnInit, OnDestroy {
 
+
+export class LeadInfoComponent implements OnInit, OnDestroy {
+  user: User;
   @ViewChild('triggerFileInput') triggerFileInput: ElementRef;
   constructor(private _formBuilder: FormBuilder,
     private _leadService: LeadService,
+    private _userService: UserService,
+
     private _changeDetectorRef: ChangeDetectorRef,
     private _matDialog: MatDialog,
     private _fuseConfirmationService: FuseConfirmationService,
     private _fuseComponentsComponent: LeadDetailComponent)
   { 
-    
+    this._userService.user$.subscribe(user => { this.user = user});
   }
   
   selectedLead: Lead;
@@ -43,9 +51,10 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   calculatedleadScore$ = this._leadService.calculateleadScore$;
   leadAttachments$ = this._leadService.leadAttachments$
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+ 
   
   save() {
+   
     this.selectedLead = { ...this.leadForm.value }
     this._leadService.saveLead(this.selectedLead).subscribe(
       {
