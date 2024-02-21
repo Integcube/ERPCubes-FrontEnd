@@ -170,30 +170,47 @@ export class TrashComponent implements OnInit, OnDestroy {
   restoreItem(item: DeletedItems): void {
     if (this._data.type === "LEAD") {
       this._trashService.restoreLead(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
     }
     else if (this._data.type === "PRODUCT") {
       this._trashService.restoreProduct(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "USER") {
       this._trashService.restoreUser(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "NOTE") {
       this._trashService.restoreNote(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "TASK") {
       this._trashService.restoreTask(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "TEAM") {
       this._trashService.restoreTeam(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "CAMPAIGN") {
       this._trashService.restoreCampaign(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "FORM") {
       this._trashService.restoreForm(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
     else if (this._data.type === "PROJECT") {
       this._trashService.restoreProject(item).subscribe(data => { this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
     }
   }
 
@@ -205,28 +222,46 @@ export class TrashComponent implements OnInit, OnDestroy {
       let a;
       if (this._data.type === "LEAD") {
         a = this._trashService.restoreBulkLeads(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       } else if (this._data.type === "PRODUCT") {
         a = this._trashService.restoreBulkProduct(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       } else if (this._data.type === "USER") {
         a = this._trashService.restoreBulkUsers(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "NOTE") {
         a = this._trashService.restoreBulkNotes(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "TASK") {
         a = this._trashService.restoreBulkTasks(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "TEAM") {
         a = this._trashService.restoreBulkTeam(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "CAMPAIGN") {
         a = this._trashService.restoreBulkCampaign(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "FORM") {
         a = this._trashService.restoreBulkForm(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       else if (this._data.type === "PROJECT") {
         a = this._trashService.restoreBulkProject(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+
       }
       
       

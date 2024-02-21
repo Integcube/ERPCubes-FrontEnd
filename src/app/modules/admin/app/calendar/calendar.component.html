@@ -1,10 +1,16 @@
 <div class="absolute flex flex-row flex-auto min-w-0 h-full w-full overflow-hidden">
 
   <div class="flex flex-col p-6 sm:p-6">
-    <button class="h-9 primary-2" mat-flat-button  (click)="addEvent()">
-      <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
-      <span class="ml-1 mr-1" i18n>Add Event</span>
-  </button>
+
+  <button
+                    class="ml-4 h-9 primary-2"
+                    mat-flat-button
+                    [color]="'primary'"
+                    (click)="addEvent()"
+                    [matTooltip]="'Add New Event'">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1 text-xs">Add Event</span>
+                </button>
   <div class="flex flex-col">
     <div class="my-4">
       <span class="text-primary text-lg font-semibold" i18n>My Calendar</span>
@@ -35,12 +41,17 @@
 
   <!-- Main -->
   <div class="flex-auto p-6 sm:p-6 " fuseScrollbar  >
-      <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
-          <ng-template #eventContent let-arg >
-            <b>{{ arg.timeText }}</b>
-            <i>{{ arg.event.title }}</i>
-          </ng-template>
-        </full-calendar>
+    <full-calendar *ngIf="calendarVisible" [options]="calendarOptions">
+      <ng-template #eventContent let-arg>
+          <b>{{ arg.event.start | date: 'h:mm a' }}</b>
+          <span class="time-title-separator">&nbsp;</span>
+          <i>{{ arg.event.title }}</i>
+          <span class="name-separator">&nbsp;</span>
+          <span>({{ arg.event.extendedProps.firstName }} {{ arg.event.extendedProps.lastName }})</span>
+      </ng-template>
+  </full-calendar>
+  
+  
   </div>
 
 </div>
