@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
@@ -55,7 +55,7 @@ export class ProductService {
       tap((products) => {
         this._products.next(products);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -69,7 +69,7 @@ export class ProductService {
       tap((projects) => {
         this._projects.next(projects);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -84,7 +84,7 @@ export class ProductService {
       tap((products) => {
         this.getProducts().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -112,7 +112,7 @@ export class ProductService {
       tap((products) => {
         this.getProducts().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -177,7 +177,7 @@ export class ProductService {
       tap((products) => {
         this._products.next(products);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -194,7 +194,7 @@ export class ProductService {
         this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
         this.getDeletedProducts().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -210,7 +210,7 @@ export class ProductService {
         this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
         this.getDeletedProducts().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 

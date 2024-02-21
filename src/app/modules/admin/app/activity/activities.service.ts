@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Activity } from './activities.types';
 import { environment } from 'environments/environment';
 import { User } from 'app/core/user/user.types';
@@ -20,7 +20,7 @@ export class ActivitiesService
     constructor(
         private _userService: UserService,
         private _httpClient: HttpClient,
-        private snackBar: MatSnackBar)
+        )
     {   
         this._userService.user$.subscribe(user => {
             this.user = user;
@@ -44,7 +44,7 @@ export class ActivitiesService
             tap((response: Activity[]) => {
                 this._activities.next(response);
             }),
-            catchError(err=>this.handleError(err))
+            
         );
     }
     getUsers(): Observable<User[]> {
@@ -56,25 +56,8 @@ export class ActivitiesService
             tap((users) => {
                 this._users.next(users);
             }),
-            catchError(err=>this.handleError(err))
+            
         );
     }
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
-      showNotification(colorName, text, placementFrom, placementAlign) {
-        this.snackBar.open(text, "", {
-          duration: 2000,
-          verticalPosition: placementFrom,
-          horizontalPosition: placementAlign,
-          panelClass: colorName,
-        });
-    }
+    
 }

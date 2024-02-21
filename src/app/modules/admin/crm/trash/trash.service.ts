@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
@@ -50,18 +50,6 @@ export class TrashService {
             this.user = user;
         })
     }
-  
-
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
 
     showNotification(colorName, text, placementFrom, placementAlign) {
         this.snackBar.open(text, "", {
@@ -77,7 +65,7 @@ export class TrashService {
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedProductListUrl, data).pipe(
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreProduct(product: DeletedItems): Observable<DeletedItems> {
@@ -90,7 +78,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkProduct(productIds: number[]): Observable<DeletedItems[]> {
@@ -103,7 +91,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -114,7 +102,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedLeadListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreLead(lead: DeletedItems): Observable<any> {
@@ -128,7 +116,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -144,7 +132,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -156,7 +144,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedUsersUrl, data).pipe(
          
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -172,7 +160,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'User restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkUsers(user: number[]): Observable<DeletedItems[]> {
@@ -187,7 +175,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Users restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedNotes(): Observable<DeletedItems[]>{
@@ -197,7 +185,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedNoteListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreNote(note: DeletedItems): Observable<any> {
@@ -210,7 +198,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Note restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkNotes(noteIds: number[]): Observable<any> {
@@ -225,7 +213,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Notes restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedTask(): Observable<DeletedItems[]>{
@@ -235,7 +223,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedTaskListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreTask(task: DeletedItems): Observable<any> {
@@ -248,7 +236,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Task restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkTasks(taskIds: number[]): Observable<any> {
@@ -263,7 +251,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Tasks restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedTeam(): Observable<DeletedItems[]>{
@@ -273,7 +261,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedTeamListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreTeam(team: DeletedItems): Observable<any> {
@@ -286,7 +274,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Team restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkTeam(teamIds: number[]): Observable<any> {
@@ -301,7 +289,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Teams restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedCampaign(): Observable<DeletedItems[]>{
@@ -311,7 +299,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedCampaignListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreCampaign(campaign: DeletedItems): Observable<any> {
@@ -324,7 +312,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkCampaign(campaignIds: number[]): Observable<any> {
@@ -339,7 +327,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedForm(): Observable<DeletedItems[]>{
@@ -349,7 +337,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedFormListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreForm(form: DeletedItems): Observable<any> {
@@ -362,7 +350,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkForm(formIds: number[]): Observable<any> {
@@ -377,7 +365,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     getDeletedProject(): Observable<DeletedItems[]>{
@@ -387,7 +375,7 @@ export class TrashService {
         }
         return this._httpClient.post<DeletedItems[]>(this.getDeletedProjectListUrl, data).pipe(
        
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreProject(project: DeletedItems): Observable<any> {
@@ -400,7 +388,7 @@ export class TrashService {
             tap(() => {
                 this.showNotification('snackbar-success', 'Project restored successfully', 'bottom', 'center');
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     restoreBulkProject(projectIds: number[]): Observable<any> {
@@ -415,7 +403,7 @@ export class TrashService {
                 this.showNotification('snackbar-success', 'Projects restored successfully', 'bottom', 'center');
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 }

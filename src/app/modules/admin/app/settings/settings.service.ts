@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Chatbot} from "./settings.type";
-import { BehaviorSubject, EMPTY, Observable, catchError, map, of, switchMap, take, tap, throwError } from "rxjs";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { BehaviorSubject, Observable, tap } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 import { UserService } from "app/core/user/user.service";
 import { User } from "app/core/user/user.types";
 import { environment } from "environments/environment";
@@ -37,7 +37,7 @@ export class SettingsService {
           tenantId: this.user.tenantId,
         };
         return this._httpClient.post<any>(this.getChatbotSettingURL, data).pipe(
-          catchError(err => this.handleError(err))
+          
         );
       }
    
@@ -51,30 +51,8 @@ export class SettingsService {
                
                 
             }),
-            catchError(err => this.handleError(err))
+            
 
         )
-    }
-
- 
-
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-          errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
-    
-    showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-        duration: 2000,
-        verticalPosition: placementFrom,
-        horizontalPosition: placementAlign,
-        panelClass: colorName,
-    });
     }
 }

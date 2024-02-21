@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, catchError, combineLatest, debounceTime, forkJoin, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, forkJoin, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
@@ -140,7 +140,7 @@ export class LeadService {
           return of([]);
         }
       }),
-      catchError(err => this.handleError(err))
+      
     )
 
   selectedNoteTag$ = this.note$
@@ -159,7 +159,7 @@ export class LeadService {
         }
       })
       ,
-      catchError(err => this.handleError(err))
+      
     )
 
   selectedTaskTag$ = this.task$
@@ -178,7 +178,7 @@ export class LeadService {
         }
       })
       ,
-      catchError(err => this.handleError(err))
+      
     )
 
   get statusWiseLeads$():Observable<StatusWiseLeads[]>{
@@ -296,7 +296,7 @@ export class LeadService {
       tap((campaigns) => {
         this._campaigns.next(campaigns);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -309,7 +309,7 @@ export class LeadService {
       tap((tags) => {
         this._tags.next(tags);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -322,7 +322,7 @@ export class LeadService {
       tap((statusWiseLeads) => {
         this._statusWiseLeads.next(statusWiseLeads);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -337,7 +337,7 @@ export class LeadService {
       tap((tasks) => {
         this._tasks.next(tasks);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -353,7 +353,7 @@ export class LeadService {
       tap((notes) => {
         this._notes.next(notes);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -367,7 +367,7 @@ export class LeadService {
       tap((leads) => {
         this._leads.next(leads);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -380,7 +380,7 @@ export class LeadService {
       tap((industries) => {
         this._industries.next(industries);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -393,7 +393,7 @@ export class LeadService {
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -407,7 +407,7 @@ export class LeadService {
       tap((leadSource) => {
         this._leadSource.next(leadSource);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -421,7 +421,7 @@ export class LeadService {
       tap((leadStatus) => {
         this._leadStatus.next(leadStatus);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -435,7 +435,7 @@ export class LeadService {
       tap((product) => {
         this._products.next(product);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -452,7 +452,7 @@ export class LeadService {
       tap((meetings) => {
         this._meetings.next(meetings);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -468,7 +468,7 @@ export class LeadService {
       tap((emails) => {
         this._emails.next(emails);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   
@@ -483,7 +483,7 @@ export class LeadService {
       tap((calls) => {
         this._calls.next(calls);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -500,7 +500,7 @@ export class LeadService {
         leads[leadToUpdateIndex].rating = calls.rating;
         this._leads.next(leads);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -526,7 +526,7 @@ export class LeadService {
       tap((calls) => {
         this._callreasons.next(calls);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   
@@ -643,7 +643,7 @@ export class LeadService {
       tap((customList) => {
         this._customLists.next(customList);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -659,7 +659,7 @@ export class LeadService {
       tap((attachment) => {
         this._leadAttachments.next(attachment);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -676,7 +676,7 @@ export class LeadService {
       tap(() => {
         this.getLeadAttachments(lead).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -686,7 +686,7 @@ export class LeadService {
         responseType: 'blob',
         observe: 'response'
     }).pipe(          
-        catchError(err => this.handleError(err))
+        
     );
   }
 
@@ -703,7 +703,7 @@ export class LeadService {
       tap(data => {
         this.getLeadAttachments(selectedLead).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -731,7 +731,7 @@ export class LeadService {
       tap((customList) => {
         this.getTasks(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -751,7 +751,7 @@ export class LeadService {
       tap((customList) => {
         this.getTasks(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -766,7 +766,7 @@ export class LeadService {
       tap((customList) => {
         this.getTasks(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -780,7 +780,7 @@ export class LeadService {
       tap((note) => {
         this.getNotes(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -795,7 +795,7 @@ export class LeadService {
       tap((customList) => {
         this.getEmails(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -810,7 +810,7 @@ export class LeadService {
       tap((customList) => {
         this.getCalls(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -825,7 +825,7 @@ export class LeadService {
       tap((customList) => {
         this.getMeetings(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -843,7 +843,7 @@ export class LeadService {
         this.setCustomList(list);
         this.getCustomList().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -858,7 +858,7 @@ export class LeadService {
       tap((company) => {
         this.getLeads().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -875,7 +875,7 @@ export class LeadService {
       tap((company) => {
         this.getLeads().subscribe();
       }),
-      catchError(err => this.handleError(err)))
+      )
   }
 
   saveNote(note: Note, leadId: number): Observable<any> {
@@ -896,7 +896,7 @@ export class LeadService {
       tap(() => {
         this.getNotes(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -914,7 +914,7 @@ export class LeadService {
       tap((email) => {
         this.getEmails(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -935,7 +935,7 @@ export class LeadService {
       tap((meeting) => {
         this.getMeetings(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -950,7 +950,7 @@ export class LeadService {
       tap((lead) => {
         this.getLeads().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -964,7 +964,7 @@ export class LeadService {
       tap((leads) => {
         this._deletedLeads.next(leads);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -974,7 +974,7 @@ export class LeadService {
       tenantId: this.user.tenantId,
     };
     return this._httpClient.post<any[]>(this.getScoreListUrl, data).pipe(
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -988,7 +988,7 @@ export class LeadService {
       tap((lead) => {
         this.getLeads().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -1013,7 +1013,7 @@ export class LeadService {
       tap((call) => {
         this.getCalls(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -1028,7 +1028,7 @@ export class LeadService {
       tap((call) => {
         this.GetLeadScore(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   
@@ -1065,7 +1065,7 @@ export class LeadService {
         this.setCustomList(customList)
         this.getCustomList().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -1078,7 +1078,7 @@ export class LeadService {
       filter
     }
     return this._httpClient.post<Lead[]>(this.saveCustomListFilterUrl, data).pipe(
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -1102,7 +1102,7 @@ export class LeadService {
       tap((customList) => {
         this.getTasks(leadId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 

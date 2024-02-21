@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { User } from "app/core/user/user.types";
 import { environment } from "environments/environment";
-import { BehaviorSubject, Observable, catchError, tap, throwError } from "rxjs";
+import { BehaviorSubject, Observable, tap} from "rxjs";
 import { LeadReport, LeadStatus, Product } from "./lead-report.type";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { UserService } from "app/core/user/user.service";
@@ -23,7 +23,7 @@ export class LeadReportService {
     constructor(
         private _userService: UserService,
         private _httpClient: HttpClient,
-        private snackBar: MatSnackBar
+        
     ) {
         this._userService.user$.subscribe(user => {
             this.user = user;
@@ -53,10 +53,6 @@ export class LeadReportService {
             tap((report) => {
                 this._leadReport.next(report);
             }),
-            catchError(err => {
-                console.error('Error in getLeadReport:', err);
-                return this.handleError(err);
-            })
         );
     }
     getProducts(): Observable<Product[]> {
@@ -68,7 +64,7 @@ export class LeadReportService {
             tap((product) => {
                 this._products.next(product);
             }),
-            catchError(err=>this.handleError(err))
+            
         );
     }
     getLeadStatus(): Observable<LeadStatus[]> {
@@ -80,7 +76,7 @@ export class LeadReportService {
             tap((status) => {
                 this._leadStatus.next(status);
             }),
-            catchError(err=>this.handleError(err))
+            
         );
     }
     getUsers(): Observable<User[]> {
@@ -92,25 +88,8 @@ export class LeadReportService {
             tap((users) => {
                 this._users.next(users);
             }),
-            catchError(err=>this.handleError(err))
+            
         );
     }
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
-    showNotification(colorName, text, placementFrom, placementAlign) {
-        this.snackBar.open(text, "", {
-          duration: 2000,
-          verticalPosition: placementFrom,
-          horizontalPosition: placementAlign,
-          panelClass: colorName,
-        });
-      }
+
 }

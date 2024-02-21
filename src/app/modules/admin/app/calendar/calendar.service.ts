@@ -5,7 +5,7 @@ import { Calendar } from '@fullcalendar/core';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { EventType } from './calendar.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,7 +26,7 @@ export class CalendarService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    private snackBar: MatSnackBar)
+    )
   {
     this._userService.user$.subscribe(user => {this.user = user;})
   }
@@ -46,7 +46,7 @@ export class CalendarService {
       tap((type) => {
         this._eventType.next(type);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getCalender(): Observable<Calendar[]> {
@@ -60,7 +60,7 @@ export class CalendarService {
       tap((calenders) => {
         this._calenders.next(calenders);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   addUpdateCalendar(calendar: FormGroup) {
@@ -73,7 +73,7 @@ export class CalendarService {
       tap((calenders) => {
         this.getCalender().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveCalendar(event: any): Observable<any> {
@@ -89,7 +89,7 @@ export class CalendarService {
       tap((calenders) => {
         this.getCalender().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteCalendar(eventId: number, eventTitle: string): Observable<any> {
@@ -103,27 +103,8 @@ export class CalendarService {
       tap((calenders) => {
         this.getCalender().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
 }

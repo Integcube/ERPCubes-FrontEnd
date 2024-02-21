@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Team, TeamMembers } from './team.type';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
@@ -27,7 +27,7 @@ export class TeamService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    private snackBar: MatSnackBar)
+    )
   {
     this._userService.user$.subscribe(user => { this.user = user; })
   }
@@ -48,7 +48,7 @@ export class TeamService {
       tap((teams) => {
         this._teams.next(teams);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getEmployeeList(): Observable<User[]> {
@@ -59,7 +59,7 @@ export class TeamService {
       tap((employees) => {
         this._employees.next(employees);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveTeam(team: any): Observable<Team[]> {
@@ -75,7 +75,7 @@ export class TeamService {
       tap((teams) => {
         this.getTeams().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteTeam(team: Team): Observable<Team[]> {
@@ -90,7 +90,7 @@ export class TeamService {
       tap(() => {
         this.getTeams().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   selectedTeam(selectedteam: Team) {
@@ -122,23 +122,5 @@ export class TeamService {
     );
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
 
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, EMPTY, Observable, catchError, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Activity, Call, Email, Industry, Meeting, Note, Opportunity, OpportunityCustomList, OpportunityFilter, OpportunitySource, OpportunityStatus, Product, Tag, TaskModel } from './opportunity.types';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
@@ -71,7 +71,7 @@ export class OpportunityService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    private snackBar: MatSnackBar
+    
   )
   { this._userService.user$.subscribe(user =>
       this.user = user
@@ -154,7 +154,7 @@ export class OpportunityService {
         return of([]);
       }
     }),
-    catchError(err => this.handleError(err))
+    
   )
   selectedNoteTag$ = this.note$.pipe(
     switchMap((note) => {
@@ -171,7 +171,7 @@ export class OpportunityService {
       }
     })
     ,
-    catchError(err => this.handleError(err))
+    
   )
   selectedTaskTag$ = this.task$.pipe(
     switchMap((task) => {
@@ -188,7 +188,7 @@ export class OpportunityService {
       }
     })
     ,
-    catchError(err => this.handleError(err))
+    
   )
   filteredOpportunityList$ = combineLatest(
     this.opportunityList$,
@@ -224,7 +224,7 @@ export class OpportunityService {
       tap((opportunity) => {
         this._opportunityList.next(opportunity)
       }),
-      catchError(err=>this.handleError(err))
+      
     )
   }
   getOpportunitySource(): Observable<OpportunitySource[]> {
@@ -236,7 +236,7 @@ export class OpportunityService {
       tap((source) => {
         this._opportunitySource.next(source)
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   getOpportunityStatus(): Observable<OpportunityStatus[]> {
@@ -248,7 +248,7 @@ export class OpportunityService {
       tap((opportunityStatus) => {
         this._opportunityStatus.next(opportunityStatus);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -286,7 +286,7 @@ export class OpportunityService {
       tap((tasks) => {
         this._tasks.next(tasks);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -326,7 +326,7 @@ export class OpportunityService {
         this._notes.next(notes);
         
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -366,10 +366,10 @@ export class OpportunityService {
       tap((meetings) => {
         this._meetings.next(meetings);
         if(meetings.length == 0){
-          catchError(err => this.handleError(err))
+          
         }
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -384,7 +384,7 @@ export class OpportunityService {
       tap((calls) => {
         this._calls.next(calls);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -399,7 +399,7 @@ export class OpportunityService {
       tap((emails) => {
         this._emails.next(emails);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getCustomList(): Observable<OpportunityCustomList[]> {
@@ -430,7 +430,7 @@ export class OpportunityService {
       tap((customList) => {
         this._customLists.next(customList);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getTags(): Observable<Tag[]> {
@@ -442,7 +442,7 @@ export class OpportunityService {
       tap((tags) => {
         this._tags.next(tags);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getIndustries(): Observable<Industry[]> {
@@ -454,7 +454,7 @@ export class OpportunityService {
       tap((industries) => {
         this._industries.next(industries);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getUsers(): Observable<User[]> {
@@ -466,7 +466,7 @@ export class OpportunityService {
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -479,7 +479,7 @@ export class OpportunityService {
       tap((product) => {
         this._product.next(product);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -512,7 +512,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getTasks(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   updateSearchQuery(value: any) {
@@ -530,7 +530,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getTasks(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveTask(taskForm, opportunityId: number): Observable<TaskModel> {
@@ -552,7 +552,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getTasks(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveNote(note: Note, opportunityId: number): Observable<any> {
@@ -574,7 +574,7 @@ export class OpportunityService {
       tap(() => {
         this.getNotes(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveEmail(email: any, opportunityId: number): Observable<any> {
@@ -591,7 +591,7 @@ export class OpportunityService {
       tap((email) => {
         this.getEmails(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveMeeting(meeting: any, opportunityId: number): Observable<any> {
@@ -610,7 +610,7 @@ export class OpportunityService {
       tap((meeting) => {
         this.getMeetings(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveCall(call: any, opportunityId: number): Observable<any> {
@@ -632,7 +632,7 @@ export class OpportunityService {
       tap((call) => {
         this.getCalls(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveCustomFilter(listId: number, listTitle: string, filter: string): Observable<any> {
@@ -644,7 +644,7 @@ export class OpportunityService {
       filter
     }
     return this._httpClient.post<Opportunity[]>(this.saveCustomListFilterUrl, data).pipe(
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveCustomList(opportunityList: OpportunityCustomList): Observable<OpportunityCustomList> {
@@ -677,7 +677,7 @@ export class OpportunityService {
         this.setCustomList(customList)
         this.getCustomList().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   setCustomList(list: OpportunityCustomList) {
@@ -697,7 +697,7 @@ export class OpportunityService {
       tap((opportunity) => {
         this.getOpportunity().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   deleteOpportunity(opp: Opportunity) {
@@ -710,7 +710,7 @@ export class OpportunityService {
       tap((opportunity) => {
         this.getOpportunity().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   deleteNote(noteId: number, opportunityId: number): Observable<Note> {
@@ -723,7 +723,7 @@ export class OpportunityService {
       tap((note) => {
         this.getNotes(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteEmail(emailId: number, opportunityId: number): Observable<Email> {
@@ -737,7 +737,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getEmails(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteCall(callId: number, opportunityId: number): Observable<Call> {
@@ -751,7 +751,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getCalls(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteMeeting(meetingId: number, opportunityId: number): Observable<Meeting> {
@@ -765,7 +765,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getMeetings(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteTask(taskId: number, taskTitle: string, opportunityId: number): Observable<TaskModel> {
@@ -779,7 +779,7 @@ export class OpportunityService {
       tap((customList) => {
         this.getTasks(opportunityId).subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteCustomList(opportunityList: OpportunityCustomList): Observable<OpportunityCustomList> {
@@ -796,25 +796,7 @@ export class OpportunityService {
         this.setCustomList(list);
         this.getCustomList().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
-  }
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
   }
 }

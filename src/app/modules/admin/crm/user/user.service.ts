@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { UserForm } from './user.type';
@@ -26,7 +26,7 @@ export class UserFormService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    private snackBar: MatSnackBar) {
+    ) {
     this._userService.user$.subscribe(user => { this.user = user; })
   }
 
@@ -47,7 +47,7 @@ export class UserFormService {
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -89,7 +89,7 @@ export class UserFormService {
       tap((users) => {
         // this.getUsers().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -105,7 +105,7 @@ export class UserFormService {
 
         this.getUsers().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteUser(userForm: UserForm) {
@@ -118,7 +118,7 @@ export class UserFormService {
       tap((companies) => {
         this.getUsers().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   selectedUser(selectedUser: UserForm) {
@@ -126,26 +126,5 @@ export class UserFormService {
     this._user.next(selectedUser);
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    }
 
-    else {
-      errorMessage = errorMessage = err.error;
-
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
 }

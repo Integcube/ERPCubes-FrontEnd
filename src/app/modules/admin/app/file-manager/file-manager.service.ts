@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Item } from './file-manager.types';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'environments/environment';
@@ -28,7 +28,7 @@ export class FileManagerService {
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
-        private snackBar: MatSnackBar) {
+        ) {
         this._userService.user$.subscribe(user => { this.user = user; });
     }
 
@@ -68,7 +68,7 @@ export class FileManagerService {
                 items[index].description = value;
                 this._items.next(items);
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     
@@ -84,7 +84,7 @@ export class FileManagerService {
             items.push({...response});
             this._items.next(items);
           }),
-          catchError(err => this.handleError(err))
+          
         );
 
       }
@@ -107,7 +107,7 @@ export class FileManagerService {
             items.push({...response});
             this._items.next(items);
           }),
-          catchError(err => this.handleError(err))
+          
         );
       }
 
@@ -124,7 +124,7 @@ export class FileManagerService {
                 items.splice(index, 1);
                 this._items.next(items);
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
     downloadFile(path: string): Observable<any> {
@@ -133,7 +133,7 @@ export class FileManagerService {
             responseType: 'blob',
             observe: 'response'
         }).pipe(          
-            catchError(err => this.handleError(err))
+            
         );
     }
     getItems(folderId: number): Observable<Item[]> {
@@ -150,7 +150,7 @@ export class FileManagerService {
                 this.setFolder(folderId)
 
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -173,25 +173,5 @@ export class FileManagerService {
                 return of(item);
             })
         );
-    }
-
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-            errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-            errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
-
-    showNotification(colorName, text, placementFrom, placementAlign) {
-        this.snackBar.open(text, "", {
-            duration: 2000,
-            verticalPosition: placementFrom,
-            horizontalPosition: placementAlign,
-            panelClass: colorName,
-        });
     }
 }

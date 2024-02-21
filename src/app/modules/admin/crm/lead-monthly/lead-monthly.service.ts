@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LeadMonthly, LeadMonthlyFilter, LeadSource, Product,  } from './lead-monthly.type';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class LeadMonthlyService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    private snackBar: MatSnackBar) 
+    ) 
   {
     this._userService.user$.subscribe(user => {
         this.user = user;
@@ -51,7 +51,7 @@ export class LeadMonthlyService {
         tap((report) => {
             this._leadMonthly.next(report);
         }),
-        catchError((err) => this.handleError(err))
+        
     );
   }
   getUsers(): Observable<User[]> {
@@ -63,7 +63,7 @@ export class LeadMonthlyService {
         tap((users) => {
             this._users.next(users);
         }),
-        catchError(err=>this.handleError(err))
+        
     );
   }
   getProducts(): Observable<Product[]> {
@@ -75,7 +75,7 @@ export class LeadMonthlyService {
       tap((product) => {
         this._products.next(product);
       }),
-      catchError(err=>this.handleError(err))
+      
     );
   }
   getLeadSource(): Observable<LeadSource[]> {
@@ -87,25 +87,8 @@ export class LeadMonthlyService {
       tap((leadSource) => {
         this._leadSources.next(leadSource);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-        errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-        errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
+  
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, EMPTY, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Tag, Task } from './tasks.types';
@@ -34,7 +34,7 @@ export class TasksService
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
-        private snackBar: MatSnackBar) 
+        ) 
     {
         this._userService.user$.subscribe(user => {this.user = user;});
         this.contactEnumInstance = new ContactEnum();
@@ -61,7 +61,7 @@ export class TasksService
             tap((tags) => {
                 this._tags.next(tags)
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -73,7 +73,7 @@ export class TasksService
             tagTitle: tag
         };
         return this._httpClient.post<Tag>(this.saveTagsURL, data).pipe(
-            catchError(err => this.handleError(err))
+            
         )
     }
 
@@ -87,7 +87,7 @@ export class TasksService
             tap(() => {
                 this.getTags().subscribe();
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -102,7 +102,7 @@ export class TasksService
             tap((tasks) => {
                 this._tasks.next(tasks)
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -129,7 +129,7 @@ export class TasksService
             tap((tasks) => {
                 this.getTasks().subscribe();
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -145,7 +145,7 @@ export class TasksService
             tap((tasks) => {
                 this.getTasks().subscribe();
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -159,7 +159,7 @@ export class TasksService
             tap((tasks) => {
                 this.getTasks().subscribe();
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -175,7 +175,7 @@ export class TasksService
             tap(() => {
                 this.getTags().subscribe();
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
@@ -223,7 +223,7 @@ export class TasksService
                             this._tags.next(tags)
                         }),
                         map(() => task),
-                        catchError(err => this.handleError(err))
+                        
                     );
                 }
                 else{
@@ -243,27 +243,8 @@ export class TasksService
             tap((users) => {
                 this._users.next(users);
             }),
-            catchError(err => this.handleError(err))
+            
         );
     }
 
-    private handleError(err: HttpErrorResponse): Observable<never> {
-        let errorMessage: string;
-        if (err.error instanceof ErrorEvent) {
-          errorMessage = `An error occurred: ${err.error.message}`;
-        } else {
-          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-        }
-        this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-        return throwError(() => errorMessage);
-    }
-
-    showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-        duration: 2000,
-        verticalPosition: placementFrom,
-        horizontalPosition: placementAlign,
-        panelClass: colorName,
-    });
-    }
 }

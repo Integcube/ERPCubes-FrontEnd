@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Campaign, Product, Source } from './campaign.type';
 import { User } from 'app/core/user/user.types';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { environment } from 'environments/environment';
 import { UserService } from 'app/core/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,7 +25,7 @@ export class CampaignService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    private snackBar: MatSnackBar
+    
   )  { 
     this._userService.user$.subscribe(user => this.user = user ) 
   }
@@ -50,7 +50,7 @@ export class CampaignService {
       tap((campaigns) => {
         this._campaigns.next(campaigns);
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   saveCampaign(campaign: FormGroup): Observable<Campaign[]>{
@@ -68,7 +68,7 @@ export class CampaignService {
       tap((campaigns) => {
         this.getCampaign().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteCampaign(campaignId: string): Observable<Campaign[]>{
@@ -81,7 +81,7 @@ export class CampaignService {
       tap((campaigns) => {
         this.getCampaign().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   selectedCampaign(selectedCampaign: Campaign){
@@ -119,7 +119,7 @@ export class CampaignService {
       tap((products) => {
         this._products.next(products)
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getSource(): Observable<Source[]> {
@@ -131,25 +131,7 @@ export class CampaignService {
       tap((sources) => {
         this._sources.next(sources)
       }),
-      catchError(err => this.handleError(err))
+      
     );
-  }
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, debounceTime, EMPTY, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, debounceTime, EMPTY, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { cloneDeep } from 'lodash-es';
 import {  Note, Tag, Tasks } from './notes.types';
 import { environment } from 'environments/environment';
@@ -38,7 +38,7 @@ export class NotesService
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    private snackBar: MatSnackBar)
+    )
   {
     this._userService.user$.subscribe(user => { this.user = user; })
     this.contactEnumInstance = new ContactEnum();
@@ -89,7 +89,7 @@ export class NotesService
         return of([]);
       }
     }),
-    catchError(err => this.handleError(err))
+    
   )
   selectedNoteTag$ = this.note$.pipe(
     switchMap((note) => {
@@ -105,7 +105,7 @@ export class NotesService
         return of([]);
       }
     }),
-    catchError(err => this.handleError(err))
+    
   )
     
   // -----------------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ export class NotesService
       tap((tags) => {
         this._tags.next(tags);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -138,7 +138,7 @@ export class NotesService
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -202,7 +202,7 @@ export class NotesService
         tap(() => {
             this.getTags().subscribe();
         }),
-        catchError(err => this.handleError(err))
+        
     );
   }
 
@@ -219,7 +219,7 @@ export class NotesService
       tap((notes) => {
         this._notes.next(notes);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -232,7 +232,7 @@ export class NotesService
       tap((notes) => {
         this._tags.next(notes);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -301,7 +301,7 @@ export class NotesService
       tap(() => {
         this.getNotes().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
 
@@ -315,7 +315,7 @@ export class NotesService
       tap((note) => {
         this.getNotes().subscribe();
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   saveTags(tag: string, tagId:number): Observable<Tag> {
@@ -327,27 +327,8 @@ export class NotesService
         tagTitle: tag
     };
     return this._httpClient.post<Tag>(this.saveTagsURL, data).pipe(
-      catchError(err => this.handleError(err))
+      
     )
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
 }

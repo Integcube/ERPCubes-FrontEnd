@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { Industry, Lead, LeadImportList, Product } from './lead-import.type';
 
 @Injectable({
@@ -67,7 +67,7 @@ export class LeadImportService {
       tap((leads) => {
         this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
       }),
-      catchError(err => this.handleError(err))
+      
     );
 
   }
@@ -81,7 +81,7 @@ export class LeadImportService {
       tap((product) => {
         this._product.next(product);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }
@@ -95,7 +95,7 @@ export class LeadImportService {
       tap((industries) => {
         this._industries.next(industries);
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   getUsers(): Observable<User[]> {
@@ -107,7 +107,7 @@ export class LeadImportService {
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
+      
 
     );
   }

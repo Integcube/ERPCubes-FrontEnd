@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Project } from './project.type';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,7 +24,7 @@ export class ProjectService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    private snackBar: MatSnackBar
+    
   )  { 
     this._userService.user$.subscribe(user => this.user = user ) 
   }
@@ -46,7 +46,7 @@ export class ProjectService {
       tap((projects) => {
         this._projects.next(projects);
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   getCompany(): Observable<Company[]>{
@@ -58,7 +58,7 @@ export class ProjectService {
       tap((companies) => {
         this._companies.next(companies);
       }),
-      catchError(err => this.handleError(err))
+      
     )
   }
   saveProject(project: FormGroup): Observable<Project[]>{
@@ -76,7 +76,7 @@ export class ProjectService {
       tap((projects) => {
         this.getProject().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   deleteProject(projectId: number): Observable<Project[]>{
@@ -89,7 +89,7 @@ export class ProjectService {
       tap((projects) => {
         this.getProject().subscribe()
       }),
-      catchError(err => this.handleError(err))
+      
     );
   }
   selectedProject(selectedProject: Project){
@@ -119,22 +119,5 @@ export class ProjectService {
     )
   }
   
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
+
 }
