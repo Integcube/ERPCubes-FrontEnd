@@ -18,13 +18,16 @@ export class AppResolver implements Resolve<any>
         return this._tenantService.checkSubdomainExists(subdomain).pipe(
             map((exists: boolean) => {
                 if (exists) {
+                    debugger
                     return true;
                 } else {
+                    debugger
                      window.location.href = 'https://thequantus.com';
                      return false;
                 }
             }),
             catchError(() => {
+                debugger
                 window.location.href = 'https://thequantus.com';
                 return of(false);
             })

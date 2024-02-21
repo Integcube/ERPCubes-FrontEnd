@@ -1,53 +1,76 @@
 <ng-container>
-    <div class="flex flex-col flex-auto md:w-160 md:min-w-160 max-h-140 -m-6 overflow-y-auto">
+  <div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
         <!-- Header -->
         <div class="flex flex-0 items-center justify-between h-10 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-            <div class="text-lg font-medium" i18n>Connect</div>
-            <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
-                <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
-            </button>
+          <div class="text-lg font-medium" i18n>Connect</div>
+          <button mat-icon-button (click)="closeDialog()" [tabIndex]="-1">
+              <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+          </button>
+      </div>
+    <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="viewForm">
+      <div class="relative w-full">
+        <mat-label class="text-md font-medium" i18n> URL For Webhook</mat-label>
+        <textarea
+          #copyTextarea
+          class="border rounded-md focus:outline-none p-3 text-white placeholder-gray-500 bg-gray-900 resize-none w-full"
+          readonly
+          formControlName="Link"
+          rows="2"
+          placeholder="Enter text here..."
+        ></textarea>
+        <button
+          class="absolute bottom-3 right-1 h-6  border-0  text-white"
+          mat-stroked-button
+          [matTooltip]="'Click to Copy To Clipboard'"
+          (click)="copyToClipboard(copyTextarea.value)"
+        >
+          <ng-container *ngIf="!isCopied; else copied">
+            <mat-icon class="icon-size-4 text-white text-xs">content_copy</mat-icon>
+            <span class="ml-2 text-xs" i18n>Copy</span>
+          </ng-container>
+          <ng-template #copied>
+            <mat-icon class="icon-size-4 text-white text-xs">done</mat-icon>
+            <span class="ml-2 text-xs" i18n>Copied!</span>
+          </ng-template>
+        </button>
+      </div>
+      <div class="flex flex-col md:flex-row lg:flex-row items-center justify-between w-full gap-5 mt-4">
+        <div class="w-1/2">
+            <mat-form-field class="fuse-mat-dense w-full">
+                <mat-label class="text-md font-medium" i18n>Chat Bot Heading</mat-label>
+                <input matInput  formControlName="title" [spellcheck]="false" class="h-2!" #firstName>
+                <mat-error *ngIf="viewForm.get('primaryColor').hasError('required')" i18n>
+                    First Name is required
+                </mat-error>
+            </mat-form-field>
         </div>
-
-        
-        <form [formGroup]="viewForm" class="flex flex-col  w-full p-4 sm:p-4 overflow-y-auto">
-          
-          <div class="relative w-full">
-            <div class="text-md mb-2"> URL For Webhook</div>
-            <textarea
-              #copyTextarea
-              class="border rounded-md focus:outline-none p-3 text-white placeholder-gray-500 bg-gray-900 resize-none w-full"
-              readonly
-              formControlName="Link"
-              rows="2"
-              placeholder="Enter text here..."
-            ></textarea>
-            <button
-              class="absolute bottom-3 right-1 h-6  border-0  text-white"
-              mat-stroked-button
-              [matTooltip]="'Click to Copy To Clipboard'"
-              (click)="copyToClipboard(copyTextarea.value)"
-            >
-              <ng-container *ngIf="!isCopied; else copied">
-                <mat-icon class="icon-size-4 text-white text-xs">content_copy</mat-icon>
-                <span class="ml-2 text-xs" i18n>Copy</span>
-              </ng-container>
-              <ng-template #copied>
-                <mat-icon class="icon-size-4 text-white text-xs">done</mat-icon>
-                <span class="ml-2 text-xs" i18n>Copied!</span>
-              </ng-template>
-            </button>
-          </div>
-          <input
-  #copytoken
-  class="border rounded-md focus:outline-none p-3 text-white resize-none w-full"
-  readonly
-  formControlName="token"
-  type="color"
-  placeholder="Enter text here..."
-  style="height: 40px; cursor: pointer;"
-  [(ngModel)]="selectedColor"
->
-        </form>
-      
+        <div class="w-1/2">
+          <mat-form-field class="fuse-mat-dense w-full">
+            <mat-label class="text-md font-medium" i18n>Choose Color For Chatbot</mat-label>
+            <input matInput [formControlName]="'primaryColor'" class="w-40" [spellcheck]="false" #lastName
+                   (input)="updateColorFromHex($event.target.value)"
+                   type="color">
+            <span *ngIf="viewForm.get('primaryColor').value" class="ml-2">{{ viewForm.get('primaryColor').value }}</span>
+          </mat-form-field>
+        </div>
     </div>
+       <div class="flex flex-col max-w-240 md:min-w-160 max-h-12 -m-6 mt-1">
+       <div class="flex  items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+      
+        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs" i18n>Cancel</span> 
+        </button>
+        <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save Call Info'" mat-stroked-button [disabled]="viewForm.invalid" (click)="saveAndClose()">
+            <mat-icon
+            class="icon-size-5 mr-2 text-white"
+               [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+            <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+        </button>
+     
+       </div>
+      </div>
+    </form>
+</div>
+
 </ng-container>

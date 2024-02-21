@@ -15,7 +15,6 @@ import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TenantService } from './core/tenantInterceptor/tenant.service';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,

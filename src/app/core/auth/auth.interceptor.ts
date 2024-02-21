@@ -3,14 +3,25 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor
 {
+    private handleError(err: HttpErrorResponse): Observable<never> {
+        let errorMessage: string;
+        if (err.error instanceof ErrorEvent) {
+          errorMessage = `An error occurred: ${err.error.message}`;
+        } else {
+          errorMessage = `Backend returned code ${err.status}: ${err.message}`;
+        }
+        this._alertService.showError( errorMessage);
+        return throwError(() => errorMessage);
+      }
     /**
      * Constructor
      */
-    constructor(private _authService: AuthService)
+    constructor(private _authService: AuthService, private _alertService:AlertService)
     {
     }
 
@@ -44,14 +55,14 @@ export class AuthInterceptor implements HttpInterceptor
         return next.handle(newReq).pipe(
             catchError((error) => {
 
-                // Catch "401 Unauthorized" responses
                 if ( error instanceof HttpErrorResponse && error.status === 401 )
                 {
-                    // Sign out
                     this._authService.signOut();
 
-                    // Reload the app
                     location.reload();
+                }
+                else{
+                    this.handleError(error)
                 }
 
                 return throwError(error);
