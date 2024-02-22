@@ -7,70 +7,98 @@
               <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
           </button>
       </div>
-    <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="viewForm">
-      <div class="relative w-full">
-        <mat-label class="text-md font-medium" i18n> URL For Webhook</mat-label>
-        <textarea
-          #copyTextarea
-          class="border rounded-md focus:outline-none p-3 text-white placeholder-gray-500 bg-gray-900 resize-none w-full"
-          readonly
-          formControlName="Link"
-          rows="2"
-          placeholder="Enter text here..."
-        ></textarea>
-        <button
-          class="absolute bottom-3 right-1 h-6  border-0  text-white"
-          mat-stroked-button
-          [matTooltip]="'Click to Copy To Clipboard'"
-          (click)="copyToClipboard(copyTextarea.value)"
-        >
-          <ng-container *ngIf="!isCopied; else copied">
-            <mat-icon class="icon-size-4 text-white text-xs">content_copy</mat-icon>
-            <span class="ml-2 text-xs" i18n>Copy</span>
-          </ng-container>
-          <ng-template #copied>
-            <mat-icon class="icon-size-4 text-white text-xs">done</mat-icon>
-            <span class="ml-2 text-xs" i18n>Copied!</span>
-          </ng-template>
-        </button>
-      </div>
-      <div class="flex flex-col md:flex-row lg:flex-row items-center justify-between w-full gap-5 mt-4">
-        <div class="w-1/2">
-            <mat-form-field class="fuse-mat-dense w-full">
-                <mat-label class="text-md font-medium" i18n>Chat Bot Heading</mat-label>
-                <input matInput  formControlName="title" [spellcheck]="false" class="h-2!" #firstName>
-                <mat-error *ngIf="viewForm.get('primaryColor').hasError('required')" i18n>
-                    First Name is required
-                </mat-error>
-            </mat-form-field>
+      <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="viewForm">
+        <!-- Input Fields -->
+        <div class="relative w-full mb-4">
+            <mat-label class="text-md font-medium" i18n> URL For Webhook</mat-label>
+            <textarea
+                #copyTextarea
+                class="border rounded-md focus:outline-none p-3 text-white placeholder-gray-500 bg-gray-900 resize-none w-full"
+                readonly
+                formControlName="Link"
+                rows="2"
+                placeholder="Enter text here..."
+            ></textarea>
+            <button
+                class="absolute bottom-3 right-1 h-6 border-0 text-white"
+                mat-stroked-button
+                [matTooltip]="'Click to Copy To Clipboard'"
+                (click)="copyToClipboard(copyTextarea.value)"
+            >
+                <ng-container *ngIf="!isCopied; else copied">
+                    <mat-icon class="icon-size-4 text-white text-xs">content_copy</mat-icon>
+                    <span class="ml-2 text-xs" i18n>Copy</span>
+                </ng-container>
+                <ng-template #copied>
+                    <mat-icon class="icon-size-4 text-white text-xs">done</mat-icon>
+                    <span class="ml-2 text-xs" i18n>Copied!</span>
+                </ng-template>
+            </button>
         </div>
-        <div class="w-1/2">
-          <mat-form-field class="fuse-mat-dense w-full">
-            <mat-label class="text-md font-medium" i18n>Choose Color For Chatbot</mat-label>
-            <input matInput [formControlName]="'primaryColor'" class="w-40" [spellcheck]="false" #lastName
-                   (input)="updateColorFromHex($event.target.value)"
-                   type="color">
-            <span *ngIf="viewForm.get('primaryColor').value" class="ml-2">{{ viewForm.get('primaryColor').value }}</span>
-          </mat-form-field>
+        
+        <div class="flex flex-col md:flex-row lg:flex-row items-center justify-between w-full gap-5 mb-4">
+            <div class="w-full md:w-1/2">
+                <mat-form-field class="fuse-mat-dense w-full">
+                    <mat-label class="text-md font-medium" i18n>Chat Bot Heading</mat-label>
+                    <input matInput formControlName="title" [spellcheck]="false" class="h-2!" #firstName>
+                    <mat-error *ngIf="viewForm.get('primaryColor').hasError('required')" i18n>
+                        Title is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="w-full md:w-1/2">
+                <mat-form-field class="fuse-mat-dense w-full">
+                    <mat-label class="text-md font-medium" i18n>Choose Color For Chatbot</mat-label>
+                    <input matInput [formControlName]="'primaryColor'" class="w-4" [spellcheck]="false" #lastName
+                        (input)="updateColorFromHex($event.target.value)"
+                        type="color">
+                    <span *ngIf="viewForm.get('primaryColor').value" class="ml-2">{{ viewForm.get('primaryColor').value }}</span>
+                </mat-form-field>
+            </div>
         </div>
-    </div>
-       <div class="flex flex-col max-w-240 md:min-w-160 max-h-12 -m-6 mt-1">
-       <div class="flex  items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
-      
-        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
-            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-            <span class="ml-2 text-xs" i18n>Cancel</span> 
-        </button>
-        <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save Call Info'" mat-stroked-button [disabled]="viewForm.invalid" (click)="saveAndClose()">
-            <mat-icon
-            class="icon-size-5 mr-2 text-white"
-               [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
-            <span class="ml-1 mr-1 text-xs" i18n>Save</span>
-        </button>
-     
-       </div>
-      </div>
+    
+        <!-- Chatbot Preview -->
+        <div class="flex flex-col md:flex-row lg:flex-row justify-end">
+            <div class="flex flex-col max-w-100 md:min-w-100 h-80 rounded-xl bg-gray-100">
+                <!-- Chatbot Header with Dynamic Background Color -->
+                <div class="flex flex-0 items-center justify-center h-14 pr-3 sm:pr-5 pl-6 sm:pl-8 text-on-primary" [style.background]="viewForm.get('primaryColor').value">
+                    <div class="text-lg font-medium" i18n>{{ viewForm.get('title').value }}</div>
+                </div>
+    
+                <!-- Chat Area -->
+                <div class="flex-1 overflow-y-auto p-4">
+                    <!-- Chat Messages Go Here -->
+                    <div class="flex items-start mb-2">
+                        <div class="bg-gray-300 text-black rounded p-2">
+                            Hello! How can I help you today?
+                        </div>
+                    </div>
+    
+                    <!-- ... More chat messages ... -->
+                </div>
+    
+                <!-- User Input -->
+                <div class="flex items-center p-4">
+                    <input type="text" placeholder="Type your message" class="flex-1 border rounded p-2 mr-2" />
+                </div>
+            </div>
+        </div>
+    
+        <!-- Bottom Buttons -->
+        <div class="flex flex-col max-w-240 md:min-w-160 max-h-12 -m-6 mt-1">
+            <div class="flex items-center justify-between h-12 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+                <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                    <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                    <span class="ml-2 text-xs" i18n>Cancel</span> 
+                </button>
+                <button class="ml-2 primary-2 h-8" [matTooltip]="'Click to Save Call Info'" mat-stroked-button [disabled]="viewForm.invalid" (click)="saveAndClose()">
+                    <mat-icon class="icon-size-5 mr-2 text-white" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+                    <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+                </button>
+            </div>
+        </div>
     </form>
+    
 </div>
 
 </ng-container>
