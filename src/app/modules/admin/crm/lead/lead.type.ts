@@ -31,6 +31,7 @@ export class Lead {
     isHovered: boolean;
     avatar: any;
     rating: any;
+    remarks :string="";
     constructor(reg) {
         this.leadId = reg.leadId ? reg.leadId : -1;
         this.status = reg.status ? reg.status : 1;

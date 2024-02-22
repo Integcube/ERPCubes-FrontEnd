@@ -67,7 +67,8 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       industryId: [],
       productId: [],
       campaignId: [],
-      createdDate: ['']
+      createdDate: [''],
+      remarks: ['']
     });
     this._leadService.lead$
     .pipe(takeUntil(this._unsubscribeAll))
