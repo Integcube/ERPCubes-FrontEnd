@@ -281,6 +281,14 @@
                                         [formControlName]="'country'" #country>
                                 </div>
                             </div>
+                            <div>
+                                <label for="remarks" class="text-sm font-semibold ml-3">Remarks:</label>
+                                <div
+                                    class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent focus-within:bg-white focus-within:shadow-sm focus-within:border-primary dark:focus-within:bg-gray-900">
+                                    <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'"
+                                        [formControlName]="'remarks'" #remarks>
+                                </div>
+                            </div>
                             <!-- Actions -->
                             <div class="flex flex-row justify-end " *ngIf="!leadForm.invalid && leadForm.dirty">
                                 <!-- Save -->

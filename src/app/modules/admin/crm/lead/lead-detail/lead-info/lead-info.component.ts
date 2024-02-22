@@ -68,6 +68,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    debugger;
     this.leadForm = this._formBuilder.group({
       leadId: [, Validators.required],
       firstName: ['', Validators.required],
@@ -86,7 +87,8 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       sourceId: [''],
       industryId: [''],
       productId: [''],
-      createdDate: ['']
+      createdDate: [''],
+      remarks: ['']
     });
     this._leadService.lead$
     .pipe(takeUntil(this._unsubscribeAll))

@@ -16,6 +16,7 @@ export class CallDetailComponent implements OnInit , OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   composeForm: UntypedFormGroup;
 
+  call: Call
   selectedScenario:any;
   selectedIsTask:any;
   copyFields: { cc: boolean; bcc: boolean } = {
