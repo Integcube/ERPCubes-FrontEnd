@@ -14,6 +14,8 @@ export class CalendarEvent{
     id: number;
     userId: string;
     title: string;
+    firstName: string;
+    lastName: string;
     type: number;
     start: Date;
     end: Date;

@@ -112,8 +112,11 @@
                 </button>
             </ng-container>
             <!-- Cancel -->
-            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDialog()" i18n>
-                Cancel
+            <button class="ml-auto " mat-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                <mat-icon
+                class="icon-size-5 mr-2"
+                   [svgIcon]="'heroicons_outline:x-circle'" class=""></mat-icon>   
+                   <span class="ml-1 mr-1 text-sm">Close</span>  
             </button>
             <!-- Save -->
             <button class="ml-2 primary-2" mat-flat-button [disabled]="eventForm.invalid"

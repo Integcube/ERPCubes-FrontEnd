@@ -76,7 +76,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems>(this.restoreProductUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Product restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -89,7 +89,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkProductUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -114,7 +114,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreLeadUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -129,7 +129,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkLeadUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
 
             }),
             
@@ -158,7 +158,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems>(this.restoreUserListUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'User restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'User restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -173,7 +173,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkUserUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Users restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Users restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -196,7 +196,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreNoteUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Note restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Note restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -210,7 +210,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkNoteUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Notes restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Notes restored successfully', 'bottom', 'center');
 
             }),
             
@@ -234,7 +234,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreTaskUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Task restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Task restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -248,7 +248,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkTaskUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Tasks restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Tasks restored successfully', 'bottom', 'center');
 
             }),
             
@@ -272,7 +272,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreTeamkUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Team restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Team restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -286,7 +286,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkTeamUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Teams restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Teams restored successfully', 'bottom', 'center');
 
             }),
             
@@ -310,7 +310,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreCampaignkUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -324,7 +324,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkCampaignUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
 
             }),
             
@@ -348,7 +348,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreFormUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -362,7 +362,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkFormUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
 
             }),
             
@@ -386,7 +386,7 @@ export class TrashService {
         };
         return this._httpClient.post<DeletedItems[]>(this.restoreProjectUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Project restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Project restored successfully', 'bottom', 'center');
             }),
             
         );
@@ -400,7 +400,7 @@ export class TrashService {
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkProjectUrl, data).pipe(
             tap(() => {
-                this.showNotification('snackbar-success', 'Projects restored successfully', 'bottom', 'center');
+                // this.showNotification('snackbar-success', 'Projects restored successfully', 'bottom', 'center');
 
             }),
             
