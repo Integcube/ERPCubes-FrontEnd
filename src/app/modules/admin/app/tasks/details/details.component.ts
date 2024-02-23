@@ -71,7 +71,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         })
         this.taskForm.get('tags').patchValue(selectedIds);
-        this._tasksService.saveTasks(this.taskForm).pipe(takeUntil(this._unsubscribeAll)).subscribe(
+        this._tasksService.saveTask(this.taskForm).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             data => {
                 this._taskListComponent.onBackdropClicked();
                 this.closeDrawer();
@@ -362,7 +362,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._tasksService.deleteTasks(this.task.taskId).pipe(
+                this._tasksService.deleteTask(this.task.taskId).pipe(
                 takeUntil(this._unsubscribeAll))
                 .subscribe(
                     data => {

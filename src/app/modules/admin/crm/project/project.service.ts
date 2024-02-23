@@ -8,6 +8,7 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Company } from '../project/project.type';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,11 @@ export class ProjectService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    
-  )  { 
+    private _alertService: AlertService) 
+  { 
     this._userService.user$.subscribe(user => this.user = user ) 
   }
+
   get projects$(): Observable<Project[]>{
     return this._projects.asObservable()
   }
@@ -74,6 +76,7 @@ export class ProjectService {
     }
     return this._httpClient.post<Project[]>(this.saveProjectURL, data).pipe(
       tap((projects) => {
+        this._alertService.showSuccess("Project Saved Successfully");
         this.getProject().subscribe()
       }),
       

@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { EventType } from './calendar.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class CalendarService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    )
+    private _alertService: AlertService)
   {
     this._userService.user$.subscribe(user => {this.user = user;})
   }
@@ -87,6 +88,7 @@ export class CalendarService {
     }
     return this._httpClient.post<any>(this.saveCalenderListURL, data).pipe(
       tap((calenders) => {
+        this._alertService.showSuccess("Event Saved Successfully");
         this.getCalender().subscribe();
       }),
       

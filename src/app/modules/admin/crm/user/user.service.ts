@@ -7,6 +7,7 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 
 @Injectable({
@@ -26,7 +27,8 @@ export class UserFormService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    ) {
+    private _alertService: AlertService) 
+  {
     this._userService.user$.subscribe(user => { this.user = user; })
   }
 
@@ -87,6 +89,7 @@ export class UserFormService {
 
     return this._httpClient.post<UserForm[]>(this.adduserListURL, data).pipe(
       tap((users) => {
+        this._alertService.showSuccess("User Registered Successfully");
         // this.getUsers().subscribe();
       }),
       

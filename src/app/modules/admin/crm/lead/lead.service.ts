@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead, Attachment } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -93,6 +94,7 @@ export class LeadService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
+    private _alertService: AlertService,
     private snackBar: MatSnackBar) {
     this._userService.user$.subscribe(user => { this.user = user; });
     this.contactEnumInstance = new ContactEnum();
@@ -948,10 +950,9 @@ export class LeadService {
     }
     return this._httpClient.post<Lead[]>(this.saveLeadURL, data).pipe(
       tap((lead) => {
+        this._alertService.showSuccess("Lead Saved Successfully");
         this.getLeads().subscribe();
       }),
-      
-
     );
   }
 
