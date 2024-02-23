@@ -3,6 +3,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
 import { Ticket, TicketInfo } from '../chat.types';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Component({
     selector: 'chat-contact-info',
@@ -20,6 +21,7 @@ export class ContactInfoComponent implements OnInit, OnDestroy {
     users$ = this._chatService.users$;
     constructor(private _chatService: ChatService,
         private _changeDetectorRef: ChangeDetectorRef,
+        private _alertService:AlertService,
 
     ) {
     }
@@ -46,6 +48,11 @@ export class ContactInfoComponent implements OnInit, OnDestroy {
             notes: this.ticket.notes,
             ticketId: this.ticket.ticketId
         }
-        this._chatService.saveTicketinfo(info).subscribe();
+        this._chatService.saveTicketinfo(info).subscribe(
+
+            (response) => {
+                this._alertService.showSuccess("Ticket Status Changed")
+              }
+        );
     }
 }

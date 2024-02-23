@@ -4,7 +4,7 @@ import { BehaviorSubject, map, Observable, of, switchMap, tap, throwError } from
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
+import { ChatFilter, Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -109,10 +109,12 @@ export class ChatService {
     selectTicket(ticket: Ticket) {
         this._ticket.next(ticket);
     }
-    getTickets(): Observable<any> {
+    getTickets( chatFilter:ChatFilter): Observable<any> {
+       
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
+            ...chatFilter
         }
         return this._httpClient.post<Ticket[]>(this.getTicketsUrl, data).pipe(
             tap((tickets) => {
@@ -220,9 +222,11 @@ export class ChatService {
             tenantId: this.user.tenantId,
             ...info
         }
-        debugger;
         return this._httpClient.post<TicketType[]>(this.saveInfoUrl, data).pipe(
-            tap(a => this.getTickets()),
+            tap((response) => {
+                const chatFilter: ChatFilter = new ChatFilter({});
+                this.getTickets(chatFilter);
+              })
             
         )
     }

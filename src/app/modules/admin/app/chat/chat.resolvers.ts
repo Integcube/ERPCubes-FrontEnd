@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
 import { ChatService } from './chat.service';
-import { Conversation, Ticket } from './chat.types';
+import { ChatFilter, Conversation, Ticket } from './chat.types';
 import { User } from 'app/core/user/user.types';
 
 @Injectable({
@@ -16,7 +16,8 @@ export class TicketsResolver implements Resolve<any>
     ) {
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Ticket[]> | any {
-        return this._chatService.getTickets();
+    const chatFilter: ChatFilter = new ChatFilter({});
+    return this._chatService.getTickets(chatFilter);
     }
 }
 

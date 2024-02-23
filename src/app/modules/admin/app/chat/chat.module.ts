@@ -16,6 +16,7 @@ import { ConversationComponent } from './conversation/conversation.component';
 import { EmptyConversationComponent } from './empty-conversation/empty-conversation.component';
 import { MatSelectModule } from '@angular/material/select';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
         MatSelectModule,
         MatMenuModule,
         MatSidenavModule,
-        SharedModule
+        SharedModule,
+        MatTooltipModule,
     ]
 })
 export class ChatModule

@@ -3,6 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ChatService } from '../chat.service';
 import { Conversation, Ticket } from '../chat.types';
+import { AlertService } from 'app/core/alert/alert.service';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class ConversationComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _chatService: ChatService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
-        private _ngZone: NgZone
+        private _ngZone: NgZone,
+
     )
     {
     }

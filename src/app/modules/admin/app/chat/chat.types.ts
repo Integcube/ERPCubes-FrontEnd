@@ -60,3 +60,24 @@ export interface TicketType{
     ticketTypeId: number;
     typeName: string;
 }
+
+
+export class ChatFilter {
+    days: number;
+    showdays: string;
+    channel: string;
+    showisread: string;
+    isread: number;
+    status:number;
+    showstatus:string;
+    constructor(reg) {
+        this.showdays = reg.showdays ? reg.showdays : "15 Days";
+        this.showisread= reg.showisread ? reg.showisread : "Both";
+        this.showstatus = reg.status ? reg.status : "All Status";
+        this.days = reg.days ? reg.days : 15;
+        this.channel = reg.channel ? reg.channel : "All channel";
+        this.isread = reg.isread ? reg.isread : -1;
+        this.status = reg.status ? reg.status : -1;
+
+    }
+}

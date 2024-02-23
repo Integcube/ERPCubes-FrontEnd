@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
-import { Ticket } from '../chat.types';
+import { Ticket,ChatFilter } from '../chat.types';
 import { User } from 'app/core/user/user.types';
 
 
@@ -19,8 +19,9 @@ export class ChatsComponent implements OnInit, OnDestroy
     drawerOpened: boolean = false;
     filteredTickets: Ticket[];
     selectedTicket: Ticket;
+    chatFilter: ChatFilter = new ChatFilter({});
+    statuses$ = this._chatService.statuses$;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
     /**
      * Constructor
      */
@@ -57,6 +58,25 @@ export class ChatsComponent implements OnInit, OnDestroy
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
+    setDuration(duration: string,value:number): void {
+      this.chatFilter.showdays=duration;
+      this.chatFilter.days=value;
+     
+      }
+      setchannel(channel: string): void {
+        this.chatFilter.channel=channel;
+        }
+
+        setIsRead(showisread: string,value:number): void {
+            this.chatFilter.showisread=showisread;
+            this.chatFilter.isread=value;
+            }
+
+            setStatus(shwstatus: string,value:number): void {
+                this.chatFilter.showstatus=shwstatus;
+                this.chatFilter.status=value;
+                }
+
 
     filterChats(query: string): void
     {

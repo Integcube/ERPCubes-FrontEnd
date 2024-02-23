@@ -66,11 +66,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     eventDrop: this.handleEventDrop.bind(this),
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
   };
   toggleType(type: EventType, change: MatCheckboxChange): void {
     const foundLabelIndex = this.selectedTypes.findIndex(a => a === type.typeId);
@@ -112,33 +107,41 @@ export class CalendarComponent implements OnInit, OnDestroy {
     info.el.style.borderColor = eventColor;
     info.el.style.backgroundColor = eventColor;
   }
-  
   currentEvents: EventApi[] = [];
   constructor(private _calendarService: CalendarService, 
     private _matDialog: MatDialog,
     private _changeDetectorRef: ChangeDetectorRef,
+  ){}
 
-  ) {
-  }
   ngOnInit() {
     this.events$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
       this.calendarOptions.events = data;
       this._changeDetectorRef.markForCheck();
     });
   }
+
   handleCalendarToggle() {
     this.calendarVisible = !this.calendarVisible;
   }
+
   handleWeekendsToggle() {
     const { calendarOptions } = this;
     calendarOptions.weekends = !calendarOptions.weekends;
   }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   addEvent() {
     let event = new CalendarEvent({});
+ 
+    const currentDate = new Date();
+    event.start = new Date(currentDate);
+    event.start.setHours(currentDate.getHours(), currentDate.getMinutes());
+    event.end = new Date(currentDate);
+    event.end.setHours((currentDate.getHours()+1), currentDate.getMinutes());
     this._matDialog.open(CalendarDetailComponent, {
       autoFocus: false,
       data: {
@@ -146,10 +149,15 @@ export class CalendarComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   handleDateSelect(selectInfo: DateSelectArg) {
     let event = new CalendarEvent({});
-    event.start= selectInfo.start;
-    event.end = selectInfo.end;
+    const currentDate = new Date();
+    event.start = new Date(selectInfo.start);
+    event.start.setHours(currentDate.getHours(), currentDate.getMinutes());
+    event.end = new Date(selectInfo.start);
+    event.end.setHours((currentDate.getHours()+1), currentDate.getMinutes());
+    
     event.allDay = selectInfo.allDay;
     this._matDialog.open(CalendarDetailComponent, {
       autoFocus: false,
@@ -158,6 +166,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   handleEventClick(clickInfo: EventClickArg) {
     const eventDataWithCustomType = {
       start:clickInfo.event.start,
@@ -174,6 +183,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   handleEventDrop(eventDropInfo: EventDropArg) {
     const eventDataWithCustomType = {
       start:eventDropInfo.event.start,
@@ -187,6 +197,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       data=>{this._changeDetectorRef.markForCheck()}
     )
   }
+
   handleEvents(events: EventApi[]) {
     this.currentEvents = events;
   }

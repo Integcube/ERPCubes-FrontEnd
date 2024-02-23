@@ -41,6 +41,10 @@
                                 </div>
                                 <div class="ml-4 font-medium truncate">{{user.name}}</div>
                             </div>
+                            <button class="ml-auto icon-size-5 cursor-pointer" mat-icon-button >
+                            <mat-icon [svgIcon]="'heroicons_outline:filter'"></mat-icon>
+                        </button>
+                         
                         </div>
                         <!-- Search -->
                         <div class="mt-4">
@@ -58,7 +62,90 @@
                                     (input)="filterChats(searchField.value)"
                                     #searchField>
                             </mat-form-field>
+
+                        
                         </div>
+
+  <div class="flex items-center justify-center m-4 mb-0">
+<div class="ml-2">
+    <button
+      class="h-6 min-h-6 px-2 rounded-full bg-hover"
+      mat-button
+      [matMenuTriggerFor]="Datemenu"
+      matTooltip="Date"
+      >
+    
+      <mat-icon   class="icon-size-4 mr-1">access_time</mat-icon>
+      <span class="font-medium text-sm text-secondary">{{ chatFilter.showdays }}</span>
+    </button>
+    <mat-menu #Datemenu="matMenu">
+     <button mat-menu-item (click)="setDuration('All',-1)">All</button>
+     <button mat-menu-item (click)="setDuration('Today',1)">Today</button>
+      <button mat-menu-item (click)="setDuration('15 days',15)">15 days</button>
+      <button mat-menu-item (click)="setDuration('30 days',30)">30 days</button>
+      <button mat-menu-item (click)="setDuration('3 months',90)">3 months</button>
+      <button mat-menu-item (click)="setDuration('1 Year',365)">1 Year</button>
+
+
+    </mat-menu>
+  </div>
+                                <div class="ml-2">
+                                    <button
+                                        class="h-6 min-h-6 px-2 rounded-full bg-hover"
+                                        mat-button
+                                        [matMenuTriggerFor]="channel"
+                                        matTooltip="Channel"
+                                        >
+                                        <mat-icon class="icon-size-4 mr-1">language</mat-icon>   
+                                    <span class="font-medium text-sm text-secondary">{{chatFilter.channel}}</span>
+                                    </button>
+                                    <mat-menu #channel="matMenu">
+                                        <button mat-menu-item (click)="setchannel('All channel')">All channel</button>
+                                        <button mat-menu-item (click)="setchannel('Chatboot')">Chatboot</button>
+                                        <button mat-menu-item (click)="setchannel('Messenger')">Messenger</button>
+                                        <button mat-menu-item (click)="setchannel('Instagram')">Instagram</button>
+                                        <button mat-menu-item (click)="setchannel('WhatsApp')">WhatsApp</button>
+                                    </mat-menu>
+                                </div>
+                               
+
+                                <div class="ml-2">
+                                    <button
+                                        class="h-6 min-h-6 px-2 rounded-full bg-hover"
+                                        mat-button
+                                        [matMenuTriggerFor]="IsRead"
+                                        matTooltip="Message"
+                                        >
+                                        <mat-icon class="icon-size-4 mr-1">email</mat-icon>   
+                                        <span class="font-medium text-sm text-secondary">{{chatFilter.showisread}}</span>
+                                    </button>
+                                    <mat-menu #IsRead="matMenu">
+                                        <button mat-menu-item (click)="setIsRead('Both',-1)">Both</button>
+                                        <button mat-menu-item (click)="setIsRead('Unread',0)">Unread</button>
+                                        <button mat-menu-item (click)="setIsRead('Read',1)">Read</button>
+                                     
+                                    </mat-menu>
+                                </div>
+                               
+
+                              <div class="ml-2">
+                                    <button
+                                        class="h-6 min-h-6 px-2 rounded-full bg-hover"
+                                        mat-button
+                                        [matMenuTriggerFor]="Status"
+                                        matTooltip="Status"
+                                        >
+                                        <mat-icon class="icon-size-4 mr-1">check_circle</mat-icon>
+                                     <span class="font-medium text-sm text-secondary">{{chatFilter.showstatus}}</span>
+                                    </button>
+                                    <mat-menu #Status="matMenu">
+                                        <button mat-menu-item (click)="setStatus('All Status',-1)">All Status</button>
+                                        <button mat-menu-item  *ngFor="let status of statuses$|async"  (click)="setStatus( status.statusName,status.ticketStatusId)">
+                                            {{status.statusName}}</button>
+                                    </mat-menu>
+                                </div>
+                            </div>
+                        
                     </div>
 
                     <!-- Chats -->

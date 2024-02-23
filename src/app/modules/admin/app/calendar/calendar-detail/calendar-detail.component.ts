@@ -71,16 +71,18 @@ export class CalendarDetailComponent implements OnInit, OnDestroy {
     const minutes = ('0' + date.getMinutes()).slice(-2);
     return `${hours}:${minutes}`;
   }
+
   ngOnInit(): void {
     this.event = this._data.event
     this.eventForm = this._formBuilder.group({
       id: [this.event.id, Validators.required],
       title: [this.event.title, Validators.required],
       type: [this.event.type, Validators.required],
-      start: [formatDate(this._data.event.start, "yyyy-MM-dd", "en"), Validators.required],
-      end: [formatDate(this._data.event.end, "yyyy-MM-dd", "en"), Validators.required],
       startTime: [this.formatTime(this.event.start)],
       endTime: [this.formatTime(this.event.end)],
+      start: [formatDate(this._data.event.start, "yyyy-MM-dd", "en"), Validators.required],
+      end: [formatDate(this._data.event.end, "yyyy-MM-dd", "en"), Validators.required],
+   
     });
     this._changeDetectorRef.markForCheck()
   }
