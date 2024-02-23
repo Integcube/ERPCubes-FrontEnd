@@ -48,6 +48,8 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   leadStatus$ = this._leadService.leadStatus$;
   leadSource$ = this._leadService.leadSource$;
   products$ = this._leadService.products$;
+  campaigns$ = this._leadService.campaigns$;
+
   calculatedleadScore$ = this._leadService.calculateleadScore$;
   leadAttachments$ = this._leadService.leadAttachments$
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -88,6 +90,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       industryId: [''],
       productId: [''],
       createdDate: [''],
+      campaignId: [],
       remarks: ['']
     });
     this._leadService.lead$

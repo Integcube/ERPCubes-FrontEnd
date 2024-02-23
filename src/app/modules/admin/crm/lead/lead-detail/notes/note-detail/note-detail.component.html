@@ -110,7 +110,7 @@
             <!-- Delete -->
             <button
               mat-icon-button 
-              (click)="delete()">
+              (click)="delete()" *ngIf="note.noteId !== -1">
               <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
             </button>
           </div>
