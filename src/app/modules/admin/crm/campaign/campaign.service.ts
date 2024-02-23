@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { UserService } from 'app/core/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup } from '@angular/forms';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class CampaignService {
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    
-  )  { 
+    private _alertService: AlertService)  
+  { 
     this._userService.user$.subscribe(user => this.user = user ) 
   }
   get campaigns$(): Observable<Campaign[]>{
@@ -66,6 +67,7 @@ export class CampaignService {
     }
     return this._httpClient.post<Campaign[]>(this.saveCampaignURL, data).pipe(
       tap((campaigns) => {
+        this._alertService.showSuccess("Campaign Saved Successfully");
         this.getCampaign().subscribe()
       }),
       

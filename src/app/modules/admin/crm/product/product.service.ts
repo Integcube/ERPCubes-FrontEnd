@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { Product, ProductImportList, Project } from './product.type';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 
 @Injectable({
@@ -30,6 +31,7 @@ export class ProductService {
   private _projects: BehaviorSubject<Project[] | null> = new BehaviorSubject(null);
   constructor(
     private _userService: UserService,
+    private _alertService: AlertService,
     private _httpClient: HttpClient,
     private snackBar: MatSnackBar) 
   {
@@ -82,6 +84,7 @@ export class ProductService {
     }
     return this._httpClient.post<Product[]>(this.saveProductURL, data).pipe(
       tap((products) => {
+        this._alertService.showSuccess("Product Saved Successfully");
         this.getProducts().subscribe();
       }),
       

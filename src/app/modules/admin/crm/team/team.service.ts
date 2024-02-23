@@ -7,6 +7,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class TeamService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    )
+    private _alertService: AlertService)
   {
     this._userService.user$.subscribe(user => { this.user = user; })
   }
@@ -73,6 +74,7 @@ export class TeamService {
     }
     return this._httpClient.post<Team[]>(this.saveTeamURL, data).pipe(
       tap((teams) => {
+        this._alertService.showSuccess("Team Saved Successfully");
         this.getTeams().subscribe();
       }),
       

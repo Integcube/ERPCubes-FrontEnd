@@ -8,6 +8,7 @@ import { UserService } from 'app/core/user/user.service';
 import { FormGroup } from '@angular/forms';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +35,7 @@ export class TasksService
     constructor(
         private _httpClient: HttpClient,
         private _userService: UserService,
-        ) 
+        private _alertService: AlertService) 
     {
         this._userService.user$.subscribe(user => {this.user = user;});
         this.contactEnumInstance = new ContactEnum();
@@ -106,7 +107,7 @@ export class TasksService
         );
     }
 
-    saveTasks(task: FormGroup<any>): Observable<Task[]> {
+    saveTask(task: FormGroup<any>): Observable<Task[]> {
         let data: any = { 
             id: this.user.id,
             tenantId:this.user.tenantId,
@@ -127,6 +128,7 @@ export class TasksService
         }
         return this._httpClient.post<Task[]>(this.saveTasksURL, data).pipe(
             tap((tasks) => {
+                this._alertService.showSuccess("Task Saved Successfully");
                 this.getTasks().subscribe();
             }),
             
@@ -149,7 +151,7 @@ export class TasksService
         );
     }
 
-    deleteTasks(id: number): Observable<Task[]> {
+    deleteTask(id: number): Observable<Task[]> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,

@@ -8,6 +8,7 @@ import { User } from 'app/core/user/user.types';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { UserService } from 'app/core/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
     providedIn: 'root'
@@ -38,7 +39,7 @@ export class NotesService
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
-    )
+    private _alertService: AlertService)
   {
     this._userService.user$.subscribe(user => { this.user = user; })
     this.contactEnumInstance = new ContactEnum();
@@ -299,6 +300,7 @@ export class NotesService
     };
     return this._httpClient.post<Note[]>(this.saveNotesUrl, data).pipe(
       tap(() => {
+        this._alertService.showSuccess("Note Saved Successfully");
         this.getNotes().subscribe();
       }),
       
