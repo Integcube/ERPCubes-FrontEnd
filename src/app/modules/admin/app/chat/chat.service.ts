@@ -6,7 +6,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { ChatFilter, Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -37,8 +37,10 @@ export class ChatService {
     constructor(
         private _userService: UserService,
         private _httpClient: HttpClient,
-        ) 
-    {
+        private _router: Router,
+        private _activatedRoute: ActivatedRoute,
+
+    ) {
         this.startConnection();
         this._userService.user$.subscribe(user => { this.user = user; })
     }
@@ -48,9 +50,9 @@ export class ChatService {
                 transport: HttpTransportType.WebSockets,
                 skipNegotiation: true
             })
-        
+
             .build();
-            
+
 
         this._ticketConnection
             .start()
@@ -78,23 +80,24 @@ export class ChatService {
             }
         });
     };
-    get users$():Observable<User[]>{
+    get users$(): Observable<User[]> {
         return this._appUsers.asObservable();
 
     }
-    get types$():Observable<TicketType[]>{
+    get types$(): Observable<TicketType[]> {
         return this._type.asObservable();
 
     }
-    get priorities$():Observable<TicketPriority[]>{
+    get priorities$(): Observable<TicketPriority[]> {
         return this._priority.asObservable();
 
     }
-    get statuses$():Observable<TicketStatus[]>{
+    get statuses$(): Observable<TicketStatus[]> {
         return this._status.asObservable();
 
     }
     get ticket$(): Observable<Ticket> {
+        debugger
         return this._ticket.asObservable();
     }
     get tickets$(): Observable<Ticket[]> {
@@ -109,8 +112,7 @@ export class ChatService {
     selectTicket(ticket: Ticket) {
         this._ticket.next(ticket);
     }
-    getTickets( chatFilter:ChatFilter): Observable<any> {
-       
+    getTickets(chatFilter: ChatFilter): Observable<any> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
@@ -120,7 +122,6 @@ export class ChatService {
             tap((tickets) => {
                 this._tickets.next(tickets);
             }),
-            
         )
     }
     getUsers(): Observable<any> {
@@ -132,7 +133,7 @@ export class ChatService {
             tap((users) => {
                 this._appUsers.next(users);
             }),
-            
+
         )
     }
     setReadStatus(ticketId: number, status: boolean): Observable<any> {
@@ -148,7 +149,7 @@ export class ChatService {
                 currentTickets[index].latestConversation.readStatus = status;
                 this._tickets.next(currentTickets);
             }),
-            
+
         )
     }
     getConversations(id: number): Observable<Conversation[]> {
@@ -175,7 +176,7 @@ export class ChatService {
                 }
                 return of(conversations);
             }),
-            
+
         );
     }
     sendMessage(ticket: Ticket): Observable<any> {
@@ -185,35 +186,35 @@ export class ChatService {
         }
         return this._httpClient.post<any>(this.sendMessageUrl, data)
     }
-    getStatus():Observable<TicketStatus[]>{
+    getStatus(): Observable<TicketStatus[]> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketStatus[]>(this.getStatusUrl, data).pipe(
-            tap(a=>this._status.next(a)),
-            
+            tap(a => this._status.next(a)),
+
         )
     }
-    getPriority():Observable<TicketPriority[]>{
+    getPriority(): Observable<TicketPriority[]> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketPriority[]>(this.getPriorityUrl, data).pipe(
-            tap(a=>this._priority.next(a)),
-            
+            tap(a => this._priority.next(a)),
+
         )
 
     }
-    getTypes():Observable<TicketType[]>{
+    getTypes(): Observable<TicketType[]> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
         }
         return this._httpClient.post<TicketType[]>(this.getTypeUrl, data).pipe(
-           tap(a=>this._type.next(a)),
-           
+            tap(a => this._type.next(a)),
+
         )
     }
     saveTicketinfo(info: TicketInfo): Observable<TicketType[]> {
@@ -226,8 +227,7 @@ export class ChatService {
             tap((response) => {
                 const chatFilter: ChatFilter = new ChatFilter({});
                 this.getTickets(chatFilter);
-              })
-            
+            })
         )
     }
 

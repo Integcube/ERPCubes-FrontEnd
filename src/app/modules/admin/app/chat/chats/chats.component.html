@@ -21,7 +21,7 @@
         <!-- Drawer content -->
         <mat-drawer-content class="flex overflow-hidden">
             <!-- Chats list -->
-            <ng-container *ngIf="tickets && tickets.length > 0; else noTickets">
+         
                 <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-100 lg:max-w-72 bg-card dark:bg-transparent">
 
                     <!-- Header -->
@@ -41,13 +41,13 @@
                                 </div>
                                 <div class="ml-4 font-medium truncate">{{user.name}}</div>
                             </div>
-                            <button class="ml-auto icon-size-5 cursor-pointer" mat-icon-button >
+                            <button class="ml-auto icon-size-5 cursor-pointer" mat-icon-button [(ngModel)]="chatFilter.isfilter"  (click)="showfilter(chatFilter.isfilter)">
                             <mat-icon [svgIcon]="'heroicons_outline:filter'"></mat-icon>
                         </button>
                          
                         </div>
                         <!-- Search -->
-                        <div class="mt-4">
+                        <div class="mt-4"  >
                             <mat-form-field
                                 class="fuse-mat-no-subscript fuse-mat-rounded fuse-mat-dense w-full"
                                 [floatLabel]="'always'">
@@ -66,7 +66,7 @@
                         
                         </div>
 
-  <div class="flex items-center justify-center m-4 mb-0">
+  <div class="flex items-center justify-center m-4 mb-0 " *ngIf="chatFilter.isfilter==1">
 <div class="ml-2">
     <button
       class="h-6 min-h-6 px-2 rounded-full bg-hover"
@@ -101,7 +101,7 @@
                                     </button>
                                     <mat-menu #channel="matMenu">
                                         <button mat-menu-item (click)="setchannel('All channel')">All channel</button>
-                                        <button mat-menu-item (click)="setchannel('Chatboot')">Chatboot</button>
+                                        <button mat-menu-item (click)="setchannel('Chatbot')">Chatbot</button>
                                         <button mat-menu-item (click)="setchannel('Messenger')">Messenger</button>
                                         <button mat-menu-item (click)="setchannel('Instagram')">Instagram</button>
                                         <button mat-menu-item (click)="setchannel('WhatsApp')">WhatsApp</button>
@@ -125,9 +125,7 @@
                                         <button mat-menu-item (click)="setIsRead('Read',1)">Read</button>
                                      
                                     </mat-menu>
-                                </div>
-                               
-
+                                </div>                              
                               <div class="ml-2">
                                     <button
                                         class="h-6 min-h-6 px-2 rounded-full bg-hover"
@@ -147,7 +145,7 @@
                             </div>
                         
                     </div>
-
+                    <ng-container *ngIf="tickets && tickets.length > 0; else noTickets">
                     <!-- Chats -->
                     <div class="flex-auto" fuseScrollbar>
                         <ng-container *ngIf="filteredTickets.length > 0; else noTickets">
@@ -193,23 +191,23 @@
                             </ng-container>
                         </ng-container>
                     </div>
-
+                </ng-container>
                 </div>
 
-            </ng-container>
+           
 
             <!-- No chats template -->
-            <ng-template #noTickets>
+           <ng-template #noTickets>
                 <div class="flex flex-auto flex-col items-center justify-center h-full">
                     <mat-icon
                         class="icon-size-24"
                         [svgIcon]="'heroicons_outline:chat'"></mat-icon>
                     <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary" i18n>No Tickets</div>
                 </div>
-            </ng-template>
+            </ng-template> 
 
             <!-- Conversation -->
-            <ng-container *ngIf="tickets && tickets.length > 0">
+            <ng-container >
                 <div
                     class="flex-auto border-l"
                     [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': selectedTicket && selectedTicket.ticketId,

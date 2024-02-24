@@ -61,22 +61,36 @@ export class ChatsComponent implements OnInit, OnDestroy
     setDuration(duration: string,value:number): void {
       this.chatFilter.showdays=duration;
       this.chatFilter.days=value;
+
+      this._chatService.getTickets(this.chatFilter).subscribe();
      
       }
       setchannel(channel: string): void {
         this.chatFilter.channel=channel;
+        this._chatService.getTickets(this.chatFilter).subscribe();
         }
 
         setIsRead(showisread: string,value:number): void {
             this.chatFilter.showisread=showisread;
             this.chatFilter.isread=value;
+            this._chatService.getTickets(this.chatFilter).subscribe();
             }
 
             setStatus(shwstatus: string,value:number): void {
                 this.chatFilter.showstatus=shwstatus;
                 this.chatFilter.status=value;
+         
+                this._chatService.getTickets(this.chatFilter).subscribe();
                 }
 
+                showfilter(val): void {
+                   if(val==1)
+                    this.chatFilter.isfilter=0;
+                   else
+                   this.chatFilter.isfilter=1;
+                   this._changeDetectorRef.detectChanges();
+                    } 
+                
 
     filterChats(query: string): void
     {
