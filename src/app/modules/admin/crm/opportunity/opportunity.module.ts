@@ -47,6 +47,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { FuseCardModule } from '@fuse/components/card';
+import { MatTableExporterModule } from 'mat-table-exporter';
 import moment from 'moment';
 import { OpportunityActivityComponent } from './opportunity-detail/opportunity-wrapper/opportunity-activity/opportunity-activity.component';
 import { OpportunityOverviewComponent } from './opportunity-detail/opportunity-wrapper/opportunity-overview/opportunity-overview.component';
@@ -116,6 +117,7 @@ import { OpportunityOverviewComponent } from './opportunity-detail/opportunity-w
     MatSelectModule,
     MatSidenavModule,
     MatTableModule,
+    MatTableExporterModule,
     MatTooltipModule,
     QuillModule,
     FuseFindByKeyPipeModule,
