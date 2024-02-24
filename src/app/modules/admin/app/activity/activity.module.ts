@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from 'app/shared/shared.module';
 import { ActivitiesComponent } from './activities.component';
 import { activitiesRoutes } from './activities.routing';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { activitiesRoutes } from './activities.routing';
     ],
     imports     : [
         RouterModule.forChild(activitiesRoutes),
+        FuseScrollbarModule,
         MatIconModule,
         SharedModule
     ]

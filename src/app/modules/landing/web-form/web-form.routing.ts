@@ -6,7 +6,7 @@ export const webFormRoutes: Routes = [
       path: 'web',
       component: WebFormComponent,
       data: {
-        queryParams: { param1: 'tenantId', param2: 'formId' }
+        queryParams: { param1: 'key', param2: 'formkey' }
       }
     }
 ]

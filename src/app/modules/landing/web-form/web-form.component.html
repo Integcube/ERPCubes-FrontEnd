@@ -1,6 +1,6 @@
 <div class="flex flex-col flex-auto md:w-160 md:min-w-160">
     <ng-container *ngIf="fieldArray">
-        <div class="flex flex-col flex-grow bg-gray-300">
+        <div class="flex flex-col flex-grow bg-white">
 
             <form class="m-6" #customForm="ngForm">
                 <ng-container *ngFor="let field of fieldArray; let i = index">
@@ -24,11 +24,13 @@
                     <div *ngIf="field.fieldType == 3">
                         <mat-form-field class="fuse-mat-dense w-full " [class]="field.css">
                             <mat-label>{{field.fieldLabel}}</mat-label>
-                            <input matInput type="number"
+                            <input matInput
                             [(ngModel)]="field.result" 
                             [id]="field.fieldLabel" [name]="field.fieldLabel"
                             [spellcheck]="false"
-                            [ngStyle]="applyCustomStyles(field)">
+                            [ngStyle]="applyCustomStyles(field)"
+                            [required]="field.isFixed"
+                            (keydown)="validateNumberInput($event)">
                         </mat-form-field>
                     </div>
                     <div *ngIf="field.fieldType == 4">

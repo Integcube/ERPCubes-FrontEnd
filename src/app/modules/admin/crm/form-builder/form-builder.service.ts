@@ -114,7 +114,7 @@ export class FormBuilderService {
         
         let data = {
             id: this.user.id,
-            tenantId: this.user.tenantId,
+            tenantGuid: this.user.tenantGuid,
             formId: formId
         }
         return this._httpClient.post<FormField[]>(this.getAllFormFieldsURL, data)

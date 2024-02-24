@@ -30,18 +30,21 @@ export class WebFormComponent implements OnInit {
   
   ngOnInit(): void {
     this._activatedRoute.queryParams.subscribe(params => {
-      this.param1 = params['tenantId'];
-      this.param2 = params['formId'];
+      this.param1 = params['key'];
+      this.param2 = params['formkey'];
     });
+    debugger;
     this._webFormService.getFormFields(this.param1, this.param2)
     .subscribe(fields => {
+      debugger;
       this.fieldArray = fields.map(field => ({ ...field, result: null }));
+
     })
-    this._webFormService.getForms(this.param1)
-    .subscribe(forms => {
-      this.formArray = forms
-      this.form = forms.find(form => form.formId === +this.param2)
-    })
+    // this._webFormService.getForms(this.param1)
+    // .subscribe(forms => {
+    //   this.formArray = forms
+    //   this.form = forms.find(form => form.formId === +this.param2)
+    // })
 
   }
 
@@ -95,9 +98,28 @@ export class WebFormComponent implements OnInit {
       field.result = event.value.toString();
     }
   }
-
+  validateNumberInput(event: KeyboardEvent) {
+    // Allow: backspace, delete, tab, escape, enter, and .
+    if ([46, 8, 9, 27, 13, 110, 190].indexOf(event.keyCode) !== -1 ||
+        // Allow: Ctrl+A
+        (event.keyCode === 65 && (event.ctrlKey || event.metaKey)) ||
+        // Allow: Ctrl+C
+        (event.keyCode === 67 && (event.ctrlKey || event.metaKey)) ||
+        // Allow: Ctrl+X
+        (event.keyCode === 88 && (event.ctrlKey || event.metaKey)) ||
+        // Allow: home, end, left, right
+        (event.keyCode >= 35 && event.keyCode <= 39)) {
+        // let it happen, don't do anything
+        return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) &&
+        (event.keyCode < 96 || event.keyCode > 105)) {
+        event.preventDefault();
+    }
+}
   allFormFieldsSaved() {
-    this._webFormService.saveFormResults(this.fieldArray).subscribe(
+    this._webFormService.saveFormResults(this.fieldArray, this.param1).subscribe(
       () => {
         this.saveSuccess = true;
         setTimeout(() => { this.saveSuccess = false; }, 1000); // 1000 milliseconds = 1 second

@@ -37,7 +37,7 @@ export class FormBuilderListComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   formList:Form[]=[];
   forms$: Observable<Form[]>
-  param01: number
+  param01: string
   param02: number
   isHovered: boolean[] = []
   ngOnInit(): void {
@@ -68,9 +68,9 @@ export class FormBuilderListComponent implements OnInit {
     })
   }
   linkForm(form:Form) {
-    this.param01 = this.user.tenantId
+    this.param01 = this.user.tenantGuid
     this.param02 = form.formId
-    const formLink: string = `<iframe src="${window.location.origin}/web-form/web?tenantId=${this.param01}&formId=${this.param02}" style="border: none; height:auto; width:auto" title="Custom Form: '${form.name}'"></iframe>`;
+    const formLink: string = `<iframe src="${window.location.origin}/web-form/web?key=${this.param01}&formkey=${this.param02}" style="border: none; height:auto; width:auto" title="Custom Form: '${form.name}'"></iframe>`;
     this.copyToClipboard(formLink);
     this.openSnackBar('Form Link has been copied to Clipboard')
   }

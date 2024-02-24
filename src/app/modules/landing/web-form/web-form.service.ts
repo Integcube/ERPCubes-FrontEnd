@@ -65,10 +65,10 @@ export class WebFormService {
 
   getFormFields(queryParam01: any, queryParam02: any) {
     let data = {
-      //id: this.user.id,
-      tenantId: +queryParam01,
+      tenantGuid: queryParam01,
       formId: +queryParam02
     }
+    debugger;
     return this._httpClient.post<FormField[]>(this.getFormFieldsURL, data)
     .pipe(
       tap((fields) => {
@@ -78,12 +78,13 @@ export class WebFormService {
     )
   }
 
-  saveFormResults(result: FormField[]) {
+  saveFormResults(result: FormField[], queryParam01: any) {
     let data = {
       //id: this.user.id,
-      tenantId: 1,
+      tenantGuid: queryParam01,
       formResult: [...result]
     }
+    debugger;
     console.log('Form Fields Save Request: Service', data)
     return this._httpClient.post<any[]>(this.saveFormResultURL, data)
     .pipe( 
