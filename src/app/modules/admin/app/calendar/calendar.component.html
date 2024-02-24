@@ -40,19 +40,20 @@
   </div>
 
   <!-- Main -->
-  <div class="flex-auto p-6 sm:p-6 " fuseScrollbar  >
+  <div class="flex-auto p-6 sm:p-6" fuseScrollbar>
     <full-calendar *ngIf="calendarVisible" [options]="calendarOptions">
       <ng-template #eventContent let-arg>
-          <b>{{ arg.event.start | date: 'h:mm a' }}</b>
-          <span class="time-title-separator">&nbsp;</span>
-          <i>{{ arg.event.title }}</i>
-          <span class="name-separator">&nbsp;</span>
-          <span>({{ arg.event.extendedProps.firstName }} {{ arg.event.extendedProps.lastName }})</span>
+        <b>{{ arg.event.start | date: 'h:mm a' }}</b>
+        <span class="time-title-separator">&nbsp;</span>
+        <i>{{ arg.event.title }}</i>
+        <span class="name-separator" *ngIf="arg.event.extendedProps.firstName || arg.event.extendedProps.lastName">&nbsp;</span>
+        <span *ngIf="arg.event.extendedProps.firstName || arg.event.extendedProps.lastName">
+          ({{ arg.event.extendedProps.firstName }} {{ arg.event.extendedProps.lastName }})
+        </span>
       </ng-template>
-  </full-calendar>
-  
-  
+    </full-calendar>
   </div>
+  
 
 </div>
 

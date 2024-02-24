@@ -107,6 +107,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     info.el.style.borderColor = eventColor;
     info.el.style.backgroundColor = eventColor;
   }
+  
+  
   currentEvents: EventApi[] = [];
   constructor(private _calendarService: CalendarService, 
     private _matDialog: MatDialog,
