@@ -70,6 +70,7 @@ export class ChatFilter {
     isread: number;
     status:number;
     showstatus:string;
+    isfilter:number;
     constructor(reg) {
         this.showdays = reg.showdays ? reg.showdays : "15 Days";
         this.showisread= reg.showisread ? reg.showisread : "Both";
@@ -78,6 +79,6 @@ export class ChatFilter {
         this.channel = reg.channel ? reg.channel : "All channel";
         this.isread = reg.isread ? reg.isread : -1;
         this.status = reg.status ? reg.status : -1;
-
+        this.isfilter = reg.isfilter ? reg.isfilter : 0;
     }
 }
