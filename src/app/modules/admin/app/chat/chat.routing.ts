@@ -10,7 +10,7 @@ export const chatRoutes: Route[] = [
         path: '',
         component: ChatComponent,
         resolve: {
-            tickets: TicketsResolver,
+            // tickets: TicketsResolver,
             users: UsersResolver,
             types:TicketTypeResolver,
             priority:TicketPriorityResolver,

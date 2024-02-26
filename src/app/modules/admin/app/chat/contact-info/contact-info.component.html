@@ -13,18 +13,18 @@
         <div class="flex flex-col my-5">
             <div class="flex items-center mb-5">
                 <div class="relative flex flex-0 items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
-                        <mat-icon svgIcon="heroicons_outline:user-circle" class="icon-size-5"></mat-icon>
+                    <mat-icon svgIcon="heroicons_outline:user-circle" class="icon-size-5"></mat-icon>
                 </div>
                 <div class="ml-2 text-lg font-medium leading-5 truncate" i18n>Client#{{ticket?.customerId}}</div>
             </div>
             <div class="flex flex-col gap-3">
                 <div class="flex text-base gap-2 w-full">
                     <span class="font-medium text-gray-600 w-20" i18n>Platform:</span>
-                    <span>{{ticket?.socialMediaPlatform}}</span>
+                    <span>{{ticket.socialMediaPlatform}}</span>
                 </div>
                 <div class="flex text-base gap-2 w-full">
                     <span class="font-medium text-gray-600 w-20" i18n>Local time:</span>
-                    <span>{{ticket?.timestamp|date}}</span>
+                    <span>{{ticket.timestamp|date}}</span>
                 </div>
                 <div class="flex text-base gap-2 w-full">
                     <span class="font-medium text-gray-600 w-20" i18n>Language:</span>
@@ -33,42 +33,35 @@
             </div>
         </div>
         <div class="py-5 border-t">
-            <form class="flex flex-col" #FormName = "ngForm">
-                <mat-form-field
-                class="fuse-mat-dense">
-                <mat-label i18n>Assignee</mat-label>
-                <mat-select [(ngModel)]="ticket.assigneeId" name="assignee">
-                    <mat-option [value]="-1">-</mat-option>
-                    <mat-option *ngFor="let user of users$|async" [value]="user.id">{{user.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field
-            class="fuse-mat-dense">
-            <mat-label i18n>Type</mat-label>
-            <mat-select [(ngModel)]="ticket.type" name="type">
-                <mat-option [value]=-1>-</mat-option>
-                <mat-option *ngFor="let type of types$|async" [value]="type.ticketTypeId">{{type.typeName}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field
-        class="fuse-mat-dense">
-        <mat-label i18n>Priority</mat-label>
-        <mat-select [(ngModel)]="ticket.priority" name="priority">
-            <mat-option [value]=-1>-</mat-option>
-            <mat-option *ngFor="let priority of priorities$|async" [value]="priority.ticketPriorityId">{{priority.priorityName}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field
-    class="fuse-mat-dense">
-    <mat-label>Notes</mat-label>
-    <textarea
-    name="notes"
-    #notes
-    [(ngModel)]="ticket.notes"
-    matInput
-    [rows]="3"
-    matTextareaAutosize></textarea>
-</mat-form-field>
+            <form class="flex flex-col" #FormName="ngForm">
+                <mat-form-field class="fuse-mat-dense">
+                    <mat-label i18n>Assignee</mat-label>
+                    <mat-select [(ngModel)]="ticket.assigneeId" name="assignee">
+                        <mat-option [value]="-1">-</mat-option>
+                        <mat-option *ngFor="let user of users$|async" [value]="user.id">{{user.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-dense">
+                    <mat-label i18n>Type</mat-label>
+                    <mat-select [(ngModel)]="ticket.type" name="type">
+                        <mat-option [value]=-1>-</mat-option>
+                        <mat-option *ngFor="let type of types$|async"
+                            [value]="type.ticketTypeId">{{type.typeName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-dense">
+                    <mat-label i18n>Priority</mat-label>
+                    <mat-select [(ngModel)]="ticket.priority" name="priority">
+                        <mat-option [value]=-1>-</mat-option>
+                        <mat-option *ngFor="let priority of priorities$|async"
+                            [value]="priority.ticketPriorityId">{{priority.priorityName}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="fuse-mat-dense">
+                    <mat-label>Notes</mat-label>
+                    <textarea name="notes" #notes [(ngModel)]="ticket.notes" matInput [rows]="3"
+                        matTextareaAutosize></textarea>
+                </mat-form-field>
             </form>
         </div>
     </div>
@@ -83,11 +76,12 @@
                 [matMenuTriggerFor]="dropdownMenu">
                 <mat-icon class="icon-size-3" [svgIcon]="'heroicons_outline:chevron-down'"></mat-icon>
                 <mat-menu #dropdownMenu="matMenu">
-                    <button mat-menu-item *ngFor="let status of statuses$|async" (click)="submit(status.ticketStatusId)">
-                        <span [ngClass]="status.class"></span><span>{{status.statusName}}</span> 
+                    <button mat-menu-item *ngFor="let status of statuses$|async"
+                        (click)="submit(status.ticketStatusId)">
+                        <span [ngClass]="status.class"></span><span>{{status.statusName}}</span>
                     </button>
                 </mat-menu>
             </button>
         </div>
     </div>
-</div> 
+</div>

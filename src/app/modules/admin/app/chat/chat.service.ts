@@ -6,7 +6,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { ChatFilter, Conversation, Ticket, TicketInfo, TicketPriority, TicketStatus, TicketType } from './chat.types';
 import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -97,7 +97,6 @@ export class ChatService {
 
     }
     get ticket$(): Observable<Ticket> {
-        debugger
         return this._ticket.asObservable();
     }
     get tickets$(): Observable<Ticket[]> {
@@ -121,6 +120,13 @@ export class ChatService {
         return this._httpClient.post<Ticket[]>(this.getTicketsUrl, data).pipe(
             tap((tickets) => {
                 this._tickets.next(tickets);
+                if(tickets.length>0){
+                    this._ticket.next(tickets[0]);
+                    this._router.navigate(['/app/chat', tickets[0].ticketId])
+                }
+                else{
+                    this._router.navigate(['/app/chat']);
+                }
             }),
         )
     }
@@ -145,7 +151,7 @@ export class ChatService {
         return this._httpClient.post<Conversation[]>(this.setReadStatusUrl, data).pipe(
             tap((data) => {
                 const currentTickets = this._tickets.getValue();
-                let index = currentTickets.findIndex(a => a.ticketId == ticketId);
+                let index = currentTickets.findIndex(a => a?.ticketId == ticketId);
                 currentTickets[index].latestConversation.readStatus = status;
                 this._tickets.next(currentTickets);
             }),
@@ -160,7 +166,7 @@ export class ChatService {
         }
         this.tickets$.pipe(
             map((tickets) => {
-                const ticket = tickets.find(item => item.ticketId === id) || null;
+                const ticket = tickets.find(item => item?.ticketId === id) || null;
                 this._ticket.next(ticket);
             })
         ).subscribe();

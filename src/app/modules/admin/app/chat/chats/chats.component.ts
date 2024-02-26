@@ -30,6 +30,7 @@ export class ChatsComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef
     )
     {
+        this._chatService.getTickets(this.chatFilter).subscribe()
     }
 
     ngOnInit(): void {

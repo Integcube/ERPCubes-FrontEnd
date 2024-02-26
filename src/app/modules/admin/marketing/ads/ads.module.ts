@@ -103,7 +103,7 @@ import { DemoDialogComponent } from './demo-dialog/demo-dialog-account.component
           },
           {
             id: CustomFacebookLoginProvider.PROVIDER_ID,
-            provider: new CustomFacebookLoginProvider('1141140310220884')
+            provider: new CustomFacebookLoginProvider('366268216208954')
           }
         ],
         onError: (err) => {

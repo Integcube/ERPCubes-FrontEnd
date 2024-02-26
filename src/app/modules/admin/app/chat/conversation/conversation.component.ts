@@ -3,7 +3,6 @@ import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ChatService } from '../chat.service';
 import { Conversation, Ticket } from '../chat.types';
-import { AlertService } from 'app/core/alert/alert.service';
 
 
 @Component({
