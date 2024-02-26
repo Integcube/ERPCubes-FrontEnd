@@ -71,21 +71,21 @@ export class LeadMonthlyComponent {
   products$ = this._leadMonthlyService.products$
   leadSources$ = this._leadMonthlyService.leadSources$;
   reports$ = this._leadMonthlyService.leadMonthly$;
-  monthly$ = this.reports$.pipe(
-    map((reports) => reports.map((r) => ({ ...r } as LeadMonthly))),
-    map((reports) => this.generateEmptyMonths(reports))
-  );
+  // monthly$ = this.reports$.pipe(
+  //   map((reports) => reports.map((r) => ({ ...r } as LeadMonthly))),
+  //   map((reports) => this.generateEmptyMonths(reports))
+  // );
 
   ngOnInit(): void {
-    this.monthly$.subscribe((report) => {
-      const emptyMonths = this.generateEmptyMonths(report);
-      const sumOfTotalLeads = report.reduce((sum, monthly) => sum + (monthly.totalLeads || 0), 0);
-      this.leadMonthlyCount = sumOfTotalLeads;
+    // this.monthly$.subscribe((report) => {
+    //   const emptyMonths = this.generateEmptyMonths(report);
+    //   const sumOfTotalLeads = report.reduce((sum, monthly) => sum + (monthly.totalLeads || 0), 0);
+    //   this.leadMonthlyCount = sumOfTotalLeads;
   
       
-      this.dataSource = new MatTableDataSource(report? report : emptyMonths);
-      this._changeDetectorRef.markForCheck();
-    });
+    //   this.dataSource = new MatTableDataSource(report? report : emptyMonths);
+    //   this._changeDetectorRef.markForCheck();
+    // });
     this.leadStatusTypes = this.getUniqueLeadStatusTypes();
   }
 
