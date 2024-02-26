@@ -10,7 +10,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
     selector: 'activity',
     templateUrl: './activities.component.html',
-    encapsulation: ViewEncapsulation.None,
+    styleUrls:['./activities.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivitiesComponent implements OnInit {
