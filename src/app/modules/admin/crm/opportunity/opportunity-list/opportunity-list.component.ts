@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { User } from 'app/core/user/user.types';
 import { ViewDetailComponent } from '../opportunity-detail/view/view-detail/view-detail.component';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-opportunity-list',
@@ -26,6 +27,7 @@ export class OpportunityListComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('exporter') public exporter;
   @ViewChild('usersPanel') private _usersPanel: TemplateRef<any>;
   @ViewChild('usersPanelOrigin') private _usersPanelOrigin: ElementRef;
   @ViewChild('createdDatePanel') private _createdDatePanel: TemplateRef<any>;
@@ -38,6 +40,7 @@ export class OpportunityListComponent implements OnInit {
   drawerMode: 'side' | 'over';
   dataSource: MatTableDataSource<Opportunity>;
   displayedColumns: string[] = ['select', 'name', 'email', 'phone', 'status', 'createdDate'];
+  isTable: boolean = true;
   selection = new SelectionModel<Opportunity>(true, []);
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   
@@ -70,6 +73,9 @@ export class OpportunityListComponent implements OnInit {
   users: User[]
   filteredStatus: OpportunityStatus[]
   status: OpportunityStatus[]
+  activeItem = new OpportunityCustomList({});
+  activeItemforAll = null;
+
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -80,8 +86,10 @@ export class OpportunityListComponent implements OnInit {
     private _renderer2: Renderer2,
     private _matDialog: MatDialog,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
-  ) { }
+    private _viewContainerRef: ViewContainerRef,
+    private dialog: MatDialog) 
+  { }
+
   ngOnInit(): void {
     this.dateRangesFilter=[...this.dateRanges];
     let selectedList = new OpportunityCustomList({});
@@ -146,20 +154,25 @@ export class OpportunityListComponent implements OnInit {
         this.createOpportunity();
       });
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   onMouseEnter(row: Opportunity) {
     row.isHovered = true;
   }
+
   onMouseLeave(row: Opportunity) {
     row.isHovered = false;
   }
+
   getOpportunity(list: OpportunityCustomList, name: string): void {
     if (list === null) {
       list = new OpportunityCustomList({});
@@ -169,24 +182,29 @@ export class OpportunityListComponent implements OnInit {
     this._opportunityService.setCustomList(list);
     this._opportunityService.setFilter(list.filterParsed);
   }
+
   createOpportunity() {
     let newOpportunity: Opportunity = new Opportunity({});
     this._opportunityService.selectedOpportunity(newOpportunity);
     this._router.navigate(['./', newOpportunity.opportunityId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
+
   previewOpportunity(selectedOpportunity: Opportunity) {
     this._opportunityService.selectedOpportunity(selectedOpportunity);
     this._router.navigate(['./', selectedOpportunity.opportunityId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
+
   updateOpportunity(row: Opportunity) {
     this._router.navigate(['detail-view', row.opportunityId], { relativeTo: this._activatedRoute });
   }
+
   onBackdropClicked(): void {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
+
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
@@ -194,17 +212,20 @@ export class OpportunityListComponent implements OnInit {
     }
     this.selection.select(...this.dataSource.data);
   }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
+
   checkboxLabel(row?: Opportunity): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.opportunityId + 1}`;
   }
+
   openModifiedDatePanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -242,6 +263,7 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
   openUsersPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -279,6 +301,7 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
   openOpportunityStatusPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -316,6 +339,7 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
   filterCreatedDate(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -329,6 +353,7 @@ export class OpportunityListComponent implements OnInit {
         );
       });
   }
+
   openCreatedDatePanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -366,6 +391,7 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
   addView() {
     let view = new OpportunityCustomList({});
     this._matDialog.open(ViewDetailComponent, {
@@ -375,6 +401,7 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
   updateView(view: OpportunityCustomList): void {
     this._matDialog.open(ViewDetailComponent, {
       autoFocus: false,
@@ -383,6 +410,11 @@ export class OpportunityListComponent implements OnInit {
       }
     });
   }
+
+  setView() {
+    this.isTable = !this.isTable
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -390,6 +422,7 @@ export class OpportunityListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
   cancelFilters(filterId: number): void {
     if (filterId == 1) {
       this.filter.opportunityOwner = [];
@@ -405,9 +438,11 @@ export class OpportunityListComponent implements OnInit {
     }
     this._opportunityService.setFilter(this.filter);
   }
+
   saveFilter(list: OpportunityCustomList): any {
     this._opportunityService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe();
   }
+
   filterUsers(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -421,6 +456,7 @@ export class OpportunityListComponent implements OnInit {
         );
       });
   }
+
   filterOpportunityStatus(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -434,6 +470,7 @@ export class OpportunityListComponent implements OnInit {
         );
       });
   }
+
   toggleOpportunityOwner(id: string): void {
     const opportunityOwnerIndex = this.filter.opportunityOwner.findIndex(userId => userId === id);
     if (opportunityOwnerIndex === -1) {
@@ -443,6 +480,7 @@ export class OpportunityListComponent implements OnInit {
     }
     this._opportunityService.setFilter(this.filter);
   }
+
   toggleOpportunityStatus(opportunityId: number): void {
     const opportunityOwnerIndex = this.filter.opportunityStatus.findIndex(a => a === opportunityId);
     if (opportunityOwnerIndex === -1) {
@@ -452,6 +490,7 @@ export class OpportunityListComponent implements OnInit {
     }
     this._opportunityService.setFilter(this.filter);
   }
+
   onDateRangeChange(selectedValue: string, type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -492,7 +531,36 @@ export class OpportunityListComponent implements OnInit {
     this._opportunityService.setFilter(this.filter);
     this._usersPanelOverlayRef.detach();
   }
+
   trackByFn(index: number, item: any): any {
     return item.id || index;
+  }
+
+  isActiveItem(item: OpportunityCustomList): boolean {
+    if (item == null) {
+      item = new OpportunityCustomList({});
+      item.listTitle = "All Opportunities";
+
+    }
+    return this.activeItem === item;
+  }
+
+  openTrashDialog() {
+    const restoreDialogRef = this.dialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+
+        autoFocus: false,
+        data: {
+          type: "LEAD",
+        }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._opportunityService.getOpportunity().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
   }
 }

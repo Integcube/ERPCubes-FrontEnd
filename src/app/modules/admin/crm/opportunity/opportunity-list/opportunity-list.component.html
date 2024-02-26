@@ -4,66 +4,131 @@
             [disableClose]="false" #matDrawer>
             <router-outlet></router-outlet>
         </mat-drawer>
-        <mat-drawer-content class="flex flex-col">
-            <div class="flex-auto">
-                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between pt-1 pb-5 px-6 md:px-8">
-                    <div>
-                        <div class="text-3xl font-bold tracking-tight leading-none">Opportunities</div>
-                        <div class="mt-1 font-medium text-secondary">
-                            <ng-container *ngIf="opportunityListCount > 0">
-                                {{opportunityListCount}}
-                            </ng-container>
-                            {{opportunityListCount | i18nPlural: {
-                            '=0' : 'No Opportunities',
-                            '=1' : 'One Opportunity',
-                            'other': 'Opportunities'
-                            } }}
-                        </div>
+        <mat-drawer-content class="flex grow flex-col md:overflow-hidden lg:overflow-hidden h-screen" fuseScrollbar>
+
+            <div class="flex  sm:flex-row  items-end   sm:items-end sm:justify-between py-3 px-6 md:px-8 mb-2 shadow">
+
+                <div>
+                    <div class="text-3xl font-bold tracking-tight leading-none">Opportunities</div>
+                    <div class="ml-o.5 font-medium text-secondary">
+                        <ng-container *ngIf="opportunityListCount > 0">
+                            {{opportunityListCount}}
+                        </ng-container>
+                        {{opportunityListCount | i18nPlural: {
+                        '=0' : 'No Opportunities',
+                        '=1' : 'One Opportunity',
+                        'other': 'Opportunities'
+                        } }}
                     </div>
-                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
-                        <div class="flex-auto">
-                            <mat-form-field
-                                class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
-                                <mat-icon class="icon-size-5" matPrefix svgIcon="heroicons_solid:search"></mat-icon>
-                                <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
-                                    [autocomplete]="'off'" [placeholder]="'Search Opportunities'">
-                            </mat-form-field>
-                        </div>
-                        <button class="ml-4 h-9" mat-flat-button [color]="'primary'" (click)="createOpportunity()">
-                            <span class="ml-1 mr-1">Create Opportunity</span>
+                </div>
+                <div class="sm:mt-0">
+
+                    <div class="flex gap-0">
+
+                        <button class="ml-2 h-8 w-20" mat-stroked-button [matTooltip]="'Click Export Excel'"
+                            (click)="exporter.exportTable('xls', { fileName: 'Opportunity-list' })">
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:cloud-arrow-down'"></mat-icon>
+                            <span class="ml-1 mr-1 text-xs" i18n>Export</span>
                         </button>
+
+                        <!--border-r-0 rounded-r-none-->
+                        <!-- <button class="ml-2 h-8 w-20" mat-stroked-button (click)="openConnectorDialog()"  [matTooltip]="'Click to Import'">
+                                <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:cloud-arrow-up'"></mat-icon>
+                                <span class="ml-1 mr-1 text-xs" i18n>Import</span>
+                            </button> -->
+                        <!-- Add Trash button -->
+                        <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
+                            [matTooltip]="'Click to restore Deleted Opportunities'">
+                            <mat-icon class="icon-size-4">delete</mat-icon>
+                            <span class="ml-1 mr-1 text-xs" i18n>Inactive Opportunity</span>
+                        </button>
+                        <button class="ml-4 h-8 primary-2" mat-flat-button (click)="createOpportunity()"
+                            [matTooltip]="'Add New Opportunity '">
+                            <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
+                            <span class="ml-2 text-xs" i18n>Add Opportunity</span>
+                        </button>
+
                     </div>
                 </div>
-                <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6  sm:px-6">
-                    <div class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
-                        matRipple [matMenuTriggerFor]="projectsMenu">
-                        <div class="flex items-center">
-                            <div class="overflow-hidden">
-                                <ng-container *ngIf="customList$|async as customList">
-                                    <div class="font-medium leading-6 truncate">{{customList.listTitle}}</div>
-                                </ng-container>
-                            </div>
-                            <div class="flex items-center justify-center pl-2">
-                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chevron-down'"></mat-icon>
-                            </div>
-                        </div>
-                        <mat-menu #projectsMenu="matMenu" [xPosition]="'before'"
-                            class="max-h-70 overflow-auto overflow-x-hidden">
-                            <ng-container *ngIf="customLists$|async as lists">
-                                <button mat-menu-item (click)="getOpportunity(null, 'All Opportunity')"> All Opportunities </button>
-                                <button *ngFor="let list of lists" (click)="getOpportunity(list, list.listTitle)"
-                                    mat-menu-item>
-                                    {{ list.listTitle }}
-                                </button>
-                                <button mat-menu-item class="text-accent2 border-t-2 font-bold" (click)="addView()">
-                                    Create new view
-                                </button>
-                            </ng-container>
-                        </mat-menu>
-                    </div>
+            </div>
+            <ng-container *ngIf="customLists$ | async as lists">
+                <div class="flex flex-row items-center px-5 ">
+                    <button class="px-2 mr-1 cursor-pointer h-8" [ngClass]="{ 'active': isActiveItem(null) }"
+                        matTooltip="This Filter showing all Leads" (click)="getLeads(null, 'All Leads')" mat-button>
+                        <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:eye'"
+                            *ngIf="isActiveItem(null)"></mat-icon>
+                        <span class="text-sm truncate" i18n>All Leads</span>
+                    </button>
+                    <button class="px-2 mr-1 cursor-pointer h-8" *ngIf="lists.length > 0"
+                        matTooltip="{{lists[0].listTitle}}" [ngClass]="{ 'active': isActiveItem(lists[0]) }"
+                        (click)="getLeads(lists[0], lists[0].listTitle)" mat-button>
+                        <span class="text-sm truncate w-28">{{lists[0].listTitle}}</span>
+                        <mat-icon class="icon-size-4 mr-1 primary-2-Icon" [svgIcon]="'heroicons_solid:dots-vertical'"
+                            *ngIf="isActiveItem(lists[0])"></mat-icon>
+                    </button>
+                    <!-- Buttons for the remaining items (2nd to 4th) -->
+                    <button *ngFor="let list of lists.slice(1, 4)" matTooltip="{{list.listTitle}}"
+                        [ngClass]="{ 'active': isActiveItem(list) }" (click)="getLeads(list, list.listTitle)"
+                        class="px-2 mr-1 hidden sm:inline-flex h-8" mat-button>
+
+                        <span class="text-sm truncate w-28">{{list.listTitle}}</span>
+                        <mat-icon class="icon-size-4 mr-1 primary-2-Icon" [svgIcon]="'heroicons_solid:dots-vertical'"
+                            *ngIf="isActiveItem(list)"></mat-icon>
+                    </button>
+                    <!-- Menu button if there are more than 4 items -->
+                    <button *ngIf="lists.length > 4" matTooltip="See More" class="px-2 cursor-pointer h-8" mat-button
+                        [matMenuTriggerFor]="postCardMenu01">
+                        <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:dots-horizontal'"></mat-icon>
+                        <span class="text-sm" i18n>More</span>
+                    </button>
+
+                    <!-- Menu for the remaining items in the list -->
+                    <mat-menu #postCardMenu01="matMenu">
+                        <button class="sm:hidden " *ngFor="let list of lists.slice(1, 4)"
+                            (click)="getLeads(list, list.listTitle)" [ngClass]="{ 'active': isActiveItem(list) }"
+                            mat-menu-item>
+                            <span class="flex items-center">
+
+                                <span class="text-sm truncate w-28">{{lists[1].listTitle}}</span>
+                                <mat-icon class="icon-size-4 mr-1" [svgIcon]="'heroicons_solid:dots-vertical'"
+                                    *ngIf="isActiveItem(list)"></mat-icon>
+                            </span>
+                        </button>
+                        <button *ngFor="let list of lists.slice(4); let i = index"
+                            (click)="getLeads(list, list.listTitle)" [ngClass]="{ 'active': isActiveItem(list) }"
+                            mat-menu-item>
+                            <span class="flex items-center">
+                                <span class="text-sm truncate w-28">{{list.listTitle}}</span>
+                                <mat-icon class="icon-size-4 mr-1" [svgIcon]="'heroicons_solid:dots-vertical'"
+                                    *ngIf="isActiveItem(list)"></mat-icon>
+                            </span>
+                        </button>
+                    </mat-menu>
+
+                    <!-- Create View button -->
+                    <button class="px-2 h-8" mat-button (click)="addView()">
+                        <mat-icon class="icon-size-5 mr-1" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                        <span class="text-sm underline" style="color:#E85038 !important" i18n>Create View</span>
+                    </button>
                 </div>
-                <div class="flex-auto pt-1 bg-default min-h-3/4 pb-5">
-                    <div class="flex flex-row justify-end w-full px-10 mb-2 gap-5">
+            </ng-container>
+            <div class="flex-grow  bg-default  justify-between overflow-hidden">
+
+                <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-1 shadow mb-2">
+                    <div class="flex px-6  gap-2">
+                        <button class="h-7 primary-2" mat-flat-button (click)="setView()">
+                            <mat-icon class="text-xs" svgIcon="mat_outline:backup_table"></mat-icon>
+                            <span class="ml-2 text-xs" *ngIf="!isTable" i18n>Table</span>
+                            <span class="ml-2  text-xs" *ngIf="isTable" i18n>Status</span>
+                        </button>
+                        <!-- <button class="ml-4" mat-stroked-button class="h-8" (click)="createLead()" *ngIf="isTable">
+                                    <mat-icon svgIcon="mat_outline:layers"></mat-icon>
+                                    <span class="ml-2 mr-1">Bulk Actions</span>
+                                </button> -->
+                    </div>
+
+                    <div
+                        class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                         <div class="flex flex-row gap-2">
                             <!-- Owner -->
                             <div class="flex gap-1 items-center p-2 rounded"
@@ -74,10 +139,10 @@
                                     [ngClass]="filter.opportunityOwner.length ? 'text-white' : 'text-primary'">
                                     {{"("+filter.opportunityOwner.length+")"}}
                                 </span>
-                                <span class="text-base  font-bold hover:underline cursor-pointer" #usersPanelOrigin
+                                <span class="text-xs font-bold hover:underline cursor-pointer" #usersPanelOrigin
                                     (click)="openUsersPanel()"
                                     [ngClass]="filter.opportunityOwner.length ? 'text-white' : 'text-primary'">
-                                    Contact owner
+                                    Opportunity Owner
                                 </span>
                                 <ng-template #usersPanel>
                                     <div class="w-60 rounded border shadow-md bg-card">
@@ -92,7 +157,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex flex-col max-h-64 py-2 border-t overflow-y-auto">
+                                        <div class="flex flex-col max-h-64 py-2 border-t text-sm" fuseScrollbar>
                                             <ng-container *ngFor="let user of filteredUsers; trackBy: trackByFn">
                                                 <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
                                                     (click)="toggleOpportunityOwner(user.id)" matRipple>
@@ -108,7 +173,8 @@
                                     </div>
                                 </ng-template>
                                 <mat-icon [ngClass]="filter.opportunityOwner.length ? 'text-white' : 'text-primary'"
-                                    svgIcon="heroicons_outline:chevron-down"></mat-icon>
+                                    svgIcon="heroicons_outline:filter"class=" hover:underline cursor-pointer"
+                                    (click)="openUsersPanel()" [matTooltip]="'Filter by Contact Owner'"></mat-icon>
                                 <mat-icon *ngIf="filter.opportunityOwner.length" matTooltip="remove"
                                     class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
                                     (click)="cancelFilters(1)"></mat-icon>
@@ -202,8 +268,8 @@
                                     [ngClass]="filter.opportunityStatus.length ? 'text-white' : 'text-primary'">
                                     {{"("+filter.opportunityStatus.length+")"}}
                                 </span>
-                                <span class="text-base  font-bold hover:underline cursor-pointer" #opportunityStatusPanelOrigin
-                                    (click)="openOpportunityStatusPanel()"
+                                <span class="text-base  font-bold hover:underline cursor-pointer"
+                                    #opportunityStatusPanelOrigin (click)="openOpportunityStatusPanel()"
                                     [ngClass]="filter.opportunityStatus.length ? 'text-white' : 'text-primary'">
                                     Opportunity Status
                                 </span>
@@ -215,7 +281,8 @@
                                                     [svgIcon]="'heroicons_solid:search'"></mat-icon>
                                                 <div class="ml-2">
                                                     <input class="w-full min-w-0 py-1 border-0" type="text"
-                                                        placeholder="Enter user name" (input)="filterOpportunityStatus($event)"
+                                                        placeholder="Enter user name"
+                                                        (input)="filterOpportunityStatus($event)"
                                                         (keypress)="filterOpportunityStatus($event)" [maxLength]="30"
                                                         #newTagInput>
                                                 </div>
@@ -254,39 +321,74 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div class="flex flex-col flex-auto bg-card shadow rounded-2xl mx-6 overflow-hidden">
+                </div>
+
+                <ng-container *ngIf="isTable">
+                    <div class="flex flex-col flex-auto bg-card shadow  mx-6 pb-4 border-t h-4/5" fuseScrollbar>
+                        <div class="flex  flex-wrap justify-between px-2 py-2">
+                            <div class="flex-auto self-center">
+                                <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript w-1/2 h-10">
+                                    <mat-icon class="icon-size-5" matPrefix
+                                        [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                                    <input matInput (keyup)="applyFilter($event)" [formControl]="searchInputControl"
+                                        [autocomplete]="'off'" [placeholder]="'Search Opportunities'">
+                                </mat-form-field>
+                            </div>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 100]"
+                                aria-label="Select page of users"></mat-paginator>
+                        </div>
+
                         <ng-container *ngIf="opportunityList$ | async as opportunities">
                             <ng-container *ngIf="opportunities.length; else noOpportunities">
-                                <div class="flex-auto  py-1 bg-card overflow-x-auto">
-                                    <table mat-table [dataSource]="dataSource" matSort>
-                                        <ng-container matColumnDef="select">
-                                            <th mat-header-cell *matHeaderCellDef>
+                                <div class="flex-auto bg-card h-4/5" fuseScrollbar>
+
+                                    <table mat-table [dataSource]="dataSource" matSort matTableExporter
+                                        #exporter="matTableExporter">
+                                        <ng-container matColumnDef="select" class="shadow-sm">
+                                            <th mat-header-cell *matHeaderCellDef class="min-w-1 w-18">
                                                 <mat-checkbox (change)="$event ? toggleAllRows() : null"
                                                     [checked]="selection.hasValue() && isAllSelected()" color="accent"
                                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                                     [aria-label]="checkboxLabel()">
-                                                </mat-checkbox>
+                                                </mat-checkbox> No.
                                             </th>
-                                            <td mat-cell *matCellDef="let row" class="w-10">
+                                            <td mat-cell *matCellDef="let row let i = index" class="min-w-1 w-18">
                                                 <mat-checkbox (click)="$event.stopPropagation()"
                                                     (change)="$event ? selection.toggle(row) : null" color="accent"
-                                                    [checked]="selection.isSelected(row)"
+                                                    [checked]="selection.isSelected(row)" 
                                                     [aria-label]="checkboxLabel(row)">
-                                                </mat-checkbox>
+                                                </mat-checkbox> {{ i + 1}}
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="name">
-                                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;">
+                                            <th mat-header-cell *matHeaderCellDef mat-sort-header 
+                                                class="w-80 min-w-80 max-w-80" i18n>
                                                 Name </th>
                                             <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"
-                                                class="group relative overflow-hidden" (mouseenter)="onMouseEnter(row)"
-                                                (mouseleave)="onMouseLeave(row)" style="width: 15rem;">
+                                                class="group w-60 min-w-60 max-w-60 relative overflow-hidden"
+                                                (mouseenter)="onMouseEnter(row)" (mouseleave)="onMouseLeave(row)">
                                                 <div class="flex items-center justify-between">
-                                                    <span (click)="updateOpportunity(row)" class="hover:text-clip truncate">
-                                                        <u>
-                                                            {{row.firstName + " " + row.lastName | tblimit: row.isHovered}}
-                                                        </u>
-                                                    </span>
+                                                    <div class="flex gap-2">
+                                                        <span
+                                                            class="flex flex-0 items-center justify-center w-6 h-6  rounded-full overflow-hidden">
+                                                            <ng-container *ngIf="row.avatar">
+                                                                <img class="object-cover w-full h-full"
+                                                                    [src]="row.avatar" alt="Contact avatar" />
+                                                            </ng-container>
+                                                            <ng-container *ngIf="!row.avatar">
+                                                                <div
+                                                                    class="flex items-center justify-center w-full h-full rounded-full uppercase font-semibold bg-gray-200 text-gray-600">
+                                                                    {{row.firstName.charAt(0)}}
+                                                                </div>
+                                                            </ng-container>
+                                                        </span>
+                                                        <span (click)="previewLead(row)"
+                                                            class="hover:text-clip truncate self-center items-center justify-center"><u>{{row.firstName
+                                                                + " " +
+                                                                row.lastName | tblimit: row.isHovered}}</u>
+                                                        </span>
+
+                                                    </div>
                                                     <span *ngIf="row.isHovered" class="relative right-0">
                                                         <button mat-stroked-button (click)="previewOpportunity(row)"
                                                             class="h-8">
@@ -296,7 +398,7 @@
                                                 </div>
                                             </td>
                                         </ng-container>
-
+    
                                         <ng-container matColumnDef="createdDate">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
                                             <td mat-cell *matCellDef="let row"> {{row.createdDate | date}} </td>
@@ -320,18 +422,21 @@
                                             <td class="mat-cell" colspan="4">No data matching the filter</td>
                                         </tr>
                                     </table>
-                                    <mat-paginator [pageSizeOptions]="[10, 25, 100]"
-                                        aria-label="Select page"></mat-paginator>
+
                                 </div>
                             </ng-container>
                         </ng-container>
-                        <ng-template #noOpportunity>
+                        <ng-template #noOpportunities>
                             <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
                                 There are no Opportunities!
                             </div>
                         </ng-template>
                     </div>
-                </div>
+                </ng-container>
+
+                <ng-container *ngIf="!isTable">
+                    <app-opportunity-status></app-opportunity-status>
+                </ng-container>
             </div>
         </mat-drawer-content>
     </mat-drawer-container>
