@@ -1,25 +1,20 @@
-<style>
-    .text-sm {
-    font-size: 0.65rem !important;
-}
-</style>
 <div class="flex flex-col w-full">
     <div class="flex items-center mb-2 sm:mt-0 ">
         <div class="flex-auto">
             <search-bar></search-bar>
         </div>
     
-    <div class="flex justify-end mb-1">
-        <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Email'"
-            (click)="addEmail()">
-        
-            <mat-icon
-            class="icon-size-5"
-               [svgIcon]="'heroicons_outline:envelope'"></mat-icon>
-            <span class="hidden sm:inline-block ml-2">New</span>
-        </button>
+        <div class="flex justify-end mb-1">
+            <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Email'"
+                (click)="addEmail()">
+            
+                <mat-icon
+                class="icon-size-5"
+                [svgIcon]="'heroicons_outline:envelope'"></mat-icon>
+                <span class="hidden sm:inline-block ml-2">New</span>
+            </button>
+        </div>
     </div>
-</div>
     <ng-container *ngIf="filteredData$|async as emails; else noEmails">
         <ng-container *ngIf="emails.length else noEmails">
             <ng-container *ngFor="let email of emails">
@@ -79,7 +74,6 @@
                             </a>
                         </ng-container>
                         
-
                     </div>
 
                 </div>
@@ -87,7 +81,7 @@
         </ng-container>
     </ng-container>
 
-    <!-- No Task -->
+    <!-- No Email -->
     <ng-template #noEmails>
         <div class="flex flex-auto flex-col items-center  justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
         

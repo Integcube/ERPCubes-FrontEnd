@@ -97,7 +97,9 @@ export class TaskTabComponent implements OnInit, OnDestroy {
     });
   }
   getTask() {
-    this._leadService.getTasks(this.lead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe((newEntries) => {
+    this._leadService.getTasks(this.lead.leadId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((newEntries) => {
         this._changeDetectorRef.markForCheck();
     });
   }

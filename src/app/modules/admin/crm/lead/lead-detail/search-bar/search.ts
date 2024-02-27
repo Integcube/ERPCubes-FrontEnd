@@ -12,14 +12,14 @@ export class SearchBarComponent implements OnInit {
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   
   constructor(
-    private _opportunityService:LeadService,
+    private _leadService:LeadService,
     private _changeDetectorRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
-    this._opportunityService.updateSearchQuery(null);
+    this._leadService.updateSearchQuery(null);
     this.searchInputControl.valueChanges.subscribe((value) => {
-     this._opportunityService.updateSearchQuery(value);
+     this._leadService.updateSearchQuery(value);
      this._changeDetectorRef.markForCheck();
     });
   }

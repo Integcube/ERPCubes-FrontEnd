@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import moment from 'moment';
 import { Subject, takeUntil } from 'rxjs';
 import { Call, Email, Meeting, Note, StatusLeads, StatusWiseLeads, TaskModel } from '../lead.type';
@@ -17,7 +17,6 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-lead-status',
   templateUrl: './lead-status.component.html',
   styleUrls: ['./lead-status.component.scss'],
-  encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadStatusComponent implements OnInit, OnDestroy {

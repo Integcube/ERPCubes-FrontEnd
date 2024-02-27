@@ -19,8 +19,8 @@ export class ViewDetailComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) private _data: { view: LeadCustomList },
     private _leadService: LeadService,
     private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<ViewDetailComponent>
-  ) { }
+    private _matDialogRef: MatDialogRef<ViewDetailComponent>) 
+  { }
 
 
   ngOnInit(): void {
@@ -30,20 +30,24 @@ export class ViewDetailComponent implements OnInit, OnDestroy {
       isPublic: [this._data.view.isPublic, Validators.required]
     });
   }
+
   delete(){
     this._leadService.deleteCustomList(this.viewForm.value)
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(data=>{this.closeDialog()})
   }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   save(){
     this._leadService.saveCustomList(this.viewForm.value)
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe( data=>{this.closeDialog()})
   }
+  
   closeDialog() {
     this._matDialogRef.close()
   }

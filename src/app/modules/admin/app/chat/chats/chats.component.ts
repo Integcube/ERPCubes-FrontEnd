@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
 import { Ticket,ChatFilter } from '../chat.types';
@@ -8,7 +8,7 @@ import { User } from 'app/core/user/user.types';
 @Component({
     selector       : 'chat-chats',
     templateUrl    : './chats.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatsComponent implements OnInit, OnDestroy

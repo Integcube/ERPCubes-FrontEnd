@@ -10,23 +10,25 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
     selector: 'app-activity-detail',
     templateUrl: './activity-detail.component.html',
+    styleUrls: ['./activity-detail.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityDetailComponent implements OnInit, OnDestroy {
-    user: User
-    constructor(public _opportunityService: OpportunityService,
-        private _changeDetectorRef: ChangeDetectorRef,
-        private _userService: UserService,
-        private _sanitizer: DomSanitizer
-    )
-    {
-        this._userService.user$.subscribe(user =>
-            this.user = user)
-    }
     @HostListener('window:scroll', ['$event'])
     loadingMore = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     counter = 1;
+    user: User
+
+    constructor(
+        public _opportunityService: OpportunityService,
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _userService: UserService,
+        private _sanitizer: DomSanitizer    )
+    {
+        this._userService.user$.subscribe(user => this.user = user)
+    }
+    
     opportunity: Opportunity;
     activitiesz$: Observable<Activity[]> = combineLatest(this._opportunityService.activities$, this._opportunityService.users$)
         .pipe(map(([activities, users]) => {

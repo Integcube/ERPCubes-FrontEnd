@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector       : 'settings-account',
     templateUrl    : './account.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsAccountComponent implements OnInit

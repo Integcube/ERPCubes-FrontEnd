@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
@@ -9,7 +9,7 @@ import { FuseAlertType } from '@fuse/components/alert';
 @Component({
     selector     : 'auth-unlock-session',
     templateUrl  : './unlock-session.component.html',
-    encapsulation: ViewEncapsulation.None,
+    
     animations   : fuseAnimations
 })
 export class AuthUnlockSessionComponent implements OnInit

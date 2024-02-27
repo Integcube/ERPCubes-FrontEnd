@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { EMPTY, Observable, Subject, combineLatest, forkJoin } from 'rxjs';
 import { takeUntil, tap, map, catchError, take } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { NotesService } from '../notes.service';
 @Component({
     selector       : 'notes-details',
     templateUrl    : './details.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotesDetailsComponent implements OnInit, OnDestroy {

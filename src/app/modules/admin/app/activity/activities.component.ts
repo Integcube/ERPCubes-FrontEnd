@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 import * as moment from 'moment';
 import { ActivitiesService } from './activities.service';

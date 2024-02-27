@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { ScrumboardService } from '../../scrumboard.service';
 @Component({
     selector       : 'scrumboard-card-details',
     templateUrl    : './details.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrumboardCardDetailsComponent implements OnInit, OnDestroy

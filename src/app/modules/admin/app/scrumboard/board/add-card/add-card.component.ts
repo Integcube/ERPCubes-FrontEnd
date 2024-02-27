@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
     selector       : 'scrumboard-board-add-card',
     templateUrl    : './add-card.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrumboardBoardAddCardComponent implements OnInit

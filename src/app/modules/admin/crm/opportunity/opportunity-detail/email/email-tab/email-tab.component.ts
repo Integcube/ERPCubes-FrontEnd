@@ -19,10 +19,8 @@ export class EmailTabComponent implements OnInit {
   constructor(
     private _opportunityService:OpportunityService,
     private _matDialog: MatDialog,
-    private sanitizer: DomSanitizer,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private matDialog: MatDialog
-  ) { }
+    private sanitizer: DomSanitizer )
+  { }
   
   opprtunity: Opportunity;
   emails$ = this._opportunityService.emails$;

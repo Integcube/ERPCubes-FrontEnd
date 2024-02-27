@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { fuseAnimations } from '@fuse/animations';
 import { Observable, Subject, takeUntil } from 'rxjs';
@@ -14,7 +14,6 @@ import { MatDialogRef } from '@angular/material/dialog';
   selector: 'app-lead-restore',
   templateUrl: './lead-restore.component.html',
   styleUrls: [  ],
-  encapsulation  : ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations     : fuseAnimations
 })

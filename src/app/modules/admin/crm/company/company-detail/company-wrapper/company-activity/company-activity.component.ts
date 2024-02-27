@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { CompanyService } from '../../../company.service';
 
@@ -7,7 +6,6 @@ import { CompanyService } from '../../../company.service';
   selector: 'app-company-activity',
   templateUrl: './company-activity.component.html',
   styleUrls: ['./company-activity.component.scss'],
-
 })
 export class CompanyActivityComponent implements OnInit {
   searchInputControl: UntypedFormControl = new UntypedFormControl();

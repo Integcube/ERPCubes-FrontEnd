@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-opportunity',
-  templateUrl: './opportunity.component.html',  
-  encapsulation: ViewEncapsulation.None,
+  templateUrl: './opportunity.component.html',    
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpportunityComponent implements OnInit {

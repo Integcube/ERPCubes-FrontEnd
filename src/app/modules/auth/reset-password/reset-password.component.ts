@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, NgForm, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
@@ -8,8 +8,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
     selector     : 'auth-reset-password',
-    templateUrl  : './reset-password.component.html',
-    encapsulation: ViewEncapsulation.None,
+    templateUrl  : './reset-password.component.html',    
     animations   : fuseAnimations
 })
 export class AuthResetPasswordComponent implements OnInit

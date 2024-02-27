@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { ChatService } from '../chat.service';
@@ -8,7 +8,7 @@ import { Conversation, Ticket } from '../chat.types';
 @Component({
     selector       : 'chat-conversation',
     templateUrl    : './conversation.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConversationComponent implements OnInit, OnDestroy

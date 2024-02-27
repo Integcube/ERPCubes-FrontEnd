@@ -13,8 +13,8 @@ export class OpportunityActivityComponent implements OnInit {
   
   constructor(
     private _opportunityService:OpportunityService,
-    private _changeDetectorRef: ChangeDetectorRef,
-  ) { }
+    private _changeDetectorRef: ChangeDetectorRef )
+  { }
 
   ngOnInit(): void {
     this._opportunityService.updateSearchQuery(null);

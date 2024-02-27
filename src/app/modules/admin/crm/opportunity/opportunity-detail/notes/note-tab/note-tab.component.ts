@@ -1,6 +1,6 @@
 import { Component, OnInit ,ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { EMPTY, catchError, combineLatest, filter, map } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep } from 'lodash';
 import { NoteDetailComponent } from '../note-detail/note-detail.component';
 import { OpportunityService } from '../../../opportunity.service';
@@ -12,26 +12,15 @@ import { Note } from '../../../opportunity.types';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class NoteTabComponent implements OnInit {
+  private _matDialogRef: MatDialogRef<NoteTabComponent>
   constructor(
     private _opportunityService:OpportunityService,
-    private _matDialog: MatDialog,
-    // private _changeDetectorRef: ChangeDetectorRef,
+    private _matDialog: MatDialog)
+  { }
 
-  ) { }
   notes$ = this._opportunityService.notes$;
   users$ = this._opportunityService.users$;
-  notesWithUser$ = combineLatest([
-    this.notes$,
-    this.users$
-  ]).pipe(
-    map(([notes, users]) =>
-    notes.map(note => ({
-        ...note,
-        userName : users.find(a=>a.id === note.createdBy).name
-      } as Note))
-    ),
-    catchError(error=>{alert(error);return EMPTY})
-  );
+  notesWithUser$ = this.notes$;
   filteredData$ = combineLatest([
     this._opportunityService.searchQuery$,
     this.notesWithUser$,
@@ -42,25 +31,31 @@ export class NoteTabComponent implements OnInit {
       )
     ),
   );
-  ngOnInit(): void {
-  }
+
+  ngOnInit(): void {  }
+  
   addNote(){
     let note = new Note({})
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(NoteDetailComponent, {
       autoFocus: false,
-      data     : {
-          note: cloneDeep(note)
+      data : {
+        note: cloneDeep(note)
       }
-  });
+    });
   }
+
   updateNote(note:Note):void{
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(NoteDetailComponent, {
       autoFocus: false,
-      data     : {
-          note: cloneDeep(note)
+      data : {
+        note: cloneDeep(note)
       }
-  });
+    });
+  }
+
+  close(): void {
+    this._matDialogRef.close();
   }
 }

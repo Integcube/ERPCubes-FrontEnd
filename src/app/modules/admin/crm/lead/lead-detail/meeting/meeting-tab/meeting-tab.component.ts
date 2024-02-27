@@ -14,6 +14,12 @@ import { MeetingDetailComponent } from '../meeting-detail/meeting-detail.compone
 })
 export class MeetingTabComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+
+  constructor(
+    private _leadService:LeadService,
+    private _matDialog: MatDialog ) 
+  { }
+
   meetings$ = this._leadService.meetings$;
   users$ = this._leadService.users$;
   meetingWithUser$ = combineLatest([
@@ -28,11 +34,6 @@ export class MeetingTabComponent implements OnInit {
       } as Meeting))
     )
   );
-  constructor(
-    private _leadService:LeadService,
-    private _matDialog: MatDialog,
-  ) { }
-
   ngOnInit(): void {}
   
   addMeeting(){

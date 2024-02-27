@@ -1,13 +1,19 @@
-<div class="flex px-2 items-center justify-center mb-2 sm:mt-0 ">
-  <div class="w-full justify-center inset-0 flex flex-col min-w-0 overflow-x-auto" *ngIf="(leadStatus$ | async) as arrowsa;" >
-      <div class="container">
-        <div class="arrow-steps clearfix">
-          <div class="step  mb-2  " (click)="ChangeStatus(arrow.statusId,arrow.statusTitle)" *ngFor="let arrow of arrowsa; let i = index" #step>
-            <span><a>{{arrow.statusTitle}}</a></span>
-          </div>
-
+<div class="flex px-2 items-center justify-center mb-2 sm:mt-0">
+  <div class="w-full justify-center inset-0 flex flex-col min-w-0 overflow-x-auto"
+  *ngIf="(leadStatus$ | async) as arrowsa" >
+    <div class="container">
+      <div class="arrow-steps clearfix">
+        <div class="step mb-2"
+        (click)="ChangeStatus(arrow.statusId, arrow.statusTitle)"
+        *ngFor="let arrow of arrowsa; let i = index" #step>
+          <span>
+            <a>
+              {{arrow.statusTitle}}
+            </a>
+          </span>
         </div>
       </div>
     </div>
+  </div>
  
 </div>

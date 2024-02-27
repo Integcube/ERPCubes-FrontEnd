@@ -51,6 +51,8 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import moment from 'moment';
 import { OpportunityActivityComponent } from './opportunity-detail/opportunity-wrapper/opportunity-activity/opportunity-activity.component';
 import { OpportunityOverviewComponent } from './opportunity-detail/opportunity-wrapper/opportunity-overview/opportunity-overview.component';
+import { SearchBarComponent } from './opportunity-detail/search-bar/search';
+import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 
 
 
@@ -74,6 +76,7 @@ import { OpportunityOverviewComponent } from './opportunity-detail/opportunity-w
     MeetingTabComponent,
     NoteDetailComponent,
     NoteTabComponent,
+    SearchBarComponent,
     TaskDetailComponent,
     TaskTabComponent,
     ViewDetailComponent,
@@ -143,6 +146,7 @@ import { OpportunityOverviewComponent } from './opportunity-detail/opportunity-w
     MatExpansionModule,
     MatTabsModule,
     FuseCardModule,
+    FuseScrollbarModule,
     DragDropModule,
     MatDialogModule,
     SharedModule

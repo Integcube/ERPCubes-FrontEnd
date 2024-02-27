@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subject, takeUntil, catchError, EMPTY } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,21 +8,33 @@ import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component'
 import { EmailDetailComponent } from '../email/email-detail/email-detail.component';
 import { CallDetailComponent } from '../call/call-detail/call-detail.component';
 import { MeetingDetailComponent } from '../meeting/meeting-detail/meeting-detail.component';
-import { Call, Email, Meeting, Note, Opportunity, TaskModel } from '../../opportunity.types';
+import { Attachment, Call, Email, Meeting, Note, Opportunity, TaskModel } from '../../opportunity.types';
 import { OpportunityService } from '../../opportunity.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.types';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-opportunity-info',
   templateUrl: './opportunity-info.component.html',
+  styleUrls: ['./opportunity-info.component.scss'],
   changeDetection:ChangeDetectionStrategy.OnPush
 
 })
 export class OpportunityInfoComponent implements OnInit, OnDestroy {
-  constructor(private _formBuilder: FormBuilder,
+  user: User
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  @ViewChild('triggerFileInput') triggerFileInput: ElementRef;
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _userService: UserService,
     private _opportunityService: OpportunityService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _matDialog: MatDialog)
-    {}
+    private _fuseConfirmationService: FuseConfirmationService,
+    private _matDialog: MatDialog )
+  { 
+    this._userService.user$.subscribe(user => { this.user = user});
+  }
   selectedOpportunity: Opportunity;
   opportunityForm: FormGroup;
   users$ = this._opportunityService.users$;
@@ -31,7 +43,7 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
   opportunitySource$ = this._opportunityService.opportunitySource$;
   product$ = this._opportunityService.product$;
   
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  opportunityAttachments$ = this._opportunityService.opportunityAttachments$
 
   save() {
     this.selectedOpportunity = { ...this.opportunityForm.value }
@@ -68,17 +80,19 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
     });
     this._opportunityService.opportunity$
     .pipe(takeUntil(this._unsubscribeAll))
-    .subscribe((company: Opportunity) => {
-      this.selectedOpportunity = { ...company };
-      this.opportunityForm.patchValue(company, { emitEvent: false });
+    .subscribe((opportunity: Opportunity) => {
+      this.selectedOpportunity = { ...opportunity };
+      this.opportunityForm.patchValue(opportunity, { emitEvent: false });
       this._changeDetectorRef.markForCheck();
     });
   }
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   addNote(){
     let note = new Note({})
     this._matDialog.open(NoteDetailComponent, {
@@ -88,6 +102,7 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       }
   });
   }
+
   addTask(){
     let tasks = new TaskModel({})
     this._matDialog.open(TaskDetailComponent, {
@@ -95,8 +110,9 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       data     : {
           task: cloneDeep(tasks)
       }
-  });
+    });
   }
+
   addMeeting(){
     let meeting = new Meeting({})
     this._matDialog.open(MeetingDetailComponent, {
@@ -104,8 +120,9 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       data     : {
           meeting: cloneDeep(meeting)
       }
-  });
+    });
   }
+
   addCall(){
     let call = new Call({})
     this._matDialog.open(CallDetailComponent, {
@@ -113,7 +130,7 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       data     : {
           call: cloneDeep(call)
       }
-  });
+    });
   }
   addEmail(){
     let email = new Email({})
@@ -122,6 +139,75 @@ export class OpportunityInfoComponent implements OnInit, OnDestroy {
       data     : {
           email: cloneDeep(email)
       }
-  });
+    });
+  }
+  getAttachments() {
+    this._opportunityService.getOpportunityAttachments(this.selectedOpportunity)
+      .subscribe(
+        // (attachments: Attachment[]) => {
+        //   this.leadAttachments = attachments;
+        // }
+      );
+  }
+  deleteOpportunityAttachment(id: number) {
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Delete Attachment',
+      message: 'Are you sure you want to delete this attachment? This action cannot be undone!',
+      actions: {
+        confirm: {
+          label: 'Delete'
+        }
+      }
+    });
+    // Subscribe to the confirmation dialog closed action
+    confirmation.afterClosed().subscribe((result) => {
+      // If the confirm button pressed...
+      if (result === 'confirmed') {
+        this._opportunityService.deleteOpportunityAttachment(id, this.selectedOpportunity)
+        .subscribe(
+          () => {
+            this.getAttachments();
+            this._changeDetectorRef.detectChanges();
+          }
+        );
+      }
+    });
+  }
+  downloadFile(file: Attachment){
+    this._opportunityService.downloadFile(file.path).pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(
+        data=>{
+            if(data.body.size < 100){
+              }
+              else{
+                const fileExtension = file.type;
+                const url = window.URL.createObjectURL(data.body);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${file.fileName}.${fileExtension}`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+              }
+        }
+    );
+  }
+  selectFile(event) {
+    event.stopPropagation();
+    const file = event.target.files[0];
+    
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+    this._opportunityService.saveFile(file, this.selectedOpportunity)
+      .subscribe(() => {
+        this.getAttachments();
+        this._changeDetectorRef.detectChanges();
+      }
+    );
+    
+  }
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
   }
 }

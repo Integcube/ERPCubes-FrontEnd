@@ -13,12 +13,12 @@ import { Meeting } from '../../../opportunity.types';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class MeetingTabComponent implements OnInit {
-
+  @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   constructor(
     private _opportunityService: OpportunityService,
-    private _matDialog: MatDialog,
-  ) { }
-  @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
+    private _matDialog: MatDialog )
+  { }
+  
   meetings$ = this._opportunityService.meetings$;
   users$ = this._opportunityService.users$;
   meetingWithUser$ = combineLatest([

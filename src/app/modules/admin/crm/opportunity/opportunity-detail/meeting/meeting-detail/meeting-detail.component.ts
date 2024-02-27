@@ -15,10 +15,7 @@ import { OpportunityService } from '../../../opportunity.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetingDetailComponent implements OnInit, OnDestroy {
-
-  composeForm: UntypedFormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-  opportunity: Opportunity
 
   constructor(
     public matDialogRef: MatDialogRef<MeetingDetailComponent>,
@@ -26,11 +23,14 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) private _data: { meeting: Meeting },
     private _opportunityService: OpportunityService,
     private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<MeetingDetailComponent>
-  ) { }
+    private _matDialogRef: MatDialogRef<MeetingDetailComponent> )
+  { }
+
+  composeForm: UntypedFormGroup;
+  opportunity: Opportunity
+
   ngOnInit(): void {
     this._opportunityService.opportunity$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.opportunity = { ...data }; this.createForm()})
-
   }
 
   createForm() {
@@ -43,32 +43,30 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
         note: [this._data.meeting.note, [Validators.required]],
         startTime: [this.formatTime(this._data.meeting.startTime)],
         endTime: [this.formatTime(this._data.meeting.endTime)],
+        meetingDate: [this._data.meeting.meetingDate]
     });
-}
+  }
+
   isOverdue(date: string): boolean {
     return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
   }
+
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+
   closeDialog(): void {
     this._matDialogRef.close();
   }
  
   formatTime(time: Date | string): string {
-    if (time instanceof Date) {
-      const offsetMinutes = time.getTimezoneOffset();
-      const localTime = new Date(time.getTime() - offsetMinutes * 60000); // Adjust for time zone offset
-  
-      const hours = ('0' + localTime.getHours()).slice(-2);
-      const minutes = ('0' + localTime.getMinutes()).slice(-2);
-  
-      return `${hours}:${minutes}`;
-    } else {
-      return time; // If it's not a Date, assume it's already in the correct format (string)
-    }
+    const date = new Date(time);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${hours}:${minutes}`;
   }
+
   save(){
 
     const startTimeValue = this.composeForm.get('startTime').value;
@@ -85,17 +83,24 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
       endTime: formattedEndTime,
     });
     
-    this._opportunityService.saveMeeting(this.composeForm.value, this.opportunity.opportunityId).pipe(
-      takeUntil(this._unsubscribeAll),
-      catchError(err=>{alert(err);
-      return EMPTY})).subscribe(data=>this.matDialogRef.close())
+    this._opportunityService.saveMeeting(this.composeForm.value, this.opportunity.opportunityId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data=>this.matDialogRef.close())
   }
+
   close(){
     this.matDialogRef.close();
   }
+
   delete(){
     this._opportunityService.deleteMeeting(this.composeForm.value.meetingId, this.opportunity.opportunityId)
     .pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.close())
   }
+
+  resetMeetingDate(): void {
+    this.composeForm.get('meetingDate').setValue(null);
+    this._changeDetectorRef.markForCheck()
+  }
+  
 }
 

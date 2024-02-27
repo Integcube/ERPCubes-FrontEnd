@@ -45,9 +45,12 @@ export class TaskTabComponent implements OnInit, OnDestroy {
 
   ) { }
   ngOnInit(): void {
-    this._opportunityService.opportunity$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
+    this._opportunityService.opportunity$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => {
       this.opportunity = { ...data }; this._changeDetectorRef.markForCheck();
     })
+    this.getTask();
   }
   toggleStatus(taskId: number, statusId: number, taskTitle:string) {
     let status:number=-1;
@@ -91,5 +94,11 @@ export class TaskTabComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+  getTask() {
+    this._opportunityService.getTasks(this.opportunity.opportunityId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe((newEntries) => {
+        this._changeDetectorRef.markForCheck();
+    });
+  }
 }

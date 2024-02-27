@@ -16,8 +16,6 @@ export class CallTabComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   calls$ = this._leadService.calls$;
   users$ = this._leadService.users$;
- 
-
   callWithUser$ = combineLatest([
     this.calls$,
     this.users$
@@ -72,7 +70,5 @@ export class CallTabComponent implements OnInit {
       }
   });
   }
-
-
 
 }

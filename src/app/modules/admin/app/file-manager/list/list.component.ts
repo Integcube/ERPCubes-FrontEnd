@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
@@ -12,7 +12,7 @@ import { FileManagerDialogComponent } from '../dialog/dialog.component';
 @Component({
     selector       : 'file-manager-list',
     templateUrl    : './list.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileManagerListComponent implements OnInit, OnDestroy

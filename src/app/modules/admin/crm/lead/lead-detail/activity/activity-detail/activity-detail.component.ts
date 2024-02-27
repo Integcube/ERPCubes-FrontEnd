@@ -10,39 +10,37 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
     selector: 'app-activity-detail',
     templateUrl: './activity-detail.component.html',
+    styleUrls: ['./activity-detail.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityDetailComponent implements OnInit, OnDestroy {
+    @HostListener('window:scroll', ['$event'])
     loadingMore = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     counter = 1;
-    lead: Lead;
-    activitiesz$: Observable<Activity[]> = this._leadService.activities$;
-    @HostListener('window:scroll', ['$event'])
-    onScroll(): void {
-        debugger
-        const scrollPosition = window.innerHeight + window.scrollY;
-        const documentHeight = document.body.scrollHeight;
-        if (scrollPosition >= documentHeight - 1 && !this.loadingMore) {
-            setTimeout(() => {
-                this.getActivity();
-            }, 500);
-        }
-    }
-    user: User;
-    constructor(public _leadService: LeadService,
+    user: User;  
+
+    constructor(
+        public _leadService: LeadService,
         private _changeDetectorRef: ChangeDetectorRef,
         private _userService: UserService,
-        private _sanitizer: DomSanitizer
-    )
+        private _sanitizer: DomSanitizer    )
     { 
-        this._userService.user$.subscribe(user => 
-            this.user = user)
+        this._userService.user$.subscribe(user => this.user = user)
     }
+
+    lead: Lead;
+    activitiesz$: Observable<Activity[]> = this._leadService.activities$;
+
     ngOnInit(): void {
         this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
             this.lead = { ...data }; this.getActivity();
         })
+    }
+    
+    ngOnDestroy(): void {
+        this._unsubscribeAll.next(null);
+        this._unsubscribeAll.complete();
     }
     getActivity() {
         this.loadingMore = true;
@@ -72,8 +70,14 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
     trackByFn(index: number, item: any): any {
         return item.id || index;
     }
-    ngOnDestroy(): void {
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
+    onScroll(): void {
+        debugger
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const documentHeight = document.body.scrollHeight;
+        if (scrollPosition >= documentHeight - 1 && !this.loadingMore) {
+            setTimeout(() => {
+                this.getActivity();
+            }, 500);
+        }
     }
 }

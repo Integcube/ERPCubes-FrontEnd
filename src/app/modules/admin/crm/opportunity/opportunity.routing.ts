@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 import { OpportunityComponent } from "./opportunity.component";
-import { CallResolver, CustomListResolver, EmailResolver, IndustryResolver, MeetingResolver, NoteResolver, OpportunityResolver, OpportunitySourceResolver, OpportunityStatusResolver, ProductResolver, SelectedOpportunityResolver, TagsResolver, TaskResolver, UserResolver } from "./opportunity.resolver";
+import { CallReasonResolver, CallResolver, CustomListResolver, EmailResolver, EventTypeResolver, IndustryResolver, MeetingResolver, NoteResolver, OpportunityResolver, OpportunitySourceResolver, OpportunityStatusResolver, ProductResolver, SelectedOpportunityResolver, TagsResolver, TaskResolver, UserResolver } from "./opportunity.resolver";
 import { OpportunityListComponent } from "./opportunity-list/opportunity-list.component";
 import { OpportunityFormComponent } from "./opportunity-form/opportunity-form.component";
 import { OpportunityDetailComponent } from "./opportunity-detail/opportunity-detail.component";
@@ -12,12 +12,13 @@ export const opportunityRoutes: Routes = [
         component: OpportunityComponent,
         resolve: {
             opportunity:OpportunityResolver,
-            industries: IndustryResolver,
-            users: UserResolver,
             opportunitySource: OpportunitySourceResolver,
             opportunityStatus: OpportunityStatusResolver,
+            industries: IndustryResolver,
+            users: UserResolver,
             product: ProductResolver,
-            customList: CustomListResolver
+            customList: CustomListResolver,
+            eventType:EventTypeResolver,
         },
         children: [
             {
@@ -41,12 +42,13 @@ export const opportunityRoutes: Routes = [
                 component: OpportunityDetailComponent,
                 resolve:{
                     selectedOpportunity: SelectedOpportunityResolver,
+                    call: CallResolver,
+                    callReason: CallReasonResolver,
+                    email: EmailResolver,
+                    meeting: MeetingResolver,
+                    tasks: TaskResolver,
                     tags: TagsResolver,
                     notes: NoteResolver,
-                    tasks: TaskResolver,
-                    email: EmailResolver,
-                    call: CallResolver,
-                    meeting: MeetingResolver
                 },     
             }
         ]

@@ -28,11 +28,11 @@ import { User } from 'app/core/user/user.types';
 
 export class LeadInfoComponent implements OnInit, OnDestroy {
   user: User;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('triggerFileInput') triggerFileInput: ElementRef;
   constructor(private _formBuilder: FormBuilder,
     private _leadService: LeadService,
     private _userService: UserService,
-
     private _changeDetectorRef: ChangeDetectorRef,
     private _matDialog: MatDialog,
     private _fuseConfirmationService: FuseConfirmationService,
@@ -52,7 +52,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
 
   calculatedleadScore$ = this._leadService.calculateleadScore$;
   leadAttachments$ = this._leadService.leadAttachments$
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  
  
   
   save() {
@@ -101,6 +101,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       this._changeDetectorRef.markForCheck();
     });
   }
+
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next(null);
@@ -114,8 +115,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       data     : {
           note: cloneDeep(note)
       }
-  });
+    });
   }
+
   addTask(){
     let tasks = new TaskModel({})
     this._matDialog.open(TaskDetailComponent, {
@@ -123,16 +125,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       data     : {
           task: cloneDeep(tasks)
       }
-  });
+    });
   }
-  convertToInteger(value: number): number {
-    return parseInt(value.toString(), 10);
-  }
-  toggleDrawer(): void
-  {
-      // Toggle the drawer
-      this._fuseComponentsComponent.matDrawer.toggle();
-  }
+
   addMeeting(){
     let meeting = new Meeting({})
     this._matDialog.open(MeetingDetailComponent, {
@@ -140,8 +135,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
       data     : {
           meeting: cloneDeep(meeting)
       }
-  });
+    });
   }
+
   addCall(){
     let call = new Call({})
     this._matDialog.open(CallDetailComponent, {
@@ -159,6 +155,14 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
           email: cloneDeep(email)
       }
   });
+  }
+  convertToInteger(value: number): number {
+    return parseInt(value.toString(), 10);
+  }
+  toggleDrawer(): void
+  {
+      // Toggle the drawer
+      this._fuseComponentsComponent.matDrawer.toggle();
   }
   leadScore(){
   

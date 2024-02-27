@@ -19,14 +19,25 @@ import { formatDate } from '@angular/common';
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
 
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  user: User;
+  constructor(
+    private _userService: UserService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Inject(MAT_DIALOG_DATA) private _data: { task: TaskModel },
+    private _leadService: LeadService,
+    private _formBuilder: UntypedFormBuilder,
+    private _matDialogRef: MatDialogRef<TaskDetailComponent> ) 
+  { }
+
   taskForm: UntypedFormGroup;
   tags: Tag[];
-  user: User;
+  
   eventTypes$ = this._leadService.eventTypes$
   users$ = this._leadService.users$;
   selectedLead: Lead;
   filteredLabels: Tag[];
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
+  
   task: TaskModel;
   taskWithTag$ = combineLatest([
     this._leadService.task$,
@@ -38,14 +49,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       tags: tags,
     } as TaskModel)),
   );
-  constructor(
-    private _userService: UserService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) private _data: { task: TaskModel },
-    private _leadService: LeadService,
-    private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<TaskDetailComponent>
-  ) { }
 
   ngOnInit(): void {
     this._userService.user$.subscribe(user => {
@@ -62,7 +65,11 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       taskOwner: [this.user.id, Validators.required],
       tasktypeId: [''],
     });
-    this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.selectedLead = { ...data })
+
+    this._leadService.lead$
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.selectedLead = { ...data })
+
     if (this._data.task.taskId) {
       this._leadService.getTaskById(this._data.task.taskId)
       .pipe(
@@ -83,9 +90,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
           this.tags = cloneDeep(data.tags);
           this.filteredLabels = this.tags;
           this._changeDetectorRef.markForCheck();
-        },
-        error => {
-          console.error("Error fetching data: ", error);
         }
       )
     }  
@@ -152,7 +156,9 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
       }
     })
     this.taskForm.get('tags').patchValue(selectedIds);
-    this._leadService.saveTask(this.taskForm, this.selectedLead.leadId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data => this.closeDialog());
+    this._leadService.saveTask(this.taskForm, this.selectedLead.leadId)
+    .pipe(takeUntil(this._unsubscribeAll))
+    .subscribe(data => this.closeDialog());
   }
 
   delete() {

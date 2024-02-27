@@ -21,30 +21,20 @@
                         } }}
                     </div>
                 </div>
-
                 <div class="sm:mt-0">
-
 
                     <div class="flex gap-0">
 
                         <button class="ml-2 h-8 w-20" mat-stroked-button [matTooltip]="'Click Export Excel'"
                             (click)="exporter.exportTable('xls', { fileName: 'Lead-list' })">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
-                                <path fill-rule="evenodd"
-                                    d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.25 6a.75.75 0 0 0-1.5 0v4.94l-1.72-1.72a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06l-1.72 1.72V9.75Z"
-                                    clip-rule="evenodd" />
-                            </svg>
-
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:cloud-arrow-down'"></mat-icon>
                             <span class="ml-1 mr-1 text-xs" i18n>Export</span>
                         </button>
 
                         <!--border-r-0 rounded-r-none-->
-                        <!-- <button class="ml-2 h-8 w-20" mat-stroked-button (click)="openConnectorDialog()"  [matTooltip]="'Click to Import'">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#64748b" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M10.5 3.75a6 6 0 0 0-5.98 6.496A5.25 5.25 0 0 0 6.75 20.25H18a4.5 4.5 0 0 0 2.206-8.423 3.75 3.75 0 0 0-4.133-4.303A6.001 6.001 0 0 0 10.5 3.75Zm2.03 5.47a.75.75 0 0 0-1.06 0l-3 3a.75.75 0 1 0 1.06 1.06l1.72-1.72v4.94a.75.75 0 0 0 1.5 0v-4.94l1.72 1.72a.75.75 0 1 0 1.06-1.06l-3-3Z" clip-rule="evenodd" />
-                            </svg>
-                            
-                        <span class="ml-1 mr-1 text-xs" i18n>Import</span>
+                        <!-- <button class="ml-2 h-8 w-20" mat-stroked-button (click)="openLeadImportDialog()"  [matTooltip]="'Click to Import'">
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:cloud-arrow-down'"></mat-icon>                          
+                            <span class="ml-1 mr-1 text-xs" i18n>Import</span>
                         </button> -->
                         <!-- Add Trash button -->
                         <button class="ml-4 h-8" mat-stroked-button (click)="openTrashDialog()"
@@ -137,7 +127,7 @@
                             </button> -->
                     </div>
 
-                    <div class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
+                    <div class="flex flex-wrap  sm:justify-start md:justify-end lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                         <div class="flex flex-row gap-2">
                             <!-- Owner -->
                             <div class="flex gap-1 items-center p-2 rounded h-5"
@@ -163,14 +153,14 @@
                                                 <div class="ml-2">
                                                     <input class="w-full min-w-0 py-1 border-0" type="text"
                                                         placeholder="Enter user name" (input)="filterUsers($event)"
-                                                        (keypress)="filterUsers($event)" [maxLength]="30" #newTagInput>
+                                                        (keypress)="filterUsers($event)" [maxLength]="30" #userInput>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="flex flex-col max-h-64 py-2 border-t text-sm" fuseScrollbar>
                                             <ng-container *ngFor="let user of filteredUsers; trackBy: trackByFn">
                                                 <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover"
-                                                    (click)="toggleProductTag(user.id)" matRipple>
+                                                    (click)="toggleLeadOwner(user.id)" matRipple>
                                                     <mat-checkbox
                                                         class="flex items-center h-10 min-h-10 pointer-events-none"
                                                         [checked]="this.filter.leadOwner.includes(user.id)"
@@ -189,15 +179,15 @@
                                     class="text-white cursor-pointer" [svgIcon]="'heroicons_outline:x'"
                                     (click)="cancelFilters(1)"></mat-icon>
                             </div>
-                            <!-- Create -->
+                            <!-- Created Date -->
                             <div class="flex gap-1 items-center p-2 rounded h-5"
                                 [ngStyle]="{'background-color': filter.createdDate ? '#E85038':'transparent'}">
 
-                                <span class="font-bold hover:underline cursor-pointer text-xs " #createdDatePanelOrigin
-                                    (click)="openCreatedDatePanel()" [matTooltip]="'Filter by Created Date'"
+                                <span class="font-bold hover:underline cursor-pointer text-xs " 
+                                    [matTooltip]="'Filter by Created Date'"#createdDatePanelOrigin
+                                    (click)="openCreatedDatePanel()" 
                                     [ngClass]="filter.createdDate ? 'text-white' : 'text-primary'" i18n>
                                     Created Date
-
                                 </span>
                                 <ng-template #createdDatePanel>
                                     <div class="w-60 rounded border shadow-md bg-card">
@@ -207,10 +197,10 @@
                                                     [svgIcon]="'heroicons_solid:search'"></mat-icon>
                                                 <div class="ml-2">
                                                     <input class="w-full min-w-0 py-1 border-0" type="text"
-                                                        placeholder="Enter user name"
+                                                        placeholder="Choose Date Range"
                                                         (input)="filterCreatedDate($event)"
                                                         (keypress)="filterCreatedDate($event)" [maxLength]="30"
-                                                        #newTagInput>
+                                                        #createdDateInput>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,7 +242,7 @@
                                                         placeholder="Enter user name"
                                                         (input)="filterCreatedDate($event)"
                                                         (keypress)="filterCreatedDate($event)" [maxLength]="30"
-                                                        #newTagInput>
+                                                        #modifiedDateInput>
                                                 </div>
                                             </div>
                                         </div>
@@ -297,7 +287,7 @@
                                                     <input class="w-full min-w-0 py-1 border-0" type="text"
                                                         placeholder="Enter user name" (input)="filterLeadStatus($event)"
                                                         (keypress)="filterLeadStatus($event)" [maxLength]="30"
-                                                        #newTagInput>
+                                                        #leadStatusInput>
                                                 </div>
                                             </div>
                                         </div>
@@ -399,7 +389,7 @@
                                                                 </div>
                                                             </ng-container>
                                                         </span>
-                                                        <span (click)="previewLead(row)"
+                                                        <span (click)="leadDetail(row)"
                                                             class="hover:text-clip truncate self-center items-center justify-center"><u>{{row.firstName
                                                                 + " " +
                                                                 row.lastName | tblimit: row.isHovered}}</u>
@@ -408,7 +398,7 @@
 
 
                                                     <span *ngIf="row.isHovered" class="relative right-0">
-                                                        <button mat-stroked-button (click)="updateLead(row)"
+                                                        <button mat-stroked-button (click)="leadForm(row)"
                                                             class="h-5">
                                                             <span class="text-xs" i18n>Preview</span>
                                                         </button>
@@ -488,9 +478,7 @@
                                         <ng-container matColumnDef="leadOwnerName">
                                             <th mat-header-cell *matHeaderCellDef mat-sort-header i18n> Lead Owner </th>
                                             <td mat-cell *matCellDef="let row" class="">
-
                                                 {{row.leadOwnerName| tblimit}}
-
                                             </td>
                                         </ng-container>
                                         <ng-container matColumnDef="leadStatus">
@@ -504,12 +492,9 @@
                                             <td class="mat-cell" colspan="4" i18n>No data matching the filter</td>
                                         </tr>
 
-
                                     </table>
 
-
                                 </div>
-
                             </ng-container>
                         </ng-container>
                         <ng-template #noLead>

@@ -17,10 +17,12 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { User } from 'app/core/user/user.types';
 import { ViewDetailComponent } from '../opportunity-detail/view/view-detail/view-detail.component';
 import { TrashComponent } from '../../trash/trash.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-opportunity-list',
   templateUrl: './opportunity-list.component.html',
+  styleUrls: ['./opportunity-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpportunityListComponent implements OnInit {
@@ -36,6 +38,7 @@ export class OpportunityListComponent implements OnInit {
   @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
   @ViewChild('opportunityStatusPanel') private _opportunityStatusPanel: TemplateRef<any>;
   @ViewChild('opportunityStatusPanelOrigin') private _opportunityStatusPanelOrigin: ElementRef;
+  @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
   private _usersPanelOverlayRef: OverlayRef;
   drawerMode: 'side' | 'over';
   dataSource: MatTableDataSource<Opportunity>;
@@ -43,9 +46,6 @@ export class OpportunityListComponent implements OnInit {
   isTable: boolean = true;
   selection = new SelectionModel<Opportunity>(true, []);
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-
   dateRangesFilter: any[];
   dateRanges: { label: string, value: string }[] = [
     { label: 'Today', value: 'today' },
@@ -69,13 +69,15 @@ export class OpportunityListComponent implements OnInit {
   selectedOpportunity: Opportunity;
   customList$ = this._opportunityService.customList$;
   customLists$ = this._opportunityService.customLists$;
-  filteredUsers: User[]
-  users: User[]
-  filteredStatus: OpportunityStatus[]
-  status: OpportunityStatus[]
+  filteredUsers: User[];
+  users: User[];
+  filteredStatus: OpportunityStatus[];
+  status: OpportunityStatus[];
+  opportunityStatus: OpportunityStatus[]
+
   activeItem = new OpportunityCustomList({});
   activeItemforAll = null;
-
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -165,19 +167,13 @@ export class OpportunityListComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
 
-  onMouseEnter(row: Opportunity) {
-    row.isHovered = true;
-  }
-
-  onMouseLeave(row: Opportunity) {
-    row.isHovered = false;
-  }
-
   getOpportunity(list: OpportunityCustomList, name: string): void {
     if (list === null) {
       list = new OpportunityCustomList({});
       list.listTitle = name;
+      this.activeItemforAll = null;
     }
+    this.activeItem = list;
     this.filter = list.filterParsed;
     this._opportunityService.setCustomList(list);
     this._opportunityService.setFilter(list.filterParsed);
@@ -190,40 +186,18 @@ export class OpportunityListComponent implements OnInit {
     this._changeDetectorRef.markForCheck();
   }
 
-  previewOpportunity(selectedOpportunity: Opportunity) {
+  opportunityForm(selectedOpportunity: Opportunity) {
     this._opportunityService.selectedOpportunity(selectedOpportunity);
     this._router.navigate(['./', selectedOpportunity.opportunityId], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-
-  updateOpportunity(row: Opportunity) {
+  
+  opportunityDetail(row: Opportunity) {
     this._router.navigate(['detail-view', row.opportunityId], { relativeTo: this._activatedRoute });
   }
+  
+  importFile() {
 
-  onBackdropClicked(): void {
-    this._router.navigate(['./'], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
-
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-    this.selection.select(...this.dataSource.data);
-  }
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  checkboxLabel(row?: Opportunity): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.opportunityId + 1}`;
   }
 
   openModifiedDatePanel(): void {
@@ -415,6 +389,19 @@ export class OpportunityListComponent implements OnInit {
     this.isTable = !this.isTable
   }
 
+  toggleView() {
+    this.isTable = !this.isTable
+  }
+
+  isActiveItem(item: OpportunityCustomList): boolean {
+    if (item == null) {
+      item = new OpportunityCustomList({});
+      item.listTitle = "All Opportunities";
+
+    }
+    return this.activeItem === item;
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -491,6 +478,36 @@ export class OpportunityListComponent implements OnInit {
     this._opportunityService.setFilter(this.filter);
   }
 
+  openOpportunityImportDialog() {
+    // const dialogRef = this.dialog.open(OpportunityImportComponent,
+    //   {
+    //     height: "100%",
+    //     width: "100%",
+    //     maxWidth: "100%",
+    //     maxHeight: "100%"
+    //   }
+    // );
+  }
+
+  openTrashDialog() {
+    const restoreDialogRef = this.dialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+
+        autoFocus: false,
+        data: {
+          type: "OPPORTUNITY",
+        }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._opportunityService.getOpportunity().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
+  }
+
   onDateRangeChange(selectedValue: string, type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -528,39 +545,47 @@ export class OpportunityListComponent implements OnInit {
     else {
       this.filter.modifiedDate = startDate;
     }
+    debugger;
     this._opportunityService.setFilter(this.filter);
     this._usersPanelOverlayRef.detach();
+  }
+
+  onBackdropClicked(): void {
+    this._router.navigate(['./'], { relativeTo: this._activatedRoute });
+    this._changeDetectorRef.markForCheck();
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.selection.select(...this.dataSource.data);
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  checkboxLabel(row?: Opportunity): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.opportunityId + 1}`;
+  }
+
+  onMouseEnter(row: Opportunity) {
+    row.isHovered = true;
+  }
+
+  onMouseLeave(row: Opportunity) {
+    row.isHovered = false;
   }
 
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
 
-  isActiveItem(item: OpportunityCustomList): boolean {
-    if (item == null) {
-      item = new OpportunityCustomList({});
-      item.listTitle = "All Opportunities";
-
-    }
-    return this.activeItem === item;
-  }
-
-  openTrashDialog() {
-    const restoreDialogRef = this.dialog.open(TrashComponent,
-      {
-        height: "100%",
-        width: "100%",
-        maxWidth: "100%",
-        maxHeight: "100%",
-
-        autoFocus: false,
-        data: {
-          type: "LEAD",
-        }
-      }
-    );
-    restoreDialogRef.afterClosed().subscribe((result) => {
-      this._opportunityService.getOpportunity().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-    });
-  }
 }

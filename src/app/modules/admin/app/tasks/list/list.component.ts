@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -15,7 +15,6 @@ import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
 @Component({
     selector       : 'tasks-list',
     templateUrl    : './list.component.html',
-    encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksListComponent implements OnInit, OnDestroy

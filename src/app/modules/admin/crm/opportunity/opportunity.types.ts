@@ -82,8 +82,21 @@ export class Call {
     endTime: Date;
     createdBy: string;
     createdDate: Date;
+    createdByName: string;
+    reasonId: number;
+    dueDate: Date | null;
+    taskId: number;
+    isTask:number;
+    tasktime:number;
+    callDate:Date| null;
     constructor(reg) {
         this.callId = reg.callId ? reg.callId : -1
+        this.reasonId = reg.reasonId ? reg.reasonId : -1
+        this.startTime = reg.startTime || new Date(); 
+        this.endTime = reg.endTime || new Date(); 
+        this.taskId = reg.taskId ? reg.taskId : -1
+        this.isTask = reg.isTask ? reg.isTask : -1
+        this.callDate = reg.callDate || new Date(); 
     }
 }
 export interface Industry {
@@ -96,6 +109,7 @@ export class Email {
     description: string;
     createdBy: string;
     createdDate: Date;
+    createdbyName:string;
     constructor(reg) {
         this.emailId = reg.emailId ? reg.emailId : -1
     }
@@ -108,8 +122,14 @@ export class Meeting{
     endTime: Date;
     createdBy: string;
     createdDate: Date;
+    createdbyName:string;
+    meetingDate:Date;
     constructor(reg){
         this.meetingId = reg.meetingId?reg.meetingId:-1
+        this.startTime = reg.startTime || new Date(); 
+        this.endTime = reg.endTime || new Date(); 
+        this.meetingDate = reg.meetingDate || new Date(); 
+        
     }
 }
 export class Note {
@@ -119,6 +139,7 @@ export class Note {
     createdDate: Date;
     createdBy: string;
     userName: string;
+    createdByName: string;
     tags: Tag[];
     tasks: Task[];
     constructor(reg) {
@@ -148,10 +169,15 @@ export class Task {
         this.taskId = reg.taskId ? reg.taskId : -1
     }
 }
+
+export interface EventType {
+    typeId: number,
+    typeTitle: string
+}
 export class TaskModel {
     taskId: number;
     taskTitle: string;
-    dueDate: Date | null;
+    dueDate: Date;
     priority: number;
     status: number;
     description: string | null;
@@ -162,7 +188,20 @@ export class TaskModel {
     createdDate: Date;
     taskType: string;
     tags: Tag[];
+    tasktypeId:number
     constructor(reg) {
         this.taskId = reg.taskId ? reg.taskId : -1
+        this.tasktypeId = reg.tasktypeId ? reg.tasktypeId : 5
+        this.dueDate = new Date()
     }
 }
+
+export class Attachment {
+    fileId: number;
+    fileName: string;
+    path: string;
+    description: string;
+    type: string;
+    size: number;
+}
+

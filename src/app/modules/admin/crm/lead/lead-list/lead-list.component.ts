@@ -41,12 +41,12 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   @ViewChild('leadStatusPanelOrigin') private _leadStatusPanelOrigin: ElementRef;
   @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
   private _usersPanelOverlayRef: OverlayRef;
+  drawerMode: 'side' | 'over';
   dataSource: MatTableDataSource<Lead>;
-  //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
   displayedColumns: string[] = ['select', 'name', 'rating', 'productTitle', 'phone', 'leadStatus', 'leadOwnerName', 'createdDate'];
   isTable: boolean = true
   selection = new SelectionModel<Lead>(true, []);
-  customList$ = this._leadService.customList$;
+  searchInputControl: UntypedFormControl = new UntypedFormControl();
   dateRangesFilter: any[];
   dateRanges: { label: string, value: string }[] = [
     { label: 'Today', value: 'today' },
@@ -64,81 +64,109 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     modifiedDate: null,
     leadStatus: []
   }
-  filteredUsers: User[]
-  users: User[]
-  filteredStatus: LeadStatus[]
-  status: LeadStatus[]
   leads$: Observable<Lead[]>;
   leads: Lead[];
   leadCount: number = 0;
   selectedLead: Lead;
-  drawerMode: 'side' | 'over';
-  leadStatus: LeadStatus[];
-  searchInputControl: UntypedFormControl = new UntypedFormControl();
-
-
+  customList$ = this._leadService.customList$;
   customLists$ = this._leadService.customLists$;
+  filteredUsers: User[];
+  users: User[];
+  filteredStatus: LeadStatus[];
+  status: LeadStatus[];
+  leadStatus: LeadStatus[];
+  
+  activeItem = new LeadCustomList({});
+  activeItemforAll = null;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
     @Inject(DOCUMENT) private _document: any,
-    private _matDialog: MatDialog,
     private _router: Router,
     private _leadService: LeadService,
-    private _renderer2: Renderer2,
     private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private _renderer2: Renderer2,
+    private _matDialog: MatDialog,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
-    public dialog: MatDialog
-  ) { }
+    private dialog: MatDialog) 
+  { }
 
-  activeItem = new LeadCustomList({});
-  activeItemforAll = null;
+  ngOnInit(): void {
+    this.dateRangesFilter = [...this.dateRanges];
+    let selectedList = new LeadCustomList({});
+    selectedList.listTitle = "All leads"
+    this._leadService.setCustomList(selectedList);
+    this.leads$ = this._leadService.filteredLeads$;
+    this._leadService.filteredLeads$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((comapnies: Lead[]) => {
+        this.leads = [...comapnies];
+        this.leadCount = comapnies.length;
+        this.dataSource = new MatTableDataSource(this.leads);
+        this.ngAfterViewInit();
+        this._changeDetectorRef.markForCheck();
+      });
 
-
-
-
-  onDateRangeChange(selectedValue: string, type: string) {
-    let startDate: Date = new Date();
-    let endDate: Date = new Date();
-    switch (selectedValue) {
-      case 'today':
-        endDate.setDate(endDate.getDate() + 1);
-        break;
-      case 'lastWeek':
-        startDate.setDate(startDate.getDate() - 7);
-        break;
-      case 'last15Days':
-        startDate.setDate(startDate.getDate() - 15);
-        break;
-      case 'lastMonth':
-        startDate.setMonth(startDate.getMonth() - 1);
-        break;
-      case 'last4Months':
-        startDate.setMonth(startDate.getMonth() - 4);
-        break;
-      case 'last8Months':
-        startDate.setMonth(startDate.getMonth() - 8);
-        break;
-      case 'lastYear':
-        startDate.setFullYear(startDate.getFullYear() - 1);
-        break;
-      case 'moreThanYear':
-        startDate.setFullYear(startDate.getFullYear() - 100);
-        break;
-      default:
-        break;
-    }
-    if (type == "created") {
-      this.filter.createdDate = startDate;
-    }
-    else {
-      this.filter.modifiedDate = startDate;
-    }
-    this._leadService.setFilter(this.filter);
-    this._usersPanelOverlayRef.detach();
+    this._leadService.lead$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((Lead: Lead) => {
+        this.selectedLead = Lead;
+        this._changeDetectorRef.markForCheck();
+      });
+    this.matDrawer.openedChange.subscribe((opened) => {
+      if (!opened) {
+        this.selectedLead = null;
+        this._changeDetectorRef.markForCheck();
+      }
+    });
+    this._leadService.users$.pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((users: User[]) => {
+        this.users = users;
+        this.filteredUsers = this.users;
+        this._changeDetectorRef.markForCheck();
+      })
+    this._leadService.leadStatus$.pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((status: LeadStatus[]) => {
+        this.status = status;
+        this.filteredStatus = this.status;
+        this._changeDetectorRef.markForCheck();
+      })
+    this._fuseMediaWatcherService.onMediaChange$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(({ matchingAliases }) => {
+        if (matchingAliases.includes('lg')) {
+          this.drawerMode = 'over';
+        }
+        else {
+          this.drawerMode = 'over';
+        }
+        this._changeDetectorRef.markForCheck();
+      });
+    fromEvent(this._document, 'keydown')
+      .pipe(
+        takeUntil(this._unsubscribeAll),
+        filter<KeyboardEvent>(event =>
+          (event.ctrlKey === true || event.metaKey) // Ctrl or Cmd
+          && (event.key === '/') // '/'
+        )
+      )
+      .subscribe(() => {
+        this.createLead();
+      });
   }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next(null);
+    this._unsubscribeAll.complete();
+  }
+
   getLeads(list: LeadCustomList, name: string): void {
 
     if (list === null) {
@@ -152,6 +180,25 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     this._leadService.setCustomList(list);
     this._leadService.setFilter(list.filterParsed);
   }
+
+  createLead() {
+    this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
+    this._changeDetectorRef.markForCheck();
+  }
+
+  leadForm(selectedLead: Lead) {
+    this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
+    this._changeDetectorRef.markForCheck();
+  }
+
+  leadDetail(row: Lead) {
+    this._router.navigate(['detail-view', row.leadId], { relativeTo: this._activatedRoute });
+  }
+
+  importFile() {
+
+  }
+
   openModifiedDatePanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -227,6 +274,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   openLeadStatusPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -264,6 +312,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   filterCreatedDate(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -277,6 +326,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         );
       });
   }
+
   openCreatedDatePanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
       backdropClass: '',
@@ -314,6 +364,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   addView() {
     let view = new LeadCustomList({});
     this._matDialog.open(ViewDetailComponent, {
@@ -323,9 +374,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  setView() {
-    this.isTable = !this.isTable
-  }
+
   updateView(view: LeadCustomList): void {
     this._matDialog.open(ViewDetailComponent, {
       autoFocus: false,
@@ -334,95 +383,13 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
-  toggleView() {
+
+  setView() {
     this.isTable = !this.isTable
   }
-  onMouseEnter(row: Lead) {
-    row.isHovered = true;
-  }
-  onMouseLeave(row: Lead) {
-    row.isHovered = false;
-  }
-  previewLead(row: Lead) {
-    this._router.navigate(['detail-view', row.leadId], { relativeTo: this._activatedRoute });
-  }
-  ngOnInit(): void {
-    this.dateRangesFilter = [...this.dateRanges];
-    let selectedList = new LeadCustomList({});
-    selectedList.listTitle = "All leads"
-    this._leadService.setCustomList(selectedList);
-    this.leads$ = this._leadService.filteredLeads$;
-    this._leadService.filteredLeads$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((comapnies: Lead[]) => {
-        this.leads = [...comapnies];
-        this.leadCount = comapnies.length;
-        this.dataSource = new MatTableDataSource(this.leads);
-        this.ngAfterViewInit();
-        this._changeDetectorRef.markForCheck();
-      });
 
-    this._leadService.lead$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((Lead: Lead) => {
-        this.selectedLead = Lead;
-        this._changeDetectorRef.markForCheck();
-      });
-    this.matDrawer.openedChange.subscribe((opened) => {
-      if (!opened) {
-        this.selectedLead = null;
-        this._changeDetectorRef.markForCheck();
-      }
-    });
-    this._leadService.users$.pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((users: User[]) => {
-        this.users = users;
-        this.filteredUsers = this.users;
-        this._changeDetectorRef.markForCheck();
-      })
-    this._leadService.leadStatus$.pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((status: LeadStatus[]) => {
-        this.status = status;
-        this.filteredStatus = this.status;
-        this._changeDetectorRef.markForCheck();
-      })
-    this._fuseMediaWatcherService.onMediaChange$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(({ matchingAliases }) => {
-        if (matchingAliases.includes('lg')) {
-          this.drawerMode = 'over';
-        }
-        else {
-          this.drawerMode = 'over';
-        }
-        this._changeDetectorRef.markForCheck();
-      });
-    fromEvent(this._document, 'keydown')
-      .pipe(
-        takeUntil(this._unsubscribeAll),
-        filter<KeyboardEvent>(event =>
-          (event.ctrlKey === true || event.metaKey) // Ctrl or Cmd
-          && (event.key === '/') // '/'
-        )
-      )
-      .subscribe(() => {
-        this.createLead();
-      });
-  }
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next(null);
-    this._unsubscribeAll.complete();
-  }
-  createLead() {
-    this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
-  importFile() {
-
+  toggleView() {
+    this.isTable = !this.isTable
   }
 
   isActiveItem(item: LeadCustomList): boolean {
@@ -434,33 +401,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     return this.activeItem === item;
   }
 
-
-  updateLead(selectedLead: Lead) {
-    this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
-  onBackdropClicked(): void {
-    this._router.navigate(['./'], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-    this.selection.select(...this.dataSource.data);
-  }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  checkboxLabel(row?: Lead): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadId + 1}`;
-  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -468,6 +408,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
   cancelFilters(filterId: number): void {
     if (filterId == 1) {
       this.filter.leadOwner = [];
@@ -483,9 +424,11 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     }
     this._leadService.setFilter(this.filter);
   }
+
   saveFilter(list: LeadCustomList): any {
     this._leadService.saveCustomFilter(list.listId, list.listTitle, JSON.stringify(this.filter)).pipe(takeUntil(this._unsubscribeAll)).subscribe();
   }
+
   filterUsers(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -499,6 +442,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         );
       });
   }
+
   filterLeadStatus(event): void {
     const value = event.target.value.toLowerCase();
     fromEvent(event.target, 'input')
@@ -512,7 +456,8 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         );
       });
   }
-  toggleProductTag(id: string): void {
+
+  toggleLeadOwner(id: string): void {
     const leadOwnerIndex = this.filter.leadOwner.findIndex(userId => userId === id);
     if (leadOwnerIndex === -1) {
       this.filter.leadOwner.push(id);
@@ -521,6 +466,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     }
     this._leadService.setFilter(this.filter);
   }
+
   toggleLeadStatus(leadId: number): void {
     const leadOwnerIndex = this.filter.leadStatus.findIndex(a => a === leadId);
     if (leadOwnerIndex === -1) {
@@ -530,11 +476,8 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     }
     this._leadService.setFilter(this.filter);
   }
-  trackByFn(index: number, item: any): any {
-    return item.id || index;
-  }
 
-  openConnectorDialog() {
+  openLeadImportDialog() {
     const dialogRef = this.dialog.open(LeadImportComponent,
       {
         height: "100%",
@@ -544,7 +487,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
 
   openTrashDialog() {
     const restoreDialogRef = this.dialog.open(TrashComponent,
@@ -564,4 +506,84 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       this._leadService.getLeads().pipe(takeUntil(this._unsubscribeAll)).subscribe();
     });
   }
+
+  onDateRangeChange(selectedValue: string, type: string) {
+    let startDate: Date = new Date();
+    let endDate: Date = new Date();
+    switch (selectedValue) {
+      case 'today':
+        endDate.setDate(endDate.getDate() + 1);
+        break;
+      case 'lastWeek':
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case 'last15Days':
+        startDate.setDate(startDate.getDate() - 15);
+        break;
+      case 'lastMonth':
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      case 'last4Months':
+        startDate.setMonth(startDate.getMonth() - 4);
+        break;
+      case 'last8Months':
+        startDate.setMonth(startDate.getMonth() - 8);
+        break;
+      case 'lastYear':
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        break;
+      case 'moreThanYear':
+        startDate.setFullYear(startDate.getFullYear() - 100);
+        break;
+      default:
+        break;
+    }
+    if (type == "created") {
+      this.filter.createdDate = startDate;
+    }
+    else {
+      this.filter.modifiedDate = startDate;
+    }
+    this._leadService.setFilter(this.filter);
+    this._usersPanelOverlayRef.detach();
+  }
+
+  onBackdropClicked(): void {
+    this._router.navigate(['./'], { relativeTo: this._activatedRoute });
+    this._changeDetectorRef.markForCheck();
+  }
+
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.selection.select(...this.dataSource.data);
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  checkboxLabel(row?: Lead): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadId + 1}`;
+  }
+
+  onMouseEnter(row: Lead) {
+    row.isHovered = true;
+  }
+
+  onMouseLeave(row: Lead) {
+    row.isHovered = false;
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
+  }
+
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable, Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
@@ -13,7 +13,7 @@ import { TrashComponent } from 'app/modules/admin/crm/trash/trash.component';
 @Component({
     selector       : 'notes-list',
     templateUrl    : './list.component.html',
-    encapsulation  : ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotesListComponent implements OnInit, OnDestroy

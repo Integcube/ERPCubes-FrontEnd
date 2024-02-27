@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService } from '../chat.service';
@@ -8,7 +8,7 @@ import { AlertService } from 'app/core/alert/alert.service';
 @Component({
     selector: 'chat-contact-info',
     templateUrl: './contact-info.component.html',
-    encapsulation: ViewEncapsulation.None,
+    
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactInfoComponent implements OnInit, OnDestroy {

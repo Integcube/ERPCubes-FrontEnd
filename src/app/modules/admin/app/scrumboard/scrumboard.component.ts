@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
     selector       : 'scrumboard',
     templateUrl    : './scrumboard.component.html',
-    encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrumboardComponent
