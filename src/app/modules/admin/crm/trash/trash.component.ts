@@ -45,6 +45,20 @@ export class TrashComponent implements OnInit, OnDestroy {
           data => { this.trashItems = this.filterItems = [...data] }
         );
         break;
+      case "COMPANY":
+        this._trashService.getDeletedCompany()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );
+        break;
+      case "OPPORTUNITY":
+        this._trashService.getDeletedOpportunity()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(
+          data => { this.trashItems = this.filterItems = [...data] }
+        );
+        break;
       case "USER":
         this._trashService.getDeletedUsersList()
         .pipe(takeUntil(this._unsubscribeAll))
@@ -170,7 +184,15 @@ export class TrashComponent implements OnInit, OnDestroy {
   restoreItem(item: DeletedItems): void {
     if (this._data.type === "LEAD") {
       this._trashService.restoreLead(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
+    }
+    else if (this._data.type === "COMPANY") {
+      this._trashService.restoreCompany(item).subscribe(data => {this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Company restored successfully', 'bottom', 'center');
+    }
+    else if (this._data.type === "OPPORTUNITY") {
+      this._trashService.restoreOpportunity(item).subscribe(data => {this.ngOnInit(); });
+      this._trashService.showNotification('snackbar-success', 'Opportunity restored successfully', 'bottom', 'center');
     }
     else if (this._data.type === "PRODUCT") {
       this._trashService.restoreProduct(item).subscribe(data => { this.ngOnInit(); });
@@ -179,50 +201,59 @@ export class TrashComponent implements OnInit, OnDestroy {
     }
     else if (this._data.type === "USER") {
       this._trashService.restoreUser(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'User restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "NOTE") {
       this._trashService.restoreNote(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Note restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "TASK") {
       this._trashService.restoreTask(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Task restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "TEAM") {
       this._trashService.restoreTeam(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Team restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "CAMPAIGN") {
       this._trashService.restoreCampaign(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Campaign restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "FORM") {
       this._trashService.restoreForm(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Form restored successfully', 'bottom', 'center');
 
     }
     else if (this._data.type === "PROJECT") {
       this._trashService.restoreProject(item).subscribe(data => { this.ngOnInit(); });
-      this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+      this._trashService.showNotification('snackbar-success', 'Project restored successfully', 'bottom', 'center');
 
     }
   }
 
 
   restoreBulkItem(): void {
+    debugger;
     if (this.isAnyItemSelected()) {
       const selectedItemIds = this.selectedItems.map(item => item?.id);
-  
+      debugger;
       let a;
       if (this._data.type === "LEAD") {
         a = this._trashService.restoreBulkLeads(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
+
+      } else if (this._data.type === "COMPANY") {
+        a = this._trashService.restoreBulkCompany(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Companies restored successfully', 'bottom', 'center');
+
+      } else if (this._data.type === "OPPORTUNITY") {
+        a = this._trashService.restoreBulkOpportunity(selectedItemIds);
+        this._trashService.showNotification('snackbar-success', 'Opportunities restored successfully', 'bottom', 'center');
 
       } else if (this._data.type === "PRODUCT") {
         a = this._trashService.restoreBulkProduct(selectedItemIds);
@@ -230,37 +261,37 @@ export class TrashComponent implements OnInit, OnDestroy {
 
       } else if (this._data.type === "USER") {
         a = this._trashService.restoreBulkUsers(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Users restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "NOTE") {
         a = this._trashService.restoreBulkNotes(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Notes restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "TASK") {
         a = this._trashService.restoreBulkTasks(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Tasks restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "TEAM") {
         a = this._trashService.restoreBulkTeam(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Teams restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "CAMPAIGN") {
         a = this._trashService.restoreBulkCampaign(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Campaigns restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "FORM") {
         a = this._trashService.restoreBulkForm(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Forms restored successfully', 'bottom', 'center');
 
       }
       else if (this._data.type === "PROJECT") {
         a = this._trashService.restoreBulkProject(selectedItemIds);
-        this._trashService.showNotification('snackbar-success', 'Products restored successfully', 'bottom', 'center');
+        this._trashService.showNotification('snackbar-success', 'Projects restored successfully', 'bottom', 'center');
 
       }
       
@@ -300,6 +331,16 @@ export class TrashComponent implements OnInit, OnDestroy {
   getDeletedFilters(): void {
     if (this._data.type === "LEAD") {
       this._trashService.getDeletedLeads().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "COMPANY") {
+      this._trashService.getDeletedCompany().subscribe((items: DeletedItems[]) => {
+        this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
+      });
+    }
+    else if (this._data.type === "OPPORTUNITY") {
+      this._trashService.getDeletedOpportunity().subscribe((items: DeletedItems[]) => {
         this.deletedUsers = Array.from(new Set(items.map(item => item.deletedBy)));
       });
     }
@@ -352,6 +393,18 @@ export class TrashComponent implements OnInit, OnDestroy {
   filterByUser(user: string): void {
     if (this._data.type === "LEAD") {
       this._trashService.getDeletedLeads().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    } else if (this._data.type === "COMPANY") {
+      this._trashService.getDeletedCompany().pipe(
+        map(items => items.filter(item => item.deletedBy === user))
+      ).subscribe(filteredItems => {
+        this.filterItems = filteredItems;
+      });
+    } else if (this._data.type === "OPPORTUNITY") {
+      this._trashService.getDeletedOpportunity().pipe(
         map(items => items.filter(item => item.deletedBy === user))
       ).subscribe(filteredItems => {
         this.filterItems = filteredItems;

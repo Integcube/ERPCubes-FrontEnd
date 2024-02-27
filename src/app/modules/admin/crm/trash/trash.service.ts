@@ -11,44 +11,57 @@ import { DeletedItems } from './trash.type';
     providedIn: 'root'
 })
 export class TrashService {
-    private readonly getDeletedProductListUrl = `${environment.url}/Product/del`
-    private readonly restoreBulkProductUrl = `${environment.url}/Product/restoreBulk`
-    private readonly restoreProductUrl = `${environment.url}/Product/restore`
     private readonly getDeletedLeadListUrl = `${environment.url}/Lead/allDeleted`
     private readonly restoreLeadUrl = `${environment.url}/Lead/restore`
     private readonly restoreBulkLeadUrl = `${environment.url}/Lead/restoreBulkLead`
+
+    private readonly getDeletedCompanyListUrl = `${environment.url}/Company/allDeleted`
+    private readonly restoreBulkCompanyUrl = `${environment.url}/Company/restoreBulk`
+    private readonly restoreCompanyUrl = `${environment.url}/Company/restore`
+
+    private readonly getDeletedOpportunityListUrl = `${environment.url}/Opportunity/allDeleted`
+    private readonly restoreBulkOpportunityUrl = `${environment.url}/Opportunity/restoreBulk`
+    private readonly restoreOpportunityUrl = `${environment.url}/Opportunity/restore`
+
+    private readonly getDeletedProductListUrl = `${environment.url}/Product/del`
+    private readonly restoreBulkProductUrl = `${environment.url}/Product/restoreBulk`
+    private readonly restoreProductUrl = `${environment.url}/Product/restore`
+    
     private readonly getDeletedUsersUrl = `${environment.url}/Users/del`
     private readonly restoreUserListUrl = `${environment.url}/Users/restore`
     private readonly restoreBulkUserUrl = `${environment.url}/Users/restoreBulkUser`
+    
     private readonly getDeletedNoteListUrl = `${environment.url}/Notes/del`
     private readonly restoreNoteUrl = `${environment.url}/Notes/restore`
     private readonly restoreBulkNoteUrl = `${environment.url}/Notes/restoreBulk`
+    
     private readonly getDeletedTaskListUrl = `${environment.url}/Task/del`
     private readonly restoreTaskUrl = `${environment.url}/Task/restore`
     private readonly restoreBulkTaskUrl = `${environment.url}/Task/restoreBulk`
+    
     private readonly getDeletedTeamListUrl = `${environment.url}/Team/del`
     private readonly restoreTeamkUrl = `${environment.url}/Team/restore`
     private readonly restoreBulkTeamUrl = `${environment.url}/Team/restoreBulk`
-    private readonly getDeletedCampaignListUrl = `${environment.url}/Campaign/del   `
+    
+    private readonly getDeletedCampaignListUrl = `${environment.url}/Campaign/del`
     private readonly restoreCampaignkUrl = `${environment.url}/Campaign/restore`
     private readonly restoreBulkCampaignUrl = `${environment.url}/Campaign/restoreBulkCampaign`
+    
     private readonly getDeletedFormListUrl = `${environment.url}/Forms/del`
     private readonly restoreFormUrl = `${environment.url}/Forms/restore`
     private readonly restoreBulkFormUrl = `${environment.url}/Forms/restoreBulk`
+    
     private readonly getDeletedProjectListUrl = `${environment.url}/Project/del`
     private readonly restoreProjectUrl = `${environment.url}/Project/restore`
     private readonly restoreBulkProjectUrl = `${environment.url}/Project/restoreBulk`
 
-    
-    
     user: User;
     constructor(
         private _userService: UserService,
         private _httpClient: HttpClient,
-        private snackBar: MatSnackBar) {
-        this._userService.user$.subscribe(user => {
-            this.user = user;
-        })
+        private snackBar: MatSnackBar)
+    {
+        this._userService.user$.subscribe(user => { this.user = user; })
     }
 
     showNotification(colorName, text, placementFrom, placementAlign) {
@@ -59,6 +72,126 @@ export class TrashService {
             panelClass: colorName,
         });
     }
+
+    getDeletedLeads(): Observable<DeletedItems[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedLeadListUrl, data).pipe(
+       
+            
+        );
+    }
+    restoreLead(lead: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            leadId: lead.id
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreLeadUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
+            }),
+            
+        );
+    }
+    restoreBulkLeads(leadIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            leadId: leadIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkLeadUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
+
+            }),
+            
+        );
+    }
+
+    getDeletedCompany(): Observable<DeletedItems[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedCompanyListUrl, data).pipe(
+       
+            
+        );
+    }
+    restoreCompany(opportunity: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            opportunityId: opportunity.id
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreCompanyUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Company restored successfully', 'bottom', 'center');
+            }),
+            
+        );
+    }
+    restoreBulkCompany(opportunityIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            opportunityId: opportunityIds
+        };
+
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkCompanyUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Companys restored successfully', 'bottom', 'center');
+
+            }),
+            
+        );
+    }
+
+    getDeletedOpportunity(): Observable<DeletedItems[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        debugger;
+        return this._httpClient.post<DeletedItems[]>(this.getDeletedOpportunityListUrl, data).pipe(
+        );
+    }
+    restoreOpportunity(opportunity: DeletedItems): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            opportunityId: opportunity.id
+        };
+        debugger;
+        return this._httpClient.post<DeletedItems[]>(this.restoreOpportunityUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Opportunity restored successfully', 'bottom', 'center');
+            }),
+            
+        );
+    }
+    restoreBulkOpportunity(opportunityIds: number[]): Observable<any> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+            opportunityId: opportunityIds
+        };
+        debugger;
+        return this._httpClient.post<DeletedItems[]>(this.restoreBulkOpportunityUrl, data).pipe(
+            tap(() => {
+                // this.showNotification('snackbar-success', 'Opportunitys restored successfully', 'bottom', 'center');
+
+            }),
+            
+        );
+    }
+
     getDeletedProducts(): Observable<DeletedItems[]> {
         let data = {
             id: this.user.id,
@@ -95,48 +228,6 @@ export class TrashService {
         );
     }
 
-    getDeletedLeads(): Observable<DeletedItems[]> {
-        let data = {
-            id: this.user.id,
-            tenantId: this.user.tenantId,
-        }
-        return this._httpClient.post<DeletedItems[]>(this.getDeletedLeadListUrl, data).pipe(
-       
-            
-        );
-    }
-    restoreLead(lead: DeletedItems): Observable<any> {
-        let data = {
-            id: this.user.id,
-            tenantId: this.user.tenantId,
-            leadId: lead.id
-        };
-
-        return this._httpClient.post<DeletedItems[]>(this.restoreLeadUrl, data).pipe(
-            tap(() => {
-                // this.showNotification('snackbar-success', 'Lead restored successfully', 'bottom', 'center');
-            }),
-            
-        );
-    }
-
-    restoreBulkLeads(leadIds: number[]): Observable<any> {
-        let data = {
-            id: this.user.id,
-            tenantId: this.user.tenantId,
-            leadId: leadIds
-        };
-
-        return this._httpClient.post<DeletedItems[]>(this.restoreBulkLeadUrl, data).pipe(
-            tap(() => {
-                // this.showNotification('snackbar-success', 'Leads restored successfully', 'bottom', 'center');
-
-            }),
-            
-        );
-    }
-
-
     getDeletedUsersList(): Observable<DeletedItems[]> {
         let data = {
             id: this.user.id,
@@ -147,7 +238,6 @@ export class TrashService {
             
         );
     }
-
     restoreUser(user: DeletedItems): Observable<DeletedItems> {
         let data = {
             id: this.user.id,
@@ -178,6 +268,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedNotes(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -216,6 +307,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedTask(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -254,6 +346,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedTeam(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -292,6 +385,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedCampaign(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -330,6 +424,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedForm(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -368,6 +463,7 @@ export class TrashService {
             
         );
     }
+
     getDeletedProject(): Observable<DeletedItems[]>{
         let data = {
             id: this.user.id,
@@ -406,4 +502,5 @@ export class TrashService {
             
         );
     }
+
 }
