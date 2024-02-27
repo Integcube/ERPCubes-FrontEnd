@@ -104,26 +104,23 @@
                         </mat-form-field>
                     </div>
                     <!-- Actions -->
-                    <div
-                        class="flex sticky bottom-0 items-center  -mx-6 sm:-mx-12 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
-                        <!-- Delete -->
+                    <div class="flex sticky bottom-0 items-center  -mx-8 sm:-mx-8 py-4 pr-4 pl-1 sm:pr-12 sm:pl-7 border-t bg-gray-50 dark:bg-transparent">
                         <ng-container *ngIf="selectedCompany.companyId !== -1">
-                            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
-                                Delete
+                            <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">
+                                <mat-icon [svgIcon]="'heroicons_outline:trash'" class="icon-size-5"></mat-icon>
+                                <span class="ml-2 text-xs" i18n>Delete</span>
                             </button>
                         </ng-container>
-
-                        <!-- Cancel -->
-                        <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
-                            [routerLink]="['../']" i18n>
-                            Cancel
+                        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDrawer()"
+                            [routerLink]="['../']">
+                            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                            <span class="ml-2 text-xs" i18n>Cancel</span>
                         </button>
-                        <!-- Save -->
-                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="companyForm.invalid"
-                            [matTooltip]="'Save'" (click)="save()" i18n>
-                            Save
+                        <button class="ml-2 primary-2 h-8" mat-flat-button [disabled]="companyForm.invalid"
+                            [matTooltip]="'Click to Save Lead'" (click)="save()">
+                            <mat-icon [svgIcon]="'heroicons_outline:check-circle'" class="icon-size-5"></mat-icon>
+                            <span class="ml-2 text-xs" i18n>Save</span>
                         </button>
-
                     </div>
                 </form>
             </div>

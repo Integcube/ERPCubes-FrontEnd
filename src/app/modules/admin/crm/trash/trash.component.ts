@@ -115,6 +115,13 @@ export class TrashComponent implements OnInit, OnDestroy {
             data => { this.trashItems = this.filterItems = [...data] }
           );
         break;
+      case "COMPANY":
+        this._trashService.getDeletedCompany()
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(
+            data => { this.trashItems = this.filterItems = [...data] }
+          );
+        break;
     }
     /** 
     if (this._data.type === "LEAD") {

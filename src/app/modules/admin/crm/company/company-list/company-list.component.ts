@@ -17,6 +17,7 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { User } from 'app/core/user/user.types';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { values } from 'lodash';
+import { TrashComponent } from '../../trash/trash.component';
 
 @Component({
   selector: 'app-company-list',
@@ -36,10 +37,12 @@ export class CompanyListComponent implements OnInit {
   @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
   @ViewChild('industryPanel') private _industryPanel: TemplateRef<any>;
   @ViewChild('industryPanelOrigin') private _industryPanelOrigin: ElementRef;
+  @ViewChild('exporter') public exporter;
+
   private _panelsOverlayRef: OverlayRef;
   
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+  isTable: boolean = true
   dataSource: MatTableDataSource<Company>;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   drawerMode: 'side' | 'over';
@@ -53,6 +56,8 @@ export class CompanyListComponent implements OnInit {
     modifiedDate: null,
     industryId: []
   }
+  activeItem = new CompanyCustomList({});
+
   dateRangesFilter: any;
   dateRanges: { label: string, value: string }[] = [
     { label: 'Today', value: 'today' },
@@ -495,5 +500,39 @@ export class CompanyListComponent implements OnInit {
   }
   trackByFn(index: number, item: any): any {
     return item.id || index;
+  }
+
+  setView() {
+    this.isTable = !this.isTable
+  }
+  toggleView() {
+    this.isTable = !this.isTable
+  }
+  isActiveItem(item: CompanyCustomList): boolean {
+    if (item == null) {
+      item = new CompanyCustomList({});
+      item.listTitle = "All Companies";
+
+    }
+    return this.activeItem === item;
+  }
+
+  openTrashDialog() {
+    const restoreDialogRef = this._matDialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+
+        autoFocus: false,
+        data: {
+          type: "COMPANY",
+        }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._companyService.getCompanies().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
   }
 }

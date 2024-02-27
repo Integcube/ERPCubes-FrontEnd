@@ -1,13 +1,21 @@
-<div class="flex flex-col flex-auto justify-start bg-white h-main-section overflow-auto ">
-    <div class="flex justify-between w-full px-6 pt-6">
+<div class="flex flex-col flex-auto justify-start bg-white h-main-section">
+    <div class="flex justify-between w-full px-3 pt-3">
         <div class="flex items-center">
+            <mat-icon class="text-xs text-accent2 cursor-pointer" svgIcon="heroicons_outline:chevron-left"
+                [routerLink]="['/crm/contacts/company']"></mat-icon>
+            <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
+                [routerLink]="['/crm/contacts/company']">
+               Back to Companies
+            </span>
+        </div>
+        <!-- <div class="flex items-center">
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-left"></mat-icon>
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [routerLink]="['/crm/contacts/company']">
                 Company
             </span>
-        </div>
-        <div class="flex items-center">
+        </div> -->
+        <!-- <div class="flex items-center">
             <span class="text-base font-bold text-accent2 hover:underline cursor-pointer"
                 [matMenuTriggerFor]="actionMenu">
                 Actions
@@ -18,9 +26,9 @@
                 <button mat-menu-item>3 days ago</button>
             </mat-menu>
             <mat-icon class="text-xs text-accent2" svgIcon="heroicons_outline:chevron-down"></mat-icon>
-        </div>
+        </div> -->
     </div>
-    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30">
+    <div class="flex flex-col sm:flex-row flex-auto sm:items-center px-6 max-h-30 min-h-30 ">
         <!-- Avatar and name -->
         <div class="flex flex-auto items-center min-w-0">
             <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden">
@@ -35,67 +43,69 @@
                 </ng-container>
             </div>
             <div class="min-w-0 ml-4">
-                <div class="text-xl leading-5 truncate">{{selectedCompany.name}}</div>
-                <div class="leading-5 truncate text-secondary">{{selectedCompany.website}}</div>
+                <div class="text-xl leading-5 truncate" style="font-weight: 600;color: #0c5d99 !important">{{selectedCompany.name}}</div>
+                <div class="leading-5 truncate text-secondary text-sm">{{selectedCompany.website}}</div>
             </div>
         </div>
     </div>
-    <div class="flex flex-row justify-between w-full border-b px-6 pb-6">
-        <div class="flex flex-col justify-center" (click)="addNote()">
-            <button mat-icon-button >
-                <mat-icon class="icon-size-5">edit_note</mat-icon>
-            </button>
-            <span class="text-sm text-center">
-                Notes
-            </span>
-        </div>
-        <div class="flex flex-col justify-center">
+    <div class="flex flex-row justify-center w-full gap-6 border-b px-4 mt-2 pb-2 ">
+      
+        <div class="flex flex-col items-center justify-center  cursor-pointer">
             <button mat-icon-button (click)="addEmail()">
-                <mat-icon class="icon-size-5">email</mat-icon>
+                <mat-icon class="icon-size-5 ">email</mat-icon>
             </button>
-            <span class="text-sm text-center">
+            <span class="text-sm text-center  mt-1">
                 Email
             </span>
         </div>
-        <div class="flex flex-col justify-center" (click)="addCall()">
+        <div class="flex flex-col items-center justify-center  cursor-pointer"  (click)="addCall()">
             <button mat-icon-button>
-                <mat-icon class="icon-size-5">call</mat-icon>
+                <mat-icon class="icon-size-5 ">call</mat-icon>
             </button>
-            <span class="text-sm text-center">
+            <span class="text-sm text-center mt-1">
                 Call
             </span>
         </div>
-        <div class="flex flex-col justify-center" (click)="addTask()">
-            <button mat-icon-button>
-                <mat-icon class="icon-size-5">add_task</mat-icon>
-            </button>
-            <span class="text-sm text-center">
-                Task
-            </span>
-        </div>
-        <div class="flex flex-col justify-center"  (click)="addMeeting()">
+        <div class="flex flex-col items-center justify-center  cursor-pointer" (click)="addMeeting()">
             <button mat-icon-button>
                 <mat-icon class="icon-size-5">person</mat-icon>
             </button>
-            <span class="text-sm text-center">
+            <span class="text-sm text-center mt-1">
                 Meeting
             </span>
         </div>
-        <div class="flex flex-col justify-center">
-            <button mat-icon-button>
+      
+     <div class="flex flex-col items-center justify-center  cursor-pointer">
+            <button mat-icon-button [matMenuTriggerFor]="postCardMenu01"> 
                 <mat-icon class="icon-size-5">more_horiz</mat-icon>
             </button>
-            <span class="text-sm text-center">
+            <span class="text-sm text-center mt-1">
                 More
             </span>
-        </div>
+        </div> 
+        <mat-menu #postCardMenu01="matMenu">
+
+            <button  (click)="addTask()" mat-menu-item>
+                <span class="flex items-center">
+                <mat-icon class="icon-size-5 mr-1">add_task</mat-icon>
+                  <span class="text-sm truncate w-10"> Task</span>
+                </span>
+              </button>
+              <button (click)="addNote()" mat-menu-item>
+                <span class="flex items-center">
+                <mat-icon class="icon-size-5 mr-1">edit_note</mat-icon>
+                  <span class="text-sm truncate w-10"> Notes</span>
+                </span>
+              </button>
+            
+        </mat-menu>
     </div>
-    <div class="flex flex-row justify-between w-full">
+    <div class="flex flex-row justify-between w-full " fuseScrollbar>
         <mat-accordion>
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">About This Company</span>
+                        <span class="text-base ">About This Company</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="flex flex-col">
@@ -213,7 +223,7 @@
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">Website Activity</span>
+                        <span class="text-base">Website Activity</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <p class="text-primary">Track the customer requests associated with this record.</p>
@@ -221,7 +231,7 @@
             <mat-expansion-panel [togglePosition]="'before'">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="items-center justify-between">
-                        <span class="text-base font-semibold">Company Subscription</span>
+                        <span class="text-base">Company Subscription</span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <p class="text-primary">Track the customer requests associated with this record.</p>
