@@ -1,19 +1,20 @@
-<div class="flex flex-col  max-w-240 md:min-w-160  -m-6 overflow-hidden max-h-screen ">
+<div class="flex flex-col max-w-240 md:min-w-160 max-h-screen -m-6">
 
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium" i18n>New Email</div>
+        <div class="text-lg font-medium" i18n>New Message</div>
         <button mat-icon-button (click)="close()" [tabIndex]="-1">
             <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
     </div>
+
     <!-- Compose form -->
-    <form class="flex flex-col flex-grow flex-auto p-6 sm:p-8 overflow-auto" [formGroup]="composeForm">
+    <form class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto" [formGroup]="composeForm">
 
         <!-- To -->
         <mat-form-field>
             <mat-label i18n>To</mat-label>
-            <input matInput [formControlName]="'to'" >
+            <input matInput [formControlName]="'to'" readonly="true">
             <mat-error *ngIf="composeForm.get('to').hasError('required')" i18n>
                 Sender email is required
             </mat-error>
@@ -28,32 +29,24 @@
         <!-- Body -->
         <quill-editor class="mt-2" [formControlName]="'description'" [bounds]="'self'" [modules]="quillModules"></quill-editor>
 
-</form>
         <!-- Actions -->
-    
-        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1 sticky bottom-0">
-            <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
+            <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">  
             <!-- Delete -->
-            <button mat-stroked-button  [color]="'warn'" class="h-8" [matTooltip]="'Delete'" (click)="delete()" *ngIf="composeForm.value.emailId !== -1">
-                <mat-icon
-                class="icon-size-5"
-                   [svgIcon]="'heroicons_outline:trash'"></mat-icon> 
-                   <span class="ml-1 mr-1 text-xs" i18n>Delete</span>  
+            <button mat-button [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" i18n>
+                Delete
             </button>
 
             <!-- Cancel -->
-            <button class="ml-auto mr-2 h-8" mat-stroked-button  [matTooltip]="'Cancel'" (click)="close()">
-                <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-                <span class="ml-2 text-xs" i18n>Cancel</span> 
+            <button class="ml-auto" mat-button [matTooltip]="'Cancel'" (click)="close()" i18n>
+                Cancel
             </button>
 
             <!-- Save -->
-            <button class=" mr-4 primary-2 h-8" mat-flat-button   [matTooltip]="'Click to Save Email Info'" (click)="saveAndClose()">
-                <mat-icon
-                     class="icon-size-5 mr-2 text-white"
-                   [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
-               <span class="ml-1 mr-1 text-xs" i18n>Save</span>
-             </button>
+            <button class="ml-2" mat-flat-button [color]="'primary'" (click)="saveAndClose()" i18n>
+                Save
+            </button>
         </div>
-       </div>
+        </div>
+    </form>
 </div>

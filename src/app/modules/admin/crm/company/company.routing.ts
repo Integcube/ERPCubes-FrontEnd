@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { CompanyComponent } from "./company.component";
 import { CompanyListComponent } from "./company-list/company-list.component";
 import { CompanyFormComponent } from "./company-form/company-form.component";
-import { CallReasonCResolver, CallResolver, CompaniesResolver, CustomListResolver, EmailResolver, EventTypeResolver, IndustryResolver, MeetingResolver, NoteResolver, SelectedCompanyResolver, TagsResolver, TaskResolver, UserResolver } from "./company.resolvers";
+import { CallResolver, CompaniesResolver, CustomListResolver, EmailResolver, IndustryResolver, MeetingResolver, NoteResolver, SelectedCompanyResolver, TagsResolver, TaskResolver, UserResolver } from "./company.resolvers";
 import { CompanyGuard } from "./company.guards";
 import { CompanyDetailComponent } from "./company-detail/company-detail.component";
 
@@ -14,9 +14,7 @@ export const companyRoutes: Routes = [
             industries: IndustryResolver,
             users: UserResolver,
             companies: CompaniesResolver,
-            customList: CustomListResolver,
-            eventType:EventTypeResolver,
-
+            customList: CustomListResolver
         },
         children: [
             {
@@ -45,9 +43,7 @@ export const companyRoutes: Routes = [
                     call: CallResolver,
                     meeting: MeetingResolver,
                     tasks: TaskResolver,
-                    tags: TagsResolver,
-                    CallReason:CallReasonCResolver,
-
+                    tags: TagsResolver
                 },
             }]
     },

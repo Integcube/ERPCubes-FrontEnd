@@ -45,8 +45,6 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
         note: [this._data.meeting.note, [Validators.required]],
         startTime: [this.formatTime(this._data.meeting.startTime)],
         endTime: [this.formatTime(this._data.meeting.endTime)],
-        meetingDate:[this._data.meeting.meetingDate],
-
     });
 }
 formatTime(time: Date | string): string {
@@ -102,10 +100,5 @@ formatTime(time: Date | string): string {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(data => this.close())
   }
-  resetmeetingDate(): void {
-    this.composeForm.get('meetingDate').setValue(null);
-    this._changeDetectorRef.markForCheck()
-  }
-
 }
 

@@ -139,23 +139,4 @@ export class SelectedCompanyResolver implements Resolve<any>
       return this._companyService.getTags();
     }
   }
-  @Injectable({
-    providedIn:'root'
-  })
-  export class CallReasonCResolver implements Resolve<any>{
-    constructor(
-      private _companyService:CompanyService)
-      { }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      return this._companyService.getScenarios();
-    }
-  }
-  @Injectable({
-    providedIn: "root"
-  })
-  export class EventTypeResolver implements Resolve<any>{
-    constructor(private _companyService: CompanyService) { }
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return this._companyService.getEventType();
-    }
-  }
+

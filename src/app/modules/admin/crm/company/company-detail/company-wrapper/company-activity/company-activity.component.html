@@ -1,19 +1,20 @@
 <!-- Main -->
-<!-- <ng-container >
-    <app-company-overview></app-company-overview>
-</ng-container>  -->
-<div class="flex-auto border-t  px-2  sm:px-2 overflow-hidden" >
-   
+<div class="flex-auto border-t -mt-px pt-4 px-6 sm:pt-6">
+    <div class="flex items-center  mb-2 sm:mt-0 ">
+        <!-- Search -->
+        <div class="flex-auto">
+            <mat-form-field class="fuse-mat-dense fuse-mat-no-subscript fuse-mat-rounded w-full min-w-50">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search'">
+            </mat-form-field>
+        </div>
+    </div>
     <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
 
         <!-- Activity -->
         <mat-tab>
             <ng-template mat-tab-label>
                 <span class="inline-flex items-center space-x-2">
-                   
-                    <mat-icon
-                    class="icon-size-5"
-                       [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
                     <span class="text-md">Activity</span>
                 </span>
             </ng-template>
@@ -21,69 +22,11 @@
                 <app-activity-detail></app-activity-detail>
             </ng-template>
         </mat-tab>
-          <!-- Call -->
-        
-          <mat-tab>
-            <ng-template mat-tab-label>
-                <span class="inline-flex items-center space-x-2">
-                    <mat-icon
-                    class="icon-size-5"
-                       [svgIcon]="'heroicons_outline:phone'"></mat-icon>
-                    <span class="text-md">Call</span>
-                </span>
-            </ng-template>
-            <ng-template matTabContent>
-                <app-call-tab></app-call-tab>
-            </ng-template>
-        </mat-tab>
-  <!-- Email -->
-      <mat-tab>
-         <ng-template mat-tab-label>
-         <span class="inline-flex items-center space-x-2">
-            <mat-icon
-            class="icon-size-5"
-               [svgIcon]="'heroicons_outline:envelope'"></mat-icon>
-             <span class="text-md">Email</span>
-          </span>
-      </ng-template>
-      <ng-template matTabContent>
-        <app-email-tab></app-email-tab>
-      </ng-template>
-    </mat-tab>
-          
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <span class="inline-flex items-center space-x-2">
-                <mat-icon
-            class="icon-size-5"
-               [svgIcon]="'heroicons_outline:user-group'"></mat-icon>
-                <span class="text-md">Meeting</span>
-            </span>
-        </ng-template>
-        <ng-template matTabContent>
-            <app-meeting-tab></app-meeting-tab>
-        </ng-template>
-    </mat-tab>
-         <!-- Task -->
-         <mat-tab class="min-w-10 max-w-10">
-            <ng-template mat-tab-label class="min-w-10 max-w-10">
-                <span class="inline-flex items-center space-x-2">
-                    <mat-icon class="icon-size-5">add_task</mat-icon>
-                     
-                    <span class="text-md">Task</span>
-                </span>
-            </ng-template>
-            <ng-template matTabContent>
-                <app-task-tab></app-task-tab>
-            </ng-template>
-        </mat-tab>
-        <!-- Meeting -->
+
         <!-- Notes -->
         <mat-tab>
             <ng-template mat-tab-label>
                 <span class="inline-flex items-center space-x-2">
-                    <mat-icon class="icon-size-5">edit_note</mat-icon>
-
                     <span class="text-md">Notes</span>
                 </span>
             </ng-template>
@@ -92,10 +35,52 @@
             </ng-template>
         </mat-tab>
 
-      
-      
-   
-  
+        <!-- Email -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span class="inline-flex items-center space-x-2">
+                    <span class="text-md">Email</span>
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-email-tab></app-email-tab>
+            </ng-template>
+        </mat-tab>
+        <!-- Call -->
+        
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span class="inline-flex items-center space-x-2">
+                    <span class="text-md">Call</span>
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-call-tab></app-call-tab>
+            </ng-template>
+        </mat-tab>
+        <!-- Task -->
+        <mat-tab class="min-w-10 max-w-10">
+            <ng-template mat-tab-label class="min-w-10 max-w-10">
+                <span class="inline-flex items-center space-x-2">
+                    <span class="text-md">Task</span>
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-task-tab></app-task-tab>
+            </ng-template>
+        </mat-tab>
+        <!-- Meeting -->
+        
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <span class="inline-flex items-center space-x-2">
+                    <span class="text-md">Meeting</span>
+                </span>
+            </ng-template>
+            <ng-template matTabContent>
+                <app-meeting-tab></app-meeting-tab>
+            </ng-template>
+        </mat-tab>
 
     </mat-tab-group>
 </div>

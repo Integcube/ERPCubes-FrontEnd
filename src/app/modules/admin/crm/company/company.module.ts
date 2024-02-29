@@ -47,14 +47,6 @@ import { TaskTabComponent } from './company-detail/tasks/task-tab/task-tab.compo
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FuseCardModule } from '@fuse/components/card';
-import { SearchBarComponent } from './company-detail/search-bar/search';
-import { MatTableExporterModule } from 'mat-table-exporter';
-import { FormsModule } from '@angular/forms';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatStepperModule } from '@angular/material/stepper';
-import { FuseDrawerModule } from '@fuse/components/drawer';
-import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
-import { TrashModule } from '../trash/trash.module';
 
 
 
@@ -80,7 +72,6 @@ import { TrashModule } from '../trash/trash.module';
     NoteTabComponent,
     TaskDetailComponent,
     TaskTabComponent,
-    SearchBarComponent
   ],
   imports: [
     RouterModule.forChild(companyRoutes),
@@ -109,13 +100,7 @@ import { TrashModule } from '../trash/trash.module';
     FuseCardModule,
     DragDropModule,
     MatDialogModule,
-    MatTableExporterModule,
-    MatStepperModule,
-    MatProgressSpinnerModule,
-    FormsModule,
-    FuseScrollbarModule ,
-    FuseDrawerModule,
-    TrashModule
+    
   ],
   providers: [
     {
