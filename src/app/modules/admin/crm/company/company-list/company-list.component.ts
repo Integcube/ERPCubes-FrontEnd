@@ -17,6 +17,8 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { User } from 'app/core/user/user.types';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { values } from 'lodash';
+import { TrashComponent } from '../../trash/trash.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-company-list',
@@ -36,10 +38,12 @@ export class CompanyListComponent implements OnInit {
   @ViewChild('modifiedDatePanelOrigin') private _modifiedDatePanelOrigin: ElementRef;
   @ViewChild('industryPanel') private _industryPanel: TemplateRef<any>;
   @ViewChild('industryPanelOrigin') private _industryPanelOrigin: ElementRef;
+  @ViewChild('exporter') public exporter;
+
   private _panelsOverlayRef: OverlayRef;
   
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+  isTable: boolean = true
   dataSource: MatTableDataSource<Company>;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   drawerMode: 'side' | 'over';
@@ -53,6 +57,12 @@ export class CompanyListComponent implements OnInit {
     modifiedDate: null,
     industryId: []
   }
+  activeItem = new CompanyCustomList({});
+  seletedCompanyOwner:string;
+  private _usersPanelOverlayRef: OverlayRef;
+  @ViewChild('pnluserorgin') private _pnluserOrgin: ElementRef;
+  @ViewChild('pnluser') private _Bulkpnluser: TemplateRef<any>;
+
   dateRangesFilter: any;
   dateRanges: { label: string, value: string }[] = [
     { label: 'Today', value: 'today' },
@@ -82,7 +92,9 @@ export class CompanyListComponent implements OnInit {
     private _matDialog: MatDialog,
     private _renderer2: Renderer2,
     private _overlay: Overlay,
-    private _viewContainerRef: ViewContainerRef
+    private _viewContainerRef: ViewContainerRef,
+    private _fuseConfirmationService: FuseConfirmationService
+
   ) { }
 
   ngOnInit(): void {
@@ -288,11 +300,11 @@ export class CompanyListComponent implements OnInit {
       })
   }
   toggleCompanyOwner(id: string): void {
-    const leadOwnerIndex = this.filter.companyOwner.findIndex(userId => userId === id);
-    if (leadOwnerIndex === -1) {
+    const companyOwnerIndex = this.filter.companyOwner.findIndex(userId => userId === id);
+    if (companyOwnerIndex === -1) {
       this.filter.companyOwner.push(id);
     } else {
-      this.filter.companyOwner.splice(leadOwnerIndex, 1);
+      this.filter.companyOwner.splice(companyOwnerIndex, 1);
     }
     this._companyService.setFilter(this.filter);
   }
@@ -496,4 +508,122 @@ export class CompanyListComponent implements OnInit {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
+
+  setView() {
+    this.isTable = !this.isTable
+  }
+  toggleView() {
+    this.isTable = !this.isTable
+  }
+  isActiveItem(item: CompanyCustomList): boolean {
+    if (item == null) {
+      item = new CompanyCustomList({});
+      item.listTitle = "All Companies";
+
+    }
+    return this.activeItem === item;
+  }
+
+  openTrashDialog() {
+    const restoreDialogRef = this._matDialog.open(TrashComponent,
+      {
+        height: "100%",
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: "100%",
+
+        autoFocus: false,
+        data: {
+          type: "COMPANY",
+        }
+      }
+    );
+    restoreDialogRef.afterClosed().subscribe((result) => {
+      this._companyService.getCompanies().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+    });
+  }
+
+  OpenDeletePop() {
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Delete Selected Companies',
+      message: 'Are you sure you want to delete Selected Companies? This action cannot be undone!',
+      actions: {
+        confirm: {
+          label: 'Delete'
+        }
+      }
+    });
+    confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+    
+        const SelectedCompanyId = this.selection.selected.map((company: Company) => {
+          return { companyId: company.companyId };
+      });
+        this._companyService.deleteBulkCompanies(SelectedCompanyId).subscribe(
+          {
+            next: () => {
+              this._changeDetectorRef.markForCheck();
+              this.selection.clear();
+            }
+          }
+        );
+        const aa=this.selection.selected.map((company: Company) => company.companyId);
+      }
+    });
+  }
+  changeBulkAssignCompany() {
+    const SelectedCompanyId = this.selection.selected.map((company: Company) => {
+      return { companyId: company.companyId };});
+    this._companyService.bulkCompaniesAssign(SelectedCompanyId,this.seletedCompanyOwner).subscribe(
+      {
+        next: () => {
+          this._changeDetectorRef.markForCheck();
+          this._usersPanelOverlayRef.detach();
+          this.selection.clear();
+        }
+      }
+    );
+  }
+  setAssignCompany(Owner) {
+    this.seletedCompanyOwner=Owner;
+  }
+  openBulkUserPanel(): void {
+    this.seletedCompanyOwner="-1";
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._pnluserOrgin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._pnluserOrgin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._Bulkpnluser, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._pnluserOrgin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.filteredUsers = this.users;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    });
+  }
+
 }

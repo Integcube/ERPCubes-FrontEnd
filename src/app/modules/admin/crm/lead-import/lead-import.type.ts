@@ -82,13 +82,13 @@ export class Lead {
         this.campaignId=reg.campaignId ? reg.campaignId : "-1";
     }
 }
-export interface Product {
-    productId: number;
-    productName: string;
-    description: string;
-    price: number;
-}
-export interface Industry {
-    industryId: number,
-    industryTitle: string
-}
+// export interface Product {
+//     productId: number;
+//     productName: string;
+//     description: string;
+//     price: number;
+// }
+// export interface Industry {
+//     industryId: number,
+//     industryTitle: string
+// }

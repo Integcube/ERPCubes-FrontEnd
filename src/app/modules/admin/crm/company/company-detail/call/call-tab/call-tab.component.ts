@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDrawer } from '@angular/material/sidenav';
 import { cloneDeep } from 'lodash';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, catchError, EMPTY } from 'rxjs';
 import { CallDetailComponent } from '../call-detail/call-detail.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CompanyService } from '../../../company.service';
 import { Call } from '../../../company.type';
+import { CompanyService } from '../../../company.service';
 
 @Component({
   selector: 'app-call-tab',
@@ -16,19 +16,20 @@ export class CallTabComponent implements OnInit {
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
   calls$ = this._companyService.calls$;
   users$ = this._companyService.users$;
+ 
+
   callWithUser$ = combineLatest([
     this.calls$,
     this.users$
-  ])
-  .pipe(
+  ]).pipe(
     map(([calls, users]) =>
     calls.map(call => ({
         ...call,
         createdByTitle:  users?.find(a=>a.id === call.createdBy)?.name,
       } as Call))
-    )
+    ),
+    catchError(error=>{alert(error);return EMPTY})
   );
-  
   filteredData$ = combineLatest([
     this._companyService.searchQuery$,
     this.callWithUser$
@@ -48,6 +49,7 @@ export class CallTabComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(htmlString);
   }
   ngOnInit(): void {
+
   }
   addCall(){
     let call = new Call({})
@@ -59,8 +61,10 @@ export class CallTabComponent implements OnInit {
       }
   });
   }
+
+
   updateCall(call:Call):void{
-    // this._changeDetectorRef.markForCheck();
+   // this._changeDetectorRef.markForCheck();
     this._matDialog.open(CallDetailComponent, {
       autoFocus: false,
       data     : {
@@ -68,5 +72,7 @@ export class CallTabComponent implements OnInit {
       }
   });
   }
+
+
 
 }

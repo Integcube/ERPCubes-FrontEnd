@@ -15,7 +15,7 @@ export class TrashService {
     private readonly restoreLeadUrl = `${environment.url}/Lead/restore`
     private readonly restoreBulkLeadUrl = `${environment.url}/Lead/restoreBulkLead`
 
-    private readonly getDeletedCompanyListUrl = `${environment.url}/Company/allDeleted`
+    private readonly getDeletedCompanyListUrl = `${environment.url}/Company/del`
     private readonly restoreBulkCompanyUrl = `${environment.url}/Company/restoreBulk`
     private readonly restoreCompanyUrl = `${environment.url}/Company/restore`
 
@@ -123,11 +123,11 @@ export class TrashService {
             
         );
     }
-    restoreCompany(opportunity: DeletedItems): Observable<any> {
+    restoreCompany(company: DeletedItems): Observable<any> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
-            opportunityId: opportunity.id
+            companyId: company.id
         };
 
         return this._httpClient.post<DeletedItems[]>(this.restoreCompanyUrl, data).pipe(
@@ -137,11 +137,11 @@ export class TrashService {
             
         );
     }
-    restoreBulkCompany(opportunityIds: number[]): Observable<any> {
+    restoreBulkCompany(companyIds: number[]): Observable<any> {
         let data = {
             id: this.user.id,
             tenantId: this.user.tenantId,
-            opportunityId: opportunityIds
+            companyId: companyIds
         };
 
         return this._httpClient.post<DeletedItems[]>(this.restoreBulkCompanyUrl, data).pipe(
@@ -158,7 +158,6 @@ export class TrashService {
             id: this.user.id,
             tenantId: this.user.tenantId,
         }
-        debugger;
         return this._httpClient.post<DeletedItems[]>(this.getDeletedOpportunityListUrl, data).pipe(
         );
     }
@@ -168,7 +167,6 @@ export class TrashService {
             tenantId: this.user.tenantId,
             opportunityId: opportunity.id
         };
-        debugger;
         return this._httpClient.post<DeletedItems[]>(this.restoreOpportunityUrl, data).pipe(
             tap(() => {
                 // this.showNotification('snackbar-success', 'Opportunity restored successfully', 'bottom', 'center');

@@ -47,7 +47,8 @@
         </div>
         
         <div class="flex flex-row items-center  p-2">
-            <div class="flex flex-wrap ml-1 text-xs text-gray-400 font-normal w-full line-clamp-1">
+            <div class="flex flex-wrap  ml-1.5 text-xs text-gray-400 font-normal w-full ">
+                <mat-checkbox *ngIf="isAnyItemSelected()" (change)="toggleSelectAll($event)" [matTooltip]="'Select All'" #selectAllCheckbox></mat-checkbox>
                 NAME
             </div>
         
@@ -59,19 +60,18 @@
                     DELETED DATE
                 </div>
             </div>
-            
+
         
         </div>
-        <div class="py-1 h-auto overflow-x-hidden" *ngIf="filterItems; else loading" fuseScrollbar>
+
+        <div class="py-1 h-auto overflow-x-hidden bg-default" *ngIf="filterItems; else loading" fuseScrollbar>
             <ng-container *ngIf="filterItems.length; else noDeletedItems">
               <ng-container *ngFor="let item of filterItems; trackBy: trackByFn">
                 <!-- Adjust the card structure based on your data -->
                 <fuse-card class="relative flex flex-col bg-card border-l-2 border-red-500 shadow overflow-x-hidden w-full filter-testimonial mb-2 rounded-sm cursor-pointer">
                   <div class="flex flex-row items-center justify-between p-0">
                     <div class="flex flex-wrap ml-1 text-md text-gray-700 font-normal px-2">
-                        <!-- Checkbox for Mat Selection -->
-                    <mat-checkbox (change)="toggleSelection($event, item)"></mat-checkbox>
-                      <!-- Adjust the content based on your data structure -->
+                        <mat-checkbox (change)="toggleSelection($event, item)" [checked]="selectAllChecked"></mat-checkbox>
                       {{ item.title }}
                     </div>
                     <div class="flex flex-row items-center gap-3">

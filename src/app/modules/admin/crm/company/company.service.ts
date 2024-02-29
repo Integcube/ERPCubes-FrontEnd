@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Activity, Call, Company, CompanyCustomList, CompanyFilter, Email, Industry, Meeting, Note, Tag, TaskModel, Tasks } from './company.type';
+import { Activity, Call, Company, CompanyCustomList, CompanyFilter, Email, EventType, Industry, Meeting, Note, Tag, TaskModel, Tasks } from './company.type';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertService } from 'app/core/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,11 @@ export class CompanyService {
   private readonly allTagsUrl = `${environment.url}/Tags/all`
   private readonly deleteCallsUrl = `${environment.url}/Call/delete`
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
+  private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
+  private readonly getScenariosUrl = `${environment.url}/Call/allscenarios`
+  private readonly bulkdelete = `${environment.url}/Company/bulkdelete`
+  private readonly bulkassignCompanyUrl = `${environment.url}/Company/bulkassigncompanies`
+
   private contactEnumInstance: ContactEnum;
 
   
@@ -69,10 +75,14 @@ export class CompanyService {
   private _meetings:BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
   private _meeting:BehaviorSubject<Meeting | null> = new BehaviorSubject(null);
   private _tasks: BehaviorSubject<TaskModel[] | null> = new BehaviorSubject(null);
+  private _callreasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
+  private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
 
   constructor(
     private _userService: UserService,
-    private _httpClient: HttpClient  ) 
+    private _httpClient: HttpClient,
+    private _alertService: AlertService,
+    ) 
   {
     this._userService.user$.subscribe(user => {
       this.user = user;
@@ -135,7 +145,13 @@ export class CompanyService {
   get tasks$(): Observable<TaskModel[]> {
     return this._tasks.asObservable();
   }
-  
+  get CallReason$(): Observable<any[]> {
+    return this._callreasons.asObservable();
+  }
+  get eventTypes$(): Observable<EventType[]> {
+    return this._eventType.asObservable();
+  }
+
   filteredCompanies$ = combineLatest(
     this.companies$,
     this.filter$
@@ -227,7 +243,7 @@ export class CompanyService {
     return this._httpClient.post<CompanyCustomList>(this.deleteCustomListUrl, data).pipe(
       tap((customList) => {
         let list = new CompanyCustomList({});
-        list.listTitle = "All Leads";
+        list.listTitle = "All Company";
         this.setCustomList(list);
         this.getCustomList().subscribe();
       }),
@@ -308,6 +324,7 @@ export class CompanyService {
     }
     return this._httpClient.post<Company[]>(this.saveCompanyURL, data).pipe(
       tap((companies) => {
+        this._alertService.showSuccess("Company Saved Successfully");
         this.getCompanies().subscribe();
       }),
       
@@ -405,7 +422,7 @@ export class CompanyService {
     let data = {
       id: "-1",
       tenantId: this.user.tenantId,
-      contactTypeId:this.contactEnumInstance.Company,
+      contactTypeId: this.contactEnumInstance.Company,
       contactId:companyId,
     }
     return this._httpClient.post<TaskModel[]>(this.getCompanyTaskUrl, data).pipe(
@@ -454,8 +471,13 @@ export class CompanyService {
       response: call.response,
       startTime: call.startTime,
       endTime: call.endTime,
-      contactTypeId:this.contactEnumInstance.Company,
-      contactId:companyId
+      reasonId: call.reasonId,
+      dueDate: call.dueDate,
+      isTask: call.isTask,
+      taskId: call.taskId,
+      contactTypeId: this.contactEnumInstance.Company,
+      contactId: companyId,
+      callDate:call.callDate,
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
@@ -464,6 +486,7 @@ export class CompanyService {
       
     );
   }
+
   saveEmail(email: any, companyId: number): Observable<any> {
     let data = {
       id: this.user.id,
@@ -491,7 +514,9 @@ export class CompanyService {
       subject: meeting.subject,
       note: meeting.note,
       startTime: meeting.startTime,
-      endTime: meeting.endTime
+      endTime: meeting.endTime,
+      meetingDate: meeting.meetingDate,
+
     }
     return this._httpClient.post<Meeting[]>(this.saveMeetingsUrl, data).pipe(
       tap((meeting) => {
@@ -635,17 +660,17 @@ export class CompanyService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
-      type: 'task',
-      contactTypeId:this.contactEnumInstance.Company,
-      contactId:companyId,
       task: {
         ...taskForm.value,
-
         priorityId: -1,
         statusId: -1,
-        tags: taskForm.value.tags.join(',')
+        tags: taskForm.value.tags.join(','),
+        type: 'task',
+        contactTypeId: this.contactEnumInstance.Company,
+        contactId: companyId,
       }
     }
+   
     return this._httpClient.post<TaskModel>(this.saveTaskUrl, data).pipe(
       tap((customList) => {
         this.getTasks(companyId).subscribe();
@@ -773,6 +798,56 @@ export class CompanyService {
       }),
       
     );
+  }
+  getEventType(): Observable<EventType[]> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    return this._httpClient.post<EventType[]>(this.getEventTypeUrl, data).pipe(
+      tap((type) => {
+        this._eventType.next(type);
+      })
+    );
+  }
+  getScenarios(): Observable<any[]> {
+    return this._httpClient.get<any[]>(this.getScenariosUrl).pipe(
+      tap((calls) => {
+        this._callreasons.next(calls);
+      }),
+      
+    );
+  }
+  deleteBulkCompanies(companyIds: any) {
+    let data = {
+      id: this.user.id,
+      tenantId:this.user.tenantId,
+      companies: companyIds,
+   
+    }
+    return this._httpClient.post<Company[]>(this.bulkdelete, data).pipe(
+      tap((company) => {
+
+        this.getCompanies().subscribe();
+        this._alertService.showSuccess("Selected Companies Deleted");
+      }),
+      
+    );
+  }
+
+  bulkCompaniesAssign(companyid: any, companyOwnerId: string) {
+    let data = {
+      userId: this.user.id,
+      tenantId: this.user.tenantId,
+      companies: companyid,
+      companyOwner: companyOwnerId,
+    }
+    return this._httpClient.post<Company[]>(this.bulkassignCompanyUrl, data).pipe(
+      tap((company) => {
+        this.getCompanies().subscribe();
+        this._alertService.showSuccess("Companies Assignd");
+      }),
+      )
   }
 
 }

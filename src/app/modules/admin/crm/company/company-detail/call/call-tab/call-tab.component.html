@@ -1,55 +1,79 @@
-<div class="flex flex-col w-full">
-    <div class="flex justify-end mb-4">
-        <button mat-flat-button [color]="'primary'" class="text-xs h-8" [matTooltip]="'Create New Call'" (click)="addCall()">
-            Create Call
-        </button>
-    </div>
-    <ng-container *ngIf="calls$ | async as calls; else noCalls">
-        <ng-container *ngIf="calls.length else noCalls">
+<style>
+    .text-sm {
+    font-size: 0.65rem !important;
+}
+</style>
+<div class="flex flex-col w-full" >
+    <div class="flex flex-row items-center mb-2 sm:mt-0 s">
+        <div class="flex-auto">
+            <search-bar></search-bar>
+        </div>
+    
+        <div class="">
+            <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Call'" (click)="addCall()">
+                <mat-icon
+                class="icon-size-5"
+                   [svgIcon]="'heroicons_outline:phone'"></mat-icon>
+                <span class="hidden sm:inline-block ml-2">New</span>
+            </button>
+        </div>
+    </div> 
+  
+  
+    <ng-container *ngIf="filteredData$ | async as calls; else noCalls">
+        <ng-container  *ngIf="calls.length else noCalls">
             <ng-container *ngFor="let call of calls">
-                <fuse-card
-                    class="relative flex flex-col w-full p-4 filter-testimonial my-2 rounded-sm cursor-pointer"
-                    (click)="updateCall(call)">
-                    <div class="flex flex-row justify-between w-full">
-                        <!-- <span class="flex text-md truncate"><b>Call</b>&nbsp;{{"Made by " + call.createdByTitle}}</span> -->
-                        <span class="flex text-md truncate">{{call.createdDate | date:'long'}}</span>
+                <div class="relative mb-4 bg-white shadow-md">
+                    <!-- Mail list -->
+                    <div class="overflow-y-auto" #emailList>
+                        <!-- Item loop -->
+                        <ng-container >
+
+                            <!-- Item -->
+                            <a class="relative flex border-t first:border-0"
+                            (click)="updateCall(call)">
+
+                                <!-- Item content -->
+                                <div class="flex flex-col items-start justify-start w-full py-3 pr-4 pl-5 border-l-4 border-transparent">
+
+                                    <!-- Info -->
+                                    <div class="flex items-center w-full">
+                                        <mat-icon class="mr-3 icon-size-5 text-primary-500 dark:text-primary-600"
+                                           
+                                            [svgIcon]="'heroicons_outline:phone'"></mat-icon>
+                                        <!-- Sender name -->
+                                        <div class="mr-2 font-semibold truncate">
+                                            {{call.subject}}
+                                        </div>
+                                        <!-- Date -->
+                                        <div class="ml-auto text-left whitespace-nowrap text-hint text-sm">
+                                            <span>
+                                                <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:clock'"></mat-icon> {{ call.createdDate | date:'dd-MMM-yyyy hh:mm a' }}
+                                                <mat-icon style="HEIGHT: 12PX!important;min-height:12PX!important;margin-right: -5px;" [svgIcon]="'heroicons_outline:user'"></mat-icon> {{ call.createdByName }}
+                                            </span>
+                                        </div> 
+                                    </div>
+                                    <!-- Expert -->
+                                    <div class="mt-2 leading-normal line-clamp-2 text-secondary">
+                                        <span class="flex flex-wrap text-md line-clamp-2"  [innerHTML]="sanitizeHtml(call.response)"></span>
+                                    </div>
+
+                                    <span class="flex flex-wrap text-md line-clamp-3 whitespace-nowrap">Calling Time {{call.startTime | date:'shortTime'}} to {{call.endTime | date:'shortTime'}}</span>
+                                </div>
+                            </a>
+                        </ng-container>
                     </div>
-                    <div class="flex flex-col mt-2">
-                        <div>
-                            <!-- <span class="text-md font-semibold">Subject</span> -->
-                            <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
-                                <span class="flex flex-wrap text-xs sm:text-sm"><span class="font-semibold">Subject: </span> {{call.subject}}</span>
-                            </div>
-                        </div>
-                        <div class="mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
-                            <span class="flex flex-wrap text-xs sm:text-sm"><span class="font-semibold">Response: </span><span class="flex flex-wrap text-md line-clamp-3" [innerHTML]="sanitizeHtml(call.response)"></span></span>
-                            <!-- <div class="flex mt-2 px-2 py-2 rounded-lg bg-gray-200 dark:bg-gray-300">
-                               <span class="flex flex-wrap text-md line-clamp-3" [innerHTML]="sanitizeHtml(call.response)"></span>
-                            </div> -->
-                        </div>
-                        <div class="flex flex-row justify-between py-3 px-0 bg-white dark:bg-transparent">
-                            <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
-                                [ngClass]="{'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-blue-50': call.startTime}">
-                                <span class="leading-relaxed whitespace-nowrap">Start Time: {{call.startTime | date:'shortTime'}}</span>
-                            </span>
-                            <span
-                                class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
-                                [ngClass]="{'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': call.endTime}">
-                                <span class="leading-relaxed whitespace-nowrap">End Time: {{call.endTime | date:'shortTime'}}</span>
-                            </span>
-                        </div>
-                    </div>                   
-                </fuse-card>
+                </div>
             </ng-container>
         </ng-container>
     </ng-container>
 
     <!-- No Call -->
     <ng-template #noCalls>
-        <div class="flex flex-auto flex-col items-center mt-4 justify-center bg-gray-100 dark:bg-transparent">
-            <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
+        <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
+            <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:phone'"></mat-icon>
             <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No call found!</div>
+            <span class="underline cursor-pointer" (click)="addCall()">Click to add</span>
         </div>
     </ng-template>
 </div>

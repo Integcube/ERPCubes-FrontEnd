@@ -6,7 +6,7 @@ import { Subject, debounceTime, distinctUntilChanged, finalize, map, takeUntil }
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TrashService } from './trash.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-trash',
@@ -14,10 +14,13 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 })
 export class TrashComponent implements OnInit, OnDestroy {
   @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
+  @ViewChild('selectAllCheckbox') selectAllCheckbox: MatCheckbox;
 
   trashItems: DeletedItems[];
   filterItems: DeletedItems[];
   selectedItems: DeletedItems[] = [];
+  showSelectAllCheckbox = false;
+  selectAllChecked = false;
 
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   selection = new SelectionModel<DeletedItems>(true, []);
@@ -110,6 +113,13 @@ export class TrashComponent implements OnInit, OnDestroy {
         break;
       case "PROJECT":
         this._trashService.getDeletedProject()
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe(
+            data => { this.trashItems = this.filterItems = [...data] }
+          );
+        break;
+      case "COMPANY":
+        this._trashService.getDeletedCompany()
           .pipe(takeUntil(this._unsubscribeAll))
           .subscribe(
             data => { this.trashItems = this.filterItems = [...data] }
@@ -238,10 +248,8 @@ export class TrashComponent implements OnInit, OnDestroy {
 
 
   restoreBulkItem(): void {
-    debugger;
     if (this.isAnyItemSelected()) {
       const selectedItemIds = this.selectedItems.map(item => item?.id);
-      debugger;
       let a;
       if (this._data.type === "LEAD") {
         a = this._trashService.restoreBulkLeads(selectedItemIds);
@@ -310,17 +318,18 @@ export class TrashComponent implements OnInit, OnDestroy {
 
   toggleSelection(event: MatCheckboxChange, item: DeletedItems): void {
     if (event.checked) {
-      this.selectedItems.push(item);
+        this.selectedItems.push(item);
     } else {
-      this.selectedItems = this.selectedItems.filter(selectedItem => selectedItem !== item);
+        this.selectedItems = this.selectedItems.filter(selectedItem => selectedItem !== item);
     }
-  }
+
+    this.showSelectAllCheckbox = this.isAnyItemSelected();
+}
 
 
   isAnyItemSelected(): boolean {
     return this.selectedItems.length > 0;
   }
-
 
   closeDialog() {
     this._matDialogRef.close();
@@ -469,6 +478,22 @@ export class TrashComponent implements OnInit, OnDestroy {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
+
+
+
+  toggleSelectAll(event: MatCheckboxChange): void {
+    this.selectAllChecked = event.checked;
+    this.selectedItems = this.selectAllChecked ? [...this.filterItems] : [];
+
+    if (this.selectAllCheckbox) {
+      this.selectAllCheckbox.checked = this.selectAllChecked;
+      this.filterItems.forEach(item => {
+      
+      });
+    }
+  }
+
+
 
 
 }

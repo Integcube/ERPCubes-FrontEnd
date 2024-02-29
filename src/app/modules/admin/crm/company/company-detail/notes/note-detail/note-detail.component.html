@@ -4,16 +4,16 @@
     <!-- Title -->
     <div>
       <input
-        class="w-full p-2 text-2xl"
-        [placeholder]="'Title'"
+        class="w-full p-2 text-2xl" style="background-color: #f1f1f1;"
+        [placeholder]="'Enter Note Title'"
         [(ngModel)]="note.noteTitle"
         (input)="updateNoteDetails(note)">
     </div>
     <!-- Note -->
-    <div class="flex w-full py-5 px-2">
-      <textarea
+    <div class="flex w-full py-5" >
+      <textarea style="background-color: #f1f1f1;"
         class="w-full"
-        [placeholder]="'Note'"
+        [placeholder]="'Write Note'"
         [(ngModel)]="note.content"
         (input)="updateNoteDetails(note)"
         matTextareaAutosize></textarea>
@@ -28,10 +28,10 @@
               [color]="'primary'"
               [(ngModel)]="task.isCompleted"
               (change)="updateTaskOnNote(task)"></mat-checkbox>
-            <input
+            <input  style="background-color: #f1f1f1;"
               class="w-full px-1 py-0.5"
               [ngClass]="{'text-secondary line-through': task.isCompleted}"
-              [placeholder]="'Task'"
+              [placeholder]="'Click Enter to Save Task'"
               [(ngModel)]="task.task"
               (input)="updateTaskOnNote(task)">
             <mat-icon
@@ -46,7 +46,7 @@
             [svgIcon]="'heroicons_solid:plus'"></mat-icon>
           <input
             class="w-full ml-1.5 px-1 py-0.5"
-            [placeholder]="'Add task'"
+            [placeholder]="'Click Enter to Save Task '"
             (keydown.enter)="addTaskToNote(newTaskInput.value); newTaskInput.value = ''"
             #newTaskInput>
         </div>
@@ -109,16 +109,26 @@
           </mat-menu>
           <!-- Delete -->
           <button
-            mat-icon-button
-            (click)="delete()">
+            mat-icon-button 
+            (click)="delete()" *ngIf="note.noteId !== -1">
             <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
           </button>
         </div>
         <!-- Save -->
-        <button class="ml-2" mat-flat-button [color]="'primary'" [matTooltip]="'Save'" (click)="save()">
-          Save
+        <button class="ml-auto h-8" mat-flat-button [color]="'cancel'" [matTooltip]="'cancel'" (click)="closeDialog()">
+          <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+          <span class="ml-2 text-xs">Cancel</span> 
+        </button>
+        <button class="ml-2 primary-2 h-8" mat-flat-button  [matTooltip]="'Save'" (click)="save()">
+          <mat-icon
+          class="icon-size-5 mr-2 text-white"
+          [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+          <span class="ml-1 mr-1 text-xs">Save</span>
         </button>
       </div>
     </ng-container>
   </div>
 </div>
+
+
+
