@@ -11,15 +11,8 @@ import { LeadService } from '../../../lead.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NoteDetailComponent implements OnInit, OnDestroy {
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-  constructor(
-    public matDialogRef: MatDialogRef<NoteDetailComponent>,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) private _data: { note: Note },
-    private _leadService: LeadService,
-    private _matDialogRef: MatDialogRef<NoteDetailComponent> )
-  { }
 
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   lead: Lead;
   note: Note; 
   tags: Tag[];
@@ -39,6 +32,14 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       tasks: tasks
     })),
   );
+
+  constructor(
+    public matDialogRef: MatDialogRef<NoteDetailComponent>,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Inject(MAT_DIALOG_DATA) private _data: { note: Note },
+    private _leadService: LeadService,
+    private _matDialogRef: MatDialogRef<NoteDetailComponent>
+  ) { }
 
   ngOnInit(): void {
         if (this._data.note.noteId) {
@@ -68,23 +69,25 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(data =>{ this.lead = { ...data };})
     }
+    
   }
-
-  updateNoteDetails(note: Note): void  {
-    this.noteChanged.next(note);
+  updateNoteDetails(note: Note): void
+  {
+      this.noteChanged.next(note);
   }
-
-  isNoteHasLabel(note: Note, tag: Tag): boolean {
+    isNoteHasLabel(note: Note, tag: Tag): boolean {
     return !!note.tags.find(item => item.tagId === tag.tagId);
   }
-
   toggleLabelOnNote(tag: Tag): void {
+    // If the note already has the label
     if (this.isNoteHasLabel(this.note, tag)) {
       this.note.tags = this.note.tags.filter(item => item.tagId !== tag.tagId)    
     } 
     else {
       this.note.tags.push(tag);
     }
+
+    // Update the note 
     this.noteChanged.next(this.note);
   }
   
@@ -92,11 +95,9 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-
   closeDialog(): void {
     this._matDialogRef.close();
   }
-
   addTasksToNote(): void {
     if (!this.note.tasks) {
       this.note.tasks = [];
@@ -125,7 +126,6 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
       this.noteChanged.next(this.note);
     }
   }
-
   removeTaskFromNote(task: Tasks): void {
     // Remove the task
     this.note.tasks = this.note.tasks.filter(item => item.task !== task.task);
@@ -133,19 +133,17 @@ export class NoteDetailComponent implements OnInit, OnDestroy {
     // Update the note
     this.noteChanged.next(this.note);
   }
-
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
-
-  save() {
+  save(){
     this._leadService.saveNote(this.note, this.lead.leadId)
     .subscribe(data=>this.closeDialog());
-  }
-  delete() {
+   }
+   delete(){
     this._leadService.deleteNote(this.note.noteId,this.lead.leadId)
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(data => this.closeDialog())
-  }
+   }
 }
 

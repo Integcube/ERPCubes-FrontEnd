@@ -128,7 +128,7 @@
     </div>
     <!-- Actions -->
     <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1 z-999" >
-        <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent actions">
+        <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent" style="z-index: 9999!important;">
         <!-- Delete -->
         <ng-container class="ml-4 " *ngIf="task.taskId !== -1">
             <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()">

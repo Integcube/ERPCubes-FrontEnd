@@ -1096,11 +1096,13 @@ export class LeadService {
         contactTypeId: this.contactEnumInstance.Lead,
         contactId: leadId,
       }
-    }   
+    }
+   
     return this._httpClient.post<TaskModel>(this.saveTaskUrl, data).pipe(
       tap((customList) => {
         this.getTasks(leadId).subscribe();
-      }),      
+      }),
+      
     );
   }
 

@@ -16,15 +16,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class EmailTabComponent implements OnInit {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-
-  constructor(
-    private _leadService:LeadService,
-    private _matDialog: MatDialog,
-    private sanitizer: DomSanitizer,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private matDialog: MatDialog ) 
-  { }
-
   lead: Lead;
   emails$ = this._leadService.emails$;
   users$ = this._leadService.users$;
@@ -49,7 +40,13 @@ export class EmailTabComponent implements OnInit {
       )
     ),
   );
-
+  constructor(
+    private _leadService:LeadService,
+    private _matDialog: MatDialog,
+    private sanitizer: DomSanitizer,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog
+  ) { }
   sanitizeHtml(htmlString: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(htmlString);
   }

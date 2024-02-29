@@ -14,4 +14,6 @@ export class OpportunityWrapperComponent {
   updateTab(tab:"overview"|"activity"){
     this._tab.next(tab);
   }
+
+
 }

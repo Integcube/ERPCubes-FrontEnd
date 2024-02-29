@@ -29,7 +29,7 @@ export class CallResolver implements Resolve<any>{
 @Injectable({
   providedIn:'root'
 })
-export class CallReasonResolver implements Resolve<any>{
+export class CallReasonCResolver implements Resolve<any>{
   constructor(
     private _leadService:LeadService)
     { }

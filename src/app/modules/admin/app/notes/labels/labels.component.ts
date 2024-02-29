@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { debounceTime, filter, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { NotesService } from '../notes.service';
 import { Tag } from '../notes.types';
@@ -7,7 +7,7 @@ import { Tag } from '../notes.types';
 @Component({
     selector       : 'notes-labels',
     templateUrl    : './labels.component.html',
-    
+    encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotesLabelsComponent implements OnInit, OnDestroy

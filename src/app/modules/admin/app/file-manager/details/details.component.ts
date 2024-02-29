@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FileManagerService } from '../file-manager.service';
@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
     selector: 'file-manager-details',
     templateUrl: './details.component.html',
-    
+    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileManagerDetailsComponent implements OnInit, OnDestroy {

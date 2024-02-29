@@ -12,12 +12,10 @@ import { OpportunityService } from '../opportunity.service';
 @Component({
   selector: 'app-opportunity-form',
   templateUrl: './opportunity-form.component.html',
-  styleUrls: ['./opportunity-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpportunityFormComponent implements OnInit {
   @ViewChild('firstName') private _titleField: ElementRef;
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
   user: User;
   constructor(
     private _formBuilder: FormBuilder,
@@ -25,8 +23,8 @@ export class OpportunityFormComponent implements OnInit {
     private _opportunityService: OpportunityService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _userService: UserService,
-    private _fuseConfirmationService: FuseConfirmationService ) 
-  { }
+    private _fuseConfirmationService: FuseConfirmationService,
+  ) { }
   private opportunitySubject = new Subject<Opportunity>();
   opportunity$ = this.opportunitySubject.asObservable();
   users$ = this._opportunityService.users$;
@@ -38,7 +36,9 @@ export class OpportunityFormComponent implements OnInit {
   opportunityForm: FormGroup;
   editMode: boolean = false;
   selectedOpportunity: Opportunity;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   
+
   ngOnInit(): void {
     this._opportunityListComponent.matDrawer.open();
     this._userService.user$.subscribe(user => {
@@ -75,11 +75,9 @@ export class OpportunityFormComponent implements OnInit {
       this._changeDetectorRef.markForCheck();
     });
   }
-
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._opportunityListComponent.matDrawer.close();
   }
-
   ngAfterViewInit(): void {
     this._opportunityListComponent.matDrawer.openedChange
       .pipe(
@@ -90,28 +88,27 @@ export class OpportunityFormComponent implements OnInit {
         this._titleField.nativeElement.focus();
       });
   }
-
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-
   save() {
     this.selectedOpportunity = { ...this.opportunityForm.value }
+    
     this._opportunityService.saveOpportunity(this.selectedOpportunity).subscribe(
       {
         next: () => {
           this._opportunityListComponent.onBackdropClicked();
           this.closeDrawer();
           this._changeDetectorRef.markForCheck();
-        }
+        },
+        
       }
     );
   }
-
   delete() {
     const confirmation = this._fuseConfirmationService.open({
-      title: 'Delete Opportunity',
+      title: 'Delete opportunity',
       message: 'Are you sure you want to delete this opportunity? This action cannot be undone!',
       actions: {
         confirm: {
@@ -134,5 +131,4 @@ export class OpportunityFormComponent implements OnInit {
       }
     });
   }
-  
 }

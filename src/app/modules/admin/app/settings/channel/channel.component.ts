@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ViewComponent } from '../view/view.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ export class LinkView {
 @Component({
     selector       : 'settings-channel',
     templateUrl    : './channel.component.html',
-    
+    encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsChannelComponent implements OnInit

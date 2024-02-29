@@ -1,5 +1,43 @@
-<div class="flex flex-col flex-auto min-w-0 py-5 h-main-section" fuseScrollbar>
-    <ng-container><!--*ngIf="(tab$ | async)=='activity'">--> 
+<div class="flex flex-col flex-auto min-w-0 py-5 h-main-section overflow-auto">
+    <!-- Header -->
+    <div>
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <!-- Project selector -->
+            <div
+                class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
+                matRipple
+                [matMenuTriggerFor]="opportunityMenu">
+                <div class="flex items-center">
+                    <div class="overflow-hidden">
+                        <div class="font-medium leading-6 truncate">{{(tab$ | async)=='overview'?'Overview':'Activity'}}</div>
+                    </div>
+                    <div class="flex items-center justify-center pl-2">
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:chevron-down'"></mat-icon>
+                    </div>
+                </div>
+                <mat-menu
+                    #opportunityMenu="matMenu"
+                    [xPosition]="'before'">
+                    <button
+                        mat-menu-item
+                        (click)="updateTab('overview')"
+                       >Overview
+                    </button>
+                    <button
+                        mat-menu-item
+                        (click)="updateTab('activity')"
+                       >Activities
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+    </div>
+    <ng-container *ngIf="(tab$ | async)=='overview'">
+        <app-opportunity-overview></app-opportunity-overview>
+    </ng-container>
+    <ng-container *ngIf="(tab$ | async)=='activity'">
         <app-opportunity-activity></app-opportunity-activity>
     </ng-container>
 </div>

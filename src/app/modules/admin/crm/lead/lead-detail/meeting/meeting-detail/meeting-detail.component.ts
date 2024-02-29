@@ -15,7 +15,12 @@ import { Lead, Meeting } from '../../../lead.type';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeetingDetailComponent implements OnInit, OnDestroy {
+
+  composeForm: UntypedFormGroup;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+  // meeting: Meeting;
+  // meeting$ = this._leadService.meeting$;
+  lead: Lead
 
   constructor(
     public matDialogRef: MatDialogRef<MeetingDetailComponent>,
@@ -23,14 +28,11 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) private _data: { meeting: Meeting },
     private _leadService: LeadService,
     private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<MeetingDetailComponent>) 
-  { }
-
-  composeForm: UntypedFormGroup;
-  lead: Lead
-
+    private _matDialogRef: MatDialogRef<MeetingDetailComponent>
+  ) { }
   ngOnInit(): void {
     this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ this.lead = { ...data }; this.createForm()})
+
   }
 
   createForm() {
@@ -45,17 +47,14 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
         endTime: [this.formatTime(this._data.meeting.endTime)],
         meetingDate:[this._data.meeting.meetingDate],
     });
-  }
-
+}
   isOverdue(date: string): boolean {
     return moment(date, moment.ISO_8601).isBefore(moment(), 'days');
   }
-
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-
   closeDialog(): void {
     this._matDialogRef.close();
   }
@@ -87,11 +86,9 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this._unsubscribeAll))
     .subscribe(data=>this.matDialogRef.close())
   }
-
   close(){
     this.matDialogRef.close();
   }
-
   delete(){
     this._leadService.deleteMeeting(this.composeForm.value.meetingId, this.lead.leadId)
     .pipe(takeUntil(this._unsubscribeAll))
@@ -102,6 +99,7 @@ export class MeetingDetailComponent implements OnInit, OnDestroy {
     this.composeForm.get('meetingDate').setValue(null);
     this._changeDetectorRef.markForCheck()
   }
+
 
 }
 

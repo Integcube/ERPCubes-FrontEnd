@@ -169,6 +169,7 @@ export class Note {
     createdByName: string;
     tags: Tag[];
     tasks: Tasks[];
+   
     constructor(reg) {
         this.noteId = reg.noteId ? reg.noteId : -1
     }

@@ -3,7 +3,7 @@ import { LeadComponent } from "./lead.component";
 import { LeadListComponent } from "./lead-list/lead-list.component";
 import { LeadFormComponent } from "./lead-form/lead-form.component";
 import { LeadDetailComponent } from "./lead-detail/lead-detail.component";
-import { CallResolver, CustomListResolver,ScoreResolver ,EmailResolver,EventTypeResolver, IndustryResolver,CallReasonResolver, LeadSourceResolver, LeadStatusResolver, LeadsResolver, MeetingResolver, NoteResolver, ProductResolver, SelectedLeadResolver, TagsResolver, TaskResolver, UserResolver, CampaignsResolver } from "./lead.resolver";
+import { CallResolver, CustomListResolver,ScoreResolver ,EmailResolver,EventTypeResolver, IndustryResolver,CallReasonCResolver, LeadSourceResolver, LeadStatusResolver, LeadsResolver, MeetingResolver, NoteResolver, ProductResolver, SelectedLeadResolver, TagsResolver, TaskResolver, UserResolver, CampaignsResolver } from "./lead.resolver";
 import { LeadGuard } from "./lead.guard";
 
 export const leadRoutes: Routes = [
@@ -11,15 +11,16 @@ export const leadRoutes: Routes = [
         path: '',
         component: LeadComponent,
         resolve: {
+            industries: IndustryResolver,
+            users: UserResolver,
             leads: LeadsResolver,
             leadSource: LeadSourceResolver,
             leadStatus: LeadStatusResolver,
-            industries: IndustryResolver,
-            users: UserResolver,
             product: ProductResolver,
-            campaigns: CampaignsResolver,
             customList: CustomListResolver,
-            eventType:EventTypeResolver,                        
+            eventType:EventTypeResolver,
+            campaigns: CampaignsResolver,
+            tags: TagsResolver,
         },
         children: [
             {
@@ -42,14 +43,13 @@ export const leadRoutes: Routes = [
                 component: LeadDetailComponent,
                 resolve: {
                     selectedCompany: SelectedLeadResolver,
-                    call: CallResolver,
-                    callReason:CallReasonResolver,
-                    email: EmailResolver,                    
-                    meeting: MeetingResolver,                   
+                    notes: NoteResolver,
                     tasks: TaskResolver,
-                    tags: TagsResolver,
-                    notes: NoteResolver,                     
-                    scoreResolver: ScoreResolver
+                    email: EmailResolver,
+                    call: CallResolver,
+                    meeting: MeetingResolver,
+                    CallReason:CallReasonCResolver,
+                    ScoreResolver: ScoreResolver
                 },
             }
         ]

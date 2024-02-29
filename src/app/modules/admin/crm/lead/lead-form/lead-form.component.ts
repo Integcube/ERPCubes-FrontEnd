@@ -16,19 +16,11 @@ import { Lead } from '../lead.type';
   changeDetection:ChangeDetectionStrategy.OnPush,
 })
 export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
+
   @ViewChild('firstName') private _titleField: ElementRef;
-  private _unsubscribeAll: Subject<any> = new Subject<any>();
-  user: User;
-  constructor(
-    private _formBuilder: FormBuilder,
-    private _leadListComponent: LeadListComponent,
-    private _leadService: LeadService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    private _userService: UserService,
-    private _fuseConfirmationService: FuseConfirmationService ) 
-  { }
   private leadSubject = new Subject<Lead>();
   lead$ = this.leadSubject.asObservable();
+  user: User;
   users$ = this._leadService.users$;
   industries$ = this._leadService.industries$;
   leadStatus$ = this._leadService.leadStatus$;
@@ -38,7 +30,17 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
   leadForm: FormGroup;
   editMode: boolean = false;
   selectedlead: Lead;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   
+
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _leadListComponent: LeadListComponent,
+    private _leadService: LeadService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _userService: UserService,
+    private _fuseConfirmationService: FuseConfirmationService,
+  ) { }
   ngOnInit(): void {
     this._leadListComponent.matDrawer.open();
     this._userService.user$.subscribe(user => {
@@ -77,11 +79,9 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
       this._changeDetectorRef.markForCheck();
     });
   }
-
   closeDrawer(): Promise<MatDrawerToggleResult> {
     return this._leadListComponent.matDrawer.close();
   }
-
   ngAfterViewInit(): void {
     this._leadListComponent.matDrawer.openedChange
       .pipe(
@@ -92,13 +92,12 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
         this._titleField.nativeElement.focus();
       });
   }
-
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-
   save() {
+
     this.selectedlead = { ...this.leadForm.value }
     this._leadService.saveLead(this.selectedlead).subscribe(
       {
@@ -106,14 +105,14 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
           this._leadListComponent.onBackdropClicked();
           this.closeDrawer();
           this._changeDetectorRef.markForCheck();
-        }
+        },
+        
       }
     );
   }
-
   delete() {
     const confirmation = this._fuseConfirmationService.open({
-      title: 'Delete Lead',
+      title: 'Delete lead',
       message: 'Are you sure you want to delete this lead? This action cannot be undone!',
       actions: {
         confirm: {
@@ -121,7 +120,9 @@ export class LeadFormComponent implements OnInit, OnDestroy, AfterViewInit{
         }
       }
     });
+    // Subscribe to the confirmation dialog closed action
     confirmation.afterClosed().subscribe((result) => {
+      // If the confirm button pressed...
       if (result === 'confirmed') {
         this.selectedlead = { ...this.leadForm.value }
         this._leadService.deleteLead(this.selectedlead).subscribe(

@@ -10,21 +10,24 @@ import { take } from 'rxjs/operators';
 
 })
 export class LeadOverviewComponent implements AfterViewInit {
+
+
   @ViewChildren('step') steps: QueryList<ElementRef>
   //arrows = [{"name":'New', "selected":0},{"name":'Contacted', "selected":1},{"name":'Interested', "selected":2},{"name":'Qualified', "selected":3},{"name":'Lost', "selected":3}]
 
   constructor(
     private _fuseComponentsComponent: LeadDetailComponent,
-    private _leadService: LeadService )
-  { }
+    private _leadService: LeadService,
+  ) {
+   
+  }
 
   leadStatus$ = this._leadService.leadStatus$
   lead$ = this._leadService.lead$;
 
   ngAfterViewInit() {
     this.lead$.subscribe((leadData) => {
-      if (leadData && leadData.status) {this.goToStep(leadData.status)
-    }});
+      if (leadData && leadData.status) {this.goToStep(leadData.status)}});
   
   }
   toggleDrawer(): void

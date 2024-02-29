@@ -10,7 +10,6 @@
                 [svgIcon]="'heroicons_outline:x'"></mat-icon>
         </button>
     </div>
-
     <form class="flex flex-col flex-auto p-6 sm:p-8" [formGroup]="composeForm">
         <mat-form-field>
             <mat-label i18n>Subject</mat-label>
@@ -64,8 +63,7 @@
             <input matInput type="time" [formControlName]="'endTime'">
         </mat-form-field>
     </div>
-        </div>
-
+       </div>
         <mat-form-field class="w-full">
             <mat-label i18n>Call Response</mat-label>
             <mat-select [formControlName]="'reasonId'" [spellcheck]="false" #leadOwner (selectionChange)="onScenarioSelectionChange($event.value)">
@@ -75,52 +73,52 @@
                 </ng-container>
             </mat-select>
         </mat-form-field> 
-        
         <div *ngIf="selectedIsTask==1" class="w-full">
             <span class="text-sm text-hint" i18n>Task will be automatically created for this Call Response.</span>
-        </div>
+         </div>
 
-        <div  *ngIf="selectedIsTask==1" class="flex flex-col md:flex-row lg:flex-row justify-between mt-2 gap-2"> 
-            
-            <div class="w-full md:w-1/2  lg:w-1/2 ">
-                <div class="font-semibold" i18n>Call Back Date</div>
-                <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer" [matTooltip]="'Task Will be Created on Selected Date'"
-                    [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !composeForm.value.dueDate,
-                                        'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': composeForm.value.dueDate && !isOverdue(composeForm.value.dueDate),
-                                        'text-red-800 bg-red-200 dark:text-red-100 dark:bg-red-500': composeForm.value.dueDate && isOverdue(composeForm.value.dueDate)}" (click)="dueDatePicker.open()">
-                    <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
-                    <span class="ml-2 text-md font-medium">
-                        <ng-container *ngIf="composeForm.value.dueDate">{{composeForm.value.dueDate
-                            |date:"dd-MMM-yyyy"}}</ng-container>
-                        <ng-container *ngIf="!composeForm.value.dueDate"  i18n>Set Date For Task</ng-container>
-                    </span>
-
-                    <mat-form-field
-                        class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
-                        <input matInput [formControlName]="'dueDate'" [matDatepicker]="dueDatePicker">
-                        <mat-datepicker #dueDatePicker>
-                            <mat-datepicker-actions>
-                                <button mat-button (click)="resetDueDate()" matDatepickerCancel  i18n>
-                                    Clear
-                                </button>
-                                <button mat-flat-button [color]="'primary'" matDatepickerApply  i18n>
-                                    Select
-                                </button>
-                            </mat-datepicker-actions>
-                        </mat-datepicker>
+            <!-- Due date -->
+            <div  *ngIf="selectedIsTask==1" class="flex flex-col md:flex-row lg:flex-row justify-between mt-2 gap-2"> 
+                
+                <div class="w-full md:w-1/2  lg:w-1/2 ">
+                    <div class="font-semibold" i18n>Call Back Date</div>
+                    <div class="relative flex items-center mt-1.5 px-4 leading-9 rounded-full cursor-pointer" [matTooltip]="'Task Will be Created on Selected Date'"
+                        [ngClass]="{'text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700': !composeForm.value.dueDate,
+                                            'text-green-800 bg-green-200 dark:text-green-100 dark:bg-green-500': composeForm.value.dueDate && !isOverdue(composeForm.value.dueDate),
+                                            'text-red-800 bg-red-200 dark:text-red-100 dark:bg-red-500': composeForm.value.dueDate && isOverdue(composeForm.value.dueDate)}" (click)="dueDatePicker.open()">
+                        <mat-icon class="icon-size-5 text-current" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                        <span class="ml-2 text-md font-medium">
+                            <ng-container *ngIf="composeForm.value.dueDate">{{composeForm.value.dueDate
+                                |date:"dd-MMM-yyyy"}}</ng-container>
+                            <ng-container *ngIf="!composeForm.value.dueDate"  i18n>Set Date For Task</ng-container>
+                        </span>
+    
+                        <mat-form-field
+                            class="fuse-mat-no-subscript fuse-mat-dense invisible absolute inset-0 -mt-2.5 opacity-0 pointer-events-none">
+                            <input matInput [formControlName]="'dueDate'" [matDatepicker]="dueDatePicker">
+                            <mat-datepicker #dueDatePicker>
+                                <mat-datepicker-actions>
+                                    <button mat-button (click)="resetDueDate()" matDatepickerCancel  i18n>
+                                        Clear
+                                    </button>
+                                    <button mat-flat-button [color]="'primary'" matDatepickerApply  i18n>
+                                        Select
+                                    </button>
+                                </mat-datepicker-actions>
+                            </mat-datepicker>
+                        </mat-form-field>
+                       
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2  lg:w-1/2 ">
+                <div>
+                    <mat-form-field class="w-full mr-2 fuse-mat-dense">
+                        <mat-label i18n>Call Back Time</mat-label>
+                        <input matInput type="time" [formControlName]="'tasktime'">
                     </mat-form-field>
-                    
                 </div>
             </div>
-            <div class="w-full md:w-1/2  lg:w-1/2 ">
-            <div>
-                <mat-form-field class="w-full mr-2 fuse-mat-dense">
-                    <mat-label i18n>Call Back Time</mat-label>
-                    <input matInput type="time" [formControlName]="'tasktime'">
-                </mat-form-field>
             </div>
-        </div>
-        </div>
            
         <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full " *ngIf="selectedScenario==1">
             <mat-label i18n>Response</mat-label>
@@ -130,27 +128,24 @@
         </mat-form-field>
         
        <div class="flex flex-col max-w-240 md:min-w-160 max-h-16 -m-6 mt-1">
-        <div class="flex items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
-                <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" *ngIf="composeForm.value.callId !== -1">
-                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'"></mat-icon> 
-                    <span class="ml-1 mr-1 text-xs">Delete</span>  
-                </button>
-                
-                <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
-                    <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
-                    <span class="ml-2 text-xs" i18n>Cancel</span> 
-                </button>
-                <button class="ml-2  primary-2 h-8"
-                [matTooltip]="'Click to Save Call Info'"
-                mat-stroked-button [disabled]="composeForm.invalid"
-                (click)="saveAndClose()">
-                    <mat-icon
-                    class="icon-size-5 mr-2 text-white"
-                    [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
-                    <span class="ml-1 mr-1 text-xs" i18n>Save</span>
-                </button>
+       <div class="flex  items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-gray-50 dark:bg-transparent">
+        <button mat-stroked-button class="h-8" [color]="'warn'" [matTooltip]="'Delete'" (click)="delete()" *ngIf="composeForm.value.callId !== -1">
+            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'"></mat-icon> 
+            <span class="ml-1 mr-1 text-xs">Delete</span>  
+        </button>
         
-        </div>
+        <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="close()">
+            <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+            <span class="ml-2 text-xs" i18n>Cancel</span> 
+        </button>
+        <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save Call Info'" mat-stroked-button [disabled]="composeForm.invalid"     (click)="saveAndClose()">
+            <mat-icon
+            class="icon-size-5 mr-2 text-white"
+               [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+            <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+        </button>
+     
+       </div>
       </div>
     </form>
 </div>

@@ -1,28 +1,20 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Email, Lead, TaskModel } from '../../../lead.type';
 import { LeadService } from '../../../lead.service';
 import { EMPTY, Subject, catchError, takeUntil } from 'rxjs';
-import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
     selector: 'app-email-detail',
     templateUrl: './email-detail.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None
+
 })
 export class EmailDetailComponent implements OnInit, OnDestroy {
-    private _unsubscribeAll: Subject<any> = new Subject<any>();
-    @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-    
-    constructor(
-        public matDialogRef: MatDialogRef<EmailDetailComponent>,
-        @Inject(MAT_DIALOG_DATA) private _data: { email: Email },
-        private _formBuilder: UntypedFormBuilder,
-        private _leadService: LeadService )
-    {}
-    
     lead: Lead
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
     composeForm: UntypedFormGroup;
     copyFields: { cc: boolean; bcc: boolean } = {
         cc: false,
@@ -36,6 +28,13 @@ export class EmailDetailComponent implements OnInit, OnDestroy {
         ]
     };
 
+    constructor(
+        public matDialogRef: MatDialogRef<EmailDetailComponent>,
+        @Inject(MAT_DIALOG_DATA) private _data: { email: Email },
+        private _formBuilder: UntypedFormBuilder,
+        private _leadService: LeadService,
+    ) {
+    }
     ngOnDestroy(): void {
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();

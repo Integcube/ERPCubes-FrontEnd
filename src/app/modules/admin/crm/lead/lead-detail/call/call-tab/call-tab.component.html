@@ -1,3 +1,8 @@
+<style>
+    .text-sm {
+    font-size: 0.65rem !important;
+}
+</style>
 <div class="flex flex-col w-full" >
     <div class="flex flex-row items-center mb-2 sm:mt-0 s">
         <div class="flex-auto">
@@ -13,7 +18,8 @@
             </button>
         </div>
     </div> 
-
+  
+  
     <ng-container *ngIf="filteredData$ | async as calls; else noCalls">
         <ng-container  *ngIf="calls.length else noCalls">
             <ng-container *ngFor="let call of calls">

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import * as moment from 'moment';
 import { Board } from '../scrumboard.models';
@@ -8,7 +8,7 @@ import { ScrumboardService } from '../scrumboard.service';
 @Component({
     selector       : 'scrumboard-boards',
     templateUrl    : './boards.component.html',
-    
+    encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrumboardBoardsComponent implements OnInit, OnDestroy

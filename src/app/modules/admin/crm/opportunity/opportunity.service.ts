@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Activity, Attachment, Call, Email, EventType, Industry, Meeting, Note, Opportunity, OpportunityCustomList, OpportunityFilter, OpportunitySource, OpportunityStatus, Product, Tag, TaskModel } from './opportunity.types';
+import { Activity, Call, Email, Industry, Meeting, Note, Opportunity, OpportunityCustomList, OpportunityFilter, OpportunitySource, OpportunityStatus, Product, Tag, TaskModel } from './opportunity.types';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
@@ -18,7 +18,6 @@ export class OpportunityService {
   private readonly getOpportunitySourceURL = `${environment.url}/Opportunity/allSource`
   private readonly getOpportunityTaskUrl = `${environment.url}/Task/all`
   private readonly getOpportunityStatusUrl = `${environment.url}/Opportunity/allStatus`
-  private readonly changeOpportunityStatus = `${environment.url}/Opportunity/changeStatus`
   private readonly getMeetingsUrl = `${environment.url}/Meeting/all`
   private readonly saveMeetingsUrl = `${environment.url}/Meeting/save`
   private readonly deleteMeetingsUrl = `${environment.url}/Meeting/delete`
@@ -30,7 +29,6 @@ export class OpportunityService {
   private readonly deleteNotesURL = `${environment.url}/Notes/delete`
   private readonly getNoteTaskUrl = `${environment.url}/Notes/tasks`
   private readonly getNoteTagsUrl = `${environment.url}/Notes/tags`
-  private readonly getScenariosUrl = `${environment.url}/Call/allscenarios`
   private readonly getCallsUrl = `${environment.url}/Call/all`
   private readonly saveCallsUrl = `${environment.url}/Call/save`
   private readonly deleteCallsUrl = `${environment.url}/Call/delete`
@@ -48,11 +46,6 @@ export class OpportunityService {
   private readonly getIndustriesURL = `${environment.url}/Industry/all`
   private readonly getUsersUrl = `${environment.url}/Users/all`
   private readonly getProductUrl = `${environment.url}/Product/all`
-  private readonly getOpportunityAttachmentsURL = `${environment.url}/Opportunity/getAttachments`
-  private readonly deleteOpportunityAttachmentURL = `${environment.url}/DocumentLibrary/delete`
-  private readonly downloadFileURL = `${environment.url}/DocumentLibrary/getfile`
-  private readonly saveFileURL = `${environment.url}/DocumentLibrary/addOpportunityFile`
-  private readonly getEventTypeUrl = `${environment.url}/Calendar/type`
   private _opportunityList: BehaviorSubject<Opportunity[] | null> = new BehaviorSubject(null);
   private _opportunity: BehaviorSubject<Opportunity | null> = new BehaviorSubject(null);
   private _opportunitySource: BehaviorSubject<OpportunitySource[] | null> = new BehaviorSubject(null);
@@ -73,9 +66,6 @@ export class OpportunityService {
   private _customList: BehaviorSubject<OpportunityCustomList | null> = new BehaviorSubject(null);
   private _filter: BehaviorSubject<OpportunityFilter | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
-  private _callReasons: BehaviorSubject<Meeting[] | null> = new BehaviorSubject(null);
-  private _eventType: BehaviorSubject<EventType[] | null> = new BehaviorSubject(null);
-  private _opportunityAttachments: BehaviorSubject<Attachment[] | null> = new BehaviorSubject(null);
   private contactEnumInstance: ContactEnum;
   user: User
   constructor(
@@ -101,9 +91,6 @@ export class OpportunityService {
   get opportunityStatus$(): Observable<OpportunityStatus[]> {
     return this._opportunityStatus.asObservable();
   }
-  get opportunityAttachments$(): Observable<Attachment[]> {
-    return this._opportunityAttachments.asObservable();
-  }
   get filter$(): Observable<OpportunityFilter> {
     return this._filter.asObservable();
   }
@@ -118,12 +105,6 @@ export class OpportunityService {
   }
   get task$(): Observable<TaskModel> {
     return this._task.asObservable();
-  }
-  get eventTypes$(): Observable<EventType[]> {
-    return this._eventType.asObservable();
-  }
-  get callReason$(): Observable<any[]> {
-    return this._callReasons.asObservable();
   }
   get calls$(): Observable<Call[]> {
     return this._calls.asObservable();
@@ -234,8 +215,6 @@ export class OpportunityService {
       })
     })
   )
-
-  
   getOpportunity(): Observable<Opportunity[]>{
     let data = {
       id: this.user.id,
@@ -409,25 +388,6 @@ export class OpportunityService {
 
     );
   }
-  getScenarios(): Observable<any[]> {   
-    return this._httpClient.get<any[]>(this.getScenariosUrl).pipe(
-      tap((calls) => {
-        this._callReasons.next(calls);
-      }),
-      
-    );
-  }
-  getEventType(): Observable<EventType[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-    }
-    return this._httpClient.post<EventType[]>(this.getEventTypeUrl, data).pipe(
-      tap((type) => {
-        this._eventType.next(type);
-      })
-    );
-  }
   getEmails(opportunityId: number): Observable<Email[]> {
     let data = {
       id: "-1",
@@ -469,22 +429,6 @@ export class OpportunityService {
       }),
       tap((customList) => {
         this._customLists.next(customList);
-      }),
-      
-    );
-  }
-  getOpportunityAttachments(opportunity: Opportunity): Observable<Attachment[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-      contactTypeId: this.contactEnumInstance.Opportunity,
-      opportunityId: opportunity.opportunityId
-    }
-    debugger;
-    return this._httpClient.post<Attachment[]>(this.getOpportunityAttachmentsURL, data)
-    .pipe(
-      tap((attachment) => {
-        this._opportunityAttachments.next(attachment);
       }),
       
     );
@@ -553,8 +497,9 @@ export class OpportunityService {
       })
     );
   }
-
-
+  selectedOpportunity(selectedOpportunity: Opportunity) {
+    this._opportunity.next(selectedOpportunity);
+  }
   updateTaskStatus(taskId: number, taskTitle, status, opportunityId): Observable<any> {
     let data = {
       id: this.user.id,
@@ -592,20 +537,22 @@ export class OpportunityService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      type: 'task',
+      contactTypeId:this.contactEnumInstance.Opportunity,
+      contactId:opportunityId,
       task: {
         ...taskForm.value,
+
         priorityId: -1,
         statusId: -1,
-        tags: taskForm.value.tags.join(','),
-        type: 'task',
-        contactTypeId:this.contactEnumInstance.Opportunity,
-        contactId:opportunityId,        
+        tags: taskForm.value.tags.join(',')
       }
     }
     return this._httpClient.post<TaskModel>(this.saveTaskUrl, data).pipe(
       tap((customList) => {
         this.getTasks(opportunityId).subscribe();
-      }),      
+      }),
+      
     );
   }
   saveNote(note: Note, opportunityId: number): Observable<any> {
@@ -657,8 +604,7 @@ export class OpportunityService {
       subject: meeting.subject,
       note: meeting.note,
       startTime: meeting.startTime,
-      endTime: meeting.endTime,
-      meetingDate: meeting.meetingDate,
+      endTime: meeting.endTime
     }
     return this._httpClient.post<Meeting[]>(this.saveMeetingsUrl, data).pipe(
       tap((meeting) => {
@@ -671,18 +617,16 @@ export class OpportunityService {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      companyId: -1,
+      leadId: -1,
+      opportunityId: opportunityId,
       callId: call.callId,
       subject: call.subject,
       response: call.response,
       startTime: call.startTime,
       endTime: call.endTime,
-      reasonId: call.reasonId,
-      dueDate: call.dueDate,
-      isTask: call.isTask,
-      taskId: call.taskId,
-      contactTypeId: this.contactEnumInstance.Opportunity,
-      contactId: opportunityId,
-      callDate:call.callDate,
+      contactTypeId:this.contactEnumInstance.Opportunity,
+      contactId:opportunityId,
     }
     return this._httpClient.post<Call[]>(this.saveCallsUrl, data).pipe(
       tap((call) => {
@@ -741,20 +685,6 @@ export class OpportunityService {
   }
   setFilter(filter: OpportunityFilter) {
     this._filter.next(filter);
-  }
-  ChangeOpportunityStatus(OpportunityId: number, statusId: number, StausTitle) {
-    let data = {
-      userId: this.user.id,
-      tenantId: this.user.tenantId,
-      opportunityId: OpportunityId,
-      statusId: statusId,
-      stausTitle: StausTitle
-    }
-    return this._httpClient.post<Opportunity[]>(this.changeOpportunityStatus, data).pipe(
-      tap((company) => {
-        this.getOpportunity().subscribe();
-      }),
-      )
   }
   saveOpportunity(dto: Opportunity) {
     let data = {
@@ -868,51 +798,5 @@ export class OpportunityService {
       }),
       
     );
-  }
-  deleteOpportunityAttachment(id:number, opportunity:Opportunity): Observable<Attachment[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-      fileId: id,
-      contactTypeId: this.contactEnumInstance.Opportunity,
-      opportunityId: opportunity.opportunityId
-    }
-    return this._httpClient.post<Attachment[]>(this.deleteOpportunityAttachmentURL, data)
-    .pipe(
-      tap(() => {
-        this.getOpportunityAttachments(opportunity).subscribe();
-      }),
-      
-    );
-  }
-
-  downloadFile(path: string): Observable<any> {
-    const fullUrl = `${this.downloadFileURL}?filePath=${path}`;
-    return this._httpClient.get(fullUrl, {
-        responseType: 'blob',
-        observe: 'response'
-    }).pipe(          
-        
-    );
-  }
-
-  saveFile(file: File, selectedOpportunity: Opportunity): Observable<Attachment[]> {
-    const parentId = 0   
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('tenantId', this.user.tenantId.toString());
-    formData.append('id', this.user.id);
-    formData.append('parentId', parentId.toString());
-    formData.append('contactTypeId', this.contactEnumInstance.Opportunity.toString());
-    formData.append('opportunityId', selectedOpportunity.opportunityId.toString());
-    return this._httpClient.post<Attachment[]>(this.saveFileURL, formData).pipe(
-      tap(data => {
-        this.getOpportunityAttachments(selectedOpportunity).subscribe();
-      }),
-      
-    );
-  }
-  selectedOpportunity(selectedOpportunity: Opportunity) {
-    this._opportunity.next(selectedOpportunity);
   }
 }

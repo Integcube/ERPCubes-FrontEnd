@@ -14,14 +14,9 @@ import { MatDialogRef } from '@angular/material/dialog';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class NoteTabComponent implements OnInit {
-  private _matDialogRef: MatDialogRef<NoteTabComponent>
-  constructor(
-    private _leadService:LeadService,
-    private _matDialog: MatDialog)
-  { }
-
   notes$ = this._leadService.notes$;
   users$ = this._leadService.users$;
+  private _matDialogRef: MatDialogRef<NoteTabComponent>
   notesWithUser$ = this.notes$;
   filteredData$ = combineLatest([
     this._leadService.searchQuery$,
@@ -35,7 +30,12 @@ export class NoteTabComponent implements OnInit {
     ),
   );
 
+  constructor(
+    private _leadService:LeadService,
+    private _matDialog: MatDialog,
+    // private _changeDetectorRef: ChangeDetectorRef,
 
+  ) { }
 
   ngOnInit(): void { }
 
@@ -44,24 +44,22 @@ export class NoteTabComponent implements OnInit {
     // this._changeDetectorRef.markForCheck();
     this._matDialog.open(NoteDetailComponent, {
       autoFocus: false,
-      data : {
-        note: cloneDeep(note)
-      }
-    });
-  }
-
-
-  updateNote(note:Note):void{
-    // this._changeDetectorRef.markForCheck();
-    this._matDialog.open(NoteDetailComponent, {
-      autoFocus: false,
-      data : {
-        note: cloneDeep(note)
+      data     : {
+          note: cloneDeep(note)
       }
     });
   }
 
   close(): void {
     this._matDialogRef.close();
+  }
+  updateNote(note:Note):void{
+    // this._changeDetectorRef.markForCheck();
+    this._matDialog.open(NoteDetailComponent, {
+      autoFocus: false,
+      data     : {
+          note: cloneDeep(note)
+      }
+  });
   }
 }
