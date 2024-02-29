@@ -62,6 +62,12 @@ export class LeadService {
   private readonly deleteLeadAttachmentURL = `${environment.url}/DocumentLibrary/delete`
   private readonly downloadFileURL = `${environment.url}/DocumentLibrary/getfile`
   private readonly saveFileURL = `${environment.url}/DocumentLibrary/addLeadFile`
+  private readonly bulkdelete = `${environment.url}/Lead/bulkdelete`
+  private readonly bulkchangestatusurl = `${environment.url}/Lead/bulkchangestatus`
+  private readonly bulkassignleadsUrl = `${environment.url}/Lead/bulkassignleads`
+  
+  
+
   user: User;
   private _industries: BehaviorSubject<Industry[] | null> = new BehaviorSubject(null);
   private _lead: BehaviorSubject<Lead | null> = new BehaviorSubject(null);
@@ -864,6 +870,22 @@ export class LeadService {
 
     );
   }
+  deleteBulkLeads(leadIds: any) {
+    let data = {
+      id: this.user.id,
+      tenantId:this.user.tenantId,
+      leads: leadIds,
+   
+    }
+    return this._httpClient.post<Lead[]>(this.bulkdelete, data).pipe(
+      tap((company) => {
+
+        this.getLeads().subscribe();
+        this._alertService.showSuccess("Selected Leads Deleted");
+      }),
+      
+    );
+  }
 
   ChangeLeadStatus(LeadId: number, statusId: number, StausTitle) {
     let data = {
@@ -876,6 +898,36 @@ export class LeadService {
     return this._httpClient.post<Lead[]>(this.changeLeadStatus, data).pipe(
       tap((company) => {
         this.getLeads().subscribe();
+      }),
+      )
+  }
+
+  ChangeBulkLeadStaus(LeadId: any, statusId: number, StausTitle:string) {
+    let data = {
+      userId: this.user.id,
+      tenantId: this.user.tenantId,
+      leads: LeadId,
+      statusId: statusId,
+      stausTitle: StausTitle
+    }
+    return this._httpClient.post<Lead[]>(this.bulkchangestatusurl, data).pipe(
+      tap((company) => {
+        this.getLeads().subscribe();
+        this._alertService.showSuccess("Leads Status Changed");
+      }),
+      )
+  }
+  BulkLeadsAssign(LeadId: any, LeadOwnerId: string) {
+    let data = {
+      userId: this.user.id,
+      tenantId: this.user.tenantId,
+      leads: LeadId,
+      leadOwner: LeadOwnerId,
+    }
+    return this._httpClient.post<Lead[]>(this.bulkassignleadsUrl, data).pipe(
+      tap((company) => {
+        this.getLeads().subscribe();
+        this._alertService.showSuccess("Leads Assignd");
       }),
       )
   }

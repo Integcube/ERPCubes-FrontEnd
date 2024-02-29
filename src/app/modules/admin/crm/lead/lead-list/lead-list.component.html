@@ -125,19 +125,106 @@
             <div class="flex-grow  bg-default  justify-between overflow-hidden">
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between py-1 shadow mb-2">
+                   
                     <div class="flex px-6  gap-2">
-                        <button class="h-7 primary-2" mat-flat-button (click)="setView()">
-                            <mat-icon class="text-xs" svgIcon="mat_outline:backup_table"></mat-icon>
-                            <span class="ml-2 text-xs" *ngIf="!isTable" i18n>Table</span>
-                            <span class="ml-2  text-xs" *ngIf="isTable" i18n>Status</span>
-                        </button>
-                        <!-- <button class="ml-4" mat-stroked-button class="h-8" (click)="createLead()" *ngIf="isTable">
-                                <mat-icon svgIcon="mat_outline:layers"></mat-icon>
-                                <span class="ml-2 mr-1">Bulk Actions</span>
-                            </button> -->
-                    </div>
+                        
+                        <button  (click)="setView()" mat-icon-button [matTooltip]="'Click to  Change View'">
+                            <mat-icon  class="icon-size-6 cursor-pointer text-primary"  svgIcon="feather:list"  *ngIf="!isTable"></mat-icon>
+                            <mat-icon svgIcon="feather:layout"  class="icon-size-6 cursor-pointer " *ngIf="isTable"></mat-icon>
+                     
 
-                    <div class="flex flex-wrap  sm:justify-start md:justify-end  lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
+                        </button>
+                      
+                    </div>
+                    <ng-container *ngIf="selection.hasValue()">
+                    <div class="flex flex-wrap  sm:justify-start md:justify-start lg:justify-start float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
+                        <div class="flex flex-row gap-2">
+                            <!-- Owner -->
+                            <div class="flex gap-1 items-center p-2 rounded h-5" [matTooltip]="'Delete Selected items'">
+                                <span class="text-xs font-bold  cursor-pointer text-primary" #deletepnl
+                                 (click)="OpenDeletePop()"
+                                     i18n>
+                                  Delete Selected
+                                </span>
+                                <mat-icon  class="hover:underline cursor-pointer text-primary"  (click)="OpenDeletePop()" svgIcon="feather:trash"></mat-icon>
+                            </div>
+                            <!--Change Status-->
+                             <div class="flex gap-1 items-center p-2 rounded h-5">
+                                <span class="font-bold hover:underline cursor-pointer text-xs ext-primary" 
+                                    [matTooltip]="'Change Status'"#pnlstatusorgin
+                                    (click)="openBulkStatusPanel()" 
+                                   i18n>
+                                    Change Status
+                                </span>
+                                <ng-template #pnlstatus>
+                                    <div class="w-40 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2 justify-center" *ngIf="SeletedStatusBulk!=0">
+                                            <div class="flex flex-row  items-center">
+
+                                                <button class="h-6 primary-2 w-24 " mat-flat-button (click)="ChangeBulkStatus()"
+                                                  [matTooltip]="'Click to Save Status For Selected items'">
+                                                  <mat-icon  class="icon-size-5 cursor-pointer" svgIcon="feather:save"></mat-icon>
+                                                 <span class="ml-1 text-xs" i18n>Save Status</span>
+                                               </button>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col max-h-64 py-2 border-t text-sm" fuseScrollbar>
+                                            <ng-container *ngFor="let s of filteredStatus; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer  hover:bg-hover" 
+                                                [ngClass]="{'bg-gray-200': s.statusId === SeletedStatusBulk}"
+                                                    matRipple (click)="SetStatusBulk(s.statusId,s.statusTitle)">
+                                                    {{s.statusTitle}}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                
+                                <mat-icon svgIcon="feather:trending-up"   class="hover:underline cursor-pointer text-primary"  (click)="openBulkStatusPanel()"> </mat-icon>
+                            </div> 
+                            
+
+                              <!--Change user-->
+                              <div class="flex gap-1 items-center p-2 rounded h-5">
+                                <span class="font-bold hover:underline cursor-pointer text-xs ext-primary" 
+                                    [matTooltip]="'Change Status'"#pnluserorgin
+                                    (click)="openBulkUserPanel()" 
+                                   i18n>
+                                    Assign Lead
+                                </span>
+                                <ng-template #pnluser>
+                                    <div class="w-40 rounded border shadow-md bg-card">
+                                        <div class="flex items-center m-3 mr-2 justify-center" *ngIf="SeletedLeadOwner!=-1">
+                                            <div class="flex flex-row  items-center">
+
+                                                <button class="h-6 primary-2 w-24 " mat-flat-button (click)="ChangeBulkAssignleads()"
+                                                  [matTooltip]="'Click to assign leads to selected user'">
+                                                  <mat-icon  class="icon-size-5 cursor-pointer" svgIcon="feather:save"></mat-icon>
+                                                 <span class="ml-1 text-xs" i18n>Assign</span>
+                                               </button>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex flex-col max-h-64 py-2 border-t text-sm" fuseScrollbar>
+                                            <ng-container *ngFor="let user of filteredUsers; trackBy: trackByFn">
+                                                <div class="flex items-center h-10 min-h-10 px-4 cursor-pointer hover:bg-hover" 
+                                                  [ngClass]="{'bg-gray-200': user.id === SeletedLeadOwner}"
+                                                    matRipple (click)="SetAssignleads(user.id)">
+                                                    {{user.name}}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <mat-icon svgIcon="feather:user" class="hover:underline cursor-pointer text-primary"  (click)="openBulkUserPanel()"></mat-icon>
+                            </div> 
+                        </div>
+                      
+                    </div>
+                </ng-container>
+                    <div class="flex flex-wrap  sm:justify-start md:justify-end lg:justify-end float-end  w-full px-5 md:px-6  gap-2 sm:py-1 mt-4 sm:mt-0">
                         <div class="flex flex-row gap-2">
                             <!-- Owner -->
                             <div class="flex gap-1 items-center p-2 rounded h-5"
@@ -277,8 +364,8 @@
                             <div class="flex gap-1 items-center p-2 rounded h-5"
                                 [ngStyle]="{'background-color': filter.leadStatus.length ? '#E85038':'transparent'}">
                                 <span *ngIf="filter.leadStatus.length"
-                                    class="font-bold hover:underline cursor-pointer text-xs" #usersPanelOrigin
-                                    (click)="openUsersPanel()" c
+                                    class="font-bold hover:underline cursor-pointer text-xs" #leadStatusPanelOrigin
+                                    (click)="openLeadStatusPanel()" 
                                     [ngClass]="filter.leadStatus.length ? 'text-white' : 'text-primary'">
                                     {{"("+filter.leadStatus.length+")"}}
                                 </span>

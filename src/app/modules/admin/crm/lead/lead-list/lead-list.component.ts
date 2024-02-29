@@ -19,7 +19,7 @@ import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail
 import { LeadImportComponent } from '../lead-import/lead-import.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { TrashComponent } from '../../trash/trash.component';
-
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 @Component({
   selector: 'app-lead-list',
   templateUrl: './lead-list.component.html',
@@ -40,9 +40,17 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   @ViewChild('leadStatusPanel') private _leadStatusPanel: TemplateRef<any>;
   @ViewChild('leadStatusPanelOrigin') private _leadStatusPanelOrigin: ElementRef;
   @ViewChild('dropdownMenu') dropdownMenu: MatMenuTrigger;
+
+  @ViewChild('pnlstatusorgin') private _pnlstatusOrgin: ElementRef;
+  @ViewChild('pnlstatus') private _Bulkpnlstatus: TemplateRef<any>;
+
+  @ViewChild('pnluserorgin') private _pnluserOrgin: ElementRef;
+  @ViewChild('pnluser') private _Bulkpnluser: TemplateRef<any>;
+  
+
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
-  //'sourceTitle',,'country','companyTitle','industryTitle' ,'email'
+
   displayedColumns: string[] = ['select', 'name', 'rating', 'productTitle', 'phone', 'leadStatus', 'leadOwnerName', 'createdDate'];
   isTable: boolean = true
   selection = new SelectionModel<Lead>(true, []);
@@ -75,7 +83,11 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   drawerMode: 'side' | 'over';
   leadStatus: LeadStatus[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-
+  
+  //For Bulk Option
+  SeletedStatusBulk:number;
+  SeletedStatusBulkTitle:string;
+  SeletedLeadOwner:string;
 
   customLists$ = this._leadService.customLists$;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -90,7 +102,8 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     private _fuseMediaWatcherService: FuseMediaWatcherService,
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _fuseConfirmationService: FuseConfirmationService
   ) { }
 
   activeItem = new LeadCustomList({});
@@ -564,4 +577,150 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       this._leadService.getLeads().pipe(takeUntil(this._unsubscribeAll)).subscribe();
     });
   }
+
+  openBulkStatusPanel(): void {
+    this.SeletedStatusBulk=0;
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._pnlstatusOrgin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._pnlstatusOrgin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._Bulkpnlstatus, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._pnlstatusOrgin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.dateRangesFilter = this.dateRanges;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    });
+
+  }
+
+  openBulkUserPanel(): void {
+    this.SeletedLeadOwner="-1";
+    this._usersPanelOverlayRef = this._overlay.create({
+      backdropClass: '',
+      hasBackdrop: true,
+      scrollStrategy: this._overlay.scrollStrategies.block(),
+      positionStrategy: this._overlay.position()
+        .flexibleConnectedTo(this._pnluserOrgin.nativeElement)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(64)
+        .withLockedPosition(true)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top'
+          }
+        ])
+    });
+
+    this._usersPanelOverlayRef.attachments().subscribe(() => {
+      this._renderer2.addClass(this._pnluserOrgin.nativeElement, 'panel-opened');
+      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    });
+    const templatePortal = new TemplatePortal(this._Bulkpnluser, this._viewContainerRef);
+    this._usersPanelOverlayRef.attach(templatePortal);
+    this._usersPanelOverlayRef.backdropClick().subscribe(() => {
+      this._renderer2.removeClass(this._pnluserOrgin.nativeElement, 'panel-opened');
+      if (this._usersPanelOverlayRef && this._usersPanelOverlayRef.hasAttached()) {
+        this._usersPanelOverlayRef.detach();
+        this.filteredUsers = this.users;
+      }
+      if (templatePortal && templatePortal.isAttached) {
+        templatePortal.detach();
+      }
+    });
+  }
+
+  OpenDeletePop() {
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Delete Selected Leads',
+      message: 'Are you sure you want to delete Selected leads? This action cannot be undone!',
+      actions: {
+        confirm: {
+          label: 'Delete'
+        }
+      }
+    });
+    confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+    
+        const SelectedLeadsId = this.selection.selected.map((lead: Lead) => {
+          return { leadId: lead.leadId };
+      });
+        this._leadService.deleteBulkLeads(SelectedLeadsId).subscribe(
+          {
+            next: () => {
+              this._changeDetectorRef.markForCheck();
+              this.selection.clear();
+            }
+          }
+        );
+        const aa=this.selection.selected.map((lead: Lead) => lead.leadId);
+      }
+    });
+  }
+
+  SetStatusBulk(status,statusTitle) {
+    this.SeletedStatusBulk=status;
+    this.SeletedStatusBulkTitle=statusTitle;
+  }
+
+  SetAssignleads(Owner) {
+    this.SeletedLeadOwner=Owner;
+  }
+  
+  ChangeBulkStatus() {
+        const SelectedLeadsId = this.selection.selected.map((lead: Lead) => {
+          return { leadId: lead.leadId };});
+        this._leadService.ChangeBulkLeadStaus(SelectedLeadsId,this.SeletedStatusBulk,this.SeletedStatusBulkTitle).subscribe(
+          {
+            next: () => {
+              this._changeDetectorRef.markForCheck();
+              this._usersPanelOverlayRef.detach();
+              this.selection.clear();
+            }
+          }
+        );
+      }
+
+      ChangeBulkAssignleads() {
+        const SelectedLeadsId = this.selection.selected.map((lead: Lead) => {
+          return { leadId: lead.leadId };});
+        this._leadService.BulkLeadsAssign(SelectedLeadsId,this.SeletedLeadOwner).subscribe(
+          {
+            next: () => {
+              this._changeDetectorRef.markForCheck();
+              this._usersPanelOverlayRef.detach();
+              this.selection.clear();
+            }
+          }
+        );
+      }
+
 }
