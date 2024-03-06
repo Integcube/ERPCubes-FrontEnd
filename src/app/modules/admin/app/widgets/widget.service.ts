@@ -5,7 +5,7 @@ import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Lead, Task } from './widget.type';
+import { TotalLeadCount, TotalLeadMonth, TotalLeadOwner, TotalLeadSource, TotalLeadSummary, TotalLostCount, TotalNewCount, TotalQualifiedCount, TotalWonCount } from './widget.type';
 
 
 
@@ -13,78 +13,114 @@ import { Lead, Task } from './widget.type';
     providedIn: 'root'
 })
 export class WidgetService {
-    private readonly getLeadsURL = `${environment.url}/Lead/all`
-    private readonly getTasksURL = `${environment.url}/Task/all`
-    private readonly getUsersURL = `${environment.url}/Users/all`
-  
+    private readonly getTotalLeadUrl = `${environment.url}/Lead/leadCountByTotal`
+    private readonly getWonLeadUrl = `${environment.url}/Lead/leadCountByWon`
+    private readonly getNewLeadUrl = `${environment.url}/Lead/leadCountByNew`
+    private readonly getQualifiedLeadUrl = `${environment.url}/Lead/leadCountByQualified`
+    private readonly getLostLeadUrl = `${environment.url}/Lead/leadCountByLost`
+    private readonly getMonthLeadUrl = `${environment.url}/Lead/leadCountByMonth`
+    private readonly getSourceLeadUrl = `${environment.url}/Lead/leadCountBySource`
+    private readonly getOwnerLeadUrl = `${environment.url}/Lead/leadCountByOwner`
+    private readonly getSummaryLeadUrl = `${environment.url}/Lead/leadCountSummary`
+
+    
+
+    // private _leadTotalCount: BehaviorSubject<TotalLeadCount[] | null> = new BehaviorSubject(null)
+
     user: User;
-    currentDate: Date = new Date();
-    private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
-    private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
-    private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
+    // private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
+
     constructor(
       private _httpClient: HttpClient,
       private _userService: UserService,
       private snackBar: MatSnackBar) 
     {
-      this._userService.user$.subscribe(user => {this.user = user;})
+        this._userService.user$.subscribe(user => {
+            this.user = user;
+        })
+    }
+
+    getTotalLead(): Observable<TotalLeadCount> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        debugger;
+        return this._httpClient.post<TotalLeadCount>(this.getTotalLeadUrl, data).pipe(
+       
+            
+        );
     }
   
-    get users$():Observable<User[]>{
-      return this._users.asObservable();
+    getWonLead(): Observable<TotalWonCount> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalWonCount>(this.getWonLeadUrl, data).pipe(                 
+        );
+    }
+
+    getNewLead(): Observable<TotalNewCount> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalNewCount>(this.getNewLeadUrl, data).pipe(                 
+        );
+    }
+
+    getQualifiedLead(): Observable<TotalQualifiedCount> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalQualifiedCount>(this.getQualifiedLeadUrl, data).pipe(                 
+        );
+    }
+
+    getLostLead(): Observable<TotalLostCount> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalLostCount>(this.getLostLeadUrl, data).pipe(                 
+        );
     }
   
-    get leads$():Observable<Lead[]>{
-      return this._leads.asObservable();
+    getSourceLead(): Observable<TotalLeadSource[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalLeadSource[]>(this.getSourceLeadUrl, data).pipe(                 
+        );
     }
-  
-    get tasks$():Observable<Task[]>{
-      return this._tasks.asObservable();
+    getMonthLead(): Observable<TotalLeadMonth[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalLeadMonth[]>(this.getMonthLeadUrl, data).pipe(                 
+        );
     }
-  
-    getLeads(): Observable<Lead[]> {
-      let data = {
-        id: this.user.id,
-        tenantId: this.user.tenantId,
-      }
-      debugger;
-      return this._httpClient.post<Lead[]>(this.getLeadsURL, data).pipe(
-        tap((leads) => {
-          this._leads.next(leads);
-        }),
-        catchError(err => this.handleError(err))
-      );
+    getOwnerLead(): Observable<TotalLeadOwner[]> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalLeadOwner[]>(this.getOwnerLeadUrl, data).pipe(                 
+        );
     }
-  
-    getTasks(): Observable<Task[]> {
-      let data = {
-        tenantId: this.user.tenantId,
-        id: this.user.id,
-        leadId: -1,
-        companyId: -1
-      }
-      return this._httpClient.post<Task[]>(this.getTasksURL, data).pipe(
-        tap((tasks) => {
-          this._tasks.next(tasks)
-        }),
-        catchError(err => this.handleError(err))
-      );
+    getSummaryLead(): Observable<TotalLeadSummary> {
+        let data = {
+            id: this.user.id,
+            tenantId: this.user.tenantId,
+        }
+        return this._httpClient.post<TotalLeadSummary>(this.getSummaryLeadUrl, data).pipe(                 
+        );
     }
-  
-    getUsers(): Observable<User[]> {
-      let data = {
-        tenantId: this.user.tenantId,
-        id: this
-          .user.id
-      }
-      return this._httpClient.post<User[]>(this.getUsersURL, data).pipe(
-        tap((users) => {
-          this._users.next(users);
-        }),
-        catchError(err => this.handleError(err))
-      );
-    }
-  
+
     private handleError(err: HttpErrorResponse): Observable<never> {
       let errorMessage: string;
       if (err.error instanceof ErrorEvent) {

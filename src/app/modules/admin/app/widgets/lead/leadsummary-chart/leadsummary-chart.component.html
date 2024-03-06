@@ -1,0 +1,9 @@
+<div class="relative flex flex-auto dark:bg-transparent py-3">
+    <div class="flex-2 bg-card p-6 flex items-center justify-center shadow rounded-2xl overflow-hidden">
+        <ng-container *ngIf="pieChartOptions">
+            <apx-chart class="flex justify-between self-center items-center" [series]="pieChartOptions.series"
+                [chart]="pieChartOptions.chart" [labels]="pieChartOptions.labels"
+                [colors]="pieChartOptions.colors"></apx-chart>
+        </ng-container>
+    </div>
+    

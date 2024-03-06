@@ -99,6 +99,7 @@ export const appRoutes: Route[] = [
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/app/scrumboard/scrumboard.module').then(m => m.ScrumboardModule)},
                 {path: 'chat', loadChildren: () => import('app/modules/admin/app/chat/chat.module').then(m => m.ChatModule)},
                 {path: 'widgets', loadChildren: () => import('app/modules/admin/app/widgets/widget.module').then(m => m.WidgetModule)},
+                {path: 'dashboards', loadChildren: () => import('app/modules/admin/dashboards/list-dashboard/list-dashboard.module').then(m => m.ListDashboardModule)},
 
                 // {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},            ]},
 

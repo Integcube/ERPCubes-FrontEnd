@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Lead } from '../../widget.type';
 import { WidgetService } from '../../widget.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -8,36 +7,27 @@ import { Subject } from 'rxjs';
   selector: 'new-leads',
   templateUrl: './new-leads.component.html',
 })
-export class NewLeadsComponent implements OnInit {
-  filterLeads: Lead[] = [];
-  leads: Lead[] = [];
-  drawerOpened: boolean = false;
-
-  private unsubscribe$: Subject<void> = new Subject();
+export class NewLeadsComponent {
+  totalNewLeads: any; 
 
   constructor(
     private _widgetService: WidgetService,
-    private _changeDetectorRef: ChangeDetectorRef,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {
-    this._widgetService.leads$
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((leads) => {
-        this.leads = leads || [];
-        // this.updateData();
-      });
-
-    this._widgetService.getLeads();
+  ngOnInit() {
+    this.fetchTotalLeads();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  fetchTotalLeads() {
+    this._widgetService.getNewLead().subscribe(
+      (data) => {
+        debugger;
+        this.totalNewLeads = data.totalNewLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+      }
+    );
   }
-  calculateLeadNumber(status: number):number {
-    let leads= this.leads.filter(lead=>lead.status === status);
-    return leads?.length??0
-  }
-
 }

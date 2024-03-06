@@ -24,7 +24,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TotalLeadsComponent } from './lead/total-leads/total-leads.component';
 import { NewLeadsComponent } from './lead/new-leads/new-leads.component';
-import { LeadComponent } from './lead/lead.component';
+import { LostLeadComponent } from './lead/lost-leads/lost-leads.component';
+import { QualifiedLeadComponent } from './lead/qualified-leads/qualified-leads.component';
+import { WonLeadComponent } from './lead/won-leads/won-leads.component';
+import { LeadOwnerGraphComponent } from './lead/leadowner-graph/leadowner-graph.component';
+import { SourcePieChartComponent } from './lead/source-piechart/source-piechart.component';
+import { MonthlyChartComponent } from './lead/monthly-chart/monthly-chart.component';
+import { LeadSummaryChartComponent } from './lead/leadsummary-chart/leadsummary-chart.component';
 
 
 
@@ -33,7 +39,13 @@ import { LeadComponent } from './lead/lead.component';
         WidgetComponent,
         TotalLeadsComponent,
         NewLeadsComponent,
-        LeadComponent
+        LostLeadComponent,
+        QualifiedLeadComponent,
+        WonLeadComponent,
+        LeadOwnerGraphComponent,
+        SourcePieChartComponent,
+        MonthlyChartComponent,
+        LeadSummaryChartComponent
         
     ],
     imports     : [
