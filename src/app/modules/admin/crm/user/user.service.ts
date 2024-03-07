@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { UserForm } from './user.type';
 import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
+import { User ,Pagination, PaginationView} from 'app/core/user/user.types';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertService } from 'app/core/alert/alert.service';
@@ -16,13 +16,15 @@ import { AlertService } from 'app/core/alert/alert.service';
 export class UserFormService {
 
   private readonly adduserListURL = `${environment.url}/Account/register`
-  private readonly getuserListURL = `${environment.url}/Users/all`
+  private readonly getuserListURL = `${environment.url}/Users/lazyall`
   private readonly updateUserURL = `${environment.url}/Account/Update`
   private readonly Deleteuser = `${environment.url}/Users/delete`
 
   user: User;
   private _user: BehaviorSubject<UserForm | null> = new BehaviorSubject(null);
   private _users: BehaviorSubject<UserForm[] | null> = new BehaviorSubject(null);
+  private _pagination: BehaviorSubject<Pagination | null> = new BehaviorSubject(null);
+  private _paginationview: BehaviorSubject<PaginationView | null> = new BehaviorSubject<PaginationView | null>(new PaginationView({}));
 
   constructor(
     private _userService: UserService,
@@ -31,25 +33,34 @@ export class UserFormService {
   {
     this._userService.user$.subscribe(user => { this.user = user; })
   }
-
+  
   get user$(): Observable<UserForm> {
     return this._user.asObservable();
   }
   get users$(): Observable<UserForm[]> {
     return this._users.asObservable();
   }
-
-  getUsers(): Observable<UserForm[]> {
-
+  get pagination$(): Observable<Pagination>
+  {
+      return this._pagination.asObservable();
+  }
+  getUsers(): Observable<{ paginationVm: Pagination;userList: UserForm[]}> {
+    
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      page: '' + this._paginationview.value.pageIndex,
+      size: '' + this._paginationview.value.pageSize,
+      sort: this._paginationview.value.active,
+      order:this._paginationview.value.direction,
+      search:this._paginationview.value.search,
     }
-    return this._httpClient.post<UserForm[]>(this.getuserListURL, data).pipe(
-      tap((users) => {
-        this._users.next(users);
+    debugger;
+    return this._httpClient.post<{ paginationVm: Pagination;userList: UserForm[]}>(this.getuserListURL, data).pipe(
+      tap((response) => {
+        this._users.next(response.userList);
+        this._pagination.next(response.paginationVm);
       }),
-      
     );
   }
 
@@ -95,7 +106,9 @@ export class UserFormService {
       
     );
   }
-
+  updatePaginationParam(pagination:PaginationView){
+    this._paginationview.next(pagination);
+  }
   updateUser(userId: any, user: FormGroup) {
     let data: UserForm = {
       Id: userId,
@@ -119,7 +132,7 @@ export class UserFormService {
     }
     return this._httpClient.post<any>(this.Deleteuser, data).pipe(
       tap((companies) => {
-        this.getUsers().subscribe();
+       this.getUsers().subscribe();
       }),
       
     );

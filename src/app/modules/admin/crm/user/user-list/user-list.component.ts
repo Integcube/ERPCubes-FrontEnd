@@ -8,11 +8,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil, fromEvent, filter } from 'rxjs';
+import { Observable,debounceTime, Subject, takeUntil,merge,switchMap,map,  fromEvent, filter } from 'rxjs';
 import { UserForm } from '../user.type';
 import { UserFormService } from '../user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TrashComponent } from '../../trash/trash.component';
+import { Pagination, PaginationView } from 'app/core/user/user.types';
 
 @Component({
   selector: 'app-user-list',
@@ -23,20 +24,21 @@ import { TrashComponent } from '../../trash/trash.component';
 export class UserListComponent implements OnInit {
 
   @ViewChild('matDrawer', { static: true }) matDrawer: MatDrawer;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) _paginator: MatPaginator;
+  @ViewChild(MatSort) _sort: MatSort;
 
   dataSource: MatTableDataSource<UserForm>;
   displayedColumns: string[] = ['select',  'firstName', 'lastName', 'userName', 'email', 'phoneNumber'];
   selection = new SelectionModel<UserForm>(true, []);
-
+  pagination: Pagination;
+  paginationparm= new PaginationView({});
   users$: Observable<UserForm[]>;
   users: UserForm[];
   userCount: number = 0;
   selectedUser: UserForm;
   drawerMode: 'side' | 'over';
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  
+  isLoading: boolean = false;
 
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -52,7 +54,6 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    //Get user List
     this.users$ = this._userFormService.users$;
     this._userFormService.users$
       .pipe(takeUntil(this._unsubscribeAll))
@@ -60,11 +61,12 @@ export class UserListComponent implements OnInit {
         this.users = [...users];
         this.userCount = users.length;
         this.dataSource = new MatTableDataSource(this.users);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        // this.dataSource.paginator = this._paginator;
+        // this.dataSource.sort = this._sort;
         this._changeDetectorRef.markForCheck();
       });
-    // Get selected company
+
+
     this._userFormService.user$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((user: UserForm) => {
@@ -103,9 +105,30 @@ export class UserListComponent implements OnInit {
       .subscribe(() => {
         this.createUser();
       });
+
+      this._userFormService.pagination$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((pagination: Pagination) => {
+          this.pagination = pagination;
+          this._changeDetectorRef.markForCheck();
+      });
+        // Subscribe to search input field value changes
+        this.searchInputControl.valueChanges
+            .pipe(
+                takeUntil(this._unsubscribeAll),
+                debounceTime(1000),
+                switchMap((query) => {
+
+                  this._userFormService.updatePaginationParam(this.paginationparm);
+                    this.isLoading = true;
+                    return this._userFormService.getUsers();
+                }),
+                map(() => {
+                    this.isLoading = false;
+                })
+            )
+            .subscribe();
   }
-
-
   onMouseEnter(row: UserForm){
     row.isHovered=true;
   }
@@ -119,8 +142,49 @@ export class UserListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
+
+    if ( this._sort && this._paginator )
+    {
+debugger
+this._sort.sort({
+  id          : 'firstName',
+  start       : 'asc',
+  disableClear: true
+});
+
+// Mark for check
+this._changeDetectorRef.markForCheck();
+
+// If the user changes the sort order...
+this._sort.sortChange
+  .pipe(takeUntil(this._unsubscribeAll))
+  .subscribe(() => {
+      // Reset back to the first page
+      this._paginator.pageIndex = 0;
+  });
+
+
+
+    merge(this._sort.sortChange, this._paginator.page).pipe(
+      switchMap(() => {
+        debugger
+      this.paginationparm.pageIndex=this._paginator.pageIndex;
+      this.paginationparm.pageSize=this._paginator.pageSize;
+      this.paginationparm.active=this._sort.active;
+      this.paginationparm.direction=this._sort.direction
+      this._userFormService.updatePaginationParam(this.paginationparm);
+        this.isLoading = true;
+        return this._userFormService.getUsers();
+      }),
+      map(() => {
+        this.isLoading = false;
+      })
+    ).subscribe();
+    }
+
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions

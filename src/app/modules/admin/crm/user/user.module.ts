@@ -26,6 +26,7 @@ import { userRoutes } from './user.routing';
 import moment from 'moment';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
 import { TrashModule } from '../trash/trash.module';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,7 @@ import { TrashModule } from '../trash/trash.module';
     SharedModule,
     FuseScrollbarModule,
     TrashModule,
-
+    MatSortModule
   ],
   providers   : [
     {
