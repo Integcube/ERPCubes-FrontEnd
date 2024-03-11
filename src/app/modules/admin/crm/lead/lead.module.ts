@@ -61,6 +61,9 @@ import { LeadRestoreComponent } from './lead-restore/lead-restore.component';
 import { LeadScoreComponent } from './lead-detail/lead-score/lead-score.component';
 import { TrashModule } from '../trash/trash.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { LeadListViewComponent } from './lead-list-view/lead-list-view.component';
+
 
 @NgModule({
   declarations: [
@@ -90,6 +93,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     LeadStatusComponent,
     LeadRestoreComponent,
     LeadScoreComponent,
+    LeadListViewComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),
@@ -125,6 +129,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     SharedModule,
     QuillModule,
     TrashModule,
+    MatSortModule,
     
   ],schemas: [
     CUSTOM_ELEMENTS_SCHEMA

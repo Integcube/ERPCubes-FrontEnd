@@ -9,11 +9,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Observable, Subject, takeUntil, fromEvent, filter, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, Subject, takeUntil, fromEvent, filter, debounceTime, distinctUntilChanged, merge, switchMap, map } from 'rxjs';
 import { LeadService } from '../lead.service';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { User } from 'app/core/user/user.types';
+import { Pagination, PaginationView, User } from 'app/core/user/user.types';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDetailComponent } from '../lead-detail/view/view-detail/view-detail.component';
 import { LeadImportComponent } from '../lead-import/lead-import.component';
@@ -46,7 +46,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
 
   @ViewChild('pnluserorgin') private _pnluserOrgin: ElementRef;
   @ViewChild('pnluser') private _Bulkpnluser: TemplateRef<any>;
-  
+
 
   private _usersPanelOverlayRef: OverlayRef;
   dataSource: MatTableDataSource<Lead>;
@@ -54,6 +54,9 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['select', 'name', 'rating', 'productTitle', 'phone', 'leadStatus', 'leadOwnerName', 'createdDate'];
   isTable: boolean = true
   selection = new SelectionModel<Lead>(true, []);
+  selectedLeads: SelectionModel<Lead>;
+  paginationparm= new PaginationView({});
+  pagination: Pagination;
   customList$ = this._leadService.customList$;
   dateRangesFilter: any[];
   dateRanges: { label: string, value: string }[] = [
@@ -83,7 +86,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   drawerMode: 'side' | 'over';
   leadStatus: LeadStatus[];
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  
+  isLoading: boolean = false;
   //For Bulk Option
   SeletedStatusBulk:number;
   SeletedStatusBulkTitle:string;
@@ -108,10 +111,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
 
   activeItem = new LeadCustomList({});
   activeItemforAll = null;
-
-
-
-
   onDateRangeChange(selectedValue: string, type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -159,7 +158,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       list.listTitle = name;
       this.activeItemforAll = null;
     }
-
+    this._leadService.updatePaginationParam(new PaginationView({}));
     this.activeItem = list;
     this.filter = list.filterParsed;
     this._leadService.setCustomList(list);
@@ -362,18 +361,29 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dateRangesFilter = [...this.dateRanges];
     let selectedList = new LeadCustomList({});
+    this._leadService.selectedLeads$.subscribe(selectedLeads => {
+      this.selection = selectedLeads;
+    });
+
     selectedList.listTitle = "All leads"
     this._leadService.setCustomList(selectedList);
-    this.leads$ = this._leadService.filteredLeads$;
-    this._leadService.filteredLeads$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe((comapnies: Lead[]) => {
-        this.leads = [...comapnies];
-        this.leadCount = comapnies.length;
-        this.dataSource = new MatTableDataSource(this.leads);
-        this.ngAfterViewInit();
-        this._changeDetectorRef.markForCheck();
-      });
+    //  this.leads$ = this._leadService.filteredLeads$;
+    // this._leadService.leads$
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((comapnies: Lead[]) => {
+    //     this.leads = [...comapnies];
+    //     this.leadCount = comapnies.length;
+    //     this.dataSource = new MatTableDataSource(this.leads);
+
+    //     this._changeDetectorRef.markForCheck();
+    //   });
+      this.ngAfterViewInit();
+      // this._leadService.pagination$
+      // .pipe(takeUntil(this._unsubscribeAll))
+      // .subscribe((pagination: Pagination) => {
+      //     this.pagination = pagination;
+      //     this._changeDetectorRef.markForCheck();
+      // });
 
     this._leadService.lead$
       .pipe(takeUntil(this._unsubscribeAll))
@@ -399,32 +409,46 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         this.filteredStatus = this.status;
         this._changeDetectorRef.markForCheck();
       })
-    this._fuseMediaWatcherService.onMediaChange$
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(({ matchingAliases }) => {
-        if (matchingAliases.includes('lg')) {
-          this.drawerMode = 'over';
-        }
-        else {
-          this.drawerMode = 'over';
-        }
-        this._changeDetectorRef.markForCheck();
-      });
-    fromEvent(this._document, 'keydown')
-      .pipe(
-        takeUntil(this._unsubscribeAll),
-        filter<KeyboardEvent>(event =>
-          (event.ctrlKey === true || event.metaKey) // Ctrl or Cmd
-          && (event.key === '/') // '/'
-        )
-      )
-      .subscribe(() => {
-        this.createLead();
-      });
+   
+  
   }
+
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+
+    // if ( this.sort && this.paginator )
+    // {
+    // this.sort.sortChange.pipe(takeUntil(this._unsubscribeAll))
+    // .subscribe(() => {
+    //     // Reset back to the first page
+    //     this.paginator.pageIndex = 0;
+    // });
+
+    // this.sort.sort({
+    //   id          : 'firstName',
+    //   start       : 'asc',
+    //   disableClear: true
+    // });
+
+    //   merge(this.sort.sortChange, this.paginator.page).pipe(
+    //     switchMap(() => {
+    //       debugger
+    //     this.paginationparm.pageIndex=this.paginator.pageIndex;
+    //     this.paginationparm.pageSize=this.paginator.pageSize;
+    //     this.paginationparm.active= this.paginationparm.active = this.sort.active || '';
+    //     this.paginationparm.direction=this.sort.direction= this.sort.direction || 'asc';
+
+    //     this._leadService.updatePaginationParam(this.paginationparm);
+    //       this.isLoading = true;
+    //       this.selection.clear();
+    //       return this._leadService.getLeads()
+
+    //     }),
+    //     map(() => {
+    //       this.isLoading = false;
+    //     })
+    //   ).subscribe();
+    // }
+
   }
   ngOnDestroy(): void {
     this._unsubscribeAll.next(null);
@@ -434,9 +458,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     this._router.navigate(['./', -1], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-  importFile() {
 
-  }
 
   isActiveItem(item: LeadCustomList): boolean {
     if (item == null) {
@@ -448,37 +470,42 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   }
 
 
-  updateLead(selectedLead: Lead) {
-    this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
+  // updateLead(selectedLead: Lead) {
+  //   this._router.navigate(['./', selectedLead.leadId], { relativeTo: this._activatedRoute });
+  //   this._changeDetectorRef.markForCheck();
+  // }
   onBackdropClicked(): void {
     this._router.navigate(['./'], { relativeTo: this._activatedRoute });
     this._changeDetectorRef.markForCheck();
   }
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-    this.selection.select(...this.dataSource.data);
-  }
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-  checkboxLabel(row?: Lead): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadId + 1}`;
-  }
+  // toggleAllRows() {
+  //   if (this.isAllSelected()) {
+  //     this.selection.clear();
+  //     return;
+  //   }
+  //   this.selection.select(...this.dataSource.data);
+  // }
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.dataSource.data.length;
+  //   return numSelected === numRows;
+  // }
+  // checkboxLabel(row?: Lead): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  //   }
+  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.leadId + 1}`;
+  // }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+  selectFn(selectedFilter:any[]){
+    if(selectedFilter.length){
+
     }
   }
   cancelFilters(filterId: number): void {
@@ -599,10 +626,10 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         ])
     });
 
-    this._usersPanelOverlayRef.attachments().subscribe(() => {
-      this._renderer2.addClass(this._pnlstatusOrgin.nativeElement, 'panel-opened');
-      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
-    });
+    // this._usersPanelOverlayRef.attachments().subscribe(() => {
+    //   this._renderer2.addClass(this._pnlstatusOrgin.nativeElement, 'panel-opened');
+    //   this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    // });
     const templatePortal = new TemplatePortal(this._Bulkpnlstatus, this._viewContainerRef);
     this._usersPanelOverlayRef.attach(templatePortal);
     this._usersPanelOverlayRef.backdropClick().subscribe(() => {
@@ -639,10 +666,10 @@ export class LeadListComponent implements OnInit, AfterViewInit {
         ])
     });
 
-    this._usersPanelOverlayRef.attachments().subscribe(() => {
-      this._renderer2.addClass(this._pnluserOrgin.nativeElement, 'panel-opened');
-      this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
-    });
+    // this._usersPanelOverlayRef.attachments().subscribe(() => {
+    //   this._renderer2.addClass(this._pnluserOrgin.nativeElement, 'panel-opened');
+    //   this._usersPanelOverlayRef.overlayElement.querySelector('input').focus();
+    // });
     const templatePortal = new TemplatePortal(this._Bulkpnluser, this._viewContainerRef);
     this._usersPanelOverlayRef.attach(templatePortal);
     this._usersPanelOverlayRef.backdropClick().subscribe(() => {
@@ -669,7 +696,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     });
     confirmation.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-    
+
         const SelectedLeadsId = this.selection.selected.map((lead: Lead) => {
           return { leadId: lead.leadId };
       });
@@ -694,7 +721,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   SetAssignleads(Owner) {
     this.SeletedLeadOwner=Owner;
   }
-  
+
   ChangeBulkStatus() {
         const SelectedLeadsId = this.selection.selected.map((lead: Lead) => {
           return { leadId: lead.leadId };});

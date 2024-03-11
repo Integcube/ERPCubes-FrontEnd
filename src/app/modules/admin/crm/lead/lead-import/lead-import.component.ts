@@ -58,14 +58,14 @@ export class LeadImportComponent implements OnInit {
     this.showColumnMapping = true;
   }
   getAllLeads() {
-    this.leadService.getLeads().subscribe(
-      leads => {
-        this.leads = leads;
-      },
-      error => {
-        console.error('Error fetching leads:', error);
-      }
-    );
+    // this.leadService.getLeads().subscribe(
+    //   leads => {
+    //     this.leads = leads;
+    //   },
+    //   error => {
+    //     console.error('Error fetching leads:', error);
+    //   }
+    // );
   }
 
   getColumnColor(column: string): string {

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, forkJoin, map, of, switchMap, take, tap, throwError } from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
+import { Pagination, PaginationView, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead, Attachment } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertService } from 'app/core/alert/alert.service';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Injectable({
   providedIn: 'root'
@@ -85,7 +86,9 @@ export class LeadService {
   private _task: BehaviorSubject<TaskModel | null> = new BehaviorSubject(null);
   private _customLists: BehaviorSubject<LeadCustomList[] | null> = new BehaviorSubject(null);
   private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
-  private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
+  // private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
+  private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject<LeadCustomList | null>(new LeadCustomList({}));
+  
   private _emails: BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
   private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
@@ -96,6 +99,12 @@ export class LeadService {
   private _statusWiseLeads: BehaviorSubject<StatusWiseLeads[] | null> = new BehaviorSubject(null);
   private _calculateleadScore: BehaviorSubject<any|null> = new BehaviorSubject(null);
   private _leadAttachments: BehaviorSubject<Attachment[] | null> = new BehaviorSubject(null);
+ 
+  private _pagination: BehaviorSubject<Pagination | null> = new BehaviorSubject(null);
+  private _paginationview: BehaviorSubject<PaginationView | null> = new BehaviorSubject<PaginationView | null>(new PaginationView({}));
+  
+  private _selectedLeads: BehaviorSubject<SelectionModel<Lead>> = new BehaviorSubject<SelectionModel<Lead>>(new SelectionModel<Lead>(true, []));
+
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -105,7 +114,7 @@ export class LeadService {
     this._userService.user$.subscribe(user => { this.user = user; });
     this.contactEnumInstance = new ContactEnum();
   }
-
+  
   filteredLeads$ = combineLatest(
     this.leads$,
     this.filter$)
@@ -295,6 +304,24 @@ export class LeadService {
     return this._calculateleadScore.asObservable();
   }
   
+  get pagination$(): Observable<Pagination>
+  {
+      return this._pagination.asObservable();
+  }
+
+  get selectedLeads$(): Observable<SelectionModel<Lead>> {
+    return this._selectedLeads.asObservable();
+  }
+  updatePaginationParam(pagination:PaginationView){
+ 
+    this._paginationview.next(pagination);
+  }
+
+  updateSelectedLeads(selected: SelectionModel<Lead>): void {
+    this._selectedLeads.next(selected);
+  }
+  
+
   getCampaigns(): Observable<Campaign[]> {
     let data = {
       id: this.user.id,
@@ -366,14 +393,28 @@ export class LeadService {
     );
   }
 
-  getLeads(): Observable<Lead[]> {
+  getLeads(): Observable<{ paginationVm: Pagination;leadsList: Lead[]}> {
+    debugger
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
+      page: '' + this._paginationview.value.pageIndex,
+      size: '' + this._paginationview.value.pageSize,
+      sort: this._paginationview.value.active,
+      order:this._paginationview.value.direction,
+      search:this._paginationview.value.search,
+      createdDate: this._customList.value.filterParsed.createdDate,
+      leadOwner :this._customList.value.filterParsed.leadOwner,
+      modifiedDate :this._customList.value.filterParsed.modifiedDate,
+      leadStatus: this._customList.value.filterParsed.leadStatus
     }
-    return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
-      tap((leads) => {
-        this._leads.next(leads);
+
+    debugger
+    return this._httpClient.post<{ paginationVm: Pagination;leadsList: Lead[]}>(this.getLeadListURL, data).pipe(
+      tap((response) => {
+        debugger
+        this._leads.next(response.leadsList);
+        this._pagination.next(response.paginationVm);
       }),
       
     );
@@ -720,11 +761,13 @@ export class LeadService {
   }
 
   setCustomList(list: LeadCustomList) {
-    this._customList.next(list)
+    this._customList.next(list);
+
   }
 
   setFilter(filter: LeadFilter) {
     this._filter.next(filter);
+    this.getLeads().subscribe();
   }
 
   updateTaskStatus(taskId: number, taskTitle, status, leadId): Observable<any> {

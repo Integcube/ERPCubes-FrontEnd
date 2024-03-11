@@ -55,7 +55,6 @@ export class UserFormService {
       order:this._paginationview.value.direction,
       search:this._paginationview.value.search,
     }
-    debugger;
     return this._httpClient.post<{ paginationVm: Pagination;userList: UserForm[]}>(this.getuserListURL, data).pipe(
       tap((response) => {
         this._users.next(response.userList);
