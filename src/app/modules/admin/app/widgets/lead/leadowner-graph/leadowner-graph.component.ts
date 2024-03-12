@@ -27,7 +27,6 @@ export class LeadOwnerGraphComponent {
   prepareBarChartData(): void {
     this.widgetService.getOwnerLead().subscribe(
       (data) => {
-        debugger;
         const leadOwnerCounts = data.map((item) => ({
           owner: item.leadOwnerName.trim(), 
           count: item.totalLeads,
@@ -53,7 +52,6 @@ export class LeadOwnerGraphComponent {
           xaxis: {
             categories: leadOwnerCounts.map((item) => item.owner),
           },
-          // Additional options as needed
         };
       },
       (error) => {

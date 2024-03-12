@@ -1,8 +1,4 @@
-<div class="relative flex flex-auto dark:bg-transparent py-3">
-<div class="flex-1 bg-card p-6  shadow rounded-2xl overflow-hidden">
     <ng-container *ngIf="barChartOptions">
-        <apx-chart [series]="barChartOptions.series" [chart]="barChartOptions.chart"
+        <apx-chart [series]="barChartOptions.series" [chart]="barChartOptions.chart" class="flex flex-auto flex-grow"
             [plotOptions]="barChartOptions.plotOptions" [xaxis]="barChartOptions.xaxis"></apx-chart>
     </ng-container>
-</div>
-</div>

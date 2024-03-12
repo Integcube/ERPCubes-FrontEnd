@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 })
 export class NewLeadsComponent {
   totalNewLeads: any; 
-
+  todayNew: any;
   constructor(
     private _widgetService: WidgetService,
     private _changeDetectorRef: ChangeDetectorRef
@@ -17,16 +17,38 @@ export class NewLeadsComponent {
 
   ngOnInit() {
     this.fetchTotalLeads();
+    this.newToday();
   }
 
   fetchTotalLeads() {
     this._widgetService.getNewLead().subscribe(
       (data) => {
-        debugger;
         this.totalNewLeads = data.totalNewLeads;
         this._changeDetectorRef.detectChanges();
       },
       (error) => {
+      }
+    );
+  }
+  applyFilter(daysAgo: number) {
+    this._widgetService.getNewCountFilter(daysAgo).subscribe(
+      (data) => {
+        this.totalNewLeads = data.totalNewLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
+      }
+    );
+  }
+  newToday() {
+    this._widgetService.getTodayNew().subscribe(
+      (data) => {
+        this.todayNew = data.totalNewLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
       }
     );
   }

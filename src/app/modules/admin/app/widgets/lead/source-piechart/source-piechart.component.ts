@@ -25,7 +25,6 @@ export class SourcePieChartComponent implements OnInit {
   preparePieChartData(): void {
     this._widgetService.getSourceLead().subscribe(
       (data) => {
-        debugger;
         const leadSourceCounts = data.map((item) => ({
           source: item.source,
           count: item.totalLeads,

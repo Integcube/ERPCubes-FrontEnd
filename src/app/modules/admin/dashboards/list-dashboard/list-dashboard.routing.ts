@@ -5,6 +5,7 @@ export const ListDashboardRouting: Routes = [
     {
         path: '',
         component: ListDashboardComponent,
+        
 
     },
 ];

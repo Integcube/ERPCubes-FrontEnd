@@ -32,3 +32,32 @@ export class TotalLeadSummary{
    totalLostLeads: number;
    totalWonLeads: number;
 }
+export class TotalCountFilter{
+   totalLeads: number;
+}
+export class NewCountFilter{
+   totalNewLeads: number;
+}
+export class QualifiedCountFilter{
+   totalQualifiedLeads: number;
+}
+export class LostCountFilter{
+   totalLostLeads: number;
+}
+export class WonCountFilter{
+   totalWonLeads: number;
+}
+export class TodayLost{
+   totalLostLeads: number;
+}
+export class TodayNew{
+   totalNewLeads: number;
+}
+export class TodayQualified{
+   totalQualifiedLeads: number;
+}
+export class TodayWon{
+   totalWonLeads: number;
+}
+
+

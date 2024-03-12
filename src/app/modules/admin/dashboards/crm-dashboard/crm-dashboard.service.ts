@@ -4,7 +4,7 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
-import { Lead,Task } from './crm-dashboard.type';
+import { Dashboard, Lead,Task } from './crm-dashboard.type';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -14,12 +14,15 @@ export class CrmDashboardService {
   private readonly getLeadsURL = `${environment.url}/Lead/all`
   private readonly getTasksURL = `${environment.url}/Task/all`
   private readonly getUsersURL = `${environment.url}/Users/all`
+  private readonly getDashboardListURL = `${environment.url}/Dashboard/all`
 
   user: User;
   currentDate: Date = new Date();
   private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
   private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
   private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
+  private _dashboards: BehaviorSubject<Dashboard[] | null> = new BehaviorSubject(null);
+
   constructor(
     private _httpClient: HttpClient,
     private _userService: UserService,
@@ -38,6 +41,9 @@ export class CrmDashboardService {
 
   get tasks$():Observable<Task[]>{
     return this._tasks.asObservable();
+  }
+  get dashboards$(): Observable<Dashboard[]> {
+    return this._dashboards.asObservable();
   }
 
   getLeads(): Observable<Lead[]> {
@@ -100,5 +106,20 @@ export class CrmDashboardService {
       horizontalPosition: placementAlign,
       panelClass: colorName,
     });
+  }
+
+  getDashboard(): Observable<Dashboard[]> {
+    
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+    }
+    debugger;
+    return this._httpClient.post<Dashboard[]>(this.getDashboardListURL, data).pipe(
+      tap((dashboards) => {
+        this._dashboards.next(dashboards);
+      }),
+      
+    );
   }
 }

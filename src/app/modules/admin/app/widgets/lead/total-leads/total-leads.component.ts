@@ -8,6 +8,7 @@ import { TotalLeadCount } from '../../widget.type';
 })
 export class TotalLeadsComponent implements OnInit {
   totalLeads: any; 
+  todayNew: any; 
 
   constructor(
     private _widgetService: WidgetService,
@@ -16,13 +17,34 @@ export class TotalLeadsComponent implements OnInit {
 
   ngOnInit() {
     this.fetchTotalLeads();
+    this.todayLeads();
   }
 
   fetchTotalLeads() {
     this._widgetService.getTotalLead().subscribe(
       (data) => {
-        debugger;
         this.totalLeads = data.totalLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+      }
+    );
+  }
+  applyFilter(daysAgo: number) {
+    this._widgetService.getTotalCountFilter(daysAgo).subscribe(
+      (data) => {
+        this.totalLeads = data.totalLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
+      }
+    );
+  }
+  todayLeads() {
+    this._widgetService.getTodayNew().subscribe(
+      (data) => {
+        this.todayNew = data.totalNewLeads;
         this._changeDetectorRef.detectChanges();
       },
       (error) => {

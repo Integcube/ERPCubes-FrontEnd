@@ -8,11 +8,7 @@
 .fuse-backdrop-on-mobile {
     @apply bg-black bg-opacity-60 sm:bg-transparent #{'!important'};
 }
-// .mat-dialog-container {
-//     padding-bottom: 0px!important;
-//     border-radius: 0px !important;
 
-// }
 
 
 
@@ -483,7 +479,9 @@ mat-expansion-panel-header {
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Dialog
 /* ----------------------------------------------------------------------------------------------------- */
-
+.mat-dialog-container {
+    padding: 0!important;
+}
 
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Drawer

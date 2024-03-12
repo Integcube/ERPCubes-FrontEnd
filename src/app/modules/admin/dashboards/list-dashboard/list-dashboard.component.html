@@ -27,9 +27,8 @@
             <div class="flex gap-0">
             
                 <!-- Add contact button -->
-                <button class="ml-4 h-8 primary-2" mat-stroked-button (click)="openTrashDialog()"
+                <button class="ml-4 h-8 primary-2" mat-stroked-button (click)="addDashboard()"
                     mat-flat-button
-                    (click)="createDashboard()"
                     [matTooltip]="'Add New Dashboard'">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5"></mat-icon>
                     <span class="ml-2 mr-1 text-xs">Add Dashboard</span>
@@ -96,9 +95,19 @@
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-5"> Private </th>
                                         <td mat-cell *matCellDef="let row" class="w-20 text-right">{{ row.isPrivate }}</td>
                                     </ng-container> -->
-                                    <ng-container matColumnDef="widgets">
-                                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-5"> Widgets </th>
-                                        <td mat-cell *matCellDef="let row" class="w-20">{{ row.widgets }}</td>
+                                    <ng-container matColumnDef="createdDate">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date</th>
+                                        <td mat-cell *matCellDef="let row" >{{ row.createdDate | date}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="createdBy">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner</th>
+                                        <td mat-cell *matCellDef="let row" >{{ row.createdBy}}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="edit">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="w-5"> Edit</th>
+                                        <td mat-cell *matCellDef="let row" class="w-20 text-right">
+                                            <mat-icon (click)="openDashboardDialog(row)" [svgIcon]="'mat_outline:edit'" class="icon-size-3.5 cursor-pointer"></mat-icon>
+                                        </td>
                                     </ng-container>
                                     
                                
@@ -122,7 +131,7 @@
                             </div>
                               
                              <div class="text-sm ">
-                                Currently, there are no products available. Click the  <button class="text-blue-500 underline"  (click)="createDashboard()" >Add Dashboard</button>  button to create a new product.
+                                <!-- Currently, there are no products available. Click the  <button class="text-blue-500 underline"  (click)="createDashboard()" >Add Dashboard</button>  button to create a new product. -->
                              </div>
                            </div>
 

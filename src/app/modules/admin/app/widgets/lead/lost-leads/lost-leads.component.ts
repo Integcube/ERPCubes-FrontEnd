@@ -8,7 +8,7 @@ import { WidgetService } from '../../widget.service';
 })
 export class LostLeadComponent {
   totalLostLeads: any; 
-
+  todaylost: any;
   constructor(
     private _widgetService: WidgetService,
     private _changeDetectorRef: ChangeDetectorRef
@@ -16,16 +16,38 @@ export class LostLeadComponent {
 
   ngOnInit() {
     this.fetchTotalLeads();
+    this.lostToday();
   }
 
   fetchTotalLeads() {
     this._widgetService.getLostLead().subscribe(
       (data) => {
-        debugger;
         this.totalLostLeads = data.totalLostLeads;
         this._changeDetectorRef.detectChanges();
       },
       (error) => {
+      }
+    );
+  }
+  applyFilter(daysAgo: number) {
+    this._widgetService.getLostCountFilter(daysAgo).subscribe(
+      (data) => {
+        this.totalLostLeads = data.totalLostLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
+      }
+    );
+  }
+  lostToday() {
+    this._widgetService.getTodayLost().subscribe(
+      (data) => {
+        this.todaylost = data.totalLostLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
       }
     );
   }

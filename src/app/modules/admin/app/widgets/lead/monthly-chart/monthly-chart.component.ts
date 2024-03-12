@@ -26,7 +26,6 @@ export class MonthlyChartComponent implements OnInit {
   prepareBarChartData(): void {
     this.widgetService.getMonthLead().subscribe(
       (data) => {
-        debugger;
         const leadMonthCounts = data.map((item) => ({
           month: item.monthName.trim(), 
           count: item.totalLeadsCount,
