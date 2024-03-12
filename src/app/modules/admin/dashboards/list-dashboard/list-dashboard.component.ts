@@ -37,7 +37,7 @@ export class ListDashboardComponent  {
   dataSource: MatTableDataSource<Dashboard>;
   dashboardCount: number = 0;
   selectedDashboard: Dashboard;
-
+  dashboard: Dashboard;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
 
   dashboards$: Observable<Dashboard[]>;
@@ -124,5 +124,17 @@ export class ListDashboardComponent  {
       },
     });
   }
+
+  delete(selectedDashboard: Dashboard) {
+    const dashboardIdToDelete = selectedDashboard.dashboardId;
+  
+    this.selectedDashboard = selectedDashboard;
+  
+    this._dashboardService.deleteDashboard(dashboardIdToDelete)
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(() => {
+      });
+  }
+  
 
 }

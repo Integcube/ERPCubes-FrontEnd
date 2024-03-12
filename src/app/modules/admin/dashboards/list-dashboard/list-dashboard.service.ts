@@ -16,8 +16,9 @@ export class ListDashboardService {
   private readonly getDashboardListURL = `${environment.url}/Dashboard/all`
   private readonly saveDashboardListURL = `${environment.url}/Dashboard/save`
   private readonly saveWidgetListURL = `${environment.url}/Dashboard/saveWidget`
+  private readonly deleteDashboardListURL = `${environment.url}/Dashboard/delete`
 
-
+  
 
   private _dashboard: BehaviorSubject<Dashboard | null> = new BehaviorSubject(null);
   private _dashboards: BehaviorSubject<Dashboard[] | null> = new BehaviorSubject(null);
@@ -84,6 +85,18 @@ export class ListDashboardService {
         this._alertService.showSuccess("Dashboard Saved Successfully");
         // this.getDashboard().subscribe();
       }),
+    );
+  }
+  deleteDashboard(dashboardId: number): Observable<Dashboard> {
+    let data = {
+      id: this.user.id,
+      dashboardId: dashboardId
+    }
+    return this._httpClient.post<Dashboard>(this.deleteDashboardListURL, data).pipe(
+      tap((note) => {
+        this.getDashboard().subscribe();
+      }),
+      
     );
   }
 }
