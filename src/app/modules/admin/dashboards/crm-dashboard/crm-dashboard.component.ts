@@ -6,19 +6,7 @@ import { User } from 'app/core/user/user.types';
 import { Dashboard, Lead, Task } from './crm-dashboard.type';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexNonAxisChartSeries, ApexOptions, ApexPlotOptions, ApexXAxis, ChartComponent } from 'ng-apexcharts';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
-export type ChartOptions = {
-  series?: number[];
-  chart?: ApexChart;
-  labels?: string[];
-  colors?: string[];
-};
-export type ChartOptions2 = {
-  series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
-  chart?: ApexChart;
-  dataLabels?: ApexDataLabels;
-  plotOptions?: ApexPlotOptions;
-  xaxis?: ApexXAxis;
-};
+
 @Component({
   selector: 'app-crm-dashboard',
   templateUrl: './crm-dashboard.component.html',
@@ -26,8 +14,6 @@ export type ChartOptions2 = {
 })
 export class CrmDashboardComponent implements OnInit, OnDestroy {
 
-  @ViewChild("chart") chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   dashboards$: Observable<Dashboard[]>;
   dashboards: Dashboard[];

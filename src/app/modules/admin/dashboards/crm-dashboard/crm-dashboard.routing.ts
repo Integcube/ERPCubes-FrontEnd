@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 import { CrmDashboardComponent } from "./crm-dashboard.component";
-import { LeadsResolver, TaskResolver, UserResolver } from "./crm-dashboard.resolver";
+import { TaskResolver, UserResolver } from "./crm-dashboard.resolver";
 
 export const CrmDashboardRouting: Routes = [
     {
@@ -8,7 +8,6 @@ export const CrmDashboardRouting: Routes = [
         component: CrmDashboardComponent,
         resolve: {
             users: UserResolver,
-            leads: LeadsResolver,
             tasks: TaskResolver
         }
     },

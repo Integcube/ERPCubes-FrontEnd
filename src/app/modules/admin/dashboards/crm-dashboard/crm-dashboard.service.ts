@@ -18,7 +18,6 @@ export class CrmDashboardService {
 
   user: User;
   currentDate: Date = new Date();
-  private _leads: BehaviorSubject<Lead[] | null> = new BehaviorSubject(null);
   private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
   private _tasks: BehaviorSubject<Task[] | null> = new BehaviorSubject(null);
   private _dashboards: BehaviorSubject<Dashboard[] | null> = new BehaviorSubject(null);
@@ -35,9 +34,7 @@ export class CrmDashboardService {
     return this._users.asObservable();
   }
 
-  get leads$():Observable<Lead[]>{
-    return this._leads.asObservable();
-  }
+
 
   get tasks$():Observable<Task[]>{
     return this._tasks.asObservable();
@@ -46,18 +43,7 @@ export class CrmDashboardService {
     return this._dashboards.asObservable();
   }
 
-  getLeads(): Observable<Lead[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-    }
-    return this._httpClient.post<Lead[]>(this.getLeadsURL, data).pipe(
-      tap((leads) => {
-        this._leads.next(leads);
-      }),
-      catchError(err => this.handleError(err))
-    );
-  }
+ 
 
   getTasks(): Observable<Task[]> {
     let data = {
@@ -70,7 +56,6 @@ export class CrmDashboardService {
       tap((tasks) => {
         this._tasks.next(tasks)
       }),
-      catchError(err => this.handleError(err))
     );
   }
 
@@ -84,29 +69,12 @@ export class CrmDashboardService {
       tap((users) => {
         this._users.next(users);
       }),
-      catchError(err => this.handleError(err))
     );
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    this.showNotification('snackbar-success', errorMessage, 'bottom', 'center');
-    return throwError(() => errorMessage);
-  }
   
-  showNotification(colorName, text, placementFrom, placementAlign) {
-    this.snackBar.open(text, "", {
-      duration: 2000,
-      verticalPosition: placementFrom,
-      horizontalPosition: placementAlign,
-      panelClass: colorName,
-    });
-  }
+  
+
 
   getDashboard(): Observable<Dashboard[]> {
     
@@ -114,7 +82,6 @@ export class CrmDashboardService {
       id: this.user.id,
       tenantId: this.user.tenantId,
     }
-    debugger;
     return this._httpClient.post<Dashboard[]>(this.getDashboardListURL, data).pipe(
       tap((dashboards) => {
         this._dashboards.next(dashboards);
