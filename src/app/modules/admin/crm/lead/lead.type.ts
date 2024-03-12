@@ -72,6 +72,7 @@ export class LeadFilter {
     createdDate: Date = null;
     modifiedDate: Date = null;
     leadStatus: number[] = [];
+ 
 }
 
 export class DeletedLead {

@@ -57,7 +57,7 @@ export class LeadsResolver implements Resolve<any>{
     constructor(private _leadService:LeadService){
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      this._leadService.setFilter(new LeadFilter())
+      // this._leadService.setFilter(new LeadFilter());
        return this._leadService.getLeads();
     }
 }

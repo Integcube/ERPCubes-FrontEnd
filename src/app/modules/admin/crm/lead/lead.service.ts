@@ -85,10 +85,11 @@ export class LeadService {
   private _tasks: BehaviorSubject<TaskModel[] | null> = new BehaviorSubject(null);
   private _task: BehaviorSubject<TaskModel | null> = new BehaviorSubject(null);
   private _customLists: BehaviorSubject<LeadCustomList[] | null> = new BehaviorSubject(null);
-  private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
+  // private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject(null);
   // private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject(null);
   private _customList: BehaviorSubject<LeadCustomList | null> = new BehaviorSubject<LeadCustomList | null>(new LeadCustomList({}));
-  
+  private _filter: BehaviorSubject<LeadFilter | null> = new BehaviorSubject<LeadFilter | null>(new LeadFilter());
+
   private _emails: BehaviorSubject<Email[] | null> = new BehaviorSubject(null);
   private _calls: BehaviorSubject<Call[] | null> = new BehaviorSubject(null);
   private _activities: BehaviorSubject<Activity[] | null> = new BehaviorSubject(null);
@@ -394,7 +395,7 @@ export class LeadService {
   }
 
   getLeads(): Observable<{ paginationVm: Pagination;leadsList: Lead[]}> {
-    debugger
+    
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -408,8 +409,6 @@ export class LeadService {
       modifiedDate :this._customList.value.filterParsed.modifiedDate,
       leadStatus: this._customList.value.filterParsed.leadStatus
     }
-
-    debugger
     return this._httpClient.post<{ paginationVm: Pagination;leadsList: Lead[]}>(this.getLeadListURL, data).pipe(
       tap((response) => {
         debugger
