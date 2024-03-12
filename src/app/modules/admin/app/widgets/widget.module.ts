@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
-import { WidgetComponent } from './widget.component';
-import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
-import { widgetsRoutes } from './widget.routing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatRippleModule } from '@angular/material/core';
@@ -36,7 +33,6 @@ import { LeadSummaryChartComponent } from './lead/leadsummary-chart/leadsummary-
 
 @NgModule({
     declarations: [
-        WidgetComponent,
         TotalLeadsComponent,
         NewLeadsComponent,
         LostLeadComponent,
@@ -46,10 +42,8 @@ import { LeadSummaryChartComponent } from './lead/leadsummary-chart/leadsummary-
         SourcePieChartComponent,
         MonthlyChartComponent,
         LeadSummaryChartComponent
-        
     ],
-    imports     : [
-        RouterModule.forChild(widgetsRoutes),
+    imports: [
         SharedModule,
         MatButtonModule,
         MatButtonToggleModule,
@@ -71,9 +65,18 @@ import { LeadSummaryChartComponent } from './lead/leadsummary-chart/leadsummary-
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-
     ],
+    exports: [
+        TotalLeadsComponent,
+        NewLeadsComponent,
+        LostLeadComponent,
+        QualifiedLeadComponent,
+        WonLeadComponent,
+        LeadOwnerGraphComponent,
+        SourcePieChartComponent,
+        MonthlyChartComponent,
+        LeadSummaryChartComponent
+    ]
 })
-export class WidgetModule
-{
+export class WidgetModule {
 }

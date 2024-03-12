@@ -18,12 +18,16 @@ import { CrmDashboardRouting } from './crm-dashboard.routing';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
+import { GridsterModule } from 'angular-gridster2';
+import { DashboardRendererComponent } from './dashboard-renderer/dashboard-renderer.component';
+import { WidgetModule } from '../../app/widgets/widget.module';
 
 
 
 @NgModule({
   declarations: [
-    CrmDashboardComponent
+    CrmDashboardComponent,
+    DashboardRendererComponent
   ],
   imports: [
     RouterModule.forChild(CrmDashboardRouting),
@@ -42,7 +46,9 @@ import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
     TranslocoModule,
     MatTooltipModule,
     SharedModule,
-    FuseScrollbarModule
+    FuseScrollbarModule,
+    GridsterModule,
+    WidgetModule
   ]
 })
 export class CrmDashboardModule { }

@@ -37,16 +37,21 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuillModule } from 'ngx-quill';
 import { ListDashboardRouting } from './list-dashboard.routing';
-import { DashboardConfiguratorComponent } from '../dashboard-dialog/dashboard-configurator.component';
+import { DashboardConfiguratorComponent } from './dialogs/dashboard-dialog/dashboard-configurator.component';
+import { GridsterModule } from 'angular-gridster2';
+import { WidgetModule } from '../../app/widgets/widget.module';
+import { DashboardBuilderDialogComponent } from './dialogs/dashboard-builder-dialog/dashboard-builder-dialog.component';
 
 
 
 @NgModule({
   declarations: [
     ListDashboardComponent,
-    DashboardConfiguratorComponent
+    DashboardBuilderDialogComponent,
+    DashboardConfiguratorComponent,
   ],
   imports: [
+    WidgetModule,
     RouterModule.forChild(ListDashboardRouting),
     MatButtonModule,
     MatButtonToggleModule,
@@ -84,6 +89,7 @@ import { DashboardConfiguratorComponent } from '../dashboard-dialog/dashboard-co
     FuseFindByKeyPipeModule,
     DragDropModule,
     QuillModule,
+    GridsterModule,
   ]
 })
 export class ListDashboardModule { }

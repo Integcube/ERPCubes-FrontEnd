@@ -1,0 +1,125 @@
+<div class="flex flex-auto w-full h-full overflow-hidden">
+    <div class="flex flex-col w-2/12 max-w-2/12 h-full bg-card">
+        <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
+            <div class="flex gap-1 items-center" (click)="closeDialog()">
+                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
+                <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Dashboard</div>
+            </div>
+            <div>
+                <div class="text-lg font-semibold tracking-tight leading-none">Dashboard Builder</div>
+            </div>
+        </div>
+        <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start py-6 px-3 sm:py-4 md:px-4 overflow-x-auto " fuseScrollbar>
+            <div class="flex flex-col w-full gap-2">
+                <div class="text-md font-semibold tracking-tight leading-none">Template</div>
+                <div class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md">Blank Dashboard</div>
+            </div>
+            <div class="flex flex-col w-full gap-2 mt-4">
+                <div class="text-md font-bold tracking-tight leading-none">Select Widget</div>
+            </div>
+            <div class="flex flex-col w-full gap-2">
+                <div class="text-md font-semibold tracking-tight leading-none">Numeric</div>
+                <div draggable="true" (dragstart)="dragStartHandler($event, '2')" class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4 text-blue-500" svgIcon="feather:chevrons-up"></mat-icon>
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Total</span>
+                </div>
+
+                <div draggable="true" (dragstart)="dragStartHandler($event, '3')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4 text-green-500" svgIcon="feather:arrow-up-right"></mat-icon>
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Won</span>
+                </div>
+                
+                <div draggable="true" (dragstart)="dragStartHandler($event, '4')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4 text-red-700" svgIcon="feather:arrow-down-left"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Lost</span>
+                </div>
+                <div draggable="true" (dragstart)="dragStartHandler($event, '5')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4 text-orange-600" svgIcon="feather:plus"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">New</span>
+                </div>
+                <div draggable="true" (dragstart)="dragStartHandler($event, '6')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4 text-green-600" svgIcon="feather:check"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Qualified</span>
+                </div>
+            </div>
+            <div class="flex flex-col w-full gap-2">
+                <div class="text-md font-semibold tracking-tight leading-none">Chart</div>
+                <div draggable="true" (dragstart)="dragStartHandler($event, '8')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4" svgIcon="feather:bar-chart-2"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Owner Bar Graph</span>
+                </div>
+                <div draggable="true" (dragstart)="dragStartHandler($event, '9')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4" svgIcon="feather:bar-chart-2"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Monthly Bar Graph</span>
+                </div>
+                <!-- <div draggable="true" (dragstart)="dragStartHandler($event, '9')" class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md">Monthly Bar Graph</div> -->
+                <div draggable="true" (dragstart)="dragStartHandler($event, '12')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4" svgIcon="feather:pie-chart"></mat-icon>
+
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Lead summary Pie Chart</span>
+                </div>
+
+                <div draggable="true" (dragstart)="dragStartHandler($event, '10')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
+                    <mat-icon class="icon-size-4" svgIcon="feather:pie-chart"></mat-icon>
+                    <span class="text-md font-normal tracking-tight leading-none ml-2">Source Pie Chart</span>
+                </div>
+                
+                <!-- <div draggable="true" (dragstart)="dragStartHandler($event, '11')" class="p-3 bg-default border rounded-md justify-start items-start">
+                    <span><mat-icon svgIcon="mat_outline:pie_chart" class="icon-size-4"></mat-icon></span>
+                    <span class="text-md font-normal tracking-tight leading-none">Owner Pie Chart</span>
+                </div> -->
+            </div>
+        </div>
+        <div class="flex border-t justify-end gap-2 px-3 sm:py-4 md:px-4 sticky bottom-0">
+            <!-- <button mat-stroked-button (click)="closeDialog()" class="h-7">
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                    <span class="text-sm">Cancel</span>
+                </span>
+            </button>
+            <button mat-flat-button color="primary" class="text-white h-7" (click)="save()" >
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                    <span class="text-sm">Save</span>
+                </span>
+            </button> -->
+
+
+            <button class="ml-auto h-8" mat-stroked-button [matTooltip]="'Cancel'" (click)="closeDialog()">
+                <mat-icon [svgIcon]="'heroicons_outline:x-circle'" class="icon-size-5"></mat-icon>
+                <span class="ml-2 text-xs" i18n>Cancel</span> 
+            </button>
+            <button class="ml-2  primary-2 h-8"  [matTooltip]="'Click to Save'" mat-stroked-button (click)="save()">
+                <mat-icon
+                class="icon-size-5 mr-2 text-white"
+                   [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+                <span class="ml-1 mr-1 text-xs" i18n>Save</span>
+            </button>
+            
+        </div>
+    </div>
+    <div class="flex flex-auto bg-default">
+        <gridster [options]="options" class="flex-auto">
+            <gridster-item [item]="item" *ngFor="let item of dashboard">
+                <span class="flex flex-row justify-end">
+                    <button mat-icon-button [color]="'bg-gray-300'" (click)="removeGridsterItem(item)">
+                      <mat-icon class="text-gray-400 icon-size-4" svgIcon="feather:x"></mat-icon>
+                    </button>
+                </span>
+                                 
+                <total-leads *ngIf="item.name=='2'"></total-leads>
+                <lost-leads *ngIf="item.name=='4'"></lost-leads>
+                <new-leads *ngIf="item.name=='5'"></new-leads>
+                <qualified-leads *ngIf="item.name=='6'"></qualified-leads>
+                <won-leads *ngIf="item.name=='3'"></won-leads>
+                <source-piechart *ngIf="item.name=='10'"></source-piechart>
+                <leadowner-graph *ngIf="item.name=='8'"></leadowner-graph>
+                <monthly-chart *ngIf="item.name=='9'"></monthly-chart>
+                <leadsummary-chart *ngIf="item.name=='12'"></leadsummary-chart>
+            </gridster-item>
+        </gridster>
+    </div>
+</div>

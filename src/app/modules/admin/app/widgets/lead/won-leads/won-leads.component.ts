@@ -8,7 +8,7 @@ import { WidgetService } from '../../widget.service';
 })
 export class WonLeadComponent {
     totalWonLeads: any; 
-
+    todayWon: any;
     constructor(
       private _widgetService: WidgetService,
       private _changeDetectorRef: ChangeDetectorRef
@@ -16,16 +16,38 @@ export class WonLeadComponent {
   
     ngOnInit() {
       this.fetchTotalLeads();
+      this.wonToday();
     }
   
     fetchTotalLeads() {
       this._widgetService.getWonLead().subscribe(
         (data) => {
-          debugger;
           this.totalWonLeads = data.totalWonLeads;
           this._changeDetectorRef.detectChanges();
         },
         (error) => {
+        }
+      );
+    }
+    applyFilter(daysAgo: number) {
+      this._widgetService.getWonCountFilter(daysAgo).subscribe(
+        (data) => {
+          this.totalWonLeads = data.totalWonLeads;
+          this._changeDetectorRef.detectChanges();
+        },
+        (error) => {
+          // Handle error if needed
+        }
+      );
+    }
+    wonToday() {
+      this._widgetService.getTodayWon().subscribe(
+        (data) => {
+          this.todayWon = data.totalWonLeads;
+          this._changeDetectorRef.detectChanges();
+        },
+        (error) => {
+          // Handle error if needed
         }
       );
     }

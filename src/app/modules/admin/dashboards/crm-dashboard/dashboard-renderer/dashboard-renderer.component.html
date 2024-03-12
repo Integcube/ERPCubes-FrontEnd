@@ -1,0 +1,14 @@
+    <gridster [options]="options">
+        <gridster-item [item]="item" *ngFor="let item of dashboard" >
+            <total-leads *ngIf="item.name=='2'"></total-leads>
+            <lost-leads *ngIf="item.name=='4'"></lost-leads>
+            <new-leads *ngIf="item.name=='5'"></new-leads>
+            <qualified-leads *ngIf="item.name=='6'"></qualified-leads>
+            <won-leads *ngIf="item.name=='3'"></won-leads>
+            <source-piechart *ngIf="item.name=='10'"></source-piechart>
+            <leadowner-graph *ngIf="item.name=='8'"></leadowner-graph>
+            <monthly-chart *ngIf="item.name=='9'"></monthly-chart>
+            <leadsummary-chart *ngIf="item.name=='12'"></leadsummary-chart>
+        </gridster-item>
+    </gridster>
+

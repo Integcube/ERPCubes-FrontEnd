@@ -1,8 +1,8 @@
 <div class="flex flex-auto w-full h-full overflow-hidden">
     <div class="flex flex-col w-1/4 max-w-1/4 h-full bg-default">
         <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
-            <div class="flex gap-1 items-center">
-                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle" (click)="closeDialog()"></mat-icon>
+            <div class="flex gap-1 items-center" (click)="closeDialog()">
+                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
                 <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Create
                     Dashboard</div>
             </div>
@@ -13,20 +13,28 @@
         <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8">
             <ol>
                 <li class="relative flex" *ngFor="let view of views">
-                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px"
-            [ngClass]="{'bg-gray-300 dark:bg-gray-600': view.viewId == 1 && !view.completed, 'bg-green-300': view.viewId == 1 && view.completed}">
-        </div>
+                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px" [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}" *ngIf="view.viewId == 1"></div>
                     <div class="relative flex flex-auto" *ngIf="view.viewId == 1">
                         <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full"
-                            [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-300': view.completed}">
+                            [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}">
                             <div *ngIf="!view.completed" class="text-white">
                                 {{view.viewId}}
                             </div>
+                            <div *ngIf="view.completed" class="text-white">
+                                <mat-icon class="icon-size-3 text-white" [svgIcon]="view.icon">
+                                </mat-icon>
+                                                   
+                            </div>
+                            
                         </div>
                         <div class="flex text-md font-semibold flex-col justify-center items-center">
                             {{view.viewName}}
                         </div>
+                        <!-- <div *ngIf="view.completed" class="text-white">
+                            {{view.viewId}}
+                        </div> -->
                     </div>
+                    
                     <div class="relative flex flex-auto mt-7" *ngIf="view.viewId == 2">
                         <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full "
                             [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-300': view.completed}">
@@ -84,9 +92,7 @@
                     (mouseenter)="hovered = true" (mouseleave)="hovered = false" [class.hover:bg-gray-300]="hovered && !isSelected"
                     [class.hover:scale-110]="hovered && !isSelected" [class.selected]="isSelected">
                     <div class="flex justify-center items-center m-4 p-8 bg-default">
-                        <button mat-stroked-button (click)="openTrashDialog()">
                         <mat-icon class="icon-size-5 text-accent" matPrefix svgIcon="feather:plus"></mat-icon>
-                        </button>
                     </div>
                     <div class="flex flex-col items-start justify-between m-6">
                         <div class="text-md font-semibold tracking-tight leading-6 truncate">Blank Dashboard</div>
@@ -115,11 +121,12 @@
                 </span>
             </button>
             
-            <button mat-flat-button color="primary" class="text-white primary-2" (click)="setView(2)" >
+            <button mat-flat-button color="primary" class="text-white primary-2" (click)="onNextClick()" [disabled]="viewForm.invalid">
                 <span class="inline-flex items-center justify-between w-full leading-5">
                     <span class="ml-1 text-sm">Next</span>
                 </span>
             </button>
+            
         </div>
     </div>
 </div>

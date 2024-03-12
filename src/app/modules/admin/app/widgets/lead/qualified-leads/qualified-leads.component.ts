@@ -8,7 +8,7 @@ import { WidgetService } from '../../widget.service';
 })
 export class QualifiedLeadComponent {
   totalQualifiedLeads: any; 
-
+  todayQualified: any;
   constructor(
     private _widgetService: WidgetService,
     private _changeDetectorRef: ChangeDetectorRef
@@ -16,16 +16,38 @@ export class QualifiedLeadComponent {
 
   ngOnInit() {
     this.fetchTotalLeads();
+    this.qualifiedToday();
   }
 
   fetchTotalLeads() {
     this._widgetService.getQualifiedLead().subscribe(
       (data) => {
-        debugger;
         this.totalQualifiedLeads = data.totalQualifiedLeads;
         this._changeDetectorRef.detectChanges();
       },
       (error) => {
+      }
+    );
+  }
+  applyFilter(daysAgo: number) {
+    this._widgetService.getQualifiedCountFilter(daysAgo).subscribe(
+      (data) => {
+        this.totalQualifiedLeads = data.totalQualifiedLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
+      }
+    );
+  }
+  qualifiedToday() {
+    this._widgetService.getTodayQualified().subscribe(
+      (data) => {
+        this.todayQualified = data.totalQualifiedLeads;
+        this._changeDetectorRef.detectChanges();
+      },
+      (error) => {
+        // Handle error if needed
       }
     );
   }

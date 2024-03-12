@@ -11,8 +11,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DOCUMENT } from '@angular/common';
-import { DashboardConfiguratorComponent } from '../dashboard-dialog/dashboard-configurator.component';
+import { DashboardConfiguratorComponent } from './dialogs/dashboard-dialog/dashboard-configurator.component';
 import { UntypedFormControl } from '@angular/forms';
+import { cloneDeep } from 'lodash';
+import { DashboardBuilderDialogComponent } from './dialogs/dashboard-builder-dialog/dashboard-builder-dialog.component';
 
 @Component({
   selector: 'app-list-dashboard',
@@ -21,7 +23,7 @@ import { UntypedFormControl } from '@angular/forms';
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ListDashboardComponent  {
-  displayedColumns: string[] = [ 'select', 'name', 'status', 'widgets'];
+  displayedColumns: string[] = [ 'select', 'name', 'status', 'createdDate', 'createdBy', 'edit'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -76,45 +78,25 @@ export class ListDashboardComponent  {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.dashboardId + 1}`;
   }
-  onMouseEnter(row: Dashboard){
-    row.isHovered=true;
-  }
-  onMouseLeave(row: Dashboard){
-    row.isHovered=false;
-  }
-  updateDashboard(selectedDasboard:Dashboard){
-    
-    this._dashboardService.selectedDashboard(selectedDasboard);
-    this._router.navigate(['./', selectedDasboard.dashboardId], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
-  createDashboard() {
-    
-    let newDashboard:Dashboard = new Dashboard({});
-    this._dashboardService.selectedDashboard(newDashboard);
-    this._router.navigate(['./', newDashboard.dashboardId], { relativeTo: this._activatedRoute });
-    this._changeDetectorRef.markForCheck();
-  }
 
-  openTrashDialog(){
-    const restoreDialogRef = this._dialog.open(DashboardConfiguratorComponent,
-      {
+  addDashboard(){
+    let dashboard = new Dashboard({})
+    // this._changeDetectorRef.markForCheck();
+    const restoreDialogRef = this._dialog.open(DashboardConfiguratorComponent, {
         height: "100%",
         width: "100%",
         maxWidth: "100%",
         maxHeight: "100%",
-        // panelClass: 'dashboard-configurator',
-
-        autoFocus: false,
-        // data: {
-        //   type: "LEAD",
-        // }
+      autoFocus: false,
+      data     : {
+          note: cloneDeep(dashboard)
       }
-    );
+    });
     restoreDialogRef.afterClosed().subscribe((result) => {
       this._dashboardService.getDashboard().pipe(takeUntil(this._unsubscribeAll)).subscribe();
     });
   }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -122,4 +104,25 @@ export class ListDashboardComponent  {
       this.dataSource.paginator.firstPage();
     }
   }
+
+
+
+  
+
+
+  openDashboardDialog(selectedDashboard: Dashboard): void {
+    debugger;
+    this._dashboardService.selectedDashboard(selectedDashboard);
+    this._dialog.open(DashboardBuilderDialogComponent, {
+      height: '100%',
+      width: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      autoFocus: false,
+      data: {
+        dashboard: selectedDashboard,
+      },
+    });
+  }
+
 }

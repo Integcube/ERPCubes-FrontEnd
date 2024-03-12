@@ -1,15 +1,23 @@
-<div class="w-full max-w-screen-xl mx-auto py-3">
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 w-full min-w-0 ">
-    <!-- Total Leads -->
-    <div class="flex flex-col items-center flex-auto p-2  bg-card shadow rounded-2xl overflow-hidden">
-      <!-- <div class="flex justify-between">
-                  <div class="text-lg font-medium tracking-tight leading-6 truncate">Won Leads</div>
-              </div> -->
-      <div class="flex flex-col items-center mt-1">
-        <div class="text-3xl sm:text-3xl font-bold tracking-tight leading-none text-green-500">
-          {{totalWonLeads}}</div>
-        <div class="text-md font-medium text-green-600 dark:text-green-500" i18n>Total Won</div>
-      </div>
+<div class="flex flex-col flex-auto p-6 overflow-hidden bg-green-50 text-green-800 dark:bg-white dark:bg-opacity-5 dark:text-green-400 w-full h-full">
+  <div class="flex items-start justify-between">
+    <div class="text-lg font-medium tracking-tight leading-6 truncate">Won Leads</div>
+    <div class="ml-2 -mt-2 -mr-3">
+      <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
+        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
+      </button>
+      <mat-menu #summaryMenu="matMenu">
+        <button mat-menu-item (click)="applyFilter(0)">All</button>
+        <button mat-menu-item (click)="applyFilter(1)">Yesterday</button>
+        <button mat-menu-item (click)="applyFilter(2)">2 days ago</button>
+        <button mat-menu-item (click)="applyFilter(3)">3 days ago</button>
+      </mat-menu>
     </div>
+  </div>
+  <div class="flex flex-col items-center mt-2">
+    <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-none text-green-500">{{ totalWonLeads }}</div>
+    <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
+      <div class="text-md font-medium truncate">Won Today:</div>
+      <div class="ml-1.5 text-lg font-semibold">{{ todayWon }}</div>
+  </div>
   </div>
 </div>

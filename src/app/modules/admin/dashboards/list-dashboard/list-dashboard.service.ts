@@ -14,6 +14,9 @@ import { HttpClient } from '@angular/common/http';
 export class ListDashboardService {
 
   private readonly getDashboardListURL = `${environment.url}/Dashboard/all`
+  private readonly saveDashboardListURL = `${environment.url}/Dashboard/save`
+  private readonly saveWidgetListURL = `${environment.url}/Dashboard/saveWidget`
+
 
 
   private _dashboard: BehaviorSubject<Dashboard | null> = new BehaviorSubject(null);
@@ -49,6 +52,38 @@ export class ListDashboardService {
         this._dashboards.next(dashboards);
       }),
       
+    );
+  }
+  saveDashboard(dashboard: Dashboard) {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      dashboard,
+
+    }
+    debugger;
+    return this._httpClient.post<Dashboard[]>(this.saveDashboardListURL, data).pipe(
+      tap((dashboard) => {
+        this._alertService.showSuccess("Dashboard Saved Successfully");
+        // this.getDashboard().subscribe();
+      }),
+    );
+  }
+  saveWidget(dashboardId: number, widgets: string) {
+    debugger;
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      dashboardId: dashboardId,
+      widgets: widgets
+
+    }
+    debugger;
+    return this._httpClient.post<Dashboard[]>(this.saveWidgetListURL, data).pipe(
+      tap((dashboard) => {
+        this._alertService.showSuccess("Dashboard Saved Successfully");
+        // this.getDashboard().subscribe();
+      }),
     );
   }
 }
