@@ -15,6 +15,7 @@ import { DashboardConfiguratorComponent } from './dialogs/dashboard-dialog/dashb
 import { UntypedFormControl } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { DashboardBuilderDialogComponent } from './dialogs/dashboard-builder-dialog/dashboard-builder-dialog.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
   selector: 'app-list-dashboard',
@@ -33,6 +34,8 @@ export class ListDashboardComponent  {
     private _router: Router,
     private _dialog: MatDialog,
     private _dashboardService: ListDashboardService,
+    private _fuseConfirmationService: FuseConfirmationService,
+
   ) { }
   dataSource: MatTableDataSource<Dashboard>;
   dashboardCount: number = 0;
@@ -125,16 +128,38 @@ export class ListDashboardComponent  {
     });
   }
 
+
   delete(selectedDashboard: Dashboard) {
-    const dashboardIdToDelete = selectedDashboard.dashboardId;
+    debugger;
+    const confirmation = this._fuseConfirmationService.open({
+      title: 'Delete Dashboard',
+      message: 'Are you sure you want to delete this dashboard? This action cannot be undone!',
+      actions: {
+        confirm: {
+          label: 'Delete'
+        }
+      }
+    });
   
-    this.selectedDashboard = selectedDashboard;
+    // Subscribe to the confirmation dialog closed action
+    confirmation.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this.selectedDashboard = selectedDashboard;
+        const dashboardIdToDelete = selectedDashboard.dashboardId;
   
-    this._dashboardService.deleteDashboard(dashboardIdToDelete)
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(() => {
-      });
+        this._dashboardService.deleteDashboard(dashboardIdToDelete).subscribe({
+          next: () => {
+            this._changeDetectorRef.markForCheck();
+            
+          },
+          error: (error) => {
+            console.error('Error deleting dashboard:', error);
+          }
+        });
+      }
+    });
   }
+  
   
 
 }
