@@ -1,18 +1,3 @@
-export class TotalLeadCount {
-   totalLeads?: number;
-}
-export class TotalNewCount{
-   totalNewLeads?: number;
-} 
-export class TotalQualifiedCount{
-   totalQualifiedLeads?: number;
-}
-export class TotalLostCount{
-   totalLostLeads?: number;
-}
-export class TotalWonCount{
-   totalWonLeads?: number;
-}
 export class TotalLeadSource{
    source: string = "";
    totalLeads: number;
@@ -32,32 +17,18 @@ export class TotalLeadSummary{
    totalLostLeads: number;
    totalWonLeads: number;
 }
-export class TotalCountFilter{
-   totalLeads: number;
-}
-export class NewCountFilter{
-   totalNewLeads: number;
-}
-export class QualifiedCountFilter{
-   totalQualifiedLeads: number;
-}
-export class LostCountFilter{
-   totalLostLeads: number;
-}
-export class WonCountFilter{
-   totalWonLeads: number;
-}
-export class TodayLost{
-   totalLostLeads: number;
-}
-export class TodayNew{
-   totalNewLeads: number;
-}
-export class TodayQualified{
-   totalQualifiedLeads: number;
-}
-export class TodayWon{
-   totalWonLeads: number;
-}
 
+export class Filter{
+   status: number;
+   tenantId: number;
+   days: number;
+   constructor(reg) {
+      this.status = reg.status ? reg.status : -1,
+      this.days = reg.days ? reg.days : -1
 
+}
+}
+export class Count{
+   count: number;
+   newCount: number;
+}

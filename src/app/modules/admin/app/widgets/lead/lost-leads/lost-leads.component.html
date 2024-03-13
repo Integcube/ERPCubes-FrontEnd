@@ -1,23 +1,23 @@
 <div class="flex flex-col flex-auto p-6 overflow-hidden bg-red-50 text-red-600 dark:bg-white dark:bg-opacity-5 dark:text-red-600 w-full h-full">
   <div class="flex items-start justify-between">
-      <div class="text-lg font-medium tracking-tight leading-6 truncate">Lost Leads</div>
+      <div class="text-md font-medium tracking-tight leading-6 truncate">Lost Leads</div>
       <div class="ml-2 -mt-2 -mr-3">
         <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
           <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:dots-vertical'"></mat-icon>
         </button>
         <mat-menu #summaryMenu="matMenu">
-          <button mat-menu-item (click)="applyFilter(0)">All</button>
-          <button mat-menu-item (click)="applyFilter(1)">Yesterday</button>
-          <button mat-menu-item (click)="applyFilter(2)">2 days ago</button>
-          <button mat-menu-item (click)="applyFilter(3)">3 days ago</button>
+          <button mat-menu-item (click)="fetchTotalLeads(-1)">All</button>
+          <button mat-menu-item (click)="fetchTotalLeads(1)">Yesterday</button>
+          <button mat-menu-item (click)="fetchTotalLeads(2)">2 days ago</button>
+          <button mat-menu-item (click)="fetchTotalLeads(3)">3 days ago</button>
         </mat-menu>
       </div>
   </div>
   <div class="flex flex-col items-center mt-2">
-      <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-none text-red-600">{{ totalLostLeads }}</div>
+      <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-none text-red-600">{{ totalLeads }}</div>
       <div class="flex items-baseline justify-center w-full mt-5 text-secondary">
         <div class="text-md font-medium truncate">Lost Today:</div>
-        <div class="ml-1.5 text-lg font-semibold">{{ todaylost }}</div>
+        <div class="ml-1.5 text-lg font-semibold">{{ todayNew }}</div>
     </div>
   </div>
 </div>

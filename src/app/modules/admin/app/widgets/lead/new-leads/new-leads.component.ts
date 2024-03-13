@@ -2,54 +2,43 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { WidgetService } from '../../widget.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { StatusEnum } from 'app/core/enum/crmEnum';
+import { Filter } from '../../widget.type';
 
 @Component({
   selector: 'new-leads',
   templateUrl: './new-leads.component.html',
 })
 export class NewLeadsComponent {
-  totalNewLeads: any; 
-  todayNew: any;
+  totalLeads: any; 
+  todayNew: any; 
+
+  filter= new Filter({});
+
+  statusEnumInstance = new StatusEnum
+
   constructor(
     private _widgetService: WidgetService,
-    private _changeDetectorRef: ChangeDetectorRef
+
   ) {}
 
   ngOnInit() {
-    this.fetchTotalLeads();
-    this.newToday();
+    this.fetchTotalLeads(-1);
   }
 
-  fetchTotalLeads() {
-    this._widgetService.getNewLead().subscribe(
+  fetchTotalLeads(days: number) {
+    debugger;
+    this.filter.days = days;
+    this.filter.status = this.statusEnumInstance.New;
+    this._widgetService.getTotalLead(this.filter).subscribe(
       (data) => {
-        this.totalNewLeads = data.totalNewLeads;
-        this._changeDetectorRef.detectChanges();
+        this.totalLeads = data.count;
+        this.todayNew= data.newCount;
+
       },
       (error) => {
       }
     );
   }
-  applyFilter(daysAgo: number) {
-    this._widgetService.getNewCountFilter(daysAgo).subscribe(
-      (data) => {
-        this.totalNewLeads = data.totalNewLeads;
-        this._changeDetectorRef.detectChanges();
-      },
-      (error) => {
-        // Handle error if needed
-      }
-    );
-  }
-  newToday() {
-    this._widgetService.getTodayNew().subscribe(
-      (data) => {
-        this.todayNew = data.totalNewLeads;
-        this._changeDetectorRef.detectChanges();
-      },
-      (error) => {
-        // Handle error if needed
-      }
-    );
-  }
+ 
 }

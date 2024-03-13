@@ -1,5 +1,7 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { WidgetService } from '../../widget.service';
+import { StatusEnum } from 'app/core/enum/crmEnum';
+import { Filter } from '../../widget.type';
 
 
 @Component({
@@ -7,50 +9,36 @@ import { WidgetService } from '../../widget.service';
   templateUrl: './won-leads.component.html',
 })
 export class WonLeadComponent {
-    totalWonLeads: any; 
-    todayWon: any;
-    constructor(
-      private _widgetService: WidgetService,
-      private _changeDetectorRef: ChangeDetectorRef
-    ) {}
-  
-    ngOnInit() {
-      this.fetchTotalLeads();
-      this.wonToday();
-    }
-  
-    fetchTotalLeads() {
-      this._widgetService.getWonLead().subscribe(
-        (data) => {
-          this.totalWonLeads = data.totalWonLeads;
-          this._changeDetectorRef.detectChanges();
-        },
-        (error) => {
-        }
-      );
-    }
-    applyFilter(daysAgo: number) {
-      this._widgetService.getWonCountFilter(daysAgo).subscribe(
-        (data) => {
-          this.totalWonLeads = data.totalWonLeads;
-          this._changeDetectorRef.detectChanges();
-        },
-        (error) => {
-          // Handle error if needed
-        }
-      );
-    }
-    wonToday() {
-      this._widgetService.getTodayWon().subscribe(
-        (data) => {
-          this.todayWon = data.totalWonLeads;
-          this._changeDetectorRef.detectChanges();
-        },
-        (error) => {
-          // Handle error if needed
-        }
-      );
-    }
+  totalLeads: any; 
+  todayNew: any; 
+
+  filter= new Filter({});
+
+  statusEnumInstance = new StatusEnum
+
+  constructor(
+    private _widgetService: WidgetService,
+
+  ) {}
+
+  ngOnInit() {
+    this.fetchTotalLeads(-1);
+  }
+
+  fetchTotalLeads(days: number) {
+    debugger;
+    this.filter.days = days;
+    this.filter.status = this.statusEnumInstance.Won;
+    this._widgetService.getTotalLead(this.filter).subscribe(
+      (data) => {
+        this.totalLeads = data.count;
+        this.todayNew= data.newCount;
+      },
+      (error) => {
+      }
+    );
+  }
+ 
 }
 
 
