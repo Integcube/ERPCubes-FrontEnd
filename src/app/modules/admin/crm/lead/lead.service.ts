@@ -9,6 +9,7 @@ import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertService } from 'app/core/alert/alert.service';
 import { SelectionModel } from '@angular/cdk/collections';
+import { ExcelService } from 'app/shared/shared.service';
 
 @Injectable({
   providedIn: 'root'
@@ -111,11 +112,14 @@ export class LeadService {
     private _userService: UserService,
     private _httpClient: HttpClient,
     private _alertService: AlertService,
+    private _excelService:ExcelService,
     private snackBar: MatSnackBar) {
     this._userService.user$.subscribe(user => { this.user = user; });
+ 
     this.contactEnumInstance = new ContactEnum();
+
   }
-  
+  HeaderConfig:any[];
   filteredLeads$ = combineLatest(
     this.leads$,
     this.filter$)
@@ -1275,5 +1279,38 @@ export class LeadService {
     this._lead.next(lead);
     return lead;
   }
+
+  Export(){
+    debugger
+    this.HeaderConfig = [
+      { key: 'firstName', label: 'First Name' },
+      { key: 'lastName', label: 'Last Name' },
+      { key: 'email', label: 'Email' },
+      { key: 'statusTitle', label: 'Status' },
+      { key: 'mobile', label: 'Mobile' },
+      { key: 'work', label: 'Work' },
+      { key: 'address', label: 'Address' },
+      { key: 'street', label: 'Street' },
+      { key: 'city', label: 'City' },
+      { key: 'zip', label: 'Zip' },
+      { key: 'state', label: 'State' },
+      { key: 'country', label: 'Country' },
+      { key: 'sourceTitle', label: 'Source' },
+      { key: 'industryTitle', label: 'Industry' },
+      { key: 'productTitle', label: 'Product' },
+      { key: 'campaignTitle', label: 'Campaign'},
+      { key: 'createdDate', label: 'Created Date' },
+      { key: 'modifiedDate', label: 'Modified Date' },
+      { key: 'leadOwnerName', label: 'Lead Owner' },
+      { key: 'rating', label: 'Rating' },
+      { key: 'remarks', label: 'Remarks' }
+  ];
+
+    this._excelService.exportToExcel(this._leads.value, this.HeaderConfig, 'Leads.xlsx');
+
+    
+      }
+
+
 }
 

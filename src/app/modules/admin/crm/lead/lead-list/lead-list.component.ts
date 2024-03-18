@@ -20,6 +20,7 @@ import { LeadImportComponent } from '../lead-import/lead-import.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { TrashComponent } from '../../trash/trash.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+
 @Component({
   selector: 'app-lead-list',
   templateUrl: './lead-list.component.html',
@@ -91,7 +92,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   SeletedStatusBulk:number;
   SeletedStatusBulkTitle:string;
   SeletedLeadOwner:string;
-
   customLists$ = this._leadService.customLists$;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -106,7 +106,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     private _overlay: Overlay,
     private _viewContainerRef: ViewContainerRef,
     public dialog: MatDialog,
-    private _fuseConfirmationService: FuseConfirmationService
+    private _fuseConfirmationService: FuseConfirmationService,
   ) { }
 
   activeItem = new LeadCustomList({});
@@ -201,6 +201,9 @@ export class LeadListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
+
 
   openUsersPanel(): void {
     this._usersPanelOverlayRef = this._overlay.create({
@@ -749,5 +752,10 @@ export class LeadListComponent implements OnInit, AfterViewInit {
           }
         );
       }
+      Export(){
+        this._leadService.Export();
 
+      }
+
+     
 }
