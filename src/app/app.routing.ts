@@ -86,6 +86,8 @@ export const appRoutes: Route[] = [
             initialData: InitialDataResolver,
         },
         children   : [
+            {path: 'checklist', loadChildren: () => import('app/modules/admin/checklist/checklist.module').then(m => m.CheckListModule)},
+
             {path: 'crm-dashboard', loadChildren: () => import('app/modules/admin/dashboards/crm-dashboard/crm-dashboard.module').then(m => m.CrmDashboardModule)},
             //CRM Routes
             {path:'crm', loadChildren:()=>import('app/modules/admin/crm/crm.module').then(m=>m.CrmModule)},

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'app/shared/shared.module';
+import { checklistRoutes } from './checklist.routing';
 
 
 
@@ -9,7 +10,7 @@ import { SharedModule } from 'app/shared/shared.module';
   ],
   imports: [
     SharedModule,
-    // RouterModule.forChild(checklistRoutes),
+    RouterModule.forChild(checklistRoutes),
   ]
 })
 export class CheckListModule { }
