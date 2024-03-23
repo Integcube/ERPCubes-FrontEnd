@@ -1305,12 +1305,7 @@ export class LeadService {
       { key: 'rating', label: 'Rating' },
       { key: 'remarks', label: 'Remarks' }
   ];
-
     this._excelService.exportToExcel(this._leads.value, this.HeaderConfig, 'Leads.xlsx');
-
-    
       }
-
-
 }
 

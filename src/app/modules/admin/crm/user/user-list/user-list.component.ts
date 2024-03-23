@@ -146,7 +146,6 @@ export class UserListComponent implements OnInit {
 
     if ( this._sort && this._paginator )
     {
-debugger
 this._sort.sort({
   id          : 'firstName',
   start       : 'asc',

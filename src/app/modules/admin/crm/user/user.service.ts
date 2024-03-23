@@ -29,7 +29,8 @@ export class UserFormService {
   constructor(
     private _userService: UserService,
     private _httpClient: HttpClient,
-    private _alertService: AlertService) 
+    private _alertService: AlertService
+    ) 
   {
     this._userService.user$.subscribe(user => { this.user = user; })
   }

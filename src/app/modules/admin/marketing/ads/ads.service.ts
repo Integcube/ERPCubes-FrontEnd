@@ -77,7 +77,7 @@ export class AdsService {
 
     // Replace 'resource_name' with the resource you want to fetch (e.g., campaigns, ad accounts)
     const resourceName = 'customers/' + customerId + '/campaigns';
-    debugger
+ 
 
     return this._httpClient.get('https://googleads.googleapis.com/v8/' + resourceName, { headers }).pipe(
       catchError(err => this.handleError(err))

@@ -67,9 +67,6 @@ export class LeadListViewComponent implements OnInit, AfterViewInit {
     this._router.navigate(['detail-view', row.leadId], { relativeTo: this._activatedRoute });
   }
   ngOnInit(): void {
-   
-
-
      this.leads$ = this._leadService.filteredLeads$;
     this._leadService.leads$
       .pipe(takeUntil(this._unsubscribeAll))
