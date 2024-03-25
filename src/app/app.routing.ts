@@ -108,6 +108,8 @@ export const appRoutes: Route[] = [
            //Marketing
            
            {path: 'user-settings', loadChildren: () => import('app/modules/admin/app/settings/settings.module').then(m => m.SettingsModule)},]},
+        //    {path:'checklist', loadChildren:()=>import('app/modules/admin/checklist/checklist.module').then(m=>m.ChecklistModule)},
+
            {path:'marketing', loadChildren:()=>import('app/modules/admin/marketing/marketing.module').then(m=>m.MarketingModule)}
         ]
     }

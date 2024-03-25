@@ -78,11 +78,11 @@
         <div class="flex items-center justify-between mt-4">
           <div class="flex items-center space-x-2">
             <!-- Checklist -->
-            <button
+            <!-- <button
               mat-icon-button
               (click)="addTasksToNote()">
               <mat-icon [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
-            </button>
+            </button> -->
             <!-- Labels -->
             <button
               mat-icon-button
@@ -110,7 +110,7 @@
             <!-- Delete -->
             <button
               mat-icon-button 
-              (click)="delete()">
+              (click)="delete()" *ngIf="note.noteId !== -1">
               <mat-icon [svgIcon]="'heroicons_outline:trash'"></mat-icon>
             </button>
           </div>

@@ -32,7 +32,7 @@
         </div>
     </div>
     <mat-tab-group class="sm:px-2"  *ngIf="dashboards; else loading" mat-stretch-tabs="false" [animationDuration]="'0'">      
-        <ng-container *ngIf="dashboards.length > 0; else noDashboards">
+        <ng-container *ngIf="dashboards.length > 0; else noDashboard">
             <mat-tab *ngFor="let d of dashboards">
             <ng-template mat-tab-label>
                 <span class="inline-flex items-center space-x-2">

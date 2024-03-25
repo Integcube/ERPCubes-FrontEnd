@@ -7,6 +7,7 @@ import { checklistRoutes } from './checklist.routing';
 
 @NgModule({
   declarations: [
+    
   ],
   imports: [
     SharedModule,
