@@ -13,7 +13,9 @@
         <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8">
             <ol>
                 <li class="relative flex" *ngFor="let view of views">
-                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px" [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}" *ngIf="view.viewId == 1"></div>
+                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px"
+                        [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}"
+                        *ngIf="view.viewId == 1"></div>
                     <div class="relative flex flex-auto" *ngIf="view.viewId == 1">
                         <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full"
                             [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}">
@@ -23,19 +25,21 @@
                             <div *ngIf="view.completed" class="text-white">
                                 <mat-icon class="icon-size-3 text-white" [svgIcon]="view.icon">
                                 </mat-icon>
-                                                   
+
                             </div>
-                            
+
                         </div>
                         <div class="flex text-md font-semibold flex-col justify-center items-center">
                             {{view.viewName}}
                         </div>
-                        <div *ngIf="view.completed" class="text-white"> 
+                        <div *ngIf="view.completed" class="text-white">
                             {{view.viewId}}
                         </div>
                     </div>
-                    
-                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px" [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}" *ngIf="view.viewId == 2"></div>
+
+                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px"
+                        [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}"
+                        *ngIf="view.viewId == 2"></div>
 
                     <div class="relative flex flex-auto mt-7" *ngIf="view.viewId == 2">
                         <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full "
@@ -46,7 +50,7 @@
                             <div *ngIf="view.completed" class="text-white">
                                 <mat-icon class="icon-size-3 text-white" [svgIcon]="view.icon">
                                 </mat-icon>
-                                                   
+
                             </div>
                         </div>
                         <div class="flex text-md font-semibold flex-col justify-center items-center">
@@ -63,7 +67,7 @@
                             <div *ngIf="view.completed" class="text-white">
                                 <mat-icon class="icon-size-3 text-white" [svgIcon]="view.icon">
                                 </mat-icon>
-                                                   
+
                             </div>
                         </div>
                         <div class="flex text-md font-semibold flex-col justify-center items-center">
@@ -79,24 +83,20 @@
             <div class="flex text-xl font-semibold flex-col justify-start">
                 Checklist Information
             </div>
-            <form [formGroup]="viewForm" class="flex flex-col flex-0 items-start w-full mt-10"> 
+            <form #checkListForm="ngForm" class="flex flex-col flex-0 items-start w-full mt-10">
                 <!-- Title -->
                 <mat-form-field class="fuse-mat-dense w-full md:w-1/3">
-                    <mat-label>Title</mat-label>
-                    <input matInput [formControlName]="'title'" #name>
-                    <mat-error *ngIf="viewForm.get('title').hasError('required')" i18n>
-                        Title is required
-                    </mat-error>
+                  <mat-label>Title</mat-label>
+                  <input matInput id="title" name="title" [(ngModel)]="checklist.title" required>
                 </mat-form-field>
+              
                 <!-- Description -->
-                    <mat-label class="font-semibold">Description</mat-label>
-<textarea [formControlName]="'description'" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your description here..." #description></textarea>
-
-                    <!-- <input matInput [formControlName]="'description'" #description> -->
-                    <mat-error *ngIf="viewForm.get('description').hasError('required')" i18n>
-                        Description is required
-                    </mat-error>
-            </form>
+                <mat-form-field class="fuse-mat-dense w-full md:w-1/3">
+                  <mat-label class="font-semibold">Description</mat-label>
+                  <textarea matInput id="description" name="description" [(ngModel)]="checklist.description"></textarea>
+                </mat-form-field>
+              </form>
+              
         </div>
         <div class="flex flex-col flex-auto px-12 pt-8" *ngIf="activeView ==2">
             <div class="flex text-xl font-semibold flex-col justify-start">
@@ -106,23 +106,24 @@
                 <div class="w-1/3 flex-auto bg-card shadow rounded-xl overflow-hidden border hover:border-primary hover:cursor-pointer"
                     [ngStyle]="{'border-color': isSelected ? '#0053a0' : '#e0e0e0',
                                 'background-color': isSelected ? '#ccc' : 'inherit'}" (click)="toggleSelection()"
-                    (mouseenter)="hovered = true" (mouseleave)="hovered = false" [class.hover:bg-gray-300]="hovered && !isSelected"
-                    [class.hover:scale-110]="hovered && !isSelected" [class.selected]="isSelected">
+                    (mouseenter)="hovered = true" (mouseleave)="hovered = false"
+                    [class.hover:bg-gray-300]="hovered && !isSelected" [class.hover:scale-110]="hovered && !isSelected"
+                    [class.selected]="isSelected">
                     <div class="flex justify-center items-center m-4 p-8 bg-default">
                         <mat-icon class="icon-size-5 text-accent" matPrefix svgIcon="feather:plus"></mat-icon>
                     </div>
                     <div class="flex flex-col items-start justify-between m-6">
                         <div class="text-md font-semibold tracking-tight leading-6 truncate">Blank Checklist</div>
-                        <div  class="text-xs font-medium">
+                        <div class="text-xs font-medium">
                             Start with a blank checklist and add any reports you need
                         </div>
                     </div>
                 </div>
                 <div class="w-1/3">
-                    
+
                 </div>
                 <div class="w-1/3">
-                   
+
                 </div>
             </div>
         </div>
@@ -133,57 +134,36 @@
                 <div class="flex text-xl font-semibold flex-col justify-start">
                     Checklists
                 </div>
-        
                 <div class="justify-end">
-                    <button class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist()" [matTooltip]="'Add New Checklist '">
+                    <button class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist()"
+                        [matTooltip]="'Add New Checklist '">
                         <mat-icon [svgIcon]="'heroicons_outline:clipboard-list'" class="icon-size-5"></mat-icon>
                         <span class="ml-2 text-xs" i18n>Add Checklist</span>
                     </button>
-                    
                 </div>
-        
             </div>
-        
-        
-            <div>
-                <div>
-                    <div class="flex items-center gap-5 mt-10" *ngIf="checks.checkpoints">
-                        <ng-container *ngFor="let check of checks.checkpoints;">
-                        <div class="group flex items-center">
-
-                        <mat-icon class="-ml-0.5 icon-size-5 text-hint" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
-                        <input class="w-full ml-1.5 px-1 py-0.5" 
-                        placeholder="'Click Enter to Save'"  
-                        [(ngModel)]="checkpoint.description"
-                        (keydown.enter)="addChecklist(newCheckInput.value); newCheckInput.value = ''"
-                        #newCheckInput i18n-placeholder>
-                        <!-- <button mat-icon-button (click)="addCheckToList(newCheckInput.value)">
-                            <span class="text-xs">Save</span>
-                        </button> -->
+            <div class="flex flex-auto flex-col overflow-x-auto">
+                <div class="flex flex-col items-center gap-5 mt-10" *ngIf="checklist.checkpoints.length">
+                    <ng-container *ngFor="let check of checklist.checkpoints;">
+                        <div class="flex w-full">
+                                <mat-icon class="-ml-0.5 icon-size-5 text-hint"
+                                    [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                                <input class="w-full ml-1.5 px-1 py-0.5" placeholder="'Click Enter to Save'"
+                                    [(ngModel)]="check.title" (keydown.enter)="addChecklist()"
+                                    #newCheckInput i18n-placeholder>
                         </div>
-                        </ng-container>
-                    </div>
+
+                    </ng-container>
                 </div>
-                
-        
-                <div *ngIf="checklists.length === 0" class="flex flex-auto flex-col items-center justify-center dark:bg-transparent" >
+                <div *ngIf="!checklist.checkpoints.length"
+                    class="flex flex-auto flex-col items-center justify-center dark:bg-transparent">
                     <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
                     <div class="flex justify-center mt-5 text-gray-500">
                         No checkpoints found
                     </div>
-                    
-                </div>
-        
-                <div *ngIf="checklists.length > 0">
-                    <div *ngFor="let checklist of checklists" class="flex items-center gap-5 mt-3">
-                        <mat-icon class="-ml-0.5 icon-size-5 text-hint" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
-                        <span>{{ checklist.checkpoint }}</span>
-                    </div>
                 </div>
             </div>
         </div>
-        
-
         <div class="flex border-t justify-end gap-4 p-6">
             <button mat-stroked-button (click)="closeDialog()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
@@ -195,13 +175,14 @@
                     <span class="ml-1 text-sm">Back</span>
                 </span>
             </button>
-            
-            <button mat-flat-button color="primary" class="text-white primary-2" (click)="onNextClick()" [disabled]="viewForm.invalid">
+
+            <button mat-flat-button color="primary" class="text-white primary-2" (click)="onNextClick()"
+                >
                 <span class="inline-flex items-center justify-between w-full leading-5">
                     <span class="ml-1 text-sm">Next</span>
                 </span>
             </button>
-            
+
             <!-- <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="activeView === 3">
                 <span class="inline-flex items-center justify-between w-full leading-5">
                     <span class="ml-1 text-sm">Save</span>
@@ -209,4 +190,3 @@
             </button> -->
         </div>
     </div>
-</div>

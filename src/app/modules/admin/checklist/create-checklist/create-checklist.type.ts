@@ -33,6 +33,10 @@ export class CheckPoint{
     createdBy: string;
     constructor(reg){
         this.cLPId = reg.cLPId?reg.cLPId:-1;
+        this.title = reg.title?reg.title:"";
+        this.description = reg.description?reg.description:"";
+        this.dueDays = reg.dueDays?reg.dueDays:null;
+        this.isRequired = reg.isRequired?reg.isRequired:0;
     }
 }
 // export class CheckPoints{

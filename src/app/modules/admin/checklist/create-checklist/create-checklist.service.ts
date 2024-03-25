@@ -21,7 +21,7 @@ export class CreateChecklistService {
     
   
     private _checklist: BehaviorSubject<Checklist | null> = new BehaviorSubject(null);
-    private _checklists: BehaviorSubject<Checklist[] | null> = new BehaviorSubject(null);
+    private _checklists: BehaviorSubject<Checklist[] | null> = new BehaviorSubject([]);
     user: User;
     constructor(
       private _userService: UserService,
