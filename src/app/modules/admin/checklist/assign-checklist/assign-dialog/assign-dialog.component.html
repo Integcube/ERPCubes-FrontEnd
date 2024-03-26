@@ -57,7 +57,7 @@
                 <!-- Title -->
               <mat-form-field class="w-full md:w-1/3">
                     <mat-label i18n>Check List</mat-label>
-                    <mat-select [formControlName]="'clId'" [spellcheck]="false" #leadOwner >
+                    <mat-select [formControlName]="'clId'" [spellcheck]="false" #leadOwner  [disabled]="viewForm.value.execId!=-1">
                         <mat-option [value]="-1"  i18n>--Select CheckList--</mat-option>
                         <ng-container *ngIf="checkList$|async as scenarios">
                             <mat-option *ngFor="let user of scenarios" [value]="user.clId">{{user.title}}</mat-option>
