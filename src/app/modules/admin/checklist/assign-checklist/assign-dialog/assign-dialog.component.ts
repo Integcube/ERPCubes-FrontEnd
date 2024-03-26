@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subject} from 'rxjs';
 import { AssignChecklistService } from '../assign-checklist.service';
-import { Assign, DashboardView } from '../assign-checklist.type';
+import { Assign, CheckListInfo, DashboardView } from '../assign-checklist.type';
 @Component({
   selector: 'assign-dialog',
   templateUrl: './assign-dialog.component.html',
@@ -16,6 +16,9 @@ export class AssignDialogComponent implements OnInit {
 
   constructor(private _formBuilder: UntypedFormBuilder,
     private _matDialogRef: MatDialogRef<AssignDialogComponent>,
+    public matDialogRef: MatDialogRef<AssignDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private _data: { Data: CheckListInfo },
+
     private _assignChecklistService: AssignChecklistService,
     private _changeDetectorRef: ChangeDetectorRef,
 
@@ -47,12 +50,13 @@ export class AssignDialogComponent implements OnInit {
   ]
   
   ngOnInit(): void {
-    this._assignChecklistService.getUsers().subscribe();
     this.checkList$ = this._assignChecklistService.CheckList$
+    debugger
       this.viewForm = this._formBuilder.group({
-        clId: [-1, Validators.required], 
-        remarks: [''],
-        execId: [-1, Validators.required], 
+        
+        clId: [this._data.Data.clId, Validators.required], 
+        remarks: [this._data.Data.remarks],
+        execId: [this._data.Data.execId, Validators.required], 
       });
       this.checkpoints$.subscribe((chk: Assign[]) => {
         this.checkpoints = [...chk];

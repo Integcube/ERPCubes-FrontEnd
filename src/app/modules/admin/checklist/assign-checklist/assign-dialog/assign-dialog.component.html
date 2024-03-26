@@ -1,5 +1,5 @@
 <div class="flex flex-auto w-full h-full overflow-hidden">
-    <div class="flex flex-col w-1/4 max-w-1/4 h-full bg-default">
+    <div class="flex flex-col w-1/6 max-w-1/6 h-full bg-default">
         <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
             <div class="flex gap-1 items-center" (click)="closeDialog()">
                 <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
@@ -83,11 +83,11 @@
             <div class="py-1 w-full bg-default">
                 <ng-container *ngIf="(checkpoints$ | async) as checkpoint">
                 <ng-container *ngIf="checkpoint && checkpoint.length; else noDeletedItems">
-                    <div class=" p-2 w-auto m-4 h-8 justify-between items-center flex bg-card gap-3">
+                    <div class=" p-2 w-auto m-2 h-8 justify-between items-center flex bg-card gap-3">
                         <div class="max-w-1/3 min-w-1/3 w-1/3">
                             <h5 class="font-semibold" >Check Point</h5></div>
-                            <div class="max-w-1/12 min-w-1/12 w-1/12 justify-center"><h5 class="font-semibold" >Due Days</h5> </div>
-                            <div class="max-w-1/6 min-w-1/6 w-1/6 justify-center"><h5 class="font-semibold" >Due Date</h5> </div>
+                            <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-start"><h5 class="font-semibold" >Due Days</h5> </div>
+                            <div class="max-w-1/6 min-w-1/6 w-1/6 flex justify-center"><h5 class="font-semibold" >Due Date</h5> </div>
                             
                             <div class="max-w-1/12 min-w-1/12 w-1/12 justify-center"><h5 class="font-semibold" >Required</h5> </div>
                         <div class="max-w-1/3 min-w-1/3 w-1/3 flex justify-center">
@@ -96,17 +96,17 @@
                       
                     </div>
                   <ng-container *ngFor="let item of checkpoint;">
-                    <div class="border-l-2 border-green-500 p-2 w-auto m-4 h-12 justify-between items-center flex bg-card gap-3">
+                    <div class="border-l-2 border-green-500 p-2 w-auto m-2 h-12 justify-between items-center flex bg-card gap-3">
                         <div class="max-w-1/3 min-w-1/3 w-1/3">{{ item.title }}</div>
-                        <div class="max-w-1/12 min-w-1/12 w-1/12 justify-center">{{ item.dueDays }}</div>
-                        <div class="max-w-1/6 min-w-1/6 w-1/6 justify-center">{{ item.dueDate | date:'mediumDate'}}</div>
-                        <div class="max-w-1/12 min-w-1/12 w-1/12 justify-center">
+                        <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-start">{{ item.dueDays }}</div>
+                        <div class="max-w-1/6 min-w-1/6 w-1/6 flex justify-center">{{ item.dueDate | date:'mediumDate'}}</div>
+                        <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-center">
                             <ng-container *ngIf="item.isRequired === 1; else notRequired">{{ 'Yes' }}</ng-container>
                             <ng-template #notRequired>{{ 'No' }}</ng-template>
                         </div>
                         <div class="max-w-1/3 min-w-1/3 w-1/3">
                             <mat-form-field class="fuse-mat-dense flex-auto w-full  mt-4">
-                                <mat-select [spellcheck]="false" #leadOwner [(ngModel)]="item.assignTo" class="w-full">
+                                <mat-select [spellcheck]="false" #leadOwner [(ngModel)]="item.assignTo" class="w-full h-2">
                                     <mat-option class="text-md font-medium" value="-1" i18n>--Select User--</mat-option>
                                     <ng-container *ngIf="users$|async as users">
                                         <mat-option class="text-md font-medium" *ngFor="let user of users"

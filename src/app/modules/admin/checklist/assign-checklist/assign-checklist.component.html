@@ -36,8 +36,8 @@
                             class="ml-4 h-8 primary-2"
                             mat-flat-button
                             [color]="'primary'"
-                            (click)="assignCheckList()" 
-                            [matTooltip]="'Add New User'">
+                            (click)="assignNew()" 
+                            [matTooltip]="'Assign CheckList'">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5" ></mat-icon>
                             <span class="ml-2 mr-1 text-xs" i18n>Assign CheckList</span>
                         </button>
@@ -61,7 +61,7 @@
                                 class="fuse-mat-dense fuse-mat-no-subscript w-1/2 h-10" >
                                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
                                 <input matInput [formControl]="searchInputControl"
-                                    [autocomplete]="'off'" [placeholder]="'Search Leads'">
+                                    [autocomplete]="'off'" [placeholder]="'Search ...'">
                             </mat-form-field>
                         </div>
                         <mat-paginator
@@ -92,7 +92,7 @@
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15rem;" i18n>Check List</th>
                                         <td mat-cell *matCellDef="let row" [style.cursor]="'pointer'"  class="group relative overflow-hidden"  style="width: 15rem;">
                                           
-                                            <span (click)="previewUser(row)" class="hover:text-clip truncate"><u>{{row.checkList | tblimit: row.isHovered}}</u></span>
+                                            <span (click)="UpdateAssignCheck(row)" class="hover:text-clip truncate"><u>{{row.checkList | tblimit: row.isHovered}}</u></span>
                                             <span *ngIf="row.isHovered" class="relative right-0">
                                               
                                               </span>

@@ -9,7 +9,7 @@ import { Pagination, PaginationView } from 'app/core/user/user.types';
 import { Observable, Subject, map, merge, switchMap, takeUntil } from 'rxjs';
 import { AssignChecklistService } from './assign-checklist.service';
 import { AssignDialogComponent } from './assign-dialog/assign-dialog.component';
-import { Assign } from './assign-checklist.type';
+import { Assign, CheckListInfo } from './assign-checklist.type';
 import { cloneDeep } from 'lodash';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 
@@ -66,7 +66,7 @@ export class AssignChecklistComponent {
       if ( this._sort && this._paginator )
       {
   this._sort.sort({
-    id          : 'checkList',
+    id          : '',
     start       : 'asc',
     disableClear: true
   });
@@ -94,8 +94,20 @@ export class AssignChecklistComponent {
       ).subscribe();
       }
     }
-    assignCheckList(){
-      let dashboard = new Assign({})
+
+assignNew(){
+  let assign = new CheckListInfo({});
+  this.assignCheckList(assign)
+}
+
+UpdateAssignCheck(assign){
+ 
+  this.assignCheckList(assign)
+}
+
+
+    assignCheckList(assign:CheckListInfo){
+     
       const restoreDialogRef = this._dialog.open(AssignDialogComponent, {
           height: "100%",
           width: "100%",
@@ -103,13 +115,11 @@ export class AssignChecklistComponent {
           maxHeight: "100%",
         autoFocus: false,
         data     : {
-            note: cloneDeep(dashboard)
+          Data: cloneDeep(assign)
         }
       });
-      // restoreDialogRef.afterClosed().subscribe((result) => {
-      //   this._dashboardService.getDashboard().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-      // });
     }
+    
     ngOnDestroy(): void {
       this._unsubscribeAll.next(null);
       this._unsubscribeAll.complete();

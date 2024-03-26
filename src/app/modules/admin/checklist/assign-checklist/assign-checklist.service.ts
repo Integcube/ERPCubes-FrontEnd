@@ -129,6 +129,7 @@ private readonly deleteURL = `${environment.url}/CkCheckList/delete`
       tenantId: this.user.tenantId,
       cLId:form.clId,
       remarks:form.remarks,
+      execId:form.execId,
       List,
 
     }

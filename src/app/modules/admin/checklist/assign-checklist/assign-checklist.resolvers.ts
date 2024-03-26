@@ -27,3 +27,16 @@ export class CheckListResolver implements Resolve<any>{
        return this._userService.getCheckList();
     }
 }
+
+@Injectable({
+    providedIn: 'root'
+})
+export class UserResolver implements Resolve<any>{
+    constructor(private _userService:AssignChecklistService){
+    }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+       return this._userService.getUsers();
+    }
+}
+
+

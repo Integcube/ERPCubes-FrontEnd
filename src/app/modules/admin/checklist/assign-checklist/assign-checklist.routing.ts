@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
 import { AssignChecklistComponent } from "./assign-checklist.component";
-import { AssignCheckListResolver, CheckListResolver } from "./assign-checklist.resolvers";
+import { AssignCheckListResolver, CheckListResolver, UserResolver } from "./assign-checklist.resolvers";
 
 
 export const AssignChecklistRouting: Routes = [
@@ -9,7 +9,8 @@ export const AssignChecklistRouting: Routes = [
         component: AssignChecklistComponent,
         resolve: {
             CheckList:CheckListResolver,
-            AssignCheckList: AssignCheckListResolver
+            AssignCheckList: AssignCheckListResolver,
+            User:UserResolver
         },
     },
 ];
