@@ -17,6 +17,8 @@ private readonly getcheckpointURL = `${environment.url}/CkCheckList/getcheckpoin
 private readonly getUsersUrl = `${environment.url}/Users/all`
 private readonly SaveUrl = `${environment.url}/CkCheckList/assign`
 private readonly deleteURL = `${environment.url}/CkCheckList/delete`
+private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
+
 
   user: User;
   private _user: BehaviorSubject<any | null> = new BehaviorSubject(null);
@@ -109,6 +111,8 @@ private readonly deleteURL = `${environment.url}/CkCheckList/delete`
       }),
     );
   }
+
+
   getUsers(): Observable<User[]> {
     let data = {
       id: this.user.id,
@@ -131,7 +135,6 @@ private readonly deleteURL = `${environment.url}/CkCheckList/delete`
       remarks:form.remarks,
       execId:form.execId,
       List,
-
     }
     return this._httpClient.post<Assign[]>(this.SaveUrl, data).pipe(
       tap((dashboard) => {
@@ -153,5 +156,23 @@ private readonly deleteURL = `${environment.url}/CkCheckList/delete`
       
     );
   }
+
+  assignCheckPointToLeads(form: any) {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      cLId:form.clId,
+      remarks:form.remarks,
+      execId:form.execId,
+    }
+    return this._httpClient.post<any>(this.assigntolead, data).pipe(
+      tap((data) => {
+        this._alertService.showSuccess("CheckList Assigned Successfully to Leads");
+      
+      }),
+    );
+  }
+
+
 
 }

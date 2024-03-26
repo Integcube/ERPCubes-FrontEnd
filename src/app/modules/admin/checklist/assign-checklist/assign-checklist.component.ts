@@ -101,11 +101,8 @@ assignNew(){
 }
 
 UpdateAssignCheck(assign){
- 
-  this.assignCheckList(assign)
+  this.assignCheckList(assign);
 }
-
-
     assignCheckList(assign:CheckListInfo){
      
       const restoreDialogRef = this._dialog.open(AssignDialogComponent, {
@@ -153,5 +150,10 @@ UpdateAssignCheck(assign){
         }
       });
     }
-
+    
+    AssigntoLead(row)
+    {
+      debugger
+      this._assignChecklistService.assignCheckPointToLeads(row).subscribe()
+    }
 }
