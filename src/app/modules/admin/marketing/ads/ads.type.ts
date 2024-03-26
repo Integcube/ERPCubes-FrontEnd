@@ -14,6 +14,13 @@ export interface AdAccountList{
     title:string,
 
 }
+export interface GoogleAdAccount{
+    accountId:string
+    title :string
+    isSelected :boolean
+    socialId :string
+    provider :string
+}
 export interface AdAcountName{
     name: string
 }

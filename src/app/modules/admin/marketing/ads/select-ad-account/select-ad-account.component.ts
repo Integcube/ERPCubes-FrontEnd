@@ -2,7 +2,7 @@ import { SocialUser } from '@abacritt/angularx-social-login';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AdsService } from '../ads.service';
-import { AdAccountDetail, AdAccountList } from '../ads.type';
+import { AdAccountDetail, AdAccountList, GoogleAdAccount } from '../ads.type';
 
 @Component({
   selector: 'app-select-ad-account',
@@ -11,29 +11,29 @@ import { AdAccountDetail, AdAccountList } from '../ads.type';
 })
 export class SelectAdAccountComponent implements OnInit {
   user:SocialUser
-  adAccounts:AdAccountList[];
+  adAccounts:GoogleAdAccount[];
   constructor(
     private _matDialogRef: MatDialogRef<SelectAdAccountComponent>,
     private adService: AdsService,
   ) { }
-  displayedColumns: string[] = ['adaccount', 'adaccountId'];
+  displayedColumns: string[] = ['title'];
   closeDialog() {
     this._matDialogRef.close();
   }
   ngOnInit(): void {
-    this.adService.adAccount$.subscribe(data=>{this.adAccounts = [...data]})
-    this.adService.socailUser$.subscribe(data=>{this.user = {...data};
-      if(this.adAccounts.length == 0){
-        this.adService.getAdAccounts(this.user.authToken).subscribe(
-          { next: data=>{ this.adAccounts = [...data]},
-           error:error=>{}}
-         )
-      }
-    })
+    this.adService.GoogleAdAccount().subscribe(data => { this.adAccounts = [...data];});
+    // this.adService.adAccount$.subscribe(data=>{this.adAccounts = [...data]})
+    // this.adService.socailUser$.subscribe(data=>{this.user = {...data};
+    //   if(this.adAccounts.length == 0){
+    //     this.adService.getAdAccounts(this.user.authToken).subscribe(
+    //       { next: data=>{ this.adAccounts = [...data]},
+    //        error:error=>{}}
+    //      )
+    //   }
+    // })
 
   }
   saveAdAccount(){    
-    this.adService.setAdAccount(this.adAccounts)
-    this.closeDialog();
+    this.adService.saveGoogleAdAccount(this.adAccounts).subscribe(data=>{this.closeDialog()});
   }
 }

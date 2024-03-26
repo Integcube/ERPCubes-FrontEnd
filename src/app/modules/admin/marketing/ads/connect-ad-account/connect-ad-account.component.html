@@ -8,13 +8,15 @@
                     <div class="flex flex-col flex-grow self-center justify-center items-center mt-4 ">
                         <div class="flex flex-col justify-center items-center">
                             <h3 class="text-bold font-semibold text-3xl" i18n>Connect an ad account</h3>
-                            <p class="text-center mt-2" i18n>Pull all your ad campaign data into ERPCubes to begin tracking
+                            <p class="text-center mt-2" i18n>Pull all your ad campaign data into ERPCubes to begin
+                                tracking
                                 who is
                                 <br>
                                 interacting with each ad.
                             </p>
                         </div>
-                        <div class="flex flex-grow flex-col w-1/2 px-6 my-10 self-center gap-4 justify-between overflow-auto">
+                        <div
+                            class="flex flex-grow flex-col w-1/2 px-6 my-10 self-center gap-4 justify-between overflow-auto">
                             <div (click)="loginFacebook()"
                                 class="flex flex-col gap-2 p-4 border hover:border-2  border-gray-500 shadow overflow-hidden hover:shadow-xl transition-shadow duration-200 ease-in-out justify-between cursor-pointer">
                                 <div class="flex gap-2 justify-between items-center">
@@ -25,7 +27,8 @@
                                         <span class="items-center" i18n>Facebook</span>
                                     </div>
                                     <div class="flex justify-center" *ngIf="selectedAccount>0">
-                                        <span class=" items-center text-accent2 text-xm" i18n>{{selectedAccount}} ad account connected</span>
+                                        <span class=" items-center text-accent2 text-xm" i18n>{{selectedAccount}} ad
+                                            account connected</span>
                                         <span class="items-center">
                                             <mat-icon class="text-xs text-accent2"
                                                 svgIcon="heroicons_outline:check-circle"></mat-icon>
@@ -64,8 +67,9 @@
                 <mat-step>
                     <ng-template matStepLabel>LEAD SYNCING</ng-template>
                     <div class="flex flex-col flex-grow justify-center items-center mt-4 ">
-                            <div class="flex flex-col justify-center items-center">
-                            <h3 class="text-bold font-semibold text-center text-3xl" i18n>Automatically sync your leads from lead
+                        <div class="flex flex-col justify-center items-center">
+                            <h3 class="text-bold font-semibold text-center text-3xl" i18n>Automatically sync your leads
+                                from lead
                                 genration ads to your ERPCubes CRM</h3>
                             <p class="text-center mt-2 " i18n>
                                 Any leads that converted on your ads in the last 90 days will sync over toERPCubes. To
@@ -132,93 +136,114 @@
                                                 <span class="text-base font-semibold">{{ad.id +" - "+ad.ad_name}}</span>
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
-                                        <div >
+                                        <div>
                                             <form #sampleForm="ngForm" class="flex flex-col gap-2 w-full">
                                                 <div class="flex w-full gap-4 ">
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
-                                                            value="First Name" disabled #name2>
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" name="name1" value="First Name"
+                                                            disabled #name2>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full"  (change)="setSelection($event, ad,1)" #leadOwner>
-                                                            <option  [value]=-1 i18n>--Non--</option>
-                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]" >{{a.name}}</option>
+                                                        <select
+                                                            class="w-full font-medium leading-5 bg-transparent h-full"
+                                                            (change)="setSelection($event, ad,1)" #leadOwner>
+                                                            <option [value]=-1 i18n>--Non--</option>
+                                                            <option *ngFor="let a of ad.field_data"
+                                                                [value]="a.values[0]">{{a.name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" 
-                                                            [(ngModel)]="ad.firstName" #dfdfd name="dfdfd">
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" [(ngModel)]="ad.firstName" #dfdfd
+                                                            name="dfdfd">
                                                     </div>
                                                 </div>
                                                 <div class="flex w-full gap-4 ">
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
-                                                            value="Last Name" disabled #name2>
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" name="name1" value="Last Name"
+                                                            disabled #name2>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full"(change)="setSelection($event, ad,2)" #leadOwner>
-                                                            <option  [value]=-1>--Non--</option>
-                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]"  >{{a.name}}</option>
+                                                        <select
+                                                            class="w-full font-medium leading-5 bg-transparent h-full"
+                                                            (change)="setSelection($event, ad,2)" #leadOwner>
+                                                            <option [value]=-1>--Non--</option>
+                                                            <option *ngFor="let a of ad.field_data"
+                                                                [value]="a.values[0]">{{a.name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" name="name1"
                                                             [(ngModel)]="ad.lastName" #lastName name="lastName">
-                                                            
+
                                                     </div>
                                                 </div>
                                                 <div class="flex w-full gap-4 ">
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
-                                                            value="email" disabled #email>
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" name="name1" value="email" disabled
+                                                            #email>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary">
-                                                        <select class="w-full font-medium leading-5 bg-transparent h-full" (change)="setSelection($event, ad,3)">
-                                                            <option  [value]=-1 i18n>--Non--</option>
-                                                            <option *ngFor="let a of ad.field_data" [value]="a.values[0]" >{{a.name}}</option>
+                                                        <select
+                                                            class="w-full font-medium leading-5 bg-transparent h-full"
+                                                            (change)="setSelection($event, ad,3)">
+                                                            <option [value]=-1 i18n>--Non--</option>
+                                                            <option *ngFor="let a of ad.field_data"
+                                                                [value]="a.values[0]">{{a.name}}</option>
                                                         </select>
                                                     </div>
                                                     <div class="items-center self-center">
-                                                        <mat-icon svgIcon="heroicons_outline:arrow-right" class="icon-size-5"></mat-icon>
-                            
+                                                        <mat-icon svgIcon="heroicons_outline:arrow-right"
+                                                            class="icon-size-5"></mat-icon>
+
                                                     </div>
                                                     <div
                                                         class="flex items-center w-full py-2 px-3 rounded-md cursor-text border border-transparent bg-default shadow-sm border-primary ">
-                                                        <input class="w-full font-medium leading-5 bg-transparent" [spellcheck]="'false'" name="name1"
-                                                             [(ngModel)]="ad.email" #email name="email">
+                                                        <input class="w-full font-medium leading-5 bg-transparent"
+                                                            [spellcheck]="'false'" name="name1" [(ngModel)]="ad.email"
+                                                            #email name="email">
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
-                                 </mat-expansion-panel>
+                                    </mat-expansion-panel>
                                 </div>
                             </mat-accordion>
                         </div>
@@ -233,13 +258,16 @@
             <button class="h-9" mat-stroked-button *ngIf="stepper.selectedIndex === 0" (click)="closeDialog()">
                 <span class="ml-2 mr-1" i18n>Cancel</span>
             </button>
-            <button class="h-9 primary-2" mat-stroked-button *ngIf="stepper.selectedIndex > 0" (click)="moveStepperToPreviousStep()">
+            <button class="h-9 primary-2" mat-stroked-button *ngIf="stepper.selectedIndex > 0"
+                (click)="moveStepperToPreviousStep()">
                 <span class="ml-2 mr-1" i18n>Back</span>
             </button>
-            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2" (click)="moveStepperToNextStep()">
+            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex < 2"
+                (click)="moveStepperToNextStep()">
                 <span class="ml-2 mr-1" i18n>Next</span>
             </button>
-            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2" (click)="saveLeads()">
+            <button class="h-9 primary-2" mat-flat-button [color]="'primary'" *ngIf="stepper.selectedIndex === 2"
+                (click)="saveLeads()">
                 <span class="ml-2 mr-1" i18n>Done</span>
             </button>
         </div>

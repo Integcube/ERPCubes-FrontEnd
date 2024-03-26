@@ -34,17 +34,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {
   SocialLoginModule,
   SocialAuthServiceConfig,
-  GoogleLoginProvider,
 
 } from '@abacritt/angularx-social-login';
 
 import { SelectAdAccountComponent } from './select-ad-account/select-ad-account.component';
 import { CustomFacebookLoginProvider } from './customFacebookLoginProvider';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { FormsModule } from '@angular/forms';
-import { FuseDrawerModule } from '@fuse/components/drawer';
-import { FuseScrollbarModule } from '@fuse/directives/scrollbar';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { DemoDialogComponent } from './demo-dialog/demo-dialog-account.component';
 
 
@@ -95,12 +89,6 @@ import { DemoDialogComponent } from './demo-dialog/demo-dialog-account.component
       useValue: {
         autoLogin: false,
         providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '37203354676-d1hp3vcmcsqhqeu8aqm7ii45n0s6j3eo.apps.googleusercontent.com'
-            )
-          },
           {
             id: CustomFacebookLoginProvider.PROVIDER_ID,
             provider: new CustomFacebookLoginProvider('366268216208954')

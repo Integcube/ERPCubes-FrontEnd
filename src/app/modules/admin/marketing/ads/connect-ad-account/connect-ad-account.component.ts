@@ -7,6 +7,32 @@ import { SelectAdAccountComponent } from '../select-ad-account/select-ad-account
 import { EMPTY, catchError } from 'rxjs';
 import { AdAccountList, AdList, LeadList, Product } from '../ads.type';
 import { FormBuilder, FormGroup } from '@angular/forms';
+export class GoogleAuth {
+  handleCloseButtonClicked(dialog:MatDialog) {
+    dialog.open(SelectAdAccountComponent
+      ,
+      {
+        width: "80%",
+        maxWidth: "80%",
+      }
+    );  }
+
+  openGoogleAuthPopup(urlReturn: string,dialog:MatDialog) {
+      const url = urlReturn;
+      const width = 600;
+      const height = 600;
+      const left = (window.innerWidth - width) / 2;
+      const top = (window.innerHeight - height) / 2;
+      const options = `width=${width},height=${height},top=${top},left=${left}`;
+      const popup = window.open(url, 'GoogleAuthPopup', options);
+      window.addEventListener('message', event => {
+          if (event.data.type === 'authenticationSuccess') {
+              popup.close();
+              this.handleCloseButtonClicked(dialog); // Call the function when the popup closes
+          }
+      });
+  }
+}
 @Component({
   selector: 'app-connect-ad-account',
   templateUrl: './connect-ad-account.component.html',
@@ -59,7 +85,6 @@ export class ConnectAdAccountComponent implements OnInit {
   }
 
   saveLeads(){
-  debugger;
   this.adService.saveLeads(this.allLeads).subscribe();
   this.adService.saveBulkAdAccount(this.adAccounts).subscribe();
   this.adService.saveBulkCampaign(this.ads).subscribe();
@@ -75,8 +100,11 @@ export class ConnectAdAccountComponent implements OnInit {
     this.adService.getGoogleAdAccount(this.user.idToken).subscribe({next:data=>{debugger}, error:err=>{debugger}});
     // this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
-  connectGoogle(){
-    this.adService.connectGoogle().subscribe();
+  connectGoogle() {
+    this.adService.connectGoogle().subscribe(data => {
+      const instance = new GoogleAuth();
+      instance.openGoogleAuthPopup(data.authorizationUrl, this.dialog);
+    });
   }
   setStepNumber(num: number) {
     this.stepNumber = num
@@ -190,7 +218,6 @@ export class ConnectAdAccountComponent implements OnInit {
   //       error: err => { }
   //     }
   //   );
-
   // }
   signOut(): void {
     this.authService.signOut();
