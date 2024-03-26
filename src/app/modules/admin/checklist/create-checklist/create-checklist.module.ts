@@ -34,8 +34,9 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuillModule } from 'ngx-quill';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { CreateChecklistComponent } from './create-checklist.component';
-import { ChecklistDialogComponent } from './checklist-dialog/checklist-dialog.component';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ChecklistDialogComponent } from './checklist-dialog/checklist-dialog.component';
 
 
 
@@ -79,6 +80,7 @@ import { MatSortModule } from '@angular/material/sort';
     DragDropModule,
     QuillModule,
     MatSortModule,
+    MatSlideToggleModule
   ]
 })
 export class CreateChecklistModule { }

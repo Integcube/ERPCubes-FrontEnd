@@ -23,16 +23,18 @@ export class Checklist{
 }
 
 export class CheckPoint{
+    cPId: number;
     cLPId: number;
     title: string;
     description: string;
     dueDays: number;
-    isRequired: number;
+    isRequired: boolean;
+    priority: number;
     createdDate: Date;
     modifiedDate: Date;
     createdBy: string;
     constructor(reg){
-        this.cLPId = reg.cLPId?reg.cLPId:-1;
+        this.cPId = reg.cPId?reg.cPId:-1;
         this.title = reg.title?reg.title:"";
         this.description = reg.description?reg.description:"";
         this.dueDays = reg.dueDays?reg.dueDays:null;
@@ -42,8 +44,13 @@ export class CheckPoint{
 // export class CheckPoints{
 //     cLPId: number;
 //     description: string;
-//     cLId: number
+//     dueDays: number;
+//     isRequired: number;
+//     priority: number;
 //     constructor(reg) {
-//         this.cLPId = reg.cLPId ? reg.cLPId : -1
+//         this.cLPId = reg.cLPId ? reg.cLPId : -1;
+//         this.description = reg.description?reg.description:"";
+//         this.dueDays = reg.dueDays?reg.dueDays:null;
+//         this.isRequired = reg.isRequired?reg.isRequired:0;
 //     }
 // }

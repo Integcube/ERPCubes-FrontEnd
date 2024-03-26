@@ -134,29 +134,55 @@
                 <div class="flex text-xl font-semibold flex-col justify-start">
                     Checklists
                 </div>
-                <div class="justify-end">
-                    <button class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist()"
-                        [matTooltip]="'Add New Checklist '">
+                <div class="justify-end" *ngIf="!hideAddButton">
+                    <button class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist(); hideAddButton = true" [matTooltip]="'Add New Checklist '">
                         <mat-icon [svgIcon]="'heroicons_outline:clipboard-list'" class="icon-size-5"></mat-icon>
                         <span class="ml-2 text-xs" i18n>Add Checklist</span>
                     </button>
                 </div>
             </div>
-            <div class="flex flex-auto flex-col overflow-x-auto">
+            <div class="flex flex-auto flex-col" style="max-height: 400px;" fuseScrollbar> <!-- Set max-height as needed -->
                 <div class="flex flex-col items-center gap-5 mt-10" *ngIf="checklist.checkpoints.length">
-                    <ng-container *ngFor="let check of checklist.checkpoints;">
-                        <div class="flex w-full">
-                                <mat-icon class="-ml-0.5 icon-size-5 text-hint"
-                                    [svgIcon]="'heroicons_solid:plus'"></mat-icon>
-                                <input class="w-full ml-1.5 px-1 py-0.5" placeholder="'Click Enter to Save'"
-                                    [(ngModel)]="check.title" (keydown.enter)="addChecklist()"
-                                    #newCheckInput i18n-placeholder>
+                    <ng-container *ngFor="let check of checklist.checkpoints; let i = index">
+                        <div class="flex items-center w-full">
+                            <mat-icon class="-ml-0.5 icon-size-5 text-hint" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
+                            <input class="w-full ml-1.5 px-1 py-0.5" placeholder="'Click Enter to Save'"
+                                [(ngModel)]="check.description" (keydown.enter)="addChecklist(); showFields(i)"
+                                #newCheckInput i18n-placeholder>
+                            <div [ngClass]="{'ml-2': showDueDays(i)}">
+                                <input *ngIf="showDueDays(i)" type="text" [(ngModel)]="check.dueDays" placeholder="Due days" class="w-14 py-0.5">
+                            </div>
+                            <div [ngClass]="{'ml-2': showIsRequired(i)}">
+                                <mat-slide-toggle *ngIf="showIsRequired(i)" [(ngModel)]="check.isRequired" class="w-14 py-0.5"></mat-slide-toggle>
+                            </div>
+                            <div [ngClass]="{'ml-2': showPriority(i)}">
+                                <span *ngIf="showPriority(i)" [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                    <mat-icon class="w-14 py-0.5" svgIcon="heroicons_solid:flag"
+                                        [ngClass]="{
+                                            'text-red-600': check.priority === 1,
+                                            'text-yellow-400': check.priority === 2,
+                                            'text-green-500': check.priority === 3
+                                        }"></mat-icon>
+                                </span>
+                                <mat-menu #actionMenu="matMenu">
+                                    <button mat-menu-item (click)="togglePriority(1, i)">
+                                        <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600 icon-size-4"></mat-icon> High
+                                    </button>
+                                    <button mat-menu-item (click)="togglePriority(2, i)">
+                                        <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400 icon-size-4"></mat-icon>
+                                        Medium
+                                    </button>
+                                    <button mat-menu-item (click)="togglePriority(3, i)">
+                                        <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500 icon-size-4"></mat-icon>
+                                        Low
+                                    </button>
+                                </mat-menu>
+                            </div>
                         </div>
-
                     </ng-container>
                 </div>
-                <div *ngIf="!checklist.checkpoints.length"
-                    class="flex flex-auto flex-col items-center justify-center dark:bg-transparent">
+        
+                <div *ngIf="!checklist.checkpoints.length" class="flex flex-auto flex-col items-center justify-center dark:bg-transparent">
                     <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:clipboard-list'"></mat-icon>
                     <div class="flex justify-center mt-5 text-gray-500">
                         No checkpoints found
@@ -164,6 +190,8 @@
                 </div>
             </div>
         </div>
+        
+        
         <div class="flex border-t justify-end gap-4 p-6">
             <button mat-stroked-button (click)="closeDialog()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
@@ -172,16 +200,20 @@
             </button>
             <button mat-stroked-button *ngIf="activeView !== 1" (click)="setView(activeView - 1)">
                 <span class="inline-flex items-center justify-between w-full leading-5">
-                    <span class="ml-1 text-sm">Back</span>
+                  <span class="ml-1 text-sm">Back</span>
                 </span>
-            </button>
-
-            <button mat-flat-button color="primary" class="text-white primary-2" (click)="onNextClick()"
-                >
+              </button>
+              
+              <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="isLastView" (click)="onNextClick()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
-                    <span class="ml-1 text-sm">Next</span>
+                  <span class="ml-1 text-sm">Save</span>
                 </span>
-            </button>
+              </button>
+              <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="!isLastView" (click)="onNextClick()">
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                  <span class="ml-1 text-sm">Next</span>
+                </span>
+              </button>
 
             <!-- <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="activeView === 3">
                 <span class="inline-flex items-center justify-between w-full leading-5">
@@ -190,3 +222,4 @@
             </button> -->
         </div>
     </div>
+

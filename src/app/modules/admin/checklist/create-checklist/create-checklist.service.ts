@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Checklist } from './create-checklist.type';
+import { CheckPoint, Checklist } from './create-checklist.type';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { AlertService } from 'app/core/alert/alert.service';
@@ -15,7 +15,7 @@ export class CreateChecklistService {
 
     private readonly getChecklistURL = `${environment.url}/CkCheckList/all`
     private readonly saveChecklistURL = `${environment.url}/CkCheckList/save`
-    // private readonly saveWidgetListURL = `${environment.url}/Dashboard/saveWidget`
+    private readonly updatePriorityListURL = `${environment.url}/CkCheckList/updateCheckPointPriority`
     // private readonly deleteDashboardListURL = `${environment.url}/Dashboard/delete`
   
     
@@ -61,12 +61,13 @@ export class CreateChecklistService {
           id: this.user.id,
           tenantId: this.user.tenantId,
 
-          checkpoints: {
+          checklist: {
             cLId: checklist.cLId,
             title: checklist.title,
             description: checklist.description,
             checkpoints: checklist.checkpoints
           }
+
         };
         return this._httpClient.post<Checklist[]>(this.saveChecklistURL, data).pipe(
           tap(() => {
@@ -75,4 +76,7 @@ export class CreateChecklistService {
           
         );
       }
+
+
+    
 }
