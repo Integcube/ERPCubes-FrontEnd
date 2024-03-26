@@ -63,6 +63,7 @@ import { TrashModule } from '../trash/trash.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { LeadListViewComponent } from './lead-list-view/lead-list-view.component';
+import { ExecuteDialogComponent } from './lead-detail/lead-info/execute-dialog/execute-dialog.component';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { LeadListViewComponent } from './lead-list-view/lead-list-view.component
     LeadStatusComponent,
     LeadRestoreComponent,
     LeadScoreComponent,
-    LeadListViewComponent
+    LeadListViewComponent,
+    ExecuteDialogComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),

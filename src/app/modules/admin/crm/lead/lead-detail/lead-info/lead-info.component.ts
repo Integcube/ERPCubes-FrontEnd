@@ -15,6 +15,7 @@ import { LeadScoreComponent } from '../lead-score/lead-score.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
+import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   constructor(private _formBuilder: FormBuilder,
     private _leadService: LeadService,
     private _userService: UserService,
-
+    private _dialog:MatDialog,
     private _changeDetectorRef: ChangeDetectorRef,
     private _matDialog: MatDialog,
     private _fuseConfirmationService: FuseConfirmationService,
@@ -234,5 +235,16 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
-
+  openpop()
+  {
+    this._leadService.getcheckpoint(this.selectedLead.leadId).subscribe();
+      this._dialog.open(ExecuteDialogComponent, {
+        height: '100%',
+        width: '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        autoFocus: false,
+       
+      });
+  }
 }
