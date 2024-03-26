@@ -35,12 +35,14 @@ import { SharedModule } from 'app/shared/shared.module';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuillModule } from 'ngx-quill';
 import { ExecuteChecklistComponent } from './execute-checklist.component';
+import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
 
 
 
 @NgModule({
   declarations: [
-    ExecuteChecklistComponent
+    ExecuteChecklistComponent,
+    ExecuteDialogComponent
 
   ],
   imports: [

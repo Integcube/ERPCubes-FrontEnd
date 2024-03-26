@@ -1,0 +1,117 @@
+<div class="flex flex-auto w-full h-full overflow-hidden">
+
+<!-- 
+        <div class="flex items-center mb-2 sm:mt-0 ">
+            <div class="flex-auto">
+                <search-bar></search-bar>
+                
+            </div>
+        <div class="flex justify-end">
+            <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Tasks'"
+                (click)="addTask()">
+                <mat-icon
+                class="icon-size-5"
+                   [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                <span class="hidden sm:inline-block ml-2">New</span>
+            </button>
+        </div>
+    </div> -->
+
+        <div class="text-3xl font-bold tracking-tight leading-none">Checklists</div>
+
+        
+   
+        
+        <div class="relative">
+                <ng-container *ngIf="checklist.checkpoints.length">
+                    <ng-container *ngFor="let checklist of checklist.checkpoints">
+                        <fuse-card class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow-md"
+                            >                  
+                                <div class="flex flex-row items-center justify-between p-2">
+                                    <div class="flex flex-row items-center justify-center">
+                                        
+                                        <button mat-icon-button (click)="$event.stopPropagation()" (click)="toggleStatus(checklist.cPId, checklist.status)">
+                                            <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{
+                                                'text-red-300' : checklist.status === 4,
+                                                'text-yellow-300': checklist.status === 3,
+                                                ' text-green-300 ': checklist.status === 1,
+                                                ' text-blue-300'  : checklist.status === 2}">
+                                            </mat-icon>
+                                        </button>
+                                        <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1">
+                                            {{checklist.description}}
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-row  justify-between dark:bg-transparent gap-2">
+                                        <!-- Added user avatar here -->
+                                        <!-- <span class="flex items-center">
+                                            <img *ngIf="task.assignedUser && task.assignedUser.avatar" class="object-cover w-8 h-8 rounded-full" [src]="task.assignedUser.avatar" alt="User Avatar" />
+                                            <div *ngIf="!task.assignedUser || !task.assignedUser.avatar" class="flex items-center justify-center w-8 h-8 rounded-full text-sm uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                {{task.assignedUser ? task.assignedUser.firstName.charAt(0) : 'NA'}}
+                                            </div>
+                                        </span> -->
+                                        <!-- End of user avatar -->
+                                        <div class="flex flex-row justify-between py-3 px-0">
+                                            <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
+                                                [ngClass]="{
+                                                    'bg-red-200 text-red-800 dark:bg-red-600 dark:text-red-50': checklist.status === 4,
+                                                    'bg-yellow-200 text-yellow-800 dark:bg-yellow-600 dark:text-yellow-50': checklist.status === 3,
+                                                    'bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50': checklist.status === 1,
+                                                    'bg-blue-200 text-blue-800 dark:bg-blue-600 dark:text-green-50': checklist.status === 2
+                                                }">
+                                                <span class="leading-relaxed whitespace-nowrap">{{checklist.statusTitle}}</span>
+                                              
+                                            </span>
+                                              <!-- Expert -->
+                                          
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                                <mat-icon svgIcon="heroicons_solid:flag" [ngClass]="{
+                                                    'text-red-600': checklist.priority === 1,
+                                                    'text-yellow-400': checklist.priority === 2,
+                                                    'text-green-500': checklist.priority === 3
+                                                }"></mat-icon>
+                                            </span>
+                                            <mat-menu #actionMenu="matMenu">
+                                              <button mat-menu-item (click)="togglePriority(checklist.cPId, checklist.priority, 1)">
+                                                <mat-icon svgIcon="heroicons_solid:flag" class="text-red-600"></mat-icon> High
+                                              </button>
+                                              <button mat-menu-item (click)="togglePriority(checklist.cPId, checklist.priority, 2)">
+                                                <mat-icon svgIcon="heroicons_solid:flag" class="text-yellow-400"></mat-icon> Medium
+                                              </button>
+                                              <button mat-menu-item (click)="togglePriority(checklist.cPId, checklist.priority, 3)">
+                                                <mat-icon svgIcon="heroicons_solid:flag" class="text-green-500"></mat-icon> Low
+                                              </button>
+                                            </mat-menu>
+                                          </div>
+                                          
+                                    </div>
+                                </div>               
+                        </fuse-card>
+                    </ng-container>
+                </ng-container>  
+    
+
+        </div>
+
+
+
+    <!-- <div class="flex  border-t justify-end gap-4 pt-3">
+        <button mat-stroked-button class="h-8" (click)="closeDialog()">
+            <span class="inline-flex items-center justify-between w-full leading-5">
+                <span class="ml-1 text-xs">Cancel</span>
+            </span>
+        </button> -->
+
+
+    <!-- <button mat-stroked-button class="h-8 primary-2" (click)="onNextClick()" [disabled]="viewForm.invalid || viewForm.value.clId==-1">
+        <span class="inline-flex items-center justify-between w-full leading-5">
+            <span class="ml-1 text-xs">{{ activeView == 2 ? 'Save' : 'Next' }}</span>
+        </span>
+    </button> -->
+
+
+    <!-- </div> -->
+
+</div>

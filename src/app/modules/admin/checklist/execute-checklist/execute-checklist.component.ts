@@ -5,11 +5,10 @@ import { MatSort } from '@angular/material/sort';
 import { Observable, Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateChecklistService } from '../create-checklist/create-checklist.service';
-import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatTableDataSource } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
+import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
 
 @Component({
   selector: 'execute-checklist',
@@ -27,7 +26,7 @@ export class ExecuteChecklistComponent {
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
-    private _checklistService: CreateChecklistService,
+    private _dialog: MatDialog
 
   ) { }
   dataSource: MatTableDataSource<Checklist>;
@@ -40,18 +39,18 @@ export class ExecuteChecklistComponent {
   checklists: Checklist[];
   selection = new SelectionModel<Checklist>(true, []);
   ngOnInit(): void {
-    this.dataSource = new MatTableDataSource<Checklist>([]);
-    this.checklists$ = this._checklistService.checklists$;
-    this._checklistService.checklists$.subscribe((checklists) => {
-      this.checklistCount = checklists.length;
-      this.dataSource.data = checklists;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    // this.dataSource = new MatTableDataSource<Checklist>([]);
+    // this.checklists$ = this._checklistService.checklists$;
+    // this._checklistService.checklists$.subscribe((checklists) => {
+    //   this.checklistCount = checklists.length;
+    //   this.dataSource.data = checklists;
+    //   this.dataSource.paginator = this.paginator;
+    //   this.dataSource.sort = this.sort;
   
-      this._changeDetectorRef.markForCheck();
-    });
+    //   this._changeDetectorRef.markForCheck();
+    // });
   
-    this._checklistService.getChecklist().subscribe();
+    // this._checklistService.getChecklist().subscribe();
   }
   
 
@@ -65,4 +64,20 @@ export class ExecuteChecklistComponent {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  openChecklistDialog(selectedChecklist: Checklist): void {
+    debugger;
+    // this._dashboardService.selectedChecklist(selectedChecklist);
+    this._dialog.open(ExecuteDialogComponent, {
+      height: '100%',
+      width: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      autoFocus: false,
+      data: {
+        checklist: selectedChecklist,
+      },
+    });
+  }
+
 }
