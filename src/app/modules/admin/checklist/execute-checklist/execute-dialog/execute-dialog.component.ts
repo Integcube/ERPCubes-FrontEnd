@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { Checklist } from '../execute-checklist.type';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AssignedCheckList, AssignedCheckPoint } from '../execute-checklist.type';
+import { ExecuteChecklistService } from '../execute-checklist.service';
 
 
 
@@ -12,11 +13,19 @@ import { Checklist } from '../execute-checklist.type';
 })
 export class ExecuteDialogComponent {
 
-  checklist = new Checklist({});
+  checkPoints:AssignedCheckPoint[]=[];
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) private _data: { checklist: AssignedCheckList },
     private _matDialogRef: MatDialogRef<ExecuteDialogComponent>,
-  ) { }
+    private _checklistService:ExecuteChecklistService
+
+  ) { 
+    this._checklistService.getCheckpoint(_data.checklist.execId).subscribe(
+      data=>{this.checkPoints = [...data]
+      debugger;}
+    )
+  }
 
   closeDialog() {
     this._matDialogRef.close();

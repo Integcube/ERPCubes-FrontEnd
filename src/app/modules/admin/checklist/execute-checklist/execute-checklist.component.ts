@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Checklist } from './execute-checklist.type';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Observable, Subject } from 'rxjs';
@@ -9,16 +8,20 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UntypedFormControl } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
+import { AssignedCheckList } from './execute-checklist.type';
+import { ExecuteChecklistService } from './execute-checklist.service';
 
 @Component({
   selector: 'execute-checklist',
   templateUrl: './execute-checklist.component.html',
+  styleUrls: ['./execute-checklist.components.scss'],
+
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExecuteChecklistComponent {
 
-  displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'createdDate'];
+  displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'assignedDate'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -26,31 +29,32 @@ export class ExecuteChecklistComponent {
     private _activatedRoute: ActivatedRoute,
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
-    private _dialog: MatDialog
-
+    private _dialog: MatDialog,
+    private _checklistService:ExecuteChecklistService
   ) { }
-  dataSource: MatTableDataSource<Checklist>;
+  dataSource: MatTableDataSource<AssignedCheckList>;
   checklistCount: number = 0;
-  selectedChecklist: Checklist;
-  checklist: Checklist;
+  selectedChecklist: AssignedCheckList;
+  checklist: AssignedCheckList;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
 
-  checklists$: Observable<Checklist[]>;
-  checklists: Checklist[];
-  selection = new SelectionModel<Checklist>(true, []);
+  checklists$: Observable<AssignedCheckList[]>;
+  checklists: AssignedCheckList[];
+  selection = new SelectionModel<AssignedCheckList>(true, []);
   ngOnInit(): void {
-    // this.dataSource = new MatTableDataSource<Checklist>([]);
-    // this.checklists$ = this._checklistService.checklists$;
-    // this._checklistService.checklists$.subscribe((checklists) => {
-    //   this.checklistCount = checklists.length;
-    //   this.dataSource.data = checklists;
-    //   this.dataSource.paginator = this.paginator;
-    //   this.dataSource.sort = this.sort;
+    this.dataSource = new MatTableDataSource<AssignedCheckList>([]);
+    this.checklists$ = this._checklistService.checkList$;
+    this._checklistService.checkList$.subscribe((checklists) => {
+      debugger;
+      this.checklistCount = checklists.length;
+      this.dataSource.data = checklists;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+
+      this._changeDetectorRef.markForCheck();
+    });
   
-    //   this._changeDetectorRef.markForCheck();
-    // });
-  
-    // this._checklistService.getChecklist().subscribe();
+    this._checklistService.getChecklist().subscribe();
   }
   
 
@@ -65,10 +69,9 @@ export class ExecuteChecklistComponent {
     }
   }
 
-  openChecklistDialog(selectedChecklist: Checklist): void {
-    debugger;
-    // this._dashboardService.selectedChecklist(selectedChecklist);
+  openChecklistDialog(selectedChecklist: AssignedCheckList): void {
     this._dialog.open(ExecuteDialogComponent, {
+      panelClass: 'no-padding-dialog',
       height: '100%',
       width: '100%',
       maxWidth: '100%',
