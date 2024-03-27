@@ -75,7 +75,7 @@ export class CreateChecklistComponent implements OnInit {
       if (!row) {
         return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
       }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.cLId + 1}`;
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.clId + 1}`;
     }
   
     addChecklist(){
@@ -105,6 +105,7 @@ export class CreateChecklistComponent implements OnInit {
     }
 
     openCheckpointDialog(checklist: Checklist){
+        debugger;
         const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
             height: "100%",
             width: "100%",
@@ -112,12 +113,12 @@ export class CreateChecklistComponent implements OnInit {
             maxHeight: "100%",
           autoFocus: false,
           data     : {
-              note: cloneDeep(checklist)
-          }
+            checklist: cloneDeep(checklist)
+        }
         });
-        restoreDialogRef.afterClosed().subscribe((result) => {
-          this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-        });
+        // restoreDialogRef.afterClosed().subscribe((result) => {
+        //   this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        // });
     }
   
   

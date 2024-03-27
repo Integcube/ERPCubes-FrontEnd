@@ -6,7 +6,7 @@ export class DashboardView{
 }
 
 export class Checklist{
-    cLId: number;
+    clId: number;
     title: string;
     description: number;
     createdDate: Date;
@@ -14,7 +14,7 @@ export class Checklist{
     createdBy: string;
     checkpoints: CheckPoint[];
     constructor(reg){
-        this.cLId = reg.cLId?reg.cLId:-1;
+        this.clId = reg.clId?reg.clId:-1;
         this.checkpoints = [];
 
     }
@@ -40,6 +40,8 @@ export class CheckPoint{
         this.isRequired = reg.isRequired?reg.isRequired:0;
     }
 }
+
+
 // export class CheckPoints{
 //     cLPId: number;
 //     description: string;

@@ -16,14 +16,16 @@ export class CreateChecklistService {
     private readonly getChecklistURL = `${environment.url}/CkCheckList/all`
     private readonly saveChecklistURL = `${environment.url}/CkCheckList/save`
     private readonly updatePriorityListURL = `${environment.url}/CkCheckList/updateCheckPointPriority`
-    private readonly getcheckpointURL = `${environment.url}/CkCheckList/getcheckpoint`
+    private readonly getcheckpointURL = `${environment.url}/CkCheckList/getcheckpoints`
+    private readonly getcheckListURL = `${environment.url}/CkCheckList/getchecklist`
 
     // private readonly deleteDashboardListURL = `${environment.url}/Dashboard/delete`
   
     
   
     private _checklist: BehaviorSubject<Checklist | null> = new BehaviorSubject(null);
-    private _checklists: BehaviorSubject<Checklist[] | null> = new BehaviorSubject([]);
+    private _checkList: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
+    private _checklists: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
     private _checkpoint: BehaviorSubject<CheckPoint[] | null> = new BehaviorSubject([]);
 
     user: User;
@@ -43,24 +45,27 @@ export class CreateChecklistService {
     }
     get Checkpoint$(): Observable<CheckPoint[]> {
         return this._checkpoint.asObservable();
+    }
+    get CheckList$(): Observable<any[]> {
+        return this._checkList.asObservable();
       }
-    selectedChecklistCheckpoint$ = this.checklist$.pipe(
-        switchMap((checklist) => {
-          if (checklist.cLId != -1) {
-            return this._httpClient.post<CheckPoint[]>(this.getcheckpointURL, {
-              id: this.user.id,
-              tenantId: this.user.tenantId,
-              cLId: checklist.cLId
-            }).pipe(
-              debounceTime(300),
-            )
-          }
-          else {
-            return of([]);
-          }
-        }),
+    // selectedChecklistCheckpoint$ = this.checklist$.pipe(
+    //     switchMap((checklist) => {
+    //       if (checklist.cLId != -1) {
+    //         return this._httpClient.post<CheckPoint[]>(this.getcheckpointURL, {
+    //           id: this.user.id,
+    //           tenantId: this.user.tenantId,
+    //           cLId: checklist.cLId
+    //         }).pipe(
+    //           debounceTime(300),
+    //         )
+    //       }
+    //       else {
+    //         return of([]);
+    //       }
+    //     }),
         
-    )
+    // )
 
     selectedChecklist(selectedChecklist: Checklist) {
       this._checklist.next(selectedChecklist);
@@ -74,6 +79,7 @@ export class CreateChecklistService {
       }
       return this._httpClient.post<Checklist[]>(this.getChecklistURL, data).pipe(
         tap((checklists) => {
+            debugger;
           this._checklists.next(checklists);
         }),
         
@@ -87,7 +93,7 @@ export class CreateChecklistService {
           tenantId: this.user.tenantId,
 
           checklist: {
-            cLId: checklist.cLId,
+            cLId: checklist.clId,
             title: checklist.title,
             description: checklist.description,
             checkpoints: checklist.checkpoints
@@ -102,12 +108,12 @@ export class CreateChecklistService {
         );
       }
 
-      getcheckpoint(clId:number,execId:number): Observable<CheckPoint[]> {
+      getcheckpoint(cLId:number): Observable<CheckPoint[]> {
+        debugger;
         let data = {
           id: this.user.id,
           tenantId: this.user.tenantId,
-          clId:clId,
-          execId:execId
+          cLId:cLId,
         }
         return this._httpClient.post<CheckPoint[]>(this.getcheckpointURL, data).pipe(
           tap((response) => {
@@ -119,6 +125,7 @@ export class CreateChecklistService {
       }
 
       getChecklistById(id: number): Observable<Checklist> {
+        debugger;
         return this._checklists.pipe(
           take(1),
           map((checklists) => {
@@ -141,5 +148,7 @@ export class CreateChecklistService {
           })
         );
       }
+
+      
     
 }
