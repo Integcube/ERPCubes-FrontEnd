@@ -318,3 +318,12 @@ export class Attachment {
     type: string;
     size: number;
 }
+
+export class Assign{
+    title: string;
+    cLId: number;
+    dueDays: number;
+    isRequired: number;
+    cPId:number;
+    dueDate:Date
+}

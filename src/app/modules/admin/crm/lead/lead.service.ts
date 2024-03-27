@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/
 import { UserService } from 'app/core/user/user.service';
 import { Pagination, PaginationView, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
-import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead, Attachment } from './lead.type';
+import { Activity, Call, Email, Industry, Lead, LeadCustomList, LeadFilter, LeadSource, LeadStatus, Note, Product, Tag, TaskModel, Tasks, Meeting, LeadImportList, EventType, Campaign, StatusWiseLeads, DeletedLead, Attachment, Assign } from './lead.type';
 import { ContactEnum } from 'app/core/enum/crmEnum';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertService } from 'app/core/alert/alert.service';
@@ -67,6 +67,7 @@ export class LeadService {
   private readonly bulkdelete = `${environment.url}/Lead/bulkdelete`
   private readonly bulkchangestatusurl = `${environment.url}/Lead/bulkchangestatus`
   private readonly bulkassignleadsUrl = `${environment.url}/Lead/bulkassignleads`
+  private readonly getcheckpointURL = `${environment.url}/Lead/getcheckpointss`
   
   
 
@@ -101,12 +102,10 @@ export class LeadService {
   private _statusWiseLeads: BehaviorSubject<StatusWiseLeads[] | null> = new BehaviorSubject(null);
   private _calculateleadScore: BehaviorSubject<any|null> = new BehaviorSubject(null);
   private _leadAttachments: BehaviorSubject<Attachment[] | null> = new BehaviorSubject(null);
- 
   private _pagination: BehaviorSubject<Pagination | null> = new BehaviorSubject(null);
   private _paginationview: BehaviorSubject<PaginationView | null> = new BehaviorSubject<PaginationView | null>(new PaginationView({}));
-  
   private _selectedLeads: BehaviorSubject<SelectionModel<Lead>> = new BehaviorSubject<SelectionModel<Lead>>(new SelectionModel<Lead>(true, []));
-
+  private _checkpoint: BehaviorSubject<Assign[] | null> = new BehaviorSubject([]);
   private contactEnumInstance: ContactEnum;
   constructor(
     private _userService: UserService,
@@ -326,7 +325,9 @@ export class LeadService {
     this._selectedLeads.next(selected);
   }
   
-
+  get Checkpoint$(): Observable<Assign[]> {
+    return this._checkpoint.asObservable();
+  }
   getCampaigns(): Observable<Campaign[]> {
     let data = {
       id: this.user.id,
@@ -1307,5 +1308,18 @@ export class LeadService {
   ];
     this._excelService.exportToExcel(this._leads.value, this.HeaderConfig, 'Leads.xlsx');
       }
+
+getcheckpoint(leadId:number): Observable<Assign[]> {
+  let data = {
+    id: this.user.id,
+    tenantId: this.user.tenantId,
+    contactId:leadId
+  }
+  return this._httpClient.post<Assign[]>(this.getcheckpointURL, data).pipe(
+    tap((response) => {
+      this._checkpoint.next(response);
+    }),
+  );
+}
 }
 
