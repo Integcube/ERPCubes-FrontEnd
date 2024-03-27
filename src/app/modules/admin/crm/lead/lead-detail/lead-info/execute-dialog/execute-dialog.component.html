@@ -1,21 +1,74 @@
-<div class="flex flex-auto w-full h-full overflow-hidden">
-
-<!-- 
-        <div class="flex items-center mb-2 sm:mt-0 ">
-            <div class="flex-auto">
-                <search-bar></search-bar>
-                
-            </div>
-        <div class="flex justify-end">
-            <button mat-flat-button  class="text-xs h-8 primary-2" [matTooltip]="'Create New Tasks'"
-                (click)="addTask()">
-                <mat-icon
-                class="icon-size-5"
-                   [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                <span class="hidden sm:inline-block ml-2">New</span>
-            </button>
+<div class="flex flex-col flex-auto w-full h-full overflow-hidden bg-default px-4">
+    <div class="flex flex-col gap-2 sm:flex-col items-end p-6 sm:py-4 md:px-8 border-b">
+        <div class="flex gap-1 items-center" (click)="closeDialog()">
+            <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
+            <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Back to Lead</div>
         </div>
-    </div> -->
+    </div>
+  
+<div class="flex w-full">
+    <div class="text-3xl font-bold tracking-tight leading-none py-4">Checkpoints</div>
+</div>
+    <div class="flex w-full flex-col flex-auto">
+        <ng-container *ngIf="(checkpoints$ | async) as checkpoint" >
+            <ng-container  *ngIf="checkpoint && checkpoint.length;">
+            <ng-container *ngFor="let cp of checkpoint">
+                <fuse-card
+                    class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow-md">
+                    <div class="flex flex-row items-center justify-between p-1">
+                        <div class="flex flex-row items-center justify-start max-w-3/4 w-3/4  min-w-3/4">
+
+                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                (click)="toggleStatus(cp)" >
+                                <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{
+                                                                        ' text-green-700 ': cp.status === 1,
+                                                                        ' text-red-500'  : cp.status === 0}">
+                                </mat-icon>
+                            </button>
+                            <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1 min-w-2/4 max-w-2/4 w-2/4">
+                                {{cp.title}}
+                            </div>
+                            <!-- <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
+                                {{cp.description}}
+                            </div> -->
+                        </div>
+                        
+                        <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
+                            <span class="text-xs text-secondary font-light"></span>
+                            Required {{cp.isRequired}}  
+                        </div>
+                        <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
+                            <span class="text-xs text-secondary font-light"></span>
+                                {{cp.dueDays}}  days
+                        </div>
+                        <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
+                            <span class="text-xs text-secondary font-light"></span>
+                                {{cp.dueDate|date}}
+                        </div>
+                        <div class="flex flex-row  justify-between dark:bg-transparent gap-2 w-auto">
+                            <div class="flex items-center">
+                                <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                    <mat-icon svgIcon="heroicons_solid:flag" [ngClass]="{
+                                                                            'text-red-600': cp.priority === 1,
+                                                                            'text-yellow-400': cp.priority === 2,
+                                                                            'text-green-500': cp.priority === 3
+                                                                        }"></mat-icon>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </fuse-card>
+            </ng-container>
+        </ng-container>
+        </ng-container>
+   
+
+    </div>
+
+</div>
+<!-- 
+<div class="flex flex-auto w-full h-full overflow-hidden">
 
         <div class="text-3xl font-bold tracking-tight leading-none">Checklists</div>
 
@@ -43,14 +96,7 @@
                                         </div>
                                     </div>
                                     <div class="flex flex-row  justify-between dark:bg-transparent gap-2">
-                                        <!-- Added user avatar here -->
-                                        <!-- <span class="flex items-center">
-                                            <img *ngIf="task.assignedUser && task.assignedUser.avatar" class="object-cover w-8 h-8 rounded-full" [src]="task.assignedUser.avatar" alt="User Avatar" />
-                                            <div *ngIf="!task.assignedUser || !task.assignedUser.avatar" class="flex items-center justify-center w-8 h-8 rounded-full text-sm uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                {{task.assignedUser ? task.assignedUser.firstName.charAt(0) : 'NA'}}
-                                            </div>
-                                        </span> -->
-                                        <!-- End of user avatar -->
+                                   
                                         <div class="flex flex-row justify-between py-3 px-0">
                                             <span class="inline-flex items-center font-bold text-xs px-2.5 py-0.5 rounded-full tracking-wide"
                                                 [ngClass]="{
@@ -62,7 +108,7 @@
                                                 <span class="leading-relaxed whitespace-nowrap">{{checklist.statusTitle}}</span>
                                               
                                             </span>
-                                              <!-- Expert -->
+                                            
                                           
                                         </div>
                                         <div class="flex items-center">
@@ -97,7 +143,7 @@
 
 
 
-    <!-- <div class="flex  border-t justify-end gap-4 pt-3">
+    <div class="flex  border-t justify-end gap-4 pt-3">
         <button mat-stroked-button class="h-8" (click)="closeDialog()">
             <span class="inline-flex items-center justify-between w-full leading-5">
                 <span class="ml-1 text-xs">Cancel</span>
@@ -112,6 +158,6 @@
     </button> -->
 
 
-    <!-- </div> -->
+    <!-- </div> 
 
-</div>
+</div> -->

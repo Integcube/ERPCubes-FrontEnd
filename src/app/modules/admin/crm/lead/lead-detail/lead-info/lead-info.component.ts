@@ -17,7 +17,6 @@ import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
 import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
 
-
 @Component({
   selector: 'app-lead-info',
   templateUrl: './lead-info.component.html',
@@ -25,7 +24,6 @@ import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.componen
   changeDetection:ChangeDetectionStrategy.OnPush
 
 })
-
 
 export class LeadInfoComponent implements OnInit, OnDestroy {
   user: User;
@@ -244,7 +242,9 @@ export class LeadInfoComponent implements OnInit, OnDestroy {
         maxWidth: '100%',
         maxHeight: '100%',
         autoFocus: false,
-       
+        data: {
+          selected: this.selectedLead, 
+        }
       });
   }
 }

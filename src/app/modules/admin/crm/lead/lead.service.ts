@@ -68,7 +68,7 @@ export class LeadService {
   private readonly bulkchangestatusurl = `${environment.url}/Lead/bulkchangestatus`
   private readonly bulkassignleadsUrl = `${environment.url}/Lead/bulkassignleads`
   private readonly getcheckpointURL = `${environment.url}/Lead/getcheckpointss`
-  
+  private readonly saveStatusUrl = `${environment.url}/Lead/setstatus`
   
 
   user: User;
@@ -325,7 +325,7 @@ export class LeadService {
     this._selectedLeads.next(selected);
   }
   
-  get Checkpoint$(): Observable<Assign[]> {
+  get checkpoint$(): Observable<Assign[]> {
     return this._checkpoint.asObservable();
   }
   getCampaigns(): Observable<Campaign[]> {
@@ -1319,6 +1319,22 @@ getcheckpoint(leadId:number): Observable<Assign[]> {
     tap((response) => {
       this._checkpoint.next(response);
     }),
+  );
+}
+
+setStatus(statusId:number, cpId:number, contactId:number){  
+  let data = {
+    id: this.user.id,
+    tenantId: this.user.tenantId,
+    cpId:cpId,
+    contactId:contactId,
+    statusId:statusId,
+    contactTypeId:1,
+  }
+  return this._httpClient.post<any[]>(this.saveStatusUrl, data).pipe(
+    tap((checkpints) => {
+
+    }), 
   );
 }
 }

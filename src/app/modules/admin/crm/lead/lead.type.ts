@@ -323,7 +323,8 @@ export class Assign{
     title: string;
     cLId: number;
     dueDays: number;
-    isRequired: number;
+    isRequired: string;
     cPId:number;
-    dueDate:Date
+    dueDate:Date;
+    priority:number;
 }
