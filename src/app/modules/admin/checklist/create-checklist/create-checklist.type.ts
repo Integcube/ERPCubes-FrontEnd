@@ -11,7 +11,6 @@ export class Checklist{
     description: number;
     createdDate: Date;
     modifiedDate: Date;
-    isHovered: boolean;
     createdBy: string;
     checkpoints: CheckPoint[];
     constructor(reg){

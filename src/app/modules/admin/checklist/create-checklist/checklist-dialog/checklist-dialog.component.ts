@@ -1,9 +1,9 @@
-import { Component, ElementRef, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { CheckPoint, Checklist, DashboardView } from '../create-checklist.type';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CreateChecklistService } from '../create-checklist.service';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, combineLatest, map, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -15,6 +15,9 @@ import { Subject, takeUntil } from 'rxjs';
 export class ChecklistDialogComponent {
   @ViewChildren('newCheckInput') newCheckInputs: QueryList<ElementRef>;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  checkpointChanged: Subject<Checklist> = new Subject<Checklist>();
+
   showDueDaysArray: boolean[] = [];
   showIsRequiredArray: boolean[] = [];
   showPriorityArray: boolean[] = [];
@@ -44,18 +47,64 @@ export class ChecklistDialogComponent {
       icon: 'feather:check',
     }
   ];
+
+
+  checklistWithData$ = combineLatest([
+    this._checklistService.checklist$,
+    this._checklistService.selectedChecklistCheckpoint$,
+  ]).pipe(
+    map(([checklist, checkpoints]) => ({
+      ...checklist,
+      checkpoints: checkpoints
+    })),
+  );
   constructor(private _formBuilder: UntypedFormBuilder,
     private _matDialogRef: MatDialogRef<ChecklistDialogComponent>,
     private _checklistService: CreateChecklistService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    @Inject(MAT_DIALOG_DATA) private _data: { checklist: Checklist },
+
   ) { }
 
   ngOnInit(): void {
+    debugger;
+    if (this._data.checklist.cLId) {
+      this._checklistService.getChecklistById(this._data.checklist.cLId).pipe(
+        takeUntil(this._unsubscribeAll),
+      ).subscribe(
+        (data) => {
+          this._changeDetectorRef.markForCheck();
+        },
+        error => {
+          console.error("Error fetching data: ", error);
+        }
+      );
+      this.checklistWithData$.pipe(
+        takeUntil(this._unsubscribeAll),
+      ).subscribe(
+        (data) => {
+          this.checklist = {
+            cLId: data.cLId,
+            title: data.title,
+            description: data.description,
+            createdBy: data.createdBy,
+            createdDate: data.createdDate,
+            modifiedDate:data.modifiedDate,
+            checkpoints: data.checkpoints,
+          };
+          this._changeDetectorRef.markForCheck();
+        },
+        error => {
+          console.error("Error fetching data: ", error);
+        }
+      );
+    }
          
-    this.viewForm = this._formBuilder.group({
-        cLId: [-1, Validators.required],
-        title: ['', Validators.required],
-        description: ['']
-    });
+    // this.viewForm = this._formBuilder.group({
+    //     cLId: [-1, Validators.required],
+    //     title: ['', Validators.required],
+    //     description: ['']
+    // });
 
   }
 
@@ -73,7 +122,7 @@ export class ChecklistDialogComponent {
   }
   prepareChecklistData(): any {
     // Filter out empty checkpoints
-    const filteredCheckpoints = this.checklist.checkpoints.filter(checkpoint => checkpoint.description.trim() !== '');
+    const filteredCheckpoints = this.checklist.checkpoints.filter(checkpoint => checkpoint.title.trim() !== '');
   
     // Prepare the checklist data
     const requestData = {
@@ -90,7 +139,7 @@ export class ChecklistDialogComponent {
             checkpoint.dueDays = -1;
           }
           return {
-            description: checkpoint.description,
+            title: checkpoint.title,
             dueDays: checkpoint.dueDays,
             priority: checkpoint.priority,
             isRequired: checkpoint.isRequired ? 1 : 0
@@ -167,5 +216,12 @@ export class ChecklistDialogComponent {
     return !!this.showPriorityArray[index];
   }
 
+  removeCheckpoint(checkpoint: CheckPoint): void {
+    // Remove the task
+    this.checklist.checkpoints = this.checklist.checkpoints.filter(item => item.description !== checkpoint.description);
+
+    // Update the note
+    this.checkpointChanged.next(this.checklist);
+  }
 
   }

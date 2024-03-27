@@ -134,20 +134,20 @@
                 <div class="flex text-xl font-semibold flex-col justify-start">
                     Checklists
                 </div>
-                <div class="justify-end" *ngIf="!hideAddButton">
-                    <button class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist(); hideAddButton = true" [matTooltip]="'Add New Checklist '">
+                <div class="justify-end">
+                    <button *ngIf="!hideAddButton || checklist.checkpoints.length === 0" class="ml-4 h-8 primary-2" mat-flat-button (click)="addChecklist(); hideAddButton = true" [matTooltip]="'Add New Checklist '">
                         <mat-icon [svgIcon]="'heroicons_outline:clipboard-list'" class="icon-size-5"></mat-icon>
                         <span class="ml-2 text-xs" i18n>Add Checklist</span>
                     </button>
                 </div>
             </div>
-            <div class="flex flex-auto flex-col" style="max-height: 400px;" fuseScrollbar> <!-- Set max-height as needed -->
+            <div class="flex flex-auto flex-col" style="max-height: 400px;" fuseScrollbar>
                 <div class="flex flex-col items-center gap-5 mt-10" *ngIf="checklist.checkpoints.length">
                     <ng-container *ngFor="let check of checklist.checkpoints; let i = index">
                         <div class="flex items-center w-full">
                             <mat-icon class="-ml-0.5 icon-size-5 text-hint" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                             <input class="w-full ml-1.5 px-1 py-0.5" placeholder="'Click Enter to Save'"
-                                [(ngModel)]="check.description" (keydown.enter)="addChecklist(); showFields(i)"
+                                [(ngModel)]="check.title" (keydown.enter)="addChecklist(); showFields(i)"
                                 #newCheckInput i18n-placeholder>
                             <div [ngClass]="{'ml-2': showDueDays(i)}">
                                 <input *ngIf="showDueDays(i)" type="text" [(ngModel)]="check.dueDays" placeholder="Due days" class="w-14 py-0.5">
@@ -178,6 +178,8 @@
                                     </button>
                                 </mat-menu>
                             </div>
+                            <mat-icon class="group-hover:flex ml-auto icon-size-3 cursor-pointer " [svgIcon]="'heroicons_solid:x'"
+                                (click)="removeCheckpoint(check)"></mat-icon>
                         </div>
                     </ng-container>
                 </div>
@@ -190,6 +192,7 @@
                 </div>
             </div>
         </div>
+        
         
         
         <div class="flex border-t justify-end gap-4 p-6">

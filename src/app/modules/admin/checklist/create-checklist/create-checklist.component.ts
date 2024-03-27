@@ -103,6 +103,22 @@ export class CreateChecklistComponent implements OnInit {
         this.dataSource.paginator.firstPage();
       }
     }
+
+    openCheckpointDialog(checklist: Checklist){
+        const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
+            height: "100%",
+            width: "100%",
+            maxWidth: "100%",
+            maxHeight: "100%",
+          autoFocus: false,
+          data     : {
+              note: cloneDeep(checklist)
+          }
+        });
+        restoreDialogRef.afterClosed().subscribe((result) => {
+          this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        });
+    }
   
   
   
