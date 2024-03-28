@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class ExecuteChecklistService {
   private readonly getCheckListUrl = `${environment.url}/CkCheckList/getExecutionCheckList`
   private readonly getCheckPointUrl = `${environment.url}/CkCheckList/getExecutionCheckPoint`
-  private readonly saveStatusUrl = `${environment.url}/CkCheckList/saveCheckPointStatus`
+  private readonly saveStatusUrl = `${environment.url}/CkCheckList/setcheckpointstatus`
 
   private _checklists: BehaviorSubject<AssignedCheckList[] | null> = new BehaviorSubject([]);
   private _checkpoints: BehaviorSubject<AssignedCheckPoint[] | null> = new BehaviorSubject([]);
@@ -50,6 +50,7 @@ export class ExecuteChecklistService {
       tenantId: this.user.tenantId,
       execId:execId
     }
+    debugger
     return this._httpClient.post<AssignedCheckPoint[]>(this.getCheckPointUrl, data).pipe(
       tap((checkpints) => {
         this._checkpoints.next(checkpints);
@@ -67,6 +68,7 @@ export class ExecuteChecklistService {
       cpId:checkPointId,
       statusId:statusId,
     }
+    debugger;
     return this._httpClient.post<AssignedCheckPoint[]>(this.saveStatusUrl, data).pipe(
       tap((checkpints) => {
         this._checkpoints.next(checkpints);
