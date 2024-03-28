@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
         <div class="flex gap-1 items-center" (click)="closeDialog()">
             <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
-            <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Back to Execute</div>
+            <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Back to List</div>
         </div>
     </div>
 <div class="flex w-full">
@@ -17,12 +17,10 @@
                         <div class="flex flex-row items-center justify-start max-w-3/4 w-3/4  min-w-3/4">
 
                             <button mat-icon-button (click)="$event.stopPropagation()"
-                                (click)="toggleStatus(cp.cPId, cp.status)">
+                                (click)="toggleStatus(cp)" >
                                 <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{
-                                                                        'text-red-300' : cp.status === 4,
-                                                                        'text-yellow-300': cp.status === 3,
-                                                                        ' text-green-300 ': cp.status === 1,
-                                                                        ' text-blue-300'  : cp.status === 2}">
+                                                                        ' text-green-700 ': cp.status === 1,
+                                                                        ' text-red-500'  : cp.status === 0}">
                                 </mat-icon>
                             </button>
                             <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1 min-w-2/4 max-w-2/4 w-2/4">
