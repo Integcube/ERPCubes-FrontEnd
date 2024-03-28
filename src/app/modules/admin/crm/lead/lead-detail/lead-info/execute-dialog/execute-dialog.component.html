@@ -1,4 +1,4 @@
-<div class="flex flex-col flex-auto w-full h-full overflow-hidden bg-default px-4">
+<div class="flex flex-col flex-auto w-full h-full overflow-hidden  px-4">
     <div class="flex flex-col gap-2 sm:flex-col items-end p-6 sm:py-4 md:px-8 border-b">
         <div class="flex gap-1 items-center" (click)="closeDialog()">
             <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
@@ -14,7 +14,7 @@
             <ng-container  *ngIf="checkpoint && checkpoint.length;">
             <ng-container *ngFor="let cp of checkpoint">
                 <fuse-card
-                    class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow-md">
+                    class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow-md bg-default">
                     <div class="flex flex-row items-center justify-between p-1">
                         <div class="flex flex-row items-center justify-start max-w-3/4 w-3/4  min-w-3/4">
 
@@ -55,7 +55,6 @@
                                                                         }"></mat-icon>
                                 </span>
                             </div>
-
                         </div>
                     </div>
                 </fuse-card>

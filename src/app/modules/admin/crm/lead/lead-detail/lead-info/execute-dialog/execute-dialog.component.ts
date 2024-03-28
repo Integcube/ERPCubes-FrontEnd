@@ -7,7 +7,6 @@ import { Subject, takeUntil } from 'rxjs';
   selector: 'execute-dialog',
   templateUrl: './execute-dialog.component.html',
   styleUrls: ['./execute-dialog.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 
 
