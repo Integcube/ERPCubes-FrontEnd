@@ -75,7 +75,7 @@ export class CreateChecklistComponent implements OnInit {
       if (!row) {
         return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
       }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.clId + 1}`;
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.cLId + 1}`;
     }
   
     addChecklist(){
