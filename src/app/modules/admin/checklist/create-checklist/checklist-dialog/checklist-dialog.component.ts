@@ -10,7 +10,7 @@ import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
   selector: 'checklist-dialog',
   templateUrl: './checklist-dialog.component.html',
   styleUrls: ['./checklist-dialog.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+
 })
 export class ChecklistDialogComponent {
   @ViewChildren('newCheckInput') newCheckInputs: QueryList<ElementRef>;
