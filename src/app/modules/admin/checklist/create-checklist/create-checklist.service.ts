@@ -87,19 +87,19 @@ export class CreateChecklistService {
     }
 
     saveChecklist(checklist: Checklist): Observable<any> {
-        debugger;
         let data = {
           id: this.user.id,
           tenantId: this.user.tenantId,
 
           checklist: {
-            cLId: checklist.clId,
+            cLId: checklist.cLId,
             title: checklist.title,
             description: checklist.description,
             checkpoints: checklist.checkpoints
           }
 
         };
+        debugger;
         return this._httpClient.post<Checklist[]>(this.saveChecklistURL, data).pipe(
           tap(() => {
             this.getChecklist().subscribe();
