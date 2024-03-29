@@ -96,12 +96,14 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
     );
   }
 
-  getcheckpoint(clId:number,execId:number): Observable<Assign[]> {
+  getcheckpoint(clId:number,execId:number, userId:string,): Observable<Assign[]> {
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
       clId:clId,
-      execId:execId
+      execId:execId,
+      userId:userId
+      
     }
     return this._httpClient.post<Assign[]>(this.getcheckpointURL, data).pipe(
       tap((response) => {
@@ -128,12 +130,14 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
   }
 
   assignCheckPoint(form: any,List:Assign[]) {
+    debugger
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
       cLId:form.clId,
       remarks:form.remarks,
       execId:form.execId,
+      referenceno:form.referenceno,
       List,
     }
     return this._httpClient.post<Assign[]>(this.SaveUrl, data).pipe(

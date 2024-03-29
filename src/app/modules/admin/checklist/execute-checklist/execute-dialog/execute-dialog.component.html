@@ -30,11 +30,11 @@
                         </div>
                         <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
                             <span class="text-xs text-secondary font-light"></span>
-                            Required {{cp.isRequired}}  
+                            Required {{ cp.isRequired ? 'Yes' : 'No' }}
                         </div>
                         <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
                             <span class="text-xs text-secondary font-light"></span>
-                                {{cp.dueDays}}  days
+                            {{ cp.dueDays == -1 ? '0' : cp.dueDays }} days
                         </div>
                         <div class="flex items-center flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
                             <span class="text-xs text-secondary font-light"></span>

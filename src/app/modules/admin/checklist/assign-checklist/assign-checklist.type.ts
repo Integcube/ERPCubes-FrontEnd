@@ -17,10 +17,15 @@ export class CheckListInfo{
     clId: number;
     execId:number;
     remarks: string;
+    referenceno:string;
+    userId:string;
     constructor(reg){
         this.execId = reg.execId?reg.execId:-1;
         this.clId = reg.execId?reg.execId:-1;
         this.remarks=reg.remarks?reg.remarks:"";
+        this.referenceno=reg.referenceno?reg.referenceno:"";
+        this.userId="-1";
+        
     }
 
 }

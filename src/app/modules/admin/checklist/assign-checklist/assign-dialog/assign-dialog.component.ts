@@ -51,12 +51,14 @@ export class AssignDialogComponent implements OnInit {
   
   ngOnInit(): void {
     this.checkList$ = this._assignChecklistService.CheckList$
-    debugger
       this.viewForm = this._formBuilder.group({
-        
+     
         clId: [this._data.Data.clId, Validators.required], 
         remarks: [this._data.Data.remarks],
-        execId: [this._data.Data.execId, Validators.required], 
+        execId: [this._data.Data.execId], 
+        referenceno: [this._data.Data.referenceno,Validators.required], 
+        userId: [this._data.Data.userId], 
+
       });
       this.checkpoints$.subscribe((chk: Assign[]) => {
         this.checkpoints = [...chk];
@@ -72,6 +74,7 @@ export class AssignDialogComponent implements OnInit {
     this.activeView = view;
   }
   save() {
+    debugger
     this._assignChecklistService.assignCheckPoint(this.viewForm.value,this.checkpoints).subscribe({
       next: () => {},
       error: (error) => {
@@ -96,6 +99,6 @@ export class AssignDialogComponent implements OnInit {
     this.isSelected = !this.isSelected;
   }
  loadCheckPoint() {
-     this._assignChecklistService.getcheckpoint(this.viewForm.value.clId,this.viewForm.value.execId).subscribe();
+     this._assignChecklistService.getcheckpoint(this.viewForm.value.clId,this.viewForm.value.execId,this.viewForm.value.userId).subscribe();
   }
 }

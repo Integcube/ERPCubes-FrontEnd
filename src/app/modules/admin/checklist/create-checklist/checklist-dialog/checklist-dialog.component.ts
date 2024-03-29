@@ -5,12 +5,10 @@ import { CreateChecklistService } from '../create-checklist.service';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 
-
 @Component({
   selector: 'checklist-dialog',
   templateUrl: './checklist-dialog.component.html',
   styleUrls: ['./checklist-dialog.component.scss'],
-
 })
 export class ChecklistDialogComponent {
   @ViewChildren('newCheckInput') newCheckInputs: QueryList<ElementRef>;
@@ -18,15 +16,14 @@ export class ChecklistDialogComponent {
 
   checkpointChanged: Subject<Checklist> = new Subject<Checklist>();
   private checklistSubject = new Subject<any>()
-  checklist$ = this.checklistSubject.asObservable();  
-  // checkpoints$ = this._checklistService.Checkpoint$;
+  checklist$ = this.checklistSubject.asObservable();
   checkpoints: CheckPoint[];
 
   showDueDaysArray: boolean[] = [];
   showIsRequiredArray: boolean[] = [];
   showPriorityArray: boolean[] = [];
   selectedChecklist: any;
-  isSelected=false;
+  isSelected = false;
   checklist = new Checklist({});
   viewForm: UntypedFormGroup;
   activeView = 1;
@@ -61,22 +58,11 @@ export class ChecklistDialogComponent {
 
   ) { }
 
-  ngOnInit(): void {
-    // this.checklist$ = this._checklistService.checklists$
-    // debugger;
-    // this.checklist= this._data.checklist;
-    // this._checklistService.Checkpoint$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ 
-    //   debugger
-    //   this.checklist.checkpoints =data;
-    
-    
-    // });
 
-  }
 
   toggleSelection() {
     this.isSelected = !this.isSelected;
-    }
+  }
 
   setView(view: number) {
     if (view > 1) {
@@ -87,13 +73,11 @@ export class ChecklistDialogComponent {
 
   }
   prepareChecklistData(): any {
-    // Filter out empty checkpoints
     const filteredCheckpoints = this.checklist.checkpoints.filter(checkpoint => checkpoint.title.trim() !== '');
-  
-    // Prepare the checklist data
+
     const requestData = {
       checklist: {
-        cLId: this.checklist.clId !== undefined ? this.checklist.clId : -1,
+        cLId: this.checklist.cLId !== undefined ? this.checklist.cLId : -1,
         title: this.checklist.title,
         description: this.checklist.description,
         checkpoints: filteredCheckpoints.map(checkpoint => {
@@ -113,25 +97,21 @@ export class ChecklistDialogComponent {
         })
       }
     };
-  
+
     return requestData;
   }
-  
-  
-  
+
+
+
   save(): void {
     const requestData = this.prepareChecklistData();
-  
+    debugger;
     // Assuming your service method is named saveChecklist and it accepts a Checklist object
     this._checklistService.saveChecklist(requestData.checklist)
-      .subscribe(response => {
-        // Handle response from the backend
-      }, error => {
-        // Handle error
-      });
+      .subscribe();
   }
-  
-  
+
+
 
 
   onNextClick() {
@@ -139,14 +119,13 @@ export class ChecklistDialogComponent {
       this.save();
       this.closeDialog();
     } else {
-      this.setView(this.activeView + 2);
+      this.setView(this.activeView + 1);
       this.loadCheckPoint();
     }
   }
 
   loadCheckPoint() {
-    debugger;
-    this._checklistService.getcheckpoint(this.checklist.clId).subscribe();
+    this._checklistService.getcheckpoint(this.checklist.cLId).subscribe();
   }
 
   closeDialog() {
@@ -156,8 +135,8 @@ export class ChecklistDialogComponent {
 
 
   addChecklist(): void {
-    this.checklist.checkpoints.push({...new CheckPoint({})});
-   
+    this.checklist.checkpoints.push({ ...new CheckPoint({}) });
+
     setTimeout(() => {
       if (this.newCheckInputs && this.newCheckInputs.length > 0) {
         const lastInputElement = this.newCheckInputs.last.nativeElement as HTMLInputElement;
@@ -169,7 +148,7 @@ export class ChecklistDialogComponent {
   togglePriority(priorityId: number, index: number) {
     this.checklist.checkpoints[index].priority = priorityId;
   }
-  
+
   showFields(index: number): void {
     this.showDueDaysArray[index] = true;
     this.showIsRequiredArray[index] = true;
@@ -193,6 +172,6 @@ export class ChecklistDialogComponent {
     this.checklist.checkpoints = this.checklist.checkpoints.filter(item => item.title !== checkpoint.title);
 
     this.checkpointChanged.next(this.checklist);
-  }
+  }
 
-  }
+}

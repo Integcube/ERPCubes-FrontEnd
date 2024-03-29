@@ -25,7 +25,7 @@ export class AssignChecklistComponent {
   @ViewChild(MatSort) _sort: MatSort;
 
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['select',  'checkList', 'code','remarks', 'createdDate', 'createdByName','edit'];
+  displayedColumns: string[] = ['select',  'checkList', 'code','referenceno','remarks', 'createdDate', 'createdByName','edit'];
   selection = new SelectionModel<any>(true, []);
   pagination: Pagination;
   paginationparm= new PaginationView({});
@@ -101,6 +101,8 @@ assignNew(){
 }
 
 UpdateAssignCheck(assign){
+
+    assign.userId = '-1';
   this.assignCheckList(assign);
 }
     assignCheckList(assign:CheckListInfo){
