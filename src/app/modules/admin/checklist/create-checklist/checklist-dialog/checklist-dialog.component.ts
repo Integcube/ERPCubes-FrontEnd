@@ -90,7 +90,6 @@ export class ChecklistDialogComponent {
         title: this.checklist.title,
         description: this.checklist.description,
         checkpoints: filteredCheckpoints.map(checkpoint => {
-          // Check if priority is defined, if not set it to -1
           if (checkpoint.priority === undefined) {
             checkpoint.priority = -1;
           }
@@ -101,7 +100,9 @@ export class ChecklistDialogComponent {
             title: checkpoint.title,
             dueDays: checkpoint.dueDays,
             priority: checkpoint.priority,
-            isRequired: checkpoint.isRequired ? 1 : 0
+            isRequired: checkpoint.isRequired ? 1 : 0,
+            cpId: checkpoint.cpId,
+            isDeleted:checkpoint.isDeleted
           };
         })
       }
@@ -175,11 +176,14 @@ export class ChecklistDialogComponent {
     return !!this.showPriorityArray[index];
   }
 
-  removeCheckpoint(checkpoint: CheckPoint): void {
-    // Remove the task
-    this.checklist.checkpoints = this.checklist.checkpoints.filter(item => item.title !== checkpoint.title);
+  removeCheckpoint(index: number,obj:CheckPoint): void {
+    debugger
+    if(obj.cpId==-1){
+      this.checklist.checkpoints.splice(index, 1);
+    }else{
+      this.checklist.checkpoints[index].isDeleted=1;
+    }
 
     this.checkpointChanged.next(this.checklist);
-  }
-
+}
 }

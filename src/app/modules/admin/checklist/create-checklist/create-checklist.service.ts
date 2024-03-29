@@ -70,6 +70,7 @@ export class CreateChecklistService {
     }
 
     saveChecklist(checklist: Checklist): Observable<any> {
+      debugger
         let data = {
           id: this.user.id,
           tenantId: this.user.tenantId,
@@ -78,7 +79,8 @@ export class CreateChecklistService {
             clId: checklist.clId,
             title: checklist.title,
             description: checklist.description,
-            checkpoints: checklist.checkpoints
+            checkpoints: checklist.checkpoints,
+
           }
 
         };

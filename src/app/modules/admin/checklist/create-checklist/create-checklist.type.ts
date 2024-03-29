@@ -22,7 +22,7 @@ export class Checklist{
 }
 
 export class CheckPoint{
-    cPId: number;
+    cpId: number;
     cLPId: number;
     title: string;
     description: string;
@@ -32,12 +32,15 @@ export class CheckPoint{
     createdDate: Date;
     modifiedDate: Date;
     createdBy: string;
+    isDeleted:number;
     constructor(reg){
-        this.cPId = reg.cPId?reg.cPId:-1;
+        this.cpId = reg.cpId?reg.cpId:-1;
         this.title = reg.title?reg.title:"";
         this.description = reg.description?reg.description:"";
         this.dueDays = reg.dueDays?reg.dueDays:null;
         this.isRequired = reg.isRequired?reg.isRequired:0;
+        this.isDeleted = 0;
+        
     }
 }
 

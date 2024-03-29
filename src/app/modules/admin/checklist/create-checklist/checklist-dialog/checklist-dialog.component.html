@@ -144,7 +144,7 @@
             <div class="flex flex-auto flex-col" style="max-height: 400px;" fuseScrollbar>
              
                 <div class="flex flex-col items-center gap-2 mt-4 " *ngIf="checklist.checkpoints.length" >
-                    <ng-container *ngFor="let check of checklist.checkpoints; let i = index">
+                    <ng-container *ngFor="let check of checklist.checkpoints| filter: { isDeleted: 0 }; let i = index">
                         <div class="flex items-center w-full bg-default p-2">
                             <mat-icon class="-ml-0.5 icon-size-5 text-hint" [svgIcon]="'heroicons_solid:plus'"></mat-icon>
                             <input class="w-full ml-1.5 px-1 py-0.5" placeholder="'Click Enter to Save'"
@@ -180,7 +180,7 @@
                                 </mat-menu>
                             </div>
                             <mat-icon class="group-hover:flex ml-auto icon-size-3 cursor-pointer " [svgIcon]="'heroicons_solid:x'"
-                                (click)="removeCheckpoint(check)"></mat-icon>
+                                (click)="removeCheckpoint(i,check)"></mat-icon>
                         </div>
                     </ng-container>
                 </div>
