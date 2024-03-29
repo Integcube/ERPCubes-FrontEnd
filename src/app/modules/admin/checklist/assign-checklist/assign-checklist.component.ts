@@ -155,7 +155,6 @@ UpdateAssignCheck(assign){
     
     AssigntoLead(row)
     {
-      debugger
       this._assignChecklistService.assignCheckPointToLeads(row).subscribe()
     }
 }

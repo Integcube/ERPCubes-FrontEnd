@@ -64,6 +64,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { LeadListViewComponent } from './lead-list-view/lead-list-view.component';
 import { ExecuteDialogComponent } from './lead-detail/lead-info/execute-dialog/execute-dialog.component';
+import { checklistTabComponent } from './lead-detail/check-list/checklist-tab.component';
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { ExecuteDialogComponent } from './lead-detail/lead-info/execute-dialog/e
     LeadRestoreComponent,
     LeadScoreComponent,
     LeadListViewComponent,
-    ExecuteDialogComponent
+    ExecuteDialogComponent,
+    checklistTabComponent
   ],
   imports: [
     RouterModule.forChild(leadRoutes),

@@ -9,7 +9,7 @@
 
                     <!-- Title -->
                     <div>
-                        <div class="text-3xl font-bold tracking-tight leading-none" i18n>Assign CheckList</div>
+                        <div class="text-3xl font-bold tracking-tight leading-none" i18n>Start CheckList</div>
                         <div class="ml-0.5 font-medium text-secondary">
                             <ng-container *ngIf="AssignCheckListCount > 0">
                                 {{AssignCheckListCount}}
@@ -24,13 +24,6 @@
 
                     <div class="sm:mt-0">
                         <div class="flex gap-0">
-                        <!-- Add contact button -->
-                        <!-- <button class="ml-4 h-8" mat-stroked-button [color]="'warn'" (click)="openTrashDialog()"
-                            [matTooltip]="'Click to restore Deleted Users'">
-                            <mat-icon [svgIcon]="'heroicons_outline:user-remove'"></mat-icon>
-                            <span class="ml-1 mr-1 text-xs" i18n>Inactive User</span>
-                        
-                        </button> -->
                         <div class="flex gap-0">
                             <button
                             class="ml-4 h-8 primary-2"
@@ -39,7 +32,7 @@
                             (click)="assignNew()" 
                             [matTooltip]="'Assign CheckList'">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'" class="icon-size-5" ></mat-icon>
-                            <span class="ml-2 mr-1 text-xs" i18n>Assign CheckList</span>
+                            <span class="ml-2 mr-1 text-xs" i18n>Start New</span>
                         </button>
 
                     </div>

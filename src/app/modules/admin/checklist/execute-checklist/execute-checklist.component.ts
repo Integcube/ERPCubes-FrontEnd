@@ -21,7 +21,7 @@ import { ExecuteChecklistService } from './execute-checklist.service';
 })
 export class ExecuteChecklistComponent {
 
-  displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'assignedDate'];
+  displayedColumns: string[] = [ 'select','title','code','referenceno','description', 'createdBy', 'assignedDate'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -45,7 +45,6 @@ export class ExecuteChecklistComponent {
     this.dataSource = new MatTableDataSource<AssignedCheckList>([]);
     this.checklists$ = this._checklistService.checkList$;
     this._checklistService.checkList$.subscribe((checklists) => {
-      debugger;
       this.checklistCount = checklists.length;
       this.dataSource.data = checklists;
       this.dataSource.paginator = this.paginator;

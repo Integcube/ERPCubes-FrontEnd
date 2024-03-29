@@ -1,0 +1,78 @@
+<style>
+    .text-sm {
+    font-size: 0.65rem !important;
+}
+</style>
+<div class="flex flex-col w-full" >
+    <div class="flex flex-row items-center mb-2 sm:mt-0 s">
+        <div class="flex-auto">
+            <search-bar></search-bar>
+        </div>
+    
+    </div> 
+  
+    <div class="flex w-full flex-col flex-auto">
+        <ng-container *ngIf="(checkpoints$ | async) as checkpoint else noCalls">
+            <ng-container  *ngIf="checkpoint && checkpoint.length;">
+            <ng-container *ngFor="let cp of checkpoint">
+                <fuse-card
+                    class="relative flex flex-col w-full filter-testimonial mb-2 rounded-sm cursor-pointer shadow ">
+                    <div class="flex flex-row items-center justify-between p-1">
+                        <div class="flex flex-row items-center justify-start max-w-3/4 w-3/4  min-w-3/4">
+
+                            <button mat-icon-button (click)="$event.stopPropagation()"
+                                (click)="toggleStatus(cp)" >
+                                <mat-icon [svgIcon]="'heroicons_outline:check-circle'" [ngClass]="{
+                                                                        ' text-green-700 ': cp.status === 1,
+                                                                        ' text-red-500'  : cp.status === 0}">
+                                </mat-icon>
+                            </button>
+                            <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1 min-w-2/4 max-w-2/4 w-2/4">
+                                {{cp.title}}
+                            </div>
+                            <!-- <div class="flex flex-wrap ml-1 text-md font-semibold line-clamp-1 w-auto">
+                                {{cp.description}}
+                            </div> -->
+                        </div>
+                        
+                        <div class="flex items-center flex-wrap ml-1 text-sm font-semibold line-clamp-1 w-auto" matTooltip="Required {{cp.isRequired}}">
+                            <span class="text-xs text-secondary font-light"></span>
+                            Required {{cp.isRequired}}  
+                        </div>
+                        <div class="flex items-center flex-wrap ml-1 text-sm font-semibold line-clamp-1 w-auto"  matTooltip="Due Days {{cp.dueDays}}">
+                            <span class="text-xs text-secondary font-light"></span>
+                                {{cp.dueDays}}  days
+                        </div>
+                        <div class="flex items-center flex-wrap ml-1 text-sm font-semibold line-clamp-1 w-auto"  matTooltip="Due Date {{cp.dueDate | date}}">
+                            <span class="text-xs text-secondary font-light"></span>
+                                {{cp.dueDate|date}}
+                        </div>
+                        <div class="flex flex-row  justify-between dark:bg-transparent gap-2 w-auto">
+                            <div class="flex items-center">
+                                <span [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
+                                    <mat-icon svgIcon="heroicons_solid:flag" [ngClass]="{
+                                                                            'text-red-600': cp.priority === 1,
+                                                                            'text-yellow-400': cp.priority === 2,
+                                                                            'text-green-500': cp.priority === 3
+                                                                        }"></mat-icon>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </fuse-card>
+            </ng-container>
+        </ng-container>
+        </ng-container>
+   
+
+    </div>
+
+
+    <!-- No Call -->
+    <ng-template #noCalls>
+        <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent" style="margin-top: 10%;">
+            <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:phone'"></mat-icon>
+            <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">No call found!</div>
+        </div>
+    </ng-template>
+</div>

@@ -42,7 +42,7 @@ export class ActivityDetailComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this._leadService.lead$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data => {
             this.lead = { ...data }; this.getActivity();
-        })
+        });
     }
     getActivity() {
         this.loadingMore = true;
