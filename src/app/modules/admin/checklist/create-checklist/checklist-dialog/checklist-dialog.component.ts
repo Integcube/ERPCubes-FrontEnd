@@ -58,7 +58,17 @@ export class ChecklistDialogComponent {
 
   ) { }
 
-
+  ngOnInit(): void {
+    this.checklist = { ...this._data.checklist }; 
+    this._checklistService.Checkpoint$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ 
+    this.checklist.checkpoints =data;
+    
+    
+    });
+    if (!this.checklist.clId) {
+      this.checklist.clId = -1;
+    }
+  }
 
   toggleSelection() {
     this.isSelected = !this.isSelected;
@@ -74,10 +84,9 @@ export class ChecklistDialogComponent {
   }
   prepareChecklistData(): any {
     const filteredCheckpoints = this.checklist.checkpoints.filter(checkpoint => checkpoint.title.trim() !== '');
-
     const requestData = {
       checklist: {
-        cLId: this.checklist.cLId !== undefined ? this.checklist.cLId : -1,
+        clId: this.checklist.clId,
         title: this.checklist.title,
         description: this.checklist.description,
         checkpoints: filteredCheckpoints.map(checkpoint => {
@@ -105,7 +114,6 @@ export class ChecklistDialogComponent {
 
   save(): void {
     const requestData = this.prepareChecklistData();
-    debugger;
     // Assuming your service method is named saveChecklist and it accepts a Checklist object
     this._checklistService.saveChecklist(requestData.checklist)
       .subscribe();
@@ -125,7 +133,7 @@ export class ChecklistDialogComponent {
   }
 
   loadCheckPoint() {
-    this._checklistService.getcheckpoint(this.checklist.cLId).subscribe();
+    this._checklistService.getcheckpoint(this.checklist.clId).subscribe();
   }
 
   closeDialog() {

@@ -20,7 +20,7 @@ import { cloneDeep } from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateChecklistComponent implements OnInit {
-    displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy'];
+    displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'edit'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -75,7 +75,7 @@ export class CreateChecklistComponent implements OnInit {
       if (!row) {
         return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
       }
-      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.cLId + 1}`;
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.clId + 1}`;
     }
   
     addChecklist(){
@@ -105,7 +105,6 @@ export class CreateChecklistComponent implements OnInit {
     }
 
     openCheckpointDialog(checklist: Checklist){
-        debugger;
         const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
             height: "100%",
             width: "100%",
@@ -116,11 +115,41 @@ export class CreateChecklistComponent implements OnInit {
             checklist: cloneDeep(checklist)
         }
         });
-        // restoreDialogRef.afterClosed().subscribe((result) => {
-        //   this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-        // });
+        restoreDialogRef.afterClosed().subscribe((result) => {
+          this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        });
     }
   
-  
+    delete(selectedChecklist: Checklist) {
+      debugger;
+      const confirmation = this._fuseConfirmationService.open({
+        title: 'Delete Checklist',
+        message: 'Are you sure you want to delete this Checklist? This action cannot be undone!',
+        actions: {
+          confirm: {
+            label: 'Delete'
+          }
+        }
+      });
+    
+      // Subscribe to the confirmation dialog closed action
+      confirmation.afterClosed().subscribe((result) => {
+        if (result === 'confirmed') {
+          this.selectedChecklist = selectedChecklist;
+          const checklistIdToDelete = selectedChecklist.clId;
+    
+          this._checklistService.deleteChecklist(checklistIdToDelete).subscribe({
+            next: () => {
+              this._changeDetectorRef.markForCheck();
+              
+            },
+            error: (error) => {
+              console.error('Error deleting dashboard:', error);
+            }
+          });
+        }
+      });
+    }
+    
   
 }
