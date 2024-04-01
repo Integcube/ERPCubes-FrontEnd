@@ -24,11 +24,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { AssignChecklistComponent } from './assign-checklist.component';
 import { AssignDialogComponent } from './assign-dialog/assign-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AssignChecklistFormComponent } from './assign-checklist-form/assign-checklist-form.component';
 
 @NgModule({
   declarations: [
     AssignChecklistComponent,
-    AssignDialogComponent
+    AssignDialogComponent,
+    AssignChecklistFormComponent
   ],
   imports: [
     RouterModule.forChild(AssignChecklistRouting),
