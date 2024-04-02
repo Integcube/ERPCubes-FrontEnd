@@ -1,25 +1,24 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { Checklist } from './create-checklist.type';
+import { Checklist } from './assign-to-lead.type';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateChecklistService } from './create-checklist.service';
+import { CreateChecklistService } from './assign-to-lead.service';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { ChecklistDialogComponent } from './checklist-dialog/checklist-dialog.component';
 import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'create-checklist',
-  templateUrl: './create-checklist.component.html',
+  selector: 'assign-to-lead',
+  templateUrl: './assign-to-lead.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateChecklistComponent implements OnInit {
+export class AssignToLeadComponent implements OnInit {
     displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'edit'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -78,23 +77,7 @@ export class CreateChecklistComponent implements OnInit {
       return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.clId + 1}`;
     }
   
-    addChecklist(){
-      let checklist = new Checklist({})
-      // this._changeDetectorRef.markForCheck();
-      const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
-          height: "100%",
-          width: "100%",
-          maxWidth: "100%",
-          maxHeight: "100%",
-        autoFocus: false,
-        data     : {
-            note: cloneDeep(checklist)
-        }
-      });
-      restoreDialogRef.afterClosed().subscribe((result) => {
-        this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-      });
-    }
+
   
     applyFilter(event: Event) {
       const filterValue = (event.target as HTMLInputElement).value;
@@ -104,55 +87,16 @@ export class CreateChecklistComponent implements OnInit {
       }
     }
 
-    openCheckpointDialog(checklist: Checklist){
-        const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
-            height: "100%",
-            width: "100%",
-            maxWidth: "100%",
-            maxHeight: "100%",
-          autoFocus: false,
-          data     : {
-            checklist: cloneDeep(checklist)
-        }
-        });
-        restoreDialogRef.afterClosed().subscribe((result) => {
-          this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-        });
-    }
+
   
-    delete(selectedChecklist: Checklist) {
-      debugger;
-      const confirmation = this._fuseConfirmationService.open({
-        title: 'Delete Checklist',
-        message: 'Are you sure you want to delete this Checklist? This action cannot be undone!',
-        actions: {
-          confirm: {
-            label: 'Delete'
-          }
-        }
-      });
-    
-      // Subscribe to the confirmation dialog closed action
-      confirmation.afterClosed().subscribe((result) => {
-        if (result === 'confirmed') {
-          this.selectedChecklist = selectedChecklist;
-          const checklistIdToDelete = selectedChecklist.clId;
-    
-          this._checklistService.deleteChecklist(checklistIdToDelete).subscribe({
-            next: () => {
-              this._changeDetectorRef.markForCheck();
-              
-            },
-            error: (error) => {
-              console.error('Error deleting dashboard:', error);
-            }
-          });
-        }
-      });
-    }
+
     AssigntoLead(row)
     {
       this._checklistService.assignCheckPointToLeads(row).subscribe()
+    }
+    unAssigntoLead(row){
+      this._checklistService.unAssignCheckPointToLeads(row).subscribe()
+
     }
   
 }

@@ -196,26 +196,26 @@
         
         
         
-        <div class="flex border-t justify-end gap-4 p-6">
-            <button mat-stroked-button (click)="closeDialog()">
+        <div class="flex border-t justify-end gap-4 pt-3">
+            <button mat-stroked-button class="h-8" (click)="closeDialog()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
-                    <span class="ml-1 text-sm">Cancel</span>
+                    <span class="ml-1 text-xs">Cancel</span>
                 </span>
             </button>
-            <button mat-stroked-button *ngIf="activeView !== 1" (click)="setView(activeView - 1)">
+            <button mat-stroked-button class="h-8" *ngIf="activeView !== 1" (click)="setView(activeView - 1)">
                 <span class="inline-flex items-center justify-between w-full leading-5">
                   <span class="ml-1 text-sm">Back</span>
                 </span>
               </button>
               
-              <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="isLastView" (click)="onNextClick()">
+              <button mat-flat-button  color="primary" class="text-white primary-2 h-8" *ngIf="isLastView" (click)="onNextClick()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
                   <span class="ml-1 text-sm">Save</span>
                 </span>
               </button>
-              <button mat-flat-button color="primary" class="text-white primary-2" *ngIf="!isLastView" (click)="onNextClick()">
+              <button mat-flat-button color="primary" class="text-white primary-2 h-8" *ngIf="!isLastView" (click)="onNextClick()">
                 <span class="inline-flex items-center justify-between w-full leading-5">
-                  <span class="ml-1 text-sm">Next</span>
+                    <span class="ml-1 text-sm">Next</span>
                 </span>
               </button>
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { CheckPoint, Checklist } from './create-checklist.type';
+import { CheckPoint, Checklist } from './assign-to-lead.type';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { AlertService } from 'app/core/alert/alert.service';
@@ -14,13 +14,10 @@ import { HttpClient } from '@angular/common/http';
 export class CreateChecklistService {
 
     private readonly getChecklistURL = `${environment.url}/CkCheckList/all`
-    private readonly saveChecklistURL = `${environment.url}/CkCheckList/save`
-    private readonly updatePriorityListURL = `${environment.url}/CkCheckList/updateCheckPointPriority`
-    private readonly getcheckpointURL = `${environment.url}/CkCheckList/getcheckpoints`
-    private readonly getcheckListURL = `${environment.url}/CkCheckList/getchecklist`
-    private readonly deletecheckListURL = `${environment.url}/CkCheckList/deleteChecklist`
     private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
+    private readonly unAssigntolead = `${environment.url}/CkCheckList/deleteAssignedChecklist`
 
+    
     // private readonly deleteDashboardListURL = `${environment.url}/Dashboard/delete`
   
     
@@ -28,7 +25,6 @@ export class CreateChecklistService {
     private _checklist: BehaviorSubject<Checklist | null> = new BehaviorSubject(null);
     private _checkList: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
     private _checklists: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
-    private _checkpoint: BehaviorSubject<CheckPoint[] | null> = new BehaviorSubject([]);
 
     user: User;
     constructor(
@@ -44,9 +40,6 @@ export class CreateChecklistService {
     }
     get checklists$(): Observable<Checklist[]> {
       return this._checklists.asObservable();
-    }
-    get Checkpoint$(): Observable<CheckPoint[]> {
-        return this._checkpoint.asObservable();
     }
     get CheckList$(): Observable<any[]> {
         return this._checkList.asObservable();
@@ -70,54 +63,6 @@ export class CreateChecklistService {
       );
     }
 
-    saveChecklist(checklist: Checklist): Observable<any> {
-      debugger
-        let data = {
-          id: this.user.id,
-          tenantId: this.user.tenantId,
-
-          checklist: {
-            clId: checklist.clId,
-            title: checklist.title,
-            description: checklist.description,
-            checkpoints: checklist.checkpoints,
-
-          }
-
-        };
-        return this._httpClient.post<Checklist[]>(this.saveChecklistURL, data).pipe(
-          tap(() => {
-            this.getChecklist().subscribe();
-          }),
-          
-        );
-      }
-
-      getcheckpoint(cLId:number): Observable<CheckPoint[]> {
-        let data = {
-          id: this.user.id,
-          tenantId: this.user.tenantId,
-          cLId:cLId,
-        }
-        return this._httpClient.post<CheckPoint[]>(this.getcheckpointURL, data).pipe(
-          tap((response) => {
-            this._checkpoint.next(response);
-           
-          }),
-        );
-      }
-      deleteChecklist(clId: number): Observable<Checklist> {
-        let data = {
-          id: this.user.id,
-          clId: clId
-        }
-        return this._httpClient.post<Checklist>(this.deletecheckListURL, data).pipe(
-          tap((checklist) => {
-            this.getChecklist().subscribe();
-          }),
-          
-        );
-      }
       assignCheckPointToLeads(form: any) {
         let data = {
           id: this.user.id,
@@ -125,9 +70,25 @@ export class CreateChecklistService {
           cLId:form.clId,
           remarks:form.remarks,
         }
+        debugger;
         return this._httpClient.post<any>(this.assigntolead, data).pipe(
           tap((data) => {
             this._alertService.showSuccess("CheckList Assigned Successfully to Leads");
+          
+          }),
+        );
+      }
+      unAssignCheckPointToLeads(form: any) {
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+          cLId:form.clId,
+          remarks:form.remarks,
+        } 
+        debugger;
+        return this._httpClient.post<any>(this.unAssigntolead, data).pipe(
+          tap((data) => {
+            this._alertService.showError("CheckList Unassigned Successfully to Leads");
           
           }),
         );

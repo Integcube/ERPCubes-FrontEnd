@@ -94,7 +94,7 @@ export class ChecklistDialogComponent {
             checkpoint.priority = -1;
           }
           if (checkpoint.dueDays === null) {
-            checkpoint.dueDays = -1;
+            checkpoint.dueDays = 0;
           }
           return {
             title: checkpoint.title,
