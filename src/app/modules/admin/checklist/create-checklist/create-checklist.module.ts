@@ -37,13 +37,15 @@ import { CreateChecklistComponent } from './create-checklist.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ChecklistDialogComponent } from './checklist-dialog/checklist-dialog.component';
+import { CreateChecklistformComponent } from './create-checklistform/create-checklistform.component';
 
 
 
 @NgModule({
   declarations: [
     CreateChecklistComponent,
-    ChecklistDialogComponent
+    ChecklistDialogComponent,
+    CreateChecklistformComponent
   ],
   imports: [
     RouterModule.forChild(CreateChecklistRouting),

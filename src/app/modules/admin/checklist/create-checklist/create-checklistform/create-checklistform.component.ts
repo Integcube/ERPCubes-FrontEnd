@@ -1,24 +1,22 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
-import { CheckPoint, Checklist, DashboardView } from '../create-checklist.type';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { CreateChecklistService } from '../create-checklist.service';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
+import { CheckPoint, Checklist, DashboardView } from '../create-checklist.type';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'checklist-dialog',
-  templateUrl: './checklist-dialog.component.html',
-  styleUrls: ['./checklist-dialog.component.scss'],
+  selector: 'app-create-checklistform',
+  templateUrl: './create-checklistform.component.html',
+  styleUrls: ['./create-checklistform.component.scss']
 })
-export class ChecklistDialogComponent {
+export class CreateChecklistformComponent implements OnInit {
   @ViewChildren('newCheckInput') newCheckInputs: QueryList<ElementRef>;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
-
   checkpointChanged: Subject<Checklist> = new Subject<Checklist>();
   private checklistSubject = new Subject<any>()
   checklist$ = this.checklistSubject.asObservable();
   checkpoints: CheckPoint[];
-
   showDueDaysArray: boolean[] = [];
   showIsRequiredArray: boolean[] = [];
   showPriorityArray: boolean[] = [];
@@ -50,20 +48,20 @@ export class ChecklistDialogComponent {
   ];
 
 
-  constructor(private _formBuilder: UntypedFormBuilder,
-    private _matDialogRef: MatDialogRef<ChecklistDialogComponent>,
+  constructor(
     private _checklistService: CreateChecklistService,
-    private _changeDetectorRef: ChangeDetectorRef,
-    @Inject(MAT_DIALOG_DATA) private _data: { checklist: Checklist },
-
+    private _routerr:Router
   ) { }
 
   ngOnInit(): void {
-    this.checklist = { ...this._data.checklist }; 
+
+    this._checklistService.selectedCheckList$.subscribe(item => {
+      this.checklist = item; 
+    
+    });
+
     this._checklistService.Checkpoint$.pipe(takeUntil(this._unsubscribeAll)).subscribe(data =>{ 
     this.checklist.checkpoints =data;
-    
-    
     });
     if (!this.checklist.clId) {
       this.checklist.clId = -1;
@@ -79,7 +77,7 @@ export class ChecklistDialogComponent {
       this.views[this.activeView - 1].completed = true;
     }
     this.activeView = view;
-    this.isLastView = view === this.views.length; // Check if it's the last view
+    this.isLastView = view === this.views.length;
 
   }
   prepareChecklistData(): any {
@@ -94,7 +92,7 @@ export class ChecklistDialogComponent {
             checkpoint.priority = -1;
           }
           if (checkpoint.dueDays === null) {
-            checkpoint.dueDays = 0;
+            checkpoint.dueDays = -1;
           }
           return {
             title: checkpoint.title,
@@ -115,9 +113,8 @@ export class ChecklistDialogComponent {
 
   save(): void {
     const requestData = this.prepareChecklistData();
-    // Assuming your service method is named saveChecklist and it accepts a Checklist object
-    this._checklistService.saveChecklist(requestData.checklist)
-      .subscribe();
+    this._checklistService.saveChecklist(requestData.checklist).subscribe();
+    this._routerr.navigate(['/checklist/create']);
   }
 
 
@@ -126,7 +123,6 @@ export class ChecklistDialogComponent {
   onNextClick() {
     if (this.activeView === this.views.length) {
       this.save();
-      this.closeDialog();
     } else {
       this.setView(this.activeView + 1);
       this.loadCheckPoint();
@@ -137,9 +133,7 @@ export class ChecklistDialogComponent {
     this._checklistService.getcheckpoint(this.checklist.clId).subscribe();
   }
 
-  closeDialog() {
-    this._matDialogRef.close();
-  }
+
 
 
 

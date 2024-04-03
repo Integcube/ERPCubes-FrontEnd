@@ -24,8 +24,6 @@ export class AssignDialogComponent implements OnInit {
 
   ) { }
 
-  // private dashboardSubject = new Subject<any>()
- 
   isSelected = false;
   hovered = false;
 

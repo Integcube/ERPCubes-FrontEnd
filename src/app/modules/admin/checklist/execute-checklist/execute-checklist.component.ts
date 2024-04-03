@@ -21,7 +21,7 @@ import { ExecuteChecklistService } from './execute-checklist.service';
 })
 export class ExecuteChecklistComponent {
 
-  displayedColumns: string[] = [ 'select','title','code','referenceno','description', 'createdBy', 'assignedDate'];
+  displayedColumns: string[] = [ 'select','referenceno','title','code','description', 'createdBy', 'assignedDate'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -69,17 +69,23 @@ export class ExecuteChecklistComponent {
   }
 
   openChecklistDialog(selectedChecklist: AssignedCheckList): void {
-    this._dialog.open(ExecuteDialogComponent, {
-      panelClass: 'no-padding-dialog',
-      height: '100%',
-      width: '100%',
-      maxWidth: '100%',
-      maxHeight: '100%',
-      autoFocus: false,
-      data: {
-        checklist: selectedChecklist,
-      },
-    });
+
+
+      this._router.navigate([selectedChecklist.execId], { relativeTo: this._activatedRoute });
+  
+
+
+    // this._dialog.open(ExecuteDialogComponent, {
+    //   panelClass: 'no-padding-dialog',
+    //   height: '100%',
+    //   width: '100%',
+    //   maxWidth: '100%',
+    //   maxHeight: '100%',
+    //   autoFocus: false,
+    //   data: {
+    //     checklist: selectedChecklist,
+    //   },
+    // });
   }
 
 }

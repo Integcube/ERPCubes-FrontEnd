@@ -1,1 +1,177 @@
-<p>assign-checklist-form works!</p>
+<div class="flex flex-auto w-full h-full overflow-hidden">
+    <div class="  w-1/6 max-w-1/6 h-full bg-default hidden md:flex md:flex-col">
+        <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
+            <div class="flex gap-1 items-center"  [routerLink]="['/checklist/assign']">
+                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
+                <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Back
+                    to List</div>
+            </div>
+           
+        </div>
+        <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8">
+            <ol>
+                <li class="relative flex" *ngFor="let view of views">
+                    <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px" [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}" *ngIf="view.viewId == 1"></div>
+                    <div class="relative flex flex-auto" *ngIf="view.viewId == 1">
+                        <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full"
+                            [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}">
+                            <div *ngIf="!view.completed" class="text-white">
+                                {{view.viewId}}
+                            </div>
+                            <div *ngIf="view.completed" class="text-white">
+                                <mat-icon class="icon-size-3 text-white" [svgIcon]="view.icon">
+                                </mat-icon>
+                                                   
+                            </div>
+                            
+                        </div>
+                        <div class="flex text-md font-semibold flex-col justify-center items-center">
+                            {{view.viewName}}
+                        </div>
+                        <!-- <div *ngIf="view.completed" class="text-white">
+                            {{view.viewId}}
+                        </div> -->
+                    </div>
+                    
+                    <div class="relative flex flex-auto mt-7" *ngIf="view.viewId == 2">
+                        <div class="flex shrink-0 items-center justify-center w-5 h-5 mr-4 rounded-full "
+                            [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-300': view.completed}">
+                            <div *ngIf="!view.completed" class="text-white">
+                                {{view.viewId}}
+                            </div>
+                        </div>
+                        <div class="flex text-md font-semibold flex-col justify-center items-center">
+                            {{view.viewName}}
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="flex flex-col flex-auto bg-card">
+        <div class="flex flex-col flex-auto px-12 pt-8" *ngIf="activeView ==1">
+            <div class="flex text-xl font-semibold flex-col justify-start">
+              Start CheckList
+            </div>
+            <form [formGroup]="viewForm" class="flex flex-col flex-0 items-start w-full mt-10">
+                <!-- Title -->
+
+                <div class="flex flex-row w-full gap-3" >
+                    <div class="w-full md:w-1/3">
+                 
+                        <mat-form-field class="w-full  mr-2 fuse-mat-dense">
+                            <mat-label i18n>Reference</mat-label>
+                            <input matInput  [formControlName]="'referenceno'">
+                        </mat-form-field>
+                  
+                </div>
+
+              <mat-form-field class="w-full md:w-1/3 mr-2 fuse-mat-dense">
+                    <mat-label i18n>Check List</mat-label>
+                    <mat-select [formControlName]="'clId'" [spellcheck]="false" #leadOwner  [disabled]="viewForm.value.execId!=-1">
+                        <mat-option [value]="-1"  i18n>--Select CheckList--</mat-option>
+                        <ng-container *ngIf="checkList$|async as scenarios">
+                            <mat-option *ngFor="let user of scenarios" [value]="user.clId">{{user.title}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>  
+
+                </div>
+
+
+                <mat-form-field class="fuse-mat-textarea fuse-mat-no-subscript w-full md:w-4/6" >
+                    <mat-label i18n>Remarks</mat-label>
+                    <textarea matInput [formControlName]="'remarks'" [rows]="1" cdkTextareaAutosize [cdkAutosizeMinRows]="1"
+                        class="resize-none h-10">
+                    </textarea>
+                </mat-form-field>
+
+                <mat-form-field class="mr-2 fuse-mat-dense w-full md:w-1/3 mt-4">
+                    <mat-label i18n>(Optional) Assign All CheckList to One User</mat-label>
+                    <mat-select [spellcheck]="false" #leadOwner [formControlName]="'userId'" class="w-full h-2">
+                        <mat-option class="text-md font-medium" value="-1" i18n>--Select User--</mat-option>
+                        <ng-container *ngIf="users$|async as users">
+                            <mat-option class="text-md font-medium" *ngFor="let user of users"
+                                [value]="user.id">{{user.name}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+            
+                </mat-form-field>
+              
+            </form>
+        </div>
+        <div class="flex flex-col flex-auto px-4 pt-4" *ngIf="activeView ==2">
+            <div class="flex text-xl font-semibold flex-col justify-start mb-3">
+               Check Points
+            </div>
+
+            <div class="py-1 w-full bg-default">
+                <ng-container *ngIf="(checkpoints$ | async) as checkpoint">
+                <ng-container *ngIf="checkpoint && checkpoint.length; else noDeletedItems">
+                    <div class=" p-2 w-auto m-2 h-8 justify-between items-center flex bg-card gap-3">
+                        <div class="max-w-1/3 min-w-1/3 w-1/3">
+                            <h5 class="font-semibold" >Check Point</h5></div>
+                            <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-start"><h5 class="font-semibold" >Due Days</h5> </div>
+                            <div class="max-w-1/6 min-w-1/6 w-1/6 flex justify-center"><h5 class="font-semibold" >Due Date</h5> </div>
+                            
+                            <div class="max-w-1/12 min-w-1/12 w-1/12 justify-center"><h5 class="font-semibold" >Required</h5> </div>
+                        <div class="max-w-1/3 min-w-1/3 w-1/3 flex justify-center">
+                           <h5 class="font-semibold" >User</h5> 
+                        </div>
+                      
+                    </div>
+                  <ng-container *ngFor="let item of checkpoint;">
+                    <div class="border-l-2 border-green-500 p-2 w-auto m-2 h-12 justify-between items-center flex bg-card gap-3">
+                        <div class="max-w-1/3 min-w-1/3 w-1/3">{{ item.title }}</div>
+                        <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-start">{{ item.dueDays }}</div>
+                        <div class="max-w-1/6 min-w-1/6 w-1/6 flex justify-center">{{ item.dueDate | date:'mediumDate'}}</div>
+                        <div class="max-w-1/12 min-w-1/12 w-1/12 flex justify-center">
+                            <ng-container *ngIf="item.isRequired === 1; else notRequired">{{ 'Yes' }}</ng-container>
+                            <ng-template #notRequired>{{ 'No' }}</ng-template>
+                        </div>
+                        <div class="max-w-1/3 min-w-1/3 w-1/3">
+                            <mat-form-field class="fuse-mat-dense flex-auto w-full  mt-4">
+                                <mat-select [spellcheck]="false" #leadOwner [(ngModel)]="item.assignTo" class="w-full h-2">
+                                    <mat-option class="text-md font-medium" value="-1" i18n>--Select User--</mat-option>
+                                    <ng-container *ngIf="users$|async as users">
+                                        <mat-option class="text-md font-medium" *ngFor="let user of users"
+                                            [value]="user.id">{{user.name}}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+                        
+                            </mat-form-field>
+                        </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noDeletedItems>
+                    <div class="text-center text-gray-500 py-4">
+                        No records found.
+                    </div>
+                </ng-template>
+            </ng-container>
+              </div>
+
+        </div>
+        <div class="flex border-t justify-end gap-4  p-6 sm:py-4 md:px-8">
+            <button mat-stroked-button class="h-8"  [routerLink]="['/checklist/assign']">
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                    <span class="ml-1 text-xs">Cancel</span>
+                </span>
+            </button>
+            <button mat-stroked-button class="h-8" *ngIf="activeView !== 1" (click)="setView(activeView - 1)">
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                    <span class="ml-1 text-xs">Back</span>
+                </span>
+            </button>
+
+            <button mat-stroked-button class="h-8 primary-2" (click)="onNextClick()" [disabled]="viewForm.invalid || viewForm.value.clId==-1">
+                <span class="inline-flex items-center justify-between w-full leading-5">
+                    <span class="ml-1 text-xs">{{ activeView == 2 ? 'Save' : 'Next' }}</span>
+                </span>
+            </button>
+         
+            
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ import { UserService } from 'app/core/user/user.service';
 import { Pagination, PaginationView, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Assign } from './assign-checklist.type';
+import { Assign, CheckListInfo } from './assign-checklist.type';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ private readonly getUsersUrl = `${environment.url}/Users/all`
 private readonly SaveUrl = `${environment.url}/CkCheckList/assign`
 private readonly deleteURL = `${environment.url}/CkCheckList/delete`
 private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
+private readonly getchecklistbyIdURL = `${environment.url}/CkCheckList/getchecklistbyId`
 
 
   user: User;
@@ -28,6 +29,7 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
   private _checkList: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
   private _checkpoint: BehaviorSubject<Assign[] | null> = new BehaviorSubject([]);
   private _users: BehaviorSubject<User[] | null> = new BehaviorSubject(null);
+  private _selectedCheckList: BehaviorSubject<CheckListInfo | null> = new BehaviorSubject(null);
 
   constructor(
     private _userService: UserService,
@@ -52,6 +54,7 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
   get CheckList$(): Observable<any[]> {
     return this._checkList.asObservable();
   }
+
   get Checkpoint$(): Observable<Assign[]> {
     return this._checkpoint.asObservable();
   }
@@ -63,6 +66,13 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
   updatePaginationParam(pagination:PaginationView){
     this._paginationview.next(pagination);
   }
+
+  get selectedCheckList$(): Observable<CheckListInfo> {
+    return this._selectedCheckList.asObservable();
+  }
+
+ 
+
 
 
   getAssignCheckList(): Observable<{ paginationVm: Pagination;list: any[]}> {
@@ -160,7 +170,6 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
       
     );
   }
-
   assignCheckPointToLeads(form: any) {
     let data = {
       id: this.user.id,
@@ -176,7 +185,17 @@ private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
       }),
     );
   }
-
-
+  getCheckListInfo(execId:number): Observable<CheckListInfo> {
+    let data = {
+      id: this.user.id,
+      tenantId: this.user.tenantId,
+      execId:execId
+    }
+    return this._httpClient.post<CheckListInfo>(this.getchecklistbyIdURL, data).pipe(
+      tap((response) => {
+        this._selectedCheckList.next(response);
+      }),
+    );
+  }
 
 }

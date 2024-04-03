@@ -36,13 +36,15 @@ import { MatTableExporterModule } from 'mat-table-exporter';
 import { QuillModule } from 'ngx-quill';
 import { ExecuteChecklistComponent } from './execute-checklist.component';
 import { ExecuteDialogComponent } from './execute-dialog/execute-dialog.component';
+import { ExecuteFormComponent } from './execute-form/execute-form.component';
 
 
 
 @NgModule({
   declarations: [
     ExecuteChecklistComponent,
-    ExecuteDialogComponent
+    ExecuteDialogComponent,
+    ExecuteFormComponent
 
   ],
   imports: [

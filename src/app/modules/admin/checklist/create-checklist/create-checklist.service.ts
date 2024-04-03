@@ -20,16 +20,14 @@ export class CreateChecklistService {
     private readonly getcheckListURL = `${environment.url}/CkCheckList/getchecklist`
     private readonly deletecheckListURL = `${environment.url}/CkCheckList/deleteChecklist`
     private readonly assigntolead = `${environment.url}/CkCheckList/assignTolead`
-
-    // private readonly deleteDashboardListURL = `${environment.url}/Dashboard/delete`
-  
-    
-  
+    private readonly getchecklistbyIdURL = `${environment.url}/CkCheckList/getcreatechecklistbyId`
     private _checklist: BehaviorSubject<Checklist | null> = new BehaviorSubject(null);
     private _checkList: BehaviorSubject<any[] | null> = new BehaviorSubject(null);
     private _checklists: BehaviorSubject<any[] | null> = new BehaviorSubject([]);
     private _checkpoint: BehaviorSubject<CheckPoint[] | null> = new BehaviorSubject([]);
+    private _selectedCheckList: BehaviorSubject<Checklist | null> = new BehaviorSubject(null);
 
+    
     user: User;
     constructor(
       private _userService: UserService,
@@ -56,6 +54,10 @@ export class CreateChecklistService {
       this._checklist.next(selectedChecklist);
     }
   
+    get selectedCheckList$(): Observable<Checklist> {
+      return this._selectedCheckList.asObservable();
+    }
+
     getChecklist(): Observable<Checklist[]> {
       
       let data = {
@@ -133,6 +135,18 @@ export class CreateChecklistService {
         );
       }
 
+      getCheckListInfo(clId:number): Observable<Checklist> {
+        let data = {
+          id: this.user.id,
+          tenantId: this.user.tenantId,
+          clId:clId
+        }
+        return this._httpClient.post<Checklist>(this.getchecklistbyIdURL, data).pipe(
+          tap((response) => {
+            this._selectedCheckList.next(response);
+          }),
+        );
+      }
       
     
 }

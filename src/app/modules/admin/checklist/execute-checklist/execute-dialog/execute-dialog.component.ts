@@ -51,21 +51,4 @@ export class ExecuteDialogComponent {
       )
     });
   }
-
-  // toggleStatus(row) {
-  //   let status:number=-1;
-  //   if (row.status === 1) {
-  //     status =0;
-  //   }
-  //   else {
-  //     status =1;
-  //   }
-  //   debugger
-  //   this._checklistService.setStatus(status,row.cpId,this._data.checklist.cLId).pipe(takeUntil(this._unsubscribeAll)).subscribe(data=>{
-      
-  //     this._changeDetectorRef.markForCheck()
-  //   this._checklistService.getCheckpoint(this._data.checklist.cLId).subscribe();
-  //   })
-  // }
-
 }

@@ -105,23 +105,25 @@ export class CreateChecklistComponent implements OnInit {
     }
 
     openCheckpointDialog(checklist: Checklist){
-        const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
-            height: "100%",
-            width: "100%",
-            maxWidth: "100%",
-            maxHeight: "100%",
-          autoFocus: false,
-          data     : {
-            checklist: cloneDeep(checklist)
-        }
-        });
-        restoreDialogRef.afterClosed().subscribe((result) => {
-          this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-        });
+        // const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
+        //     height: "100%",
+        //     width: "100%",
+        //     maxWidth: "100%",
+        //     maxHeight: "100%",
+        //   autoFocus: false,
+        //   data     : {
+        //     checklist: cloneDeep(checklist)
+        // }
+        // });
+        // restoreDialogRef.afterClosed().subscribe((result) => {
+        //   this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
+        // });
+
+        this._router.navigate([checklist.clId], { relativeTo: this._activatedRoute });
     }
   
     delete(selectedChecklist: Checklist) {
-      debugger;
+
       const confirmation = this._fuseConfirmationService.open({
         title: 'Delete Checklist',
         message: 'Are you sure you want to delete this Checklist? This action cannot be undone!',

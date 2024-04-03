@@ -12,6 +12,7 @@ import { AssignDialogComponent } from './assign-dialog/assign-dialog.component';
 import { Assign, CheckListInfo } from './assign-checklist.type';
 import { cloneDeep } from 'lodash';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'assign-checklist',
@@ -23,9 +24,10 @@ export class AssignChecklistComponent {
   
   @ViewChild(MatPaginator) _paginator: MatPaginator;
   @ViewChild(MatSort) _sort: MatSort;
+ 
 
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['select',  'checkList', 'code','referenceno','remarks', 'createdDate', 'createdByName','edit'];
+  displayedColumns: string[] = ['select','referenceno', 'checkList', 'code','remarks', 'createdDate', 'createdByName','edit'];
   selection = new SelectionModel<any>(true, []);
   pagination: Pagination;
   paginationparm= new PaginationView({});
@@ -41,7 +43,8 @@ export class AssignChecklistComponent {
     private _dialog: MatDialog,
     private _assignChecklistService: AssignChecklistService,
     private _fuseConfirmationService: FuseConfirmationService,
-
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router,
 
   ) { }
   ngOnInit(): void {
@@ -103,10 +106,15 @@ assignNew(){
 UpdateAssignCheck(assign){
 
     assign.userId = '-1';
-  this.assignCheckList(assign);
+  // this.assignCheckList(assign);
+  this.editCheckList(assign);
+}
+
+editCheckList(assign:CheckListInfo){
+    this._router.navigate([assign.execId], { relativeTo: this._activatedRoute });
+
 }
     assignCheckList(assign:CheckListInfo){
-     
       const restoreDialogRef = this._dialog.open(AssignDialogComponent, {
           height: "100%",
           width: "100%",
@@ -124,7 +132,6 @@ UpdateAssignCheck(assign){
       this._unsubscribeAll.complete();
     }
     delete(chklist: Assign) {
-     debugger
       const confirmation = this._fuseConfirmationService.open({
         title: 'Delete Assign CheckList',
         message: 'Are you sure you want to delete this Assign CheckList? This action cannot be undone!',

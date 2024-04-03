@@ -23,12 +23,7 @@
         </div>
 
         <div class="sm:mt-0">
-
-
-
-
         </div>
-
     </div>
 </div>
 
@@ -65,16 +60,8 @@
 
                                 <ng-container matColumnDef="title">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
-                                    <td mat-cell *matCellDef="let row" class="group relative overflow-hidden hover:cursor-pointer"  style="width: 15rem;">
-                                        <div class="flex items-center justify-between">
-                                            <span  (click)="openChecklistDialog(row)" ><u>{{row.title}}</u></span>
-                                            <!-- <span *ngIf="row.isHovered" class="relative right-0">
-                                              <button mat-stroked-button (click)="updateProduct(row)" class="h-8"> 
-                                                <span class="text-xs">Preview</span>
-                                              </button>
-                                            </span> -->
-                                        </div>
-                                    <!-- <td mat-cell *matCellDef="let row"> {{row.title}} </td> -->
+                                    <td mat-cell *matCellDef="let row" >
+                                      {{row.title}}
                                     </td>
                                 </ng-container>
                                  <ng-container matColumnDef="code">
@@ -82,8 +69,14 @@
                                     <td mat-cell *matCellDef="let row"> {{row.code | tblimit}} </td>
                                 </ng-container>
                                 <ng-container matColumnDef="referenceno">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Referenceno </th>
-                                    <td mat-cell *matCellDef="let row"> {{row.referenceno | tblimit}} </td>
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header [style.cursor]="'pointer'" class="group relative overflow-hidden hover:cursor-pointer"  style="width: 15rem;"> Referencen</th>
+                                    <td mat-cell *matCellDef="let row"> 
+                                        <div class="flex items-center justify-between">
+                                            <span  (click)="openChecklistDialog(row)" ><u>{{row.referenceno | tblimit}}</u></span>
+                                           
+                                        </div>
+                                    
+                                    </td>
                                 </ng-container>
                                 <ng-container matColumnDef="description">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>

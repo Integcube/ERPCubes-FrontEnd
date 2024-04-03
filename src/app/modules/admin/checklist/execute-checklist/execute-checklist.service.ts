@@ -50,7 +50,6 @@ export class ExecuteChecklistService {
       tenantId: this.user.tenantId,
       execId:execId
     }
-    debugger
     return this._httpClient.post<AssignedCheckPoint[]>(this.getCheckPointUrl, data).pipe(
       tap((checkpints) => {
         this._checkpoints.next(checkpints);
