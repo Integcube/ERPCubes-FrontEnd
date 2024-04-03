@@ -3,30 +3,31 @@ import { UntypedFormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
-import { ChecklistReporttService } from './checklist-report.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { ChecklistReport } from './checklist-report.type';
+import { ExecutedChecklistReport } from './executedchecklist-report.type';
+import { ExecutedChecklistReportService } from './executedchecklist-report.service';
 
 @Component({
-  selector: 'checklist-report',
-  templateUrl: './checklist-report.component.html',
+  selector: 'executedchecklist-report',
+  templateUrl: './executedchecklist-report.component.html',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChecklistReportComponent {
+export class ExecutedChecklistReportComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('exporter') public exporter;
 
-  dataSource: MatTableDataSource<ChecklistReport>;
-  displayedColumns: string[] = [ 'referenceno', 'title', 'total', 'executedCount', 'notExecutedCount', 'executedPercentage'];
+  dataSource: MatTableDataSource<ExecutedChecklistReport>;
+  displayedColumns: string[] = [ 'firstName', 'executedCheckpoints', 'notExecutedCheckpoints', 'executedPercentage', 'overdueCheckpoints'];
   checklistReportCount: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  
+  startDate: Date
+  endDate: Date
 
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
-    private _checklistReportService: ChecklistReporttService,
+    private _checklistReportService: ExecutedChecklistReportService,
     private _changeDetectorRef: ChangeDetectorRef,
     
   ) { }
@@ -46,6 +47,11 @@ export class ChecklistReportComponent {
         this._changeDetectorRef.markForCheck();
     });
     this.getLeadReports();
+    const currentDate = new Date();
+    this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+  const endingDate = new Date();
+    this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
+    
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -55,10 +61,12 @@ export class ChecklistReportComponent {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
+  getLeadSourceReports(){
+    
+  }
 
   getLeadReports(){
-    this._checklistReportService.getCheckListReport().subscribe();
+    this._checklistReportService.getCheckListReport(this.startDate.toISOString(), this.endDate.toISOString()).subscribe();
   }
-
-  }
+}
   

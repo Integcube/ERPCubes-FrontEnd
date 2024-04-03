@@ -1,6 +1,7 @@
 export class ChecklistReport {
     execId: number;
-    referenceNo: string = '';
+    referenceno: string = '';
+    title: string = '';
     total?: number;
     executedCount?: number;
     notExecutedCount?: number;
