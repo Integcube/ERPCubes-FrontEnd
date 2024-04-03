@@ -13,6 +13,7 @@ export class Checklist{
     modifiedDate: Date;
     createdBy: string;
     checkpoints: CheckPoint[];
+    iAssign: number;
     constructor(reg){
         this.clId = reg.clId?reg.clId:-1;
         this.checkpoints = [];
