@@ -57,6 +57,7 @@ export class CreateChecklistService {
       }
       return this._httpClient.post<Checklist[]>(this.getChecklistURL, data).pipe(
         tap((checklists) => {
+                debugger;
           this._checklists.next(checklists);
         }),
         
@@ -68,7 +69,7 @@ export class CreateChecklistService {
           id: this.user.id,
           tenantId: this.user.tenantId,
           cLId:form.clId,
-          remarks:form.remarks,
+          iAssign:form.iAssign
         }
         debugger;
         return this._httpClient.post<any>(this.assigntolead, data).pipe(

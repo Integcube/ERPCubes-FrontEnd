@@ -19,7 +19,7 @@ import { cloneDeep } from 'lodash';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssignToLeadComponent implements OnInit {
-    displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'edit'];
+    displayedColumns: string[] = [ 'select', 'title', 'description', 'createdBy', 'assignStatus'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -88,15 +88,15 @@ export class AssignToLeadComponent implements OnInit {
     }
 
 
-  
+  AssigntoLead(row: any) {
+      this._checklistService.assignCheckPointToLeads(row).subscribe(() => {
+        this._checklistService.getChecklist().subscribe();
 
-    AssigntoLead(row)
-    {
-      this._checklistService.assignCheckPointToLeads(row).subscribe()
-    }
-    unAssigntoLead(row){
-      this._checklistService.unAssignCheckPointToLeads(row).subscribe()
+          this._changeDetectorRef.detectChanges();
+      });
 
-    }
+
+  }
   
-}
+  }
+  
