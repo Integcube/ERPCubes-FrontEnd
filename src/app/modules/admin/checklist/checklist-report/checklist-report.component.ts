@@ -32,21 +32,20 @@ export class ChecklistReportComponent {
   ) { }
   reports$ = this._checklistReportService.checklistReport$
   checklistReportWithUser$ = this.reports$;
-  
-  // products$ = this._activityReportService.prodcts$
-  // project$ = this._activityReportService.project$;
-  // leadStatuses$ = this._activityReportService.leadStatus$;
 
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource([]);
     this.checklistReportWithUser$.subscribe((report) => {
-        this.checklistReportCount = report.length;
-        this.dataSource = new MatTableDataSource(report);
-        this.ngAfterViewInit();
-        this._changeDetectorRef.markForCheck();
+        if (report) {
+            this.checklistReportCount = report.length;
+            this.dataSource.data = report; 
+            this._changeDetectorRef.markForCheck();
+        }
     });
     this.getLeadReports();
-  }
+}
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

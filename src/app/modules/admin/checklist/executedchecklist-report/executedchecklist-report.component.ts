@@ -34,21 +34,22 @@ export class ExecutedChecklistReportComponent {
   reports$ = this._checklistReportService.checklistReport$
   checklistReportWithUser$ = this.reports$;
   
-  // products$ = this._activityReportService.prodcts$
-  // project$ = this._activityReportService.project$;
-  // leadStatuses$ = this._activityReportService.leadStatus$;
 
 
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource([]);
     this.checklistReportWithUser$.subscribe((report) => {
+      if (report) {
+        this.checklistReportCount = report.length;
+        this.dataSource.data = report; 
+        this._changeDetectorRef.markForCheck();
+    }
       const currentDate = new Date();
       this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
     const endingDate = new Date();
-      this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0); 
-        this.checklistReportCount = report.length;
-        this.dataSource = new MatTableDataSource(report);
+      this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
         this.ngAfterViewInit();
-        this._changeDetectorRef.markForCheck();
+    
     });
     this.getLeadReports();
  
@@ -62,9 +63,7 @@ export class ExecutedChecklistReportComponent {
     this._unsubscribeAll.next(null);
     this._unsubscribeAll.complete();
   }
-  getLeadSourceReports(){
-    
-  }
+  
 
   getLeadReports(){
     this._checklistReportService.getCheckListReport(this.startDate.toISOString(), this.endDate.toISOString()).subscribe();
