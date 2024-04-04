@@ -193,6 +193,7 @@ private readonly getchecklistbyIdURL = `${environment.url}/CkCheckList/getcheckl
     }
     return this._httpClient.post<CheckListInfo>(this.getchecklistbyIdURL, data).pipe(
       tap((response) => {
+        response = response==null?new CheckListInfo({}):response;
         this._selectedCheckList.next(response);
       }),
     );

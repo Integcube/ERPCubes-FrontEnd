@@ -115,16 +115,7 @@ editCheckList(assign:CheckListInfo){
 
 }
     assignCheckList(assign:CheckListInfo){
-      const restoreDialogRef = this._dialog.open(AssignDialogComponent, {
-          height: "100%",
-          width: "100%",
-          maxWidth: "100%",
-          maxHeight: "100%",
-        autoFocus: false,
-        data     : {
-          Data: cloneDeep(assign)
-        }
-      });
+      this._router.navigate([-1], { relativeTo: this._activatedRoute });
     }
     
     ngOnDestroy(): void {

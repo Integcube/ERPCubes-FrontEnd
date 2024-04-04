@@ -79,21 +79,8 @@ export class CreateChecklistComponent implements OnInit {
     }
   
     addChecklist(){
-      let checklist = new Checklist({})
-      // this._changeDetectorRef.markForCheck();
-      const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
-          height: "100%",
-          width: "100%",
-          maxWidth: "100%",
-          maxHeight: "100%",
-        autoFocus: false,
-        data     : {
-            note: cloneDeep(checklist)
-        }
-      });
-      restoreDialogRef.afterClosed().subscribe((result) => {
-        this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-      });
+      this._router.navigate([-1], { relativeTo: this._activatedRoute });
+     
     }
   
     applyFilter(event: Event) {
@@ -105,19 +92,6 @@ export class CreateChecklistComponent implements OnInit {
     }
 
     openCheckpointDialog(checklist: Checklist){
-        // const restoreDialogRef = this._dialog.open(ChecklistDialogComponent, {
-        //     height: "100%",
-        //     width: "100%",
-        //     maxWidth: "100%",
-        //     maxHeight: "100%",
-        //   autoFocus: false,
-        //   data     : {
-        //     checklist: cloneDeep(checklist)
-        // }
-        // });
-        // restoreDialogRef.afterClosed().subscribe((result) => {
-        //   this._checklistService.getChecklist().pipe(takeUntil(this._unsubscribeAll)).subscribe();
-        // });
 
         this._router.navigate([checklist.clId], { relativeTo: this._activatedRoute });
     }

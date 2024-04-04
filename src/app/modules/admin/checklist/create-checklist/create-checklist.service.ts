@@ -143,6 +143,7 @@ export class CreateChecklistService {
         }
         return this._httpClient.post<Checklist>(this.getchecklistbyIdURL, data).pipe(
           tap((response) => {
+            response = response==null?new Checklist({}):response;
             this._selectedCheckList.next(response);
           }),
         );

@@ -41,16 +41,17 @@ export class ExecutedChecklistReportComponent {
 
   ngOnInit(): void {
     this.checklistReportWithUser$.subscribe((report) => {
+      const currentDate = new Date();
+      this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+    const endingDate = new Date();
+      this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0); 
         this.checklistReportCount = report.length;
         this.dataSource = new MatTableDataSource(report);
         this.ngAfterViewInit();
         this._changeDetectorRef.markForCheck();
     });
     this.getLeadReports();
-    const currentDate = new Date();
-    this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
-  const endingDate = new Date();
-    this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
+ 
     
   }
   ngAfterViewInit() {

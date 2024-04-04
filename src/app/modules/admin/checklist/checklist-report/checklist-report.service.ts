@@ -29,7 +29,6 @@ export class ChecklistReporttService {
       id: this.user.id,
       tenantId: this.user.tenantId,
     }
-    debugger;
     return this._httpClient.post<any[]>(this.getuListURL, data).pipe(
       tap((response) => {
         this._checklistReport.next(response);
