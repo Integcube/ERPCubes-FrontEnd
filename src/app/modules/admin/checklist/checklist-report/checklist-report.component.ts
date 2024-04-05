@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { Subject } from 'rxjs';
 import { ChecklistReporttService } from './checklist-report.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { ChecklistReport } from './checklist-report.type';
+import { ChecklistReport, ChecklistReportFilter } from './checklist-report.type';
 
 @Component({
   selector: 'checklist-report',
@@ -19,10 +19,12 @@ export class ChecklistReportComponent {
   @ViewChild('exporter') public exporter;
 
   dataSource: MatTableDataSource<ChecklistReport>;
-  displayedColumns: string[] = [ 'referenceno', 'title', 'total', 'executedCount', 'notExecutedCount', 'executedPercentage','action'];
+  displayedColumns: string[] = [ 'referenceno', 'title', 'total', 'executedCount', 'notExecutedCount', 'executedPercentage'];
   checklistReportCount: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  
+  startDate: Date
+  endDate: Date
+  checklistReportFilter: ChecklistReportFilter = new ChecklistReportFilter({});
 
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -42,6 +44,11 @@ export class ChecklistReportComponent {
             this.dataSource.data = report; 
             this._changeDetectorRef.markForCheck();
         }
+      // const currentDate = new Date();
+      // this.startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      // const endingDate = new Date();
+      // this.endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      // this.ngAfterViewInit();
     });
     this.getLeadReports();
 }
@@ -56,7 +63,7 @@ export class ChecklistReportComponent {
   }
 
   getLeadReports(){
-    this._checklistReportService.getCheckListReport().subscribe();
+    this._checklistReportService.getCheckListReport(this.checklistReportFilter).subscribe();
   }
 
   }

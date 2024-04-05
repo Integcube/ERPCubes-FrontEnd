@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ChecklistReport } from './checklist-report.type';
+import { ChecklistReport, ChecklistReportFilter } from './checklist-report.type';
 import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/core/user/user.service';
 import { HttpClient } from '@angular/common/http';
@@ -24,12 +24,11 @@ export class ChecklistReporttService {
   get checklistReport$(): Observable<ChecklistReport[]> {
     return this._checklistReport.asObservable()
   }
-  getCheckListReport(): Observable<any[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-    }
-    return this._httpClient.post<any[]>(this.getuListURL, data).pipe(
+  getCheckListReport(obj:ChecklistReportFilter): Observable<any[]> {
+    obj.tenantId =this.user.tenantId;
+    obj.id= this.user.id;
+    debugger;
+    return this._httpClient.post<any[]>(this.getuListURL, obj).pipe(
       tap((response) => {
         this._checklistReport.next(response);
        
