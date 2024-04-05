@@ -44,11 +44,6 @@ export class ChecklistReportComponent {
             this.dataSource.data = report; 
             this._changeDetectorRef.markForCheck();
         }
-      // const currentDate = new Date();
-      // this.startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-      // const endingDate = new Date();
-      // this.endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      // this.ngAfterViewInit();
     });
     this.getLeadReports();
 }
