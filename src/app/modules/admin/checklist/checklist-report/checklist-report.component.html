@@ -31,30 +31,33 @@
                         <table mat-table [dataSource]="dataSource" matSort
                         matTableExporter #exporter="matTableExporter">
                             <ng-container matColumnDef="referenceno">
-                                <th mat-header-cell *matHeaderCellDef mat-header-sort i18n> Reference No </th>
+                                <th mat-header-cell *matHeaderCellDef mat-header-sort i18n class="w-60"> eference</th>
                                 <td mat-cell *matCellDef="let row" > {{row.referenceno}} </td>
                             </ng-container>
                             <ng-container matColumnDef="title">
-                                <th mat-header-cell class ="text-center" *matHeaderCellDef mat-header-sort i18n> Title </th>
+                                <th mat-header-cell class ="text-left w-60" *matHeaderCellDef mat-header-sort i18n> Title </th>
                                 <td mat-cell *matCellDef="let row" > {{row.title}} </td>
                             </ng-container>
                             <ng-container matColumnDef="total">
-                                <th mat-header-cell class ="text-center" *matHeaderCellDef mat-header-sort i18n> Total </th>
+                                <th mat-header-cell class ="text-center w-24" *matHeaderCellDef mat-header-sort i18n> Total Checkpoint </th>
                                 <td mat-cell class = "text-right" *matCellDef="let row" > {{row.total}} </td>
                             </ng-container>
                             <ng-container matColumnDef="executedCount">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Executed</th>
+                                <th mat-header-cell class = "text-center w-24" *matHeaderCellDef mat-header-sort i18n>Completed</th>
                                 <td mat-cell class = "text-right" *matCellDef="let row" > {{row.executedCount}} </td>
                             </ng-container>
                             <ng-container matColumnDef="notExecutedCount">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Not Executed</th>
+                                <th mat-header-cell class = "text-center w-24" *matHeaderCellDef mat-header-sort i18n> In Progress</th>
                                 <td mat-cell class = "text-right" *matCellDef="let row" > {{row.notExecutedCount}}</td>
                             </ng-container>
                             <ng-container matColumnDef="executedPercentage">
-                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> Executed Percentage </th>
+                                <th mat-header-cell class = "text-center  w-24" *matHeaderCellDef mat-header-sort i18n> Completion </th>
                                 <td mat-cell class = "text-right" *matCellDef="let row"> {{row.executedPercentage}} %</td>
                             </ng-container>
-              
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell class = "text-center" *matHeaderCellDef mat-header-sort i18n> </th>
+                                <td mat-cell class = "text-right" *matCellDef="let row"></td>
+                            </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             <tr class="mat-row" *matNoDataRow>

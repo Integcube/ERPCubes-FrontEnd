@@ -19,7 +19,7 @@ export class ExecutedChecklistReportComponent {
   @ViewChild('exporter') public exporter;
 
   dataSource: MatTableDataSource<ExecutedChecklistReport>;
-  displayedColumns: string[] = [ 'firstName', 'executedCheckpoints', 'notExecutedCheckpoints', 'executedPercentage', 'overdueCheckpoints'];
+  displayedColumns: string[] = [ 'firstName', 'totalCheckpoints','executedCheckpoints', 'notExecutedCheckpoints', 'overdueCheckpoints','executedPercentage','action'];
   checklistReportCount: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   startDate: Date

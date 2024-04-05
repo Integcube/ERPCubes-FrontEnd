@@ -19,7 +19,7 @@ export class ChecklistReportComponent {
   @ViewChild('exporter') public exporter;
 
   dataSource: MatTableDataSource<ChecklistReport>;
-  displayedColumns: string[] = [ 'referenceno', 'title', 'total', 'executedCount', 'notExecutedCount', 'executedPercentage'];
+  displayedColumns: string[] = [ 'referenceno', 'title', 'total', 'executedCount', 'notExecutedCount', 'executedPercentage','action'];
   checklistReportCount: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
   
