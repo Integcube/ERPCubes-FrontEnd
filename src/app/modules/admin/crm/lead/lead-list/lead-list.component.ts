@@ -110,7 +110,6 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   ) { }
 
   activeItem = new LeadCustomList({});
-  activeItemforAll = null;
   onDateRangeChange(selectedValue: string, type: string) {
     let startDate: Date = new Date();
     let endDate: Date = new Date();
@@ -156,11 +155,10 @@ export class LeadListComponent implements OnInit, AfterViewInit {
     if (list === null) {
       list = new LeadCustomList({});
       list.listTitle = name;
-      this.activeItemforAll = null;
     }
     this._leadService.updatePaginationParam(new PaginationView({}));
     this.activeItem = list;
-    this.filter = list.filterParsed;
+     this.filter = list.filterParsed;
     this._leadService.setCustomList(list);
     this._leadService.setFilter(list.filterParsed);
   }
@@ -363,13 +361,17 @@ export class LeadListComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.dateRangesFilter = [...this.dateRanges];
-    let selectedList = new LeadCustomList({});
+    this._leadService.customList$.subscribe(selectedFilter => {
+      this.activeItem = selectedFilter;
+      this.filter=selectedFilter.filterParsed;
+
+    });
     this._leadService.selectedLeads$.subscribe(selectedLeads => {
       this.selection = selectedLeads;
     });
 
-    selectedList.listTitle = "All leads"
-    this._leadService.setCustomList(selectedList);
+    // selectedList.listTitle = "All leads"
+    // this._leadService.setCustomList(selectedList);
     //  this.leads$ = this._leadService.filteredLeads$;
     // this._leadService.leads$
     //   .pipe(takeUntil(this._unsubscribeAll))
@@ -464,6 +466,7 @@ export class LeadListComponent implements OnInit, AfterViewInit {
 
 
   isActiveItem(item: LeadCustomList): boolean {
+    debugger
     if (item == null) {
       item = new LeadCustomList({});
       item.listTitle = "All Leads";

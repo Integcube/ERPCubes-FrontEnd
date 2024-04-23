@@ -56,7 +56,7 @@ export interface LeadStatus {
     order: number;
 }
 export class LeadCustomList {
-    listId: number = -1;
+    listId: number;
     listTitle: string = "";
     filter: string = "";
     isPublic: number;
@@ -65,6 +65,7 @@ export class LeadCustomList {
     constructor(reg) {
         this.listId = reg.list ? reg.list : -1;
         this.filterParsed = reg.filterParsed ? reg.filterParsed : new LeadFilter();
+        this.listTitle = reg.listTitle ? reg.listTitle : "All Leads";
     }
 }
 export class LeadFilter {

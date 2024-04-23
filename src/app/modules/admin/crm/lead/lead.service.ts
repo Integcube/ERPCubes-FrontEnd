@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, combineLatest, debounceTime, forkJoin, map, of, switchMap, take, tap, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
+import { BehaviorSubject, Observable, combineLatest, debounceTime, map, of, switchMap, take, tap, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'app/core/user/user.service';
 import { Pagination, PaginationView, User } from 'app/core/user/user.types';
 import { environment } from 'environments/environment';
@@ -416,7 +416,6 @@ export class LeadService {
     }
     return this._httpClient.post<{ paginationVm: Pagination;leadsList: Lead[]}>(this.getLeadListURL, data).pipe(
       tap((response) => {
-        debugger
         this._leads.next(response.leadsList);
         this._pagination.next(response.paginationVm);
       }),
