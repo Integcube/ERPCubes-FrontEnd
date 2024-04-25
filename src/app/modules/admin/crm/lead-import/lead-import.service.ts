@@ -35,6 +35,9 @@ export class LeadImportService {
   get leads$(): Observable<Lead[]> {
     return this._leads.asObservable();
   }
+  get products$(): Observable<Product[]> {
+    return this._product.asObservable();
+  }
   get industries$(): Observable<Industry[]> {
     return this._industries.asObservable();
   }
@@ -58,19 +61,20 @@ export class LeadImportService {
     });
   }
 
-  getLeads(): Observable<Lead[]> {
-    let data = {
-      id: this.user.id,
-      tenantId: this.user.tenantId,
-    }
-    return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
-      tap((leads) => {
-        this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
-      }),
+  // getLeads(): Observable<Lead[]> {
+  //   let data = {
+  //     id: this.user.id,
+  //     tenantId: this.user.tenantId,
+  //   }
+  //   debugger;
+  //   return this._httpClient.post<Lead[]>(this.getLeadListURL, data).pipe(
+  //     tap((leads) => {
+  //       this._leads.next(leads); // Update leads BehaviorSubject with the retrieved leads
+  //     }),
       
-    );
+  //   );
 
-  }
+  // }
 
   getProduct(): Observable<Product[]> {
     let data = {

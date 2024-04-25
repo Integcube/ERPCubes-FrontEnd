@@ -24,7 +24,6 @@ export class TotalLeadsComponent implements OnInit {
   }
 
   fetchTotalLeads(days: number) {
-    debugger;
     this.filter.days = days;
     this.filter.status = this.statusEnumInstance.All;
     this._widgetService.getTotalLead(this.filter).subscribe(

@@ -114,7 +114,6 @@ export class ListDashboardComponent  {
 
 
   openDashboardDialog(selectedDashboard: Dashboard): void {
-    debugger;
     this._dashboardService.selectedDashboard(selectedDashboard);
     this._dialog.open(DashboardBuilderDialogComponent, {
       height: '100%',
@@ -130,7 +129,6 @@ export class ListDashboardComponent  {
 
 
   delete(selectedDashboard: Dashboard) {
-    debugger;
     const confirmation = this._fuseConfirmationService.open({
       title: 'Delete Dashboard',
       message: 'Are you sure you want to delete this dashboard? This action cannot be undone!',

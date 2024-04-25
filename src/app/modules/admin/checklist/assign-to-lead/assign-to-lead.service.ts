@@ -57,7 +57,6 @@ export class CreateChecklistService {
       }
       return this._httpClient.post<Checklist[]>(this.getChecklistURL, data).pipe(
         tap((checklists) => {
-                debugger;
           this._checklists.next(checklists);
         }),
         
@@ -71,7 +70,6 @@ export class CreateChecklistService {
           cLId:form.clId,
           iAssign:form.iAssign
         }
-        debugger;
         return this._httpClient.post<any>(this.assigntolead, data).pipe(
           tap((data) => {
             this._alertService.showSuccess("CheckList Assigned Successfully to Leads");
@@ -86,7 +84,6 @@ export class CreateChecklistService {
           cLId:form.clId,
           remarks:form.remarks,
         } 
-        debugger;
         return this._httpClient.post<any>(this.unAssigntolead, data).pipe(
           tap((data) => {
             this._alertService.showError("CheckList Unassigned Successfully to Leads");

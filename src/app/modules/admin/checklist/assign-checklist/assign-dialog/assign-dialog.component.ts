@@ -72,7 +72,6 @@ export class AssignDialogComponent implements OnInit {
     this.activeView = view;
   }
   save() {
-    debugger
     this._assignChecklistService.assignCheckPoint(this.viewForm.value,this.checkpoints).subscribe({
       next: () => {},
       error: (error) => {

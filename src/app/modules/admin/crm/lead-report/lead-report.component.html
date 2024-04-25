@@ -8,13 +8,13 @@
       <div class="flex flex-col md:flex-row lg:flex-row justify-start pt-1 pb-1 gap-6">
         <div class="w-full max-w-sm">
           <mat-form-field class="fuse-mat-dense flex-auto w-full">
-            <mat-label i18n>Select a Date Range</mat-label>
-            <mat-date-range-input class="w-128" [rangePicker]="picker">
-              <input matStartDate placeholder="Start date" [(ngModel)]="startDate" [spellcheck]="false">
-              <input matEndDate placeholder="End date" [(ngModel)]="endDate" [spellcheck]="false">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
+              <mat-label i18n>Enter a Date Range</mat-label>                       
+              <mat-date-range-input class="w-128" [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" [(ngModel)]="startDate" [spellcheck]="false">
+                  <input matEndDate placeholder="End date" [(ngModel)]="endDate" [spellcheck]="false">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
           </mat-form-field>
         </div>
         <div class="w-full max-w-sm">

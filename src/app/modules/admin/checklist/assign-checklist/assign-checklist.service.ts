@@ -117,7 +117,6 @@ private readonly getchecklistbyIdURL = `${environment.url}/CkCheckList/getcheckl
     }
     return this._httpClient.post<Assign[]>(this.getcheckpointURL, data).pipe(
       tap((response) => {
-        debugger
         this._checkpoint.next(response);
        
       }),
@@ -140,7 +139,6 @@ private readonly getchecklistbyIdURL = `${environment.url}/CkCheckList/getcheckl
   }
 
   assignCheckPoint(form: any,List:Assign[]) {
-    debugger
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,

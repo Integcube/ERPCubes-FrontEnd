@@ -87,6 +87,7 @@ export class TasksDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
             this._changeDetectorRef.markForCheck();
         })
         // Create the task form
+        debugger;
         this.taskForm = this._formBuilder.group({
             taskId: ['', Validators.required],
             taskType: ['', Validators.required],

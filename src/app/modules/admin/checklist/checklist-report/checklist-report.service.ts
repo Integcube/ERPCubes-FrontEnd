@@ -27,7 +27,6 @@ export class ChecklistReporttService {
   getCheckListReport(obj:ChecklistReportFilter): Observable<any[]> {
     obj.tenantId =this.user.tenantId;
     obj.id= this.user.id;
-    debugger;
     return this._httpClient.post<any[]>(this.getuListURL, obj).pipe(
       tap((response) => {
         this._checklistReport.next(response);

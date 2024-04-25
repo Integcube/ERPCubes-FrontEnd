@@ -71,8 +71,5 @@ export const MY_DATE_FORMATS = {
     MatTableModule,
     MomentDateModule
   ],
-  providers: [
-   { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
-  ],
 })
 export class CampaigEffectivenessModule { }

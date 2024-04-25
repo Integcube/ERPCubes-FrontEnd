@@ -45,7 +45,7 @@ export class LeadImportComponent implements OnInit {
     // Initialization logic here if needed
     this._userService.user$.subscribe(user => {
       this.user = user;
-      this.getAllLeads(); // Fetch leads when the user changes
+      // this.getAllLeads(); // Fetch leads when the user changes
     });
     this.leadColumns = Object.keys(new LeadImportList({}));
 
@@ -61,16 +61,16 @@ export class LeadImportComponent implements OnInit {
   
     this.showColumnMapping = true;
   }
-  getAllLeads() {
-    this.leadImportService.getLeads().subscribe(
-      leads => {
-        this.leads = leads;
-      },
-      error => {
-        console.error('Error fetching leads:', error);
-      }
-    );
-  }
+  // getAllLeads() {
+  //   this.leadImportService.getLeads().subscribe(
+  //     leads => {
+  //       this.leads = leads;
+  //     },
+  //     error => {
+  //       console.error('Error fetching leads:', error);
+  //     }
+  //   );
+  // }
 
   getColumnColor(column: string): string {
     const leadColumn = this.columnMappings[column];
@@ -150,7 +150,7 @@ export class LeadImportComponent implements OnInit {
         this.leadImportService.saveBulkImportLeads(mappedLeads).subscribe(() => {
           // this.closeDialog();
           this.stepper.selectedIndex = 3;
-          this.getAllLeads();
+          // this.getAllLeads();
         });
       });
     });

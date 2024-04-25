@@ -73,7 +73,6 @@ export class CreateChecklistService {
     }
 
     saveChecklist(checklist: Checklist): Observable<any> {
-      debugger
         let data = {
           id: this.user.id,
           tenantId: this.user.tenantId,

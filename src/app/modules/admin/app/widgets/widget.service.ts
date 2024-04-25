@@ -33,7 +33,6 @@ export class WidgetService {
 
     getTotalLead(data: Filter): Observable<Count> {
  
-        debugger
         data.tenantId=this.user.tenantId
         return this._httpClient.post<Count>(this.getTotalLeadUrl, data).pipe(
         );

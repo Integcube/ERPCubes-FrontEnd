@@ -20,8 +20,8 @@ export class LeadSourceReportComponent {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('exporter') public exporter;
   sourceId:number
-  startDate: Date
-  endDate: Date
+  startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 2);
+  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,1); 
   dataSource: MatTableDataSource<LeadSourceReport>;
   displayedColumns: string[] = [ 'source', 'totalLeads', 'convertedLeads', 'conversionRate', 'averageDealSize', 'totalRevenue'];
   selection = new SelectionModel<LeadSourceReport>(true, []);
@@ -59,10 +59,6 @@ export class LeadSourceReportComponent {
         this._changeDetectorRef.markForCheck();
     });
     this.ngAfterViewInit();
-    const currentDate = new Date();
-    this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
-  const endingDate = new Date();
-    this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
     this.source$.subscribe(
       data=>{this.sources = [...data] }
     );

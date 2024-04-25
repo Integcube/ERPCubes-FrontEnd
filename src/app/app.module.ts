@@ -15,6 +15,9 @@ import { appRoutes } from 'app/app.routing';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GridsterModule } from 'angular-gridster2';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import moment from 'moment';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 const routerConfig: ExtraOptions = {
     preloadingStrategy: PreloadAllModules,
@@ -42,7 +45,32 @@ const routerConfig: ExtraOptions = {
 
     bootstrap: [
         AppComponent
-    ]
+    ],
+    providers: [
+        {
+          provide: MAT_DATE_FORMATS,
+          useValue: {
+            parse: {
+              dateInput: (value: any) => {
+                const momentDate = moment.utc(value, 'YYYY-MM-DD', true);
+                return momentDate.isValid() ? momentDate.toDate() : null;
+              },
+              strict: true
+            },
+            display: {
+              dateInput: 'll',
+              monthYearLabel: 'MMM YYYY',
+              dateA11yLabel: 'LL',
+              monthYearA11yLabel: 'MMMM YYYY'
+            }
+          }
+        },
+        // Add this provider to prevent date conversion issues
+        {
+          provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+          useValue: { useUtc: true }
+        }
+      ]
 })
 export class AppModule {
 }

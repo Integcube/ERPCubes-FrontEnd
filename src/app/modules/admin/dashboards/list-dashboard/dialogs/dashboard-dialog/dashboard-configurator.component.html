@@ -1,5 +1,5 @@
 <div class="flex flex-auto w-full h-full overflow-hidden">
-    <div class="flex flex-col w-1/4 max-w-1/4 h-full bg-default">
+    <div class="flex flex-col w-1/4 max-w-1/4 h-full bg-default hidden sm:block">
         <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
             <div class="flex gap-1 items-center" (click)="closeDialog()">
                 <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
@@ -10,7 +10,7 @@
                 <div class="text-lg font-semibold tracking-tight leading-none">Dashboard Manager</div>
             </div>
         </div>
-        <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8">
+        <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 ">
             <ol>
                 <li class="relative flex" *ngFor="let view of views">
                     <div class="absolute top-6 left-2.5 w-0.5 h-full -ml-px" [ngClass]=" {'bg-gray-400': !view.completed , 'bg-green-700': view.completed,'bg-blue-500': view.viewId==activeView}" *ngIf="view.viewId == 1"></div>

@@ -82,7 +82,6 @@ export class AssignChecklistComponent {
     });
       merge(this._sort.sortChange, this._paginator.page).pipe(
         switchMap(() => {
-          debugger
         this.paginationparm.pageIndex=this._paginator.pageIndex;
         this.paginationparm.pageSize=this._paginator.pageSize;
         this.paginationparm.active=this._sort.active;

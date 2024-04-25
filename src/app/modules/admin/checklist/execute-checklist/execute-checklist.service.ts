@@ -67,7 +67,6 @@ export class ExecuteChecklistService {
       cpId:checkPointId,
       statusId:statusId,
     }
-    debugger;
     return this._httpClient.post<AssignedCheckPoint[]>(this.saveStatusUrl, data).pipe(
       tap((checkpints) => {
         this._checkpoints.next(checkpints);

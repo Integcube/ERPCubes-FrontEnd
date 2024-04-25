@@ -4,7 +4,7 @@ import { LeadPipelineComponent } from './lead-pipeline.component';
 import { RouterModule } from '@angular/router';
 import { leadPipelineRoutes } from './lead-pipeline.routing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -27,19 +27,8 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import {CdkTableModule} from '@angular/cdk/table';
 import { MomentDateModule } from '@angular/material-moment-adapter';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatTableExporterModule } from 'mat-table-exporter';
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'DD-MMM-YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+
 @NgModule({
   declarations: [
     LeadPipelineComponent
@@ -72,9 +61,6 @@ export const MY_DATE_FORMATS = {
     MatTableModule,
     MomentDateModule,
     MatTableExporterModule
-  ],
-  providers: [
-   { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
   ],
 })
 export class leadPipelineModule { }

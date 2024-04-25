@@ -15,13 +15,15 @@ export class ChecklistReportFilter {
     constructor(reg) {
 
         const currentDate = new Date();
+        
         if (reg.startDate === null || reg.startDate === undefined) {
             const currentDate = new Date();
-            this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+            this.startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 2);
+
         } else {
             this.startDate = reg.startDate;
         }
-        this.endDate = reg.endDate?reg.endDate: this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);
+        this.endDate = reg.endDate?reg.endDate: this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,1);
        
     }
 }

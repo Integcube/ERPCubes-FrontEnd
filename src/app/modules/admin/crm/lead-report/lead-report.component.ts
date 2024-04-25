@@ -19,8 +19,8 @@ export class LeadReportComponent implements OnInit, OnDestroy {
     private ExcelServe: ExcelService
   ) { }
   prodId:number
-  startDate: Date
-  endDate: Date
+  startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,0); 
   leadReportCount: number = 0;
   _unsubscribeAll: Subject<any> = new Subject<any>();
   users$ = this._leadReportService.users$
@@ -34,10 +34,10 @@ export class LeadReportComponent implements OnInit, OnDestroy {
   HeaderConfig: { key: string; label: string }[] = [];
   ngOnInit(): void {
    
-    const currentDate = new Date();
-    this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
-      const endingDate = new Date();
-    this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
+    // const currentDate = new Date();
+    // this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
+    //   const endingDate = new Date();
+    // this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
     this.prodId=-1;
     this.leadReportWithUser$.subscribe((report) => {
       this.leadReportCount = report.length;

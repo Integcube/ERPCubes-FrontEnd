@@ -24,19 +24,8 @@ import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
 import { LeadSourceReportComponent } from './leadsource-report.component';
 import { leadSourceReportRoutes } from './leadsource-report.routing';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatTableExporterModule } from 'mat-table-exporter';
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'DD-MMM-YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+
 @NgModule({
   declarations: [
     LeadSourceReportComponent
@@ -67,8 +56,5 @@ export const MY_DATE_FORMATS = {
     SharedModule,
     MatTableExporterModule
   ],
-  providers: [
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }
-   ],
  })
 export class LeadSourceReportModule { }

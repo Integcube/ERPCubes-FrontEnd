@@ -26,7 +26,6 @@ export class QualifiedLeadComponent {
   }
 
   fetchTotalLeads(days: number) {
-    debugger;
     this.filter.days = days;
     this.filter.status = this.statusEnumInstance.Qualified;
     this._widgetService.getTotalLead(this.filter).subscribe(

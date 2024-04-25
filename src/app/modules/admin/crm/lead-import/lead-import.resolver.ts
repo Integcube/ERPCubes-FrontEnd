@@ -7,16 +7,16 @@ import {
 import { Observable, of } from 'rxjs';
 import { LeadImportService } from './lead-import.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class LeadImportResolver implements Resolve<any> {
-  constructor(
-    private _leadImportService: LeadImportService){ }
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    return this._leadImportService.getLeads();
-  }
-}
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class LeadImportResolver implements Resolve<any> {
+//   constructor(
+//     private _leadImportService: LeadImportService){ }
+//   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+//     return this._leadImportService.getLeads();
+//   }
+// }
 @Injectable({
   providedIn: 'root'
 })

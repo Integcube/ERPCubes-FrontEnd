@@ -47,7 +47,6 @@ export class ListDashboardService {
       id: this.user.id,
       tenantId: this.user.tenantId,
     }
-    debugger;
     return this._httpClient.post<Dashboard[]>(this.getDashboardListURL, data).pipe(
       tap((dashboards) => {
         this._dashboards.next(dashboards);
@@ -62,7 +61,6 @@ export class ListDashboardService {
       dashboard,
 
     }
-    debugger;
     return this._httpClient.post<Dashboard[]>(this.saveDashboardListURL, data).pipe(
       tap((dashboard) => {
         this._alertService.showSuccess("Dashboard Saved Successfully");
@@ -71,7 +69,6 @@ export class ListDashboardService {
     );
   }
   saveWidget(dashboardId: number, widgets: string) {
-    debugger;
     let data = {
       id: this.user.id,
       tenantId: this.user.tenantId,
@@ -79,7 +76,6 @@ export class ListDashboardService {
       widgets: widgets
 
     }
-    debugger;
     return this._httpClient.post<Dashboard[]>(this.saveWidgetListURL, data).pipe(
       tap((dashboard) => {
         this._alertService.showSuccess("Dashboard Saved Successfully");

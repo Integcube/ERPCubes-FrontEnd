@@ -22,8 +22,8 @@ export class ExecutedChecklistReportComponent {
   displayedColumns: string[] = [ 'firstName', 'totalCheckpoints','executedCheckpoints', 'notExecutedCheckpoints', 'overdueCheckpoints','executedPercentage','action'];
   checklistReportCount: number = 0;
   searchInputControl: UntypedFormControl = new UntypedFormControl();
-  startDate: Date
-  endDate: Date
+  startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 2);
+  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,1); 
 
   _unsubscribeAll: Subject<any> = new Subject<any>();
   constructor(
@@ -44,10 +44,7 @@ export class ExecutedChecklistReportComponent {
         this.dataSource.data = report; 
         this._changeDetectorRef.markForCheck();
     }
-      const currentDate = new Date();
-      this.startDate = new Date(currentDate.getFullYear(),currentDate.getMonth(),1);
-    const endingDate = new Date();
-      this.endDate = new Date(currentDate.getFullYear(),currentDate.getMonth()+1,0);  
+
         this.ngAfterViewInit();
     
     });

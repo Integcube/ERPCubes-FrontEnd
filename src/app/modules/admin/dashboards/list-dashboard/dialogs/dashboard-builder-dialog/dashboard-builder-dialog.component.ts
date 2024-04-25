@@ -4,6 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { Dashboard, DashboardWidget } from '../../list-dashboard.type';
 import { ListDashboardService } from '../../list-dashboard.service';
+import { Subject, takeUntil } from 'rxjs';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 
 
 @Component({
@@ -12,6 +14,10 @@ import { ListDashboardService } from '../../list-dashboard.service';
 
 })
 export class DashboardBuilderDialogComponent {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  drawerMode: 'side' | 'over';
+  drawerOpened: boolean;
   selectedDashboard:Dashboard;
   options: GridsterConfig;
   dashboard: Array<GridsterItem> =[];
@@ -19,7 +25,9 @@ export class DashboardBuilderDialogComponent {
     constructor(
         private _matDialogRef: MatDialogRef<DashboardBuilderDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { dashboard: Dashboard },
-        private _dashboardService: ListDashboardService
+        private _dashboardService: ListDashboardService,
+        private _fuseMediaWatcherService: FuseMediaWatcherService
+
     
     ) {     this.selectedDashboard = data.dashboard;
 
@@ -60,6 +68,22 @@ export class DashboardBuilderDialogComponent {
     }
   
     ngOnInit() {
+      this._fuseMediaWatcherService.onMediaChange$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(({matchingAliases}) => {
+                // Set the drawerMode and drawerOpened
+                if ( matchingAliases.includes('md') )
+                {
+                    this.drawerMode = 'side';
+                    this.isDrawerOpen = true;
+                }
+                else
+                {
+                    this.drawerMode = 'over';
+                    this.isDrawerOpen = false;
+                }
+            });
+
       if (this.selectedDashboard.widgets) {
         try {
           const jsonArray = JSON.parse(this.selectedDashboard.widgets);
@@ -149,7 +173,11 @@ export class DashboardBuilderDialogComponent {
       });
     }
     
-    
+    isDrawerOpen: boolean;
+
+    toggleDrawer() {
+        this.isDrawerOpen = !this.isDrawerOpen;
+    }
     
     
     

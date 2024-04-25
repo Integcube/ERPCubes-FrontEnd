@@ -25,8 +25,8 @@ export class LeadOwnerReportComponent {
   statusId:number
   sourceId:number
   //currentDate = new Date();
-  startDate = new Date(new Date().getFullYear(),new Date().getMonth(),1);
-  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,0); 
+  startDate = new Date(new Date().getFullYear(), new Date().getMonth(), 2);
+  endDate = new Date(new Date().getFullYear(),new Date().getMonth()+1,1); 
   dataSource: MatTableDataSource<LeadOwnerReport>;
   displayedColumns: string[] = [ 'leadOwnerName', 'totalLeads', 'totalRevenue', 'averageDealSize', 'convertedleads', 'conversionRate', 'winLeads', 'winRates'];
   selection = new SelectionModel<LeadOwnerReport>(true, []);

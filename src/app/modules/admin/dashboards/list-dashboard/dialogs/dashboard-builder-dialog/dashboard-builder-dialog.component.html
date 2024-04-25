@@ -1,10 +1,12 @@
 <div class="flex flex-auto w-full h-full overflow-hidden">
-    <div class="flex flex-col w-2/12 max-w-2/12 h-full bg-card">
+    <div class="flex flex-col w-2/12 max-w-2/12 h-full bg-card" [ngClass]="{'hidden': !isDrawerOpen}">
         <div class="flex flex-col gap-2 sm:flex-col items-start p-6 sm:py-4 md:px-8 border-b">
-            <div class="flex gap-1 items-center" (click)="closeDialog()">
-                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle"></mat-icon>
+            <div class="flex gap-1 items-center" >
+                <mat-icon class="icon-size-4" matPrefix svgIcon="feather:arrow-left-circle" (click)="closeDialog()"></mat-icon>
+                
                 <div class="text-md font-normal tracking-tight leading-none hover:underline hover:cursor-pointer">Dashboard</div>
             </div>
+            
             <div>
                 <div class="text-lg font-semibold tracking-tight leading-none">Dashboard Builder</div>
             </div>
@@ -12,14 +14,14 @@
         <div class="flex flex-col flex-auto gap-2 sm:flex-col items-start py-6 px-3 sm:py-4 md:px-4 overflow-x-auto " fuseScrollbar>
             <div class="flex flex-col w-full gap-2">
                 <div class="text-md font-semibold tracking-tight leading-none">Template</div>
-                <div class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md">Blank Dashboard</div>
+                <div class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md overflow-auto">Blank Dashboard</div>
             </div>
             <div class="flex flex-col w-full gap-2 mt-4">
                 <div class="text-md font-bold tracking-tight leading-none">Select Widget</div>
             </div>
             <div class="flex flex-col w-full gap-2">
                 <div class="text-md font-semibold tracking-tight leading-none">Numeric</div>
-                <div draggable="true" (dragstart)="dragStartHandler($event, '2')" class="text-md font-normal tracking-tight leading-none p-3 bg-default border rounded-md hover:cursor-pointer hover:shadow-md">
+                <div draggable="true" (dragstart)="dragStartHandler($event, '2')" class="flex p-3 bg-default border rounded-md items-center hover:cursor-pointer hover:shadow-md">
                     <mat-icon class="icon-size-4 text-blue-500" svgIcon="feather:chevrons-up"></mat-icon>
                     <span class="text-md font-normal tracking-tight leading-none ml-2">Total</span>
                 </div>
@@ -101,7 +103,14 @@
             
         </div>
     </div>
-    <div class="flex flex-auto bg-default">
+    <div>
+        <button class="-ml-3 sm:ml-0 mb-2 sm:mb-0 order-first sm:order-last" mat-icon-button (click)="toggleDrawer()">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+        </button>
+    </div>
+    
+    
+    <div class="flex flex-auto bg-default overflow-auto">
         <gridster [options]="options" class="flex-auto">
             <gridster-item [item]="item" *ngFor="let item of dashboard">
                 <span class="flex flex-row justify-end">
